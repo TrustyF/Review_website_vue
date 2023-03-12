@@ -7,11 +7,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - id: Build-Vue
-      uses: xRealNeon/VuePagesAction@1.0.0
+      uses: xRealNeon/VuePagesAction@1.0.1
       with:
         username: 'TrustyF'
         reponame: 'Review_website_vue'
-        token: ${{ secrets.GITHUB_TOKEN }}
-#       env:
-#         VUE_APP_KEY: ${{ secrets.VUE_APP_KEY }}
-#         VUE_APP_URL: ${{ secrets.VUE_APP_URL }}
+        token: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
