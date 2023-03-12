@@ -10,8 +10,6 @@ import TagContainer from "@/components/TagContainer";
 import asset_paths from '../../public/assets/tags/assets.json'
 import '../styles/db_helper.css'
 
-const movie = ref({})
-
 const movie_db = collection(database, 'movies')
 const tags_db = collection(database, 'tag_presets')
 
