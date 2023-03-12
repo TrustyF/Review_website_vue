@@ -6,11 +6,11 @@ import MovieContainer from "@/components/MovieContainer";
 
 <template>
   <div class="filters">
-    <h1 style="font-weight: bold;font-size: 1.3em">Filters</h1>
+    <h1 style="font-weight: bold;font-size: 1.2vw">Filters</h1>
     <div class="filter_genres" >
-      <h1 style="text-decoration: underline">Genre</h1>
+      <h1 style="text-decoration: underline;font-size: 0.9vw">Genre</h1>
       <div v-for="filter in availableGenres" :key="filter">
-        <label>
+        <label style="font-size: 0.7vw">
           <input type="checkbox" @change="swap_filter(filter);applyFilters()">
           {{ filter }}
         </label>
@@ -18,9 +18,9 @@ import MovieContainer from "@/components/MovieContainer";
     </div>
 
     <div class="filter_types">
-      <h1 style="text-decoration: underline">Type</h1>
+      <h1 style="text-decoration: underline;font-size: 0.9vw">Type</h1>
       <div v-for="filter in availableTypes" :key="filter">
-        <label>
+        <label style="font-size: 0.7vw">
           <input type="checkbox" @change="swap_filter(filter);applyFilters()">
           {{ filter }}
         </label>
@@ -157,7 +157,7 @@ export default {
 
 .filters {
   position: fixed;
-  width: max-content;
+  width: 6vw;
   /*height: 200px;*/
 
   padding: 15px;
