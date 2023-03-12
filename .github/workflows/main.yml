@@ -12,6 +12,6 @@ jobs:
         username: 'TrustyF'
         reponame: 'Review_website_vue'
         token: ${{ secrets.GITHUB_TOKEN }}
-      env:
-        VUE_APP_KEY: ${{ secrets.VUE_APP_KEY }}
-        VUE_APP_URL: ${{ secrets.VUE_APP_URL }}
+#       env:
+#         VUE_APP_KEY: ${{ secrets.VUE_APP_KEY }}
+#         VUE_APP_URL: ${{ secrets.VUE_APP_URL }}
