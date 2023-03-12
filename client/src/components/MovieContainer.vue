@@ -1,9 +1,7 @@
 <script setup>
 import {ref, onMounted, defineProps} from "vue";
-import {ref as storageRef, getDownloadURL} from 'firebase/storage'
 
 import TagContainer from "./TagContainer";
-import ContainerEditor from "@/components/ContainerEditor";
 </script>
 
 <template>
