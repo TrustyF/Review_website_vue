@@ -1,3 +1,3 @@
 module.exports = {
-  publicPath:"/Review_website_vue/",
+  base:"/Review_website_vue/",
 }
