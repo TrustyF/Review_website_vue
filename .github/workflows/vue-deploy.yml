@@ -9,6 +9,6 @@ jobs:
     - id: Build-Vue
       uses: xRealNeon/VuePagesAction@1.0.1
       with:
-        username: 'Trusty'
+        username: 'TrustyF'
         reponame: 'Review_website_vue'
         token: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
