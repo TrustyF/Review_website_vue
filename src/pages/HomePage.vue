@@ -1,7 +1,4 @@
 <script setup>
-import {useCollection} from "vuefire"
-import {useRoute, useRouter} from 'vue-router'
-
 import '../styles/globals.css'
 import DbHelper from "@/pages/DbHelper";
 import MovieContainer from "@/components/MovieContainer";
@@ -24,7 +21,6 @@ import MovieContainer from "@/components/MovieContainer";
 </template>
 
 <script>
-import axios from "axios";
 import MovieLib from "../../public/assets/new_lib.json"
 
 export default {
