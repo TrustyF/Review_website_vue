@@ -5,6 +5,3 @@ module.exports = defineConfig({
   publicPath:"/Review_website_vue/",
   transpileDependencies: true
 })
-module.exports = {
-  publicPath: ''
-}
