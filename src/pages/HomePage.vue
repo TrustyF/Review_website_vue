@@ -25,9 +25,6 @@ import MovieContainer from "@/components/MovieContainer";
 
 <script>
 import axios from "axios";
-import {collection, getDocs, query, where, orderBy} from "firebase/firestore";
-
-import {database} from "@/firebase";
 import MovieLib from "../../public/assets/new_lib.json"
 
 export default {
@@ -37,36 +34,11 @@ export default {
     }
   },
   async created() {
-    // this.movies = (await axios.get('http://localhost:3000/get_movies')).data
     this.movies = this.sortMovies()
 
     console.log(this.movies, "movies loaded")
   },
   methods: {
-    async getMovies() {
-
-      let movies_sorted = []
-      const movies_ref = collection(database, 'tv_series')
-
-      const q = query(movies_ref, orderBy("my_rating"))
-      const movies_snap = await getDocs(q)
-      const movies = movies_snap.docs.map((doc) => {
-        return doc.data()
-      })
-
-      // console.log("loadMovies", response)
-
-      for (let i = 10; i > 0; i--) {
-        let list = []
-        movies.forEach((elem) => {
-          if (elem.my_rating === i.toString()) {
-            list.push(elem)
-          }
-        })
-        movies_sorted.push(list)
-      }
-      return movies_sorted
-    },
     sortMovies() {
       let movies_sorted = []
 
