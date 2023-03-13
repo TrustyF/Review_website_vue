@@ -7,16 +7,6 @@ import MovieContainer from "@/components/MovieContainer";
 <template>
   <div class="filters">
     <h1 style="font-weight: bold;font-size: 1.2vw">Filters</h1>
-    <div class="filter_genres" >
-      <h1 style="text-decoration: underline;font-size: 0.9vw">Genre</h1>
-      <div v-for="filter in availableGenres" :key="filter">
-        <label style="font-size: 0.7vw">
-          <input type="checkbox" @change="swap_filter(filter);applyFilters()">
-          {{ filter }}
-        </label>
-      </div>
-    </div>
-
     <div class="filter_types">
       <h1 style="text-decoration: underline;font-size: 0.9vw">Type</h1>
       <div v-for="filter in availableTypes" :key="filter">
@@ -26,6 +16,17 @@ import MovieContainer from "@/components/MovieContainer";
         </label>
       </div>
     </div>
+
+    <div class="filter_genres">
+      <h1 style="text-decoration: underline;font-size: 0.9vw">Genre</h1>
+      <div v-for="filter in availableGenres" :key="filter">
+        <label style="font-size: 0.7vw">
+          <input type="checkbox" @change="swap_filter(filter);applyFilters()">
+          {{ filter }}
+        </label>
+      </div>
+    </div>
+
   </div>
   <div class="feed">
     <div class="movie_grid" v-for="rating in filteredMovies" :key="rating">
@@ -46,9 +47,10 @@ export default {
     return {
       movies: [],
       availableGenres: ["Action", "Adventure", "Sci-Fi", "Crime", "Comedy", "Drama", "Mystery", "Thriller"],
-      availableTypes: ["Animation", "Documentary"],
+      availableTypes: ["Movie", "Animation", "Documentary"],
       filteredMovies: [],
-      filters: []
+      filters: [],
+      clickCount: 0
     }
   },
   async created() {
@@ -81,44 +83,42 @@ export default {
           this.filters.splice(index, 1); // 2nd parameter means remove one item only
         }
       }
-      console.log("avaialable", this.filters)
+      // console.log("avaialable", this.filters)
     },
     applyFilters() {
-      // console.log('filtering')
       let result = []
 
+      //set initial list
       if (this.filters.length === 0) {
-        console.log('no filters')
         this.filteredMovies = this.movies
         return
       }
-      console.log('filter found')
+
+      // iterate through all ratings
       for (let i = 0; i < 10; i++) {
         let list = this.movies[i]
 
+        // exit if rating empty
         if (this.movies[i] === undefined) {
           continue
         }
 
+        // special case for "Movie" filter
+        // if (this.filters.includes("Movie") === true) {
+        //   console.log('movies included')
+        //   list = (list.filter(mov => mov['genre'].includes('Animation') === false))
+
+
+        // filter genre
         this.filters.forEach((filter) => {
-          // console.log('filter', filter)
-          list = (list.filter(mov => mov['genre'].includes(filter) === false))
+          list = (list.filter(mov => mov['genre'].includes(filter) === true))
         })
 
-        // this.movies[i].forEach((mov) => {
-        //   // console.log(i)
-        //   if (mov['genre'].includes('Animation')) {
-        //     console.log(mov['name'])
-        //     let index = this.movies[i].indexOf(mov)
-        //     if (index > -1) { // only splice array when item is found
-        //       this.movies[i].splice(index, 1); // 2nd parameter means remove one item only
-        //     }
-        //   }
-        // })
-        result.push(list)
 
+
+        result.push(list)
       }
-      console.log('filtered', result)
+      console.log('end')
       this.filteredMovies = result
     }
   }
@@ -131,8 +131,8 @@ export default {
 
   position: relative;
 
-  width: 80%;
-  margin: auto;
+  width: 87%;
+  margin-left: 12%;
 
   display: flex;
   flex-direction: column;
@@ -140,8 +140,8 @@ export default {
 
 .rating_title {
   width: 100%;
-  font-size: 1.5em;
-  border-bottom: solid black 2px;
+  font-size: 2em;
+  border-bottom: solid black 1px;
 }
 
 .movie_grid {
@@ -150,18 +150,19 @@ export default {
   width: 100%;
 
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  /*justify-content: space-between;*/
   flex-flow: row wrap;
   margin: auto;
 }
 
 .filters {
   position: fixed;
-  width: 6vw;
+  width: 8%;
   /*height: 200px;*/
 
-  padding: 15px;
-  margin: 15px;
+  padding: 0.75%;
+  margin: 0.2% 0 0 1%;
   border-radius: 8px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
 

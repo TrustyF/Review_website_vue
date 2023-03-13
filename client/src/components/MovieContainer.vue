@@ -11,7 +11,8 @@ import TagContainer from "./TagContainer";
         <tag-container v-for="tag in data['tags']" :key="tag" :tag="tag"/>
       </div>
 
-      <img :src="data['poster']" class="poster" :alt="data['poster']">
+<!--      <img v-lazy="data['poster']" :src="" class="poster" :alt="data['poster']">-->
+      <img v-lazy="data['poster']" class="poster" :alt="data['poster']">
 
       <div class="content">
         <p class="title">{{ data['name'] }}</p>
