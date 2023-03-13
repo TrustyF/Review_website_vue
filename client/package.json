@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@mahdikhashan/vue3-click-outside": "^0.1.2",
     "core-js": "^3.8.3",
     "vue-lazyload": "^3.0.0-rc.2",
     "vue-router": "^4.1.6",
