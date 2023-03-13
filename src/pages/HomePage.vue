@@ -54,9 +54,9 @@ export default {
     }
   },
   async created() {
-    this.movies = this.sortMovies()
+    this.movies = [...this.sortMovies()]
     this.filteredMovies = []
-    this.applyFilters()
+    await this.applyFilters()
   },
   methods: {
     sortMovies() {
@@ -83,14 +83,13 @@ export default {
           this.filters.splice(index, 1); // 2nd parameter means remove one item only
         }
       }
-      // console.log("avaialable", this.filters)
     },
-    applyFilters() {
+    async applyFilters() {
       let result = []
 
       //set initial list
       if (this.filters.length === 0) {
-        this.filteredMovies = this.movies
+        this.filteredMovies = [...this.movies]
         return
       }
 
@@ -104,21 +103,34 @@ export default {
         }
 
         // special case for "Movie" filter
-        // if (this.filters.includes("Movie") === true) {
-        //   console.log('movies included')
-        //   list = (list.filter(mov => mov['genre'].includes('Animation') === false))
+        if (this.filters.includes("Movie") === true) {
+          // filter genre only movies
+          const excludeFilters = ['Animation','Documentary']
+          excludeFilters.forEach((filter) => {
+            list = (list.filter(mov => mov['genre'].includes(filter) === false))
+          })
 
+          let tempFilter = [...this.filters]
+          let index = tempFilter.indexOf("Movie")
+          if (index > -1) {
+            tempFilter.splice(index, 1);
+          }
 
-        // filter genre
-        this.filters.forEach((filter) => {
-          list = (list.filter(mov => mov['genre'].includes(filter) === true))
-        })
-
+          if (tempFilter.length !== 0) {
+            tempFilter.forEach((filter) => {
+              list = (list.filter(mov => mov['genre'].includes(filter) === true))
+            })
+          }
+        } else {
+          // filter genre
+          this.filters.forEach((filter) => {
+            list = (list.filter(mov => mov['genre'].includes(filter) === true))
+          })
+        }
 
 
         result.push(list)
       }
-      console.log('end')
       this.filteredMovies = result
     }
   }
