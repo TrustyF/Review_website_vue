@@ -1,7 +1,6 @@
 <script setup>
-import {ref, onMounted, defineProps} from "vue";
-
 import TagContainer from "./TagContainer";
+import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 </script>
 
 <template>
@@ -11,8 +10,9 @@ import TagContainer from "./TagContainer";
         <tag-container v-for="tag in data['tags']" :key="tag" :tag="tag"/>
       </div>
 
-<!--      <img v-lazy="data['poster']" :src="" class="poster" :alt="data['poster']">-->
-      <img v-lazy="data['poster']" class="poster" :alt="data['poster']">
+      <!--      <img v-lazy="data['poster']" :src="" class="poster" :alt="data['poster']">-->
+      <img v-lazy="data['poster']" class="poster" :alt="data['poster']" v-click-out-side="clickOutside"
+           @click="isOpen = !isOpen">
 
       <div class="content">
         <p class="title">{{ data['name'] }}</p>
@@ -34,7 +34,9 @@ import TagContainer from "./TagContainer";
             {{ "Duration: " + data['duration'].slice(2, 7) }}</p>
           <p class="rank">{{ "Rating: " + data['contentRating'] }}</p>
 
-          <h3 class="heading">Reception</h3>
+          <h3 class="heading">Public reception</h3>
+          <p class="rank" v-if="data['rating']">{{ data['rating']['ratingValue']}}/10</p>
+          <!--          <round-progress-classic :data="data['rating']['ratingValue']" :number="true"></round-progress-classic>-->
           <h3 class="heading">Extras</h3>
           <a :href="data['url']" target="_blank" rel="noopener noreferrer">
             <button type="button"
