@@ -38,7 +38,7 @@ import DbHelper from "@/components/DbHelper";
         <div class="details_wrapper">
           <p class="rank" v-if="data['genres']" style="margin-bottom:5px;">
             {{ data['genres'].map(elem => elem).join(', ') }}</p>
-          <p class="rank" style="margin-bottom:5px;"> {{ "Duration: " + timeConvert(data['runtime']) }}</p>
+          <p class="rank" style="margin-bottom:5px;" v-if="data['runtime']"> {{ "Duration: " + timeConvert(data['runtime']) }}</p>
           <p class="rank" v-if="data['contentRating']">{{ "Rating: " + data['contentRating'] }}</p>
 
           <h3 class="heading">Public reception</h3>
