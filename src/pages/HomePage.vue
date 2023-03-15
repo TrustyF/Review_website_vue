@@ -1,6 +1,5 @@
 <script setup>
 import '../styles/globals.css'
-import DbHelper from "@/pages/DbHelper";
 import MovieContainer from "@/components/MovieContainer";
 </script>
 
@@ -30,7 +29,10 @@ import MovieContainer from "@/components/MovieContainer";
   </div>
   <div class="feed">
     <div class="movie_grid" v-for="rating in filteredMovies" :key="rating">
-      <h1 class="rating_title" v-if="rating[0]">{{ rating[0]['my_rating'] }}</h1>
+      <div v-if="rating[0]" class="rating_container">
+        <h1 class="rating_title">{{ rating[0]['my_rating'] }}</h1>
+        <p class="rating_desc"> {{ getRankDetails(rating[0]['my_rating']) }}</p>
+      </div>
       <div class="movie_container_wrapper" v-for="mov in rating" :key="mov.id">
         <MovieContainer :key="mov.id" :data="mov"></MovieContainer>
       </div>
@@ -40,17 +42,16 @@ import MovieContainer from "@/components/MovieContainer";
 </template>
 
 <script>
-import MovieLib from "../../public/assets/new_lib.json"
+import MovieLib from "../../public/assets/movie_db_lib.json"
 
 export default {
   data() {
     return {
       movies: [],
-      availableGenres: ["Action", "Adventure", "Sci-Fi", "Crime", "Comedy", "Drama", "Mystery", "Thriller"],
+      availableGenres: ["Action", "Adventure", "Science Fiction", "Crime", "Comedy", "Drama", "Horror", "Mystery", "Thriller"],
       availableTypes: ["Movie", "Animation", "Documentary"],
       filteredMovies: [],
       filters: [],
-      clickCount: 0
     }
   },
   async created() {
@@ -61,16 +62,21 @@ export default {
   methods: {
     sortMovies() {
       let movies_sorted = []
+      // console.log(MovieLib)
 
       for (let i = 10; i > 0; i--) {
         let list = []
-        MovieLib.forEach((elem) => {
-          if (elem.my_rating === i.toString() && elem['result_count'] !== 0 && elem['type'] === 'Movie') {
+        MovieLib['movie_results'].forEach((elem) => {
+          if (elem.my_rating === i.toString() && elem['result_count'] !== 0) {
             list.push(elem)
           }
         })
+        // sort by reception
+        list.sort((a, b) => b['vote_average'] - a['vote_average'])
+        // export
         movies_sorted.push(list)
       }
+      console.log(movies_sorted)
       return movies_sorted
 
     },
@@ -98,16 +104,17 @@ export default {
         let list = this.movies[i]
 
         // exit if rating empty
-        if (this.movies[i] === undefined) {
+        if (list === undefined) {
           continue
         }
+
 
         // special case for "Movie" filter
         if (this.filters.includes("Movie") === true) {
           // filter genre only movies
-          const excludeFilters = ['Animation','Documentary']
+          const excludeFilters = ['Animation', 'Documentary']
           excludeFilters.forEach((filter) => {
-            list = (list.filter(mov => mov['genre'].includes(filter) === false))
+            list = (list.filter(mov => mov['genres'].includes(filter) === false))
           })
 
           let tempFilter = [...this.filters]
@@ -118,13 +125,13 @@ export default {
 
           if (tempFilter.length !== 0) {
             tempFilter.forEach((filter) => {
-              list = (list.filter(mov => mov['genre'].includes(filter) === true))
+              list = (list.filter(mov => mov['genres'].includes(filter) === true))
             })
           }
         } else {
           // filter genre
           this.filters.forEach((filter) => {
-            list = (list.filter(mov => mov['genre'].includes(filter) === true))
+            list = (list.filter(mov => mov['genres'].includes(filter) === true))
           })
         }
 
@@ -132,6 +139,17 @@ export default {
         result.push(list)
       }
       this.filteredMovies = result
+    },
+    getRankDetails(rank) {
+      if (rank === '9')  return 'Near perfect masterpiece'
+      if (rank === '8')  return 'Extremely good'
+      if (rank === '7')  return 'Quite good'
+      if (rank === '6')  return 'Good with minor flaws'
+      if (rank === '5')  return "I didn't like"
+      if (rank === '4')  return 'Bad'
+      if (rank === '3')  return 'Bad and boring'
+      if (rank === '2')  return 'Holy shit bad'
+      if (rank === '1')  return 'Affront to god'
     }
   }
 }
@@ -150,10 +168,22 @@ export default {
   flex-direction: column;
 }
 
-.rating_title {
+.rating_container {
   width: 100%;
+}
+
+.rating_title {
+  font-family: "Arial Black";
+  padding: 10px 5px 5px 0;
   font-size: 2em;
   border-bottom: solid black 1px;
+}
+
+.rating_desc {
+  /*font-family: Calibri;*/
+  font-size: 1em;
+  position: absolute;
+  transform: translate(35px,-25px);
 }
 
 .movie_grid {

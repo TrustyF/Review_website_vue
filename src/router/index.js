@@ -1,7 +1,6 @@
 import {createRouter, createWebHistory} from "vue-router";
 
 import HomePage from '@/pages/HomePage'
-import DbHelper from "@/pages/DbHelper"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -11,11 +10,6 @@ const router = createRouter({
             name: "home",
             component: HomePage
         },
-        // {
-        //     path: "/helper",
-        //     name: "helper",
-        //     component: DbHelper
-        // }
     ]
 })
 
