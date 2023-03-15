@@ -9,20 +9,21 @@ import DbHelper from "@/components/DbHelper";
   <div class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [isSeen ? ' seen' : '']">
     <div class="main_block">
 
-      <div class="settings">
-        <button @click="settingsOpen = !settingsOpen">...</button>
+<!--      <div class="settings">-->
+<!--        <button @click="settingsOpen = !settingsOpen">...</button>-->
+<!--      </div>-->
+
+
+
+      <div class="tags_list_poster">
+        <tag-container v-for="tag in data['tags']" :key="tag" :tag="tag"/>
       </div>
 
-      <!--      <div class="tags_list_poster">-->
-      <!--        <tag-container v-for="tag in data['tags']" :key="tag" :tag="tag"/>-->
-      <!--      </div>-->
-
       <img v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`" class="poster" alt="poster"
-           v-click-out-side="clickOutside"
-           @click="isOpen = !isOpen">
+           v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
 
-      <div class="content" @click="isSeen = !isSeen">
-        <p class="title">{{ data['title'] }}</p>
+      <div class="content">
+        <p class="title" v-if="data['title']">{{ data['title'] }}</p>
         <p class="date" v-if="data['release_date']">{{ data['release_date'].split("-")[0] }}</p>
         <p class="rating">{{ data['my_rating'] + "★" }} </p>
       </div>
@@ -54,7 +55,12 @@ import DbHelper from "@/components/DbHelper";
       </div>
     </div>
 
-    <div class="seen_block"><div class="checkmark"></div></div>
+    <div class="seen_block">
+<!--      <div class="checkmark"></div>-->
+    </div>
+    <div class="seen_checkbox">
+      <input type="checkbox" @change="isSeen = !isSeen"/>
+    </div>
   </div>
 </template>
 
@@ -64,6 +70,7 @@ export default {
   name: "MovieContainer",
   props: {
     data: Object,
+
   },
   data() {
     return {
@@ -115,7 +122,12 @@ export default {
 .settings {
   position: absolute;
 }
-
+.seen_checkbox {
+  position: absolute;
+  margin-left: 166px;
+  margin-top: 12px;
+  transform: scale(1.5);
+}
 .main_block {
   /*outline: 2px solid yellow;*/
   width: 200px;
@@ -132,14 +144,14 @@ export default {
   width: 160px;
   height: 260px;
 
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(255, 255, 255, 0.9);
 
   font-size: 0.7em;
   text-align: left;
 
   visibility: hidden;
   opacity: 0;
-  transition: all 0.2s;
+  transition: all 0.1s;
 }
 
 .open .expanded {
@@ -149,15 +161,15 @@ export default {
 
 .seen_block {
   /*outline: 1px red solid;*/
-  border-radius: 8px 8px 0 0;
+  border-radius: 8px;
 
   padding: 20px 20px 20px 20px;
   position: absolute;
 
   width: 160px;
-  height: 260px;
+  height: 315px;
 
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(255, 255, 255, 0.85);
 
   visibility: hidden;
   opacity: 0;
@@ -171,8 +183,8 @@ export default {
   width: 12px;
   margin-left: 90%;
   margin-top: -10%;
-  border-bottom: 7px solid rgba(173, 255, 47,1);
-  border-right: 7px solid rgba(173, 255, 47,1);
+  border-bottom: 7px solid rgba(173, 255, 47, 1);
+  border-right: 7px solid rgba(173, 255, 47, 1);
 }
 
 .seen .seen_block {
@@ -187,6 +199,7 @@ export default {
 }
 
 .poster {
+  user-select: none;
   border-radius: 8px 8px 0 0;
   width: 200px;
   aspect-ratio: 1/1.5;
