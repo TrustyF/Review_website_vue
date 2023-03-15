@@ -126,6 +126,13 @@ export default {
       let ratings = []
       let reversedMovies = [...this.movies].reverse()
 
+      let lenMin
+      let lenMax
+      if (this.lengthFilters.length > 0) {
+        lenMin = Math.min(...this.lengthFilters)
+        lenMax = Math.max(...this.lengthFilters)
+      }
+
       if (this.ratingFilters.length < 1) {
         ratings = [1, 2, 3, 4, 5, 6, 7, 8, 9]
       } else {
@@ -138,10 +145,11 @@ export default {
         let list = reversedMovies[rating - 1]
 
         // filter length
-        this.lengthFilters.forEach((len) => {
+        console.log(lenMin)
+        if (this.lengthFilters.length > 0) {
           let temp = (list.filter(mov => mov['media_type'].includes("tv") === false))
-          list = temp.filter(mov => mov['runtime'] > len * 60 && mov['runtime'] < (len + 1) * 60)
-        })
+          list = (temp.filter(mov => mov['runtime'] > lenMin * 60 && mov['runtime'] < (lenMax + 1) * 60))
+        }
 
         // filter type
         this.typeFilters.forEach((type) => {
