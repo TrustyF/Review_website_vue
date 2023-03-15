@@ -9,7 +9,7 @@ const app = createApp(App)
 app.component("PopperComp", Popper)
 app.use(router)
 app.use(VueLazyload, {
-    preLoad: 1.3,
-    attempt: 1
+    preLoad: 2,
+    attempt: 2
 })
 app.mount('#app')

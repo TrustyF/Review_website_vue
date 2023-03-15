@@ -5,22 +5,43 @@ import MovieContainer from "@/components/MovieContainer";
 
 <template>
   <div class="filters">
-    <h1 style="font-weight: bold;font-size: 1.2vw">Filters</h1>
+    <h1 style="font-weight: bold; font-size: 1.5em">Filters</h1>
+
     <div class="filter_types">
-      <h1 style="text-decoration: underline;font-size: 0.9vw">Type</h1>
+      <h1 style="text-decoration: underline;padding-bottom: 5px">Type</h1>
       <div v-for="filter in availableTypes" :key="filter">
-        <label style="font-size: 0.7vw">
-          <input type="checkbox" @change="swap_filter(filter);applyFilters()">
+        <label class="filter_label">
+          <input type="checkbox" @click="swap_filter(filter,typeFilters);applyFilters()">
           {{ filter }}
         </label>
       </div>
     </div>
 
+    <div class="filter_rating">
+      <h1 style="text-decoration: underline;padding-bottom: 5px">Rating</h1>
+      <div v-for="filter in availableRatings" :key="filter">
+        <label class="filter_label">
+          <input type="checkbox" @click="swap_filter(filter,ratingFilters);applyFilters()">
+          {{ filter }}
+        </label>
+      </div>
+    </div>
+
+    <div class="filter_time">
+      <h1 style="text-decoration: underline;padding-bottom: 5px">Length</h1>
+      <div v-for="filter in availableLength" :key="filter">
+        <label class="filter_label">
+          <input type="checkbox" @click="swap_filter(filter,lengthFilters);applyFilters()">
+          {{ filter + "h" }}
+        </label>
+      </div>
+    </div>
+
     <div class="filter_genres">
-      <h1 style="text-decoration: underline;font-size: 0.9vw">Genre</h1>
+      <h1 style="text-decoration: underline;padding-bottom: 5px">Genre</h1>
       <div v-for="filter in availableGenres" :key="filter">
-        <label style="font-size: 0.7vw">
-          <input type="checkbox" @change="swap_filter(filter);applyFilters()">
+        <label class="filter_label">
+          <input type="checkbox" @click="swap_filter(filter,genreFilters);applyFilters()">
           {{ filter }}
         </label>
       </div>
@@ -29,6 +50,7 @@ import MovieContainer from "@/components/MovieContainer";
   </div>
   <div class="feed">
     <div class="movie_grid" v-for="rating in filteredMovies" :key="rating">
+
       <div v-if="rating[0]" class="rating_container">
         <h1 class="rating_title">{{ rating[0]['my_rating'] }}</h1>
         <p class="rating_desc"> {{ getRankDetails(rating[0]['my_rating']) }}</p>
@@ -48,16 +70,21 @@ export default {
   data() {
     return {
       movies: [],
-      availableGenres: ["Action", "Adventure", "Science Fiction", "Crime", "Comedy", "Drama", "Horror", "Mystery", "Thriller"],
-      availableTypes: ["Movie", "Animation", "Documentary"],
+      availableGenres: ["Action", "Adventure", "Crime", "Comedy", "Drama", "Family", "Horror", "Mystery", "Science Fiction", "Thriller"],
+      availableTypes: ["Movie", "Animation", "Tv-series", "Documentary"],
+      availableRatings: [9, 8, 7, 6, 5, 4, 3, 2, 1],
+      availableLength: [1, 2, 3],
       filteredMovies: [],
-      filters: [],
+      genreFilters: [],
+      typeFilters: [],
+      lengthFilters: [],
+      ratingFilters: [],
     }
   },
   async created() {
     this.movies = [...this.sortMovies()]
     this.filteredMovies = []
-    await this.applyFilters()
+    this.applyFilters()
   },
   methods: {
     sortMovies() {
@@ -66,9 +93,13 @@ export default {
 
       for (let i = 10; i > 0; i--) {
         let list = []
-        MovieLib['movie_results'].forEach((elem) => {
-          if (elem.my_rating === i.toString() && elem['result_count'] !== 0) {
-            list.push(elem)
+        Object.keys(MovieLib).forEach((type) => {
+          if (type.length > 0) {
+            MovieLib[type].forEach((elem) => {
+              if (elem.my_rating === i.toString() && elem['result_count'] !== 0) {
+                list.push(elem)
+              }
+            })
           }
         })
         // sort by reception
@@ -80,76 +111,66 @@ export default {
       return movies_sorted
 
     },
-    swap_filter(filter) {
-      if (this.filters.includes(filter) === false) {
-        this.filters.push(filter)
+    swap_filter(filter, target) {
+      if (target.includes(filter) === false) {
+        target.push(filter)
       } else {
-        let index = this.filters.indexOf(filter)
+        let index = target.indexOf(filter)
         if (index > -1) { // only splice array when item is found
-          this.filters.splice(index, 1); // 2nd parameter means remove one item only
+          target.splice(index, 1); // 2nd parameter means remove one item only
         }
       }
     },
-    async applyFilters() {
+    applyFilters() {
       let result = []
+      let ratings = []
+      let reversedMovies = [...this.movies].reverse()
 
-      //set initial list
-      if (this.filters.length === 0) {
-        this.filteredMovies = [...this.movies]
-        return
+      if (this.ratingFilters.length < 1) {
+        ratings = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+      } else {
+        ratings = this.ratingFilters.sort()
       }
+      console.log("reverse", reversedMovies)
 
-      // iterate through all ratings
-      for (let i = 0; i < 10; i++) {
-        let list = this.movies[i]
+      // filter rating
+      ratings.forEach((rating) => {
+        let list = reversedMovies[rating - 1]
 
-        // exit if rating empty
-        if (list === undefined) {
-          continue
-        }
+        // filter length
+        this.lengthFilters.forEach((len) => {
+          let temp = (list.filter(mov => mov['media_type'].includes("tv") === false))
+          list = temp.filter(mov => mov['runtime'] > len * 60 && mov['runtime'] < (len + 1) * 60)
+        })
 
+        // filter type
+        this.typeFilters.forEach((type) => {
+          if (type === "Tv-series") type = "tv"
+          let lower_type = type.toLowerCase()
+          let temp1 = (list.filter(mov => mov['media_type'].includes(lower_type) === true))
+          let temp2 = (list.filter(mov => mov['genres'].includes(type) === true))
+          list = temp1.concat(temp2)
+        })
 
-        // special case for "Movie" filter
-        if (this.filters.includes("Movie") === true) {
-          // filter genre only movies
-          const excludeFilters = ['Animation', 'Documentary']
-          excludeFilters.forEach((filter) => {
-            list = (list.filter(mov => mov['genres'].includes(filter) === false))
-          })
-
-          let tempFilter = [...this.filters]
-          let index = tempFilter.indexOf("Movie")
-          if (index > -1) {
-            tempFilter.splice(index, 1);
-          }
-
-          if (tempFilter.length !== 0) {
-            tempFilter.forEach((filter) => {
-              list = (list.filter(mov => mov['genres'].includes(filter) === true))
-            })
-          }
-        } else {
-          // filter genre
-          this.filters.forEach((filter) => {
-            list = (list.filter(mov => mov['genres'].includes(filter) === true))
-          })
-        }
-
+        // filter genre
+        this.genreFilters.forEach((genre) => {
+          list = (list.filter(mov => mov['genres'].includes(genre) === true))
+        })
 
         result.push(list)
-      }
-      this.filteredMovies = result
+      })
+      this.filteredMovies = [...result].reverse()
     },
     getRankDetails(rank) {
-      if (rank === '9')  return 'Near perfect masterpiece'
-      if (rank === '8')  return 'Extremely good'
-      if (rank === '7')  return 'Quite good'
-      if (rank === '6')  return 'Good with minor flaws'
-      if (rank === '5')  return "I didn't like"
-      if (rank === '4')  return 'Bad'
-      if (rank === '3')  return 'Bad and boring'
-      if (rank === '2')  return 'Holy shit bad'
-      if (rank === '1')  return 'Affront to god'
+      if (rank === '9') return 'Near perfect masterpiece'
+      if (rank === '8') return 'Extremely good'
+      if (rank === '7') return 'Quite good'
+      if (rank === '6') return 'Good with flaws'
+      if (rank === '5') return "Mid"
+      if (rank === '4') return 'Bad'
+      if (rank === '3') return 'Fucking bad'
+      if (rank === '2') return 'Holy shit bad'
+      if (rank === '1') return 'Affront to god'
     }
   }
 }
@@ -161,8 +182,9 @@ export default {
 
   position: relative;
 
-  width: 87%;
-  margin-left: 12%;
+
+  margin-left: 250px;
+  margin-right: 20px;
 
   display: flex;
   flex-direction: column;
@@ -170,6 +192,7 @@ export default {
 
 .rating_container {
   width: 100%;
+  user-select: none;
 }
 
 .rating_title {
@@ -183,7 +206,7 @@ export default {
   /*font-family: Calibri;*/
   font-size: 1em;
   position: absolute;
-  transform: translate(35px,-25px);
+  transform: translate(35px, -25px);
 }
 
 .movie_grid {
@@ -199,19 +222,27 @@ export default {
 }
 
 .filters {
+  font-family: Calibri;
+
+  user-select: none;
   position: fixed;
-  width: 8%;
+  width: 150px;
+  font-min-size: 1em;
   /*height: 200px;*/
 
-  padding: 0.75%;
-  margin: 0.2% 0 0 1%;
+  padding: 20px;
+  margin: 15px 0 0 25px;
   border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 
   display: flex;
   flex-flow: column;
   /*grid-template-areas:"left right";*/
   gap: 8px;
+}
+
+.filter_label {
+  font-size: 0.9em;
 }
 
 .filter_genres {
@@ -226,5 +257,6 @@ export default {
   /*grid-area: right;*/
   display: flex;
   flex-flow: column;
+
 }
 </style>
