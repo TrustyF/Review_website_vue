@@ -15,7 +15,7 @@ import MovieContainer from "@/components/MovieContainer";
       <h1 style="text-decoration: underline;padding-bottom: 5px">{{ elem['name'] }}</h1>
       <div v-for="filter in elem['available']" :key="filter" class="filter_content_list">
         <label class="filter_label">
-          <input type="checkbox" style="cursor: pointer" @click="swap_filter(filter,elem['filter']);">
+          <input type="checkbox" style="cursor: pointer" @change="swap_filter(filter,elem['filter'])">
           {{ filter }}
         </label>
       </div>
@@ -39,6 +39,9 @@ import MovieContainer from "@/components/MovieContainer";
 
 <script>
 import MovieLib from "../../public/assets/movie_db_lib.json"
+
+// to do
+// add addedDate, add fresh review, fix long titles
 
 export default {
   data() {
@@ -270,7 +273,7 @@ export default {
 }
 
 .filter_content_list {
-  outline: red 1px solid;
+  /*outline: red 1px solid;*/
   width: 100%;
 }
 
