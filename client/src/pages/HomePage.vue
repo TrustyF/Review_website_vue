@@ -6,42 +6,16 @@ import MovieContainer from "@/components/MovieContainer";
 <template>
   <div class="filters">
     <h1 style="font-weight: bold; font-size: 1.5em">Filters</h1>
+    <label class="filter_label">
+      <input type="checkbox" style="cursor: pointer" @click="excludeMode = !excludeMode">
+      Invert
+    </label>
 
-    <div class="filter_types">
-      <h1 style="text-decoration: underline;padding-bottom: 5px">Type</h1>
-      <div v-for="filter in availableTypes" :key="filter" class="filter_content_list">
+    <div class="filter_types" v-for="elem in filters" :key="elem['name']">
+      <h1 style="text-decoration: underline;padding-bottom: 5px">{{ elem['name'] }}</h1>
+      <div v-for="filter in elem['available']" :key="filter" class="filter_content_list">
         <label class="filter_label">
-          <input type="checkbox" style="cursor: pointer" @click="swap_filter(filter,typeFilters);applyFilters()">
-          {{ filter }}
-        </label>
-      </div>
-    </div>
-
-    <div class="filter_rating">
-      <h1 style="text-decoration: underline;padding-bottom: 5px">Rating</h1>
-      <div v-for="filter in availableRatings" :key="filter" class="filter_content_list">
-        <label class="filter_label">
-          <input type="checkbox" style="cursor: pointer" @click="swap_filter(filter,ratingFilters);applyFilters()">
-          {{ filter }}
-        </label>
-      </div>
-    </div>
-
-    <div class="filter_time">
-      <h1 style="text-decoration: underline;padding-bottom: 5px">Length</h1>
-      <div v-for="filter in availableLength" :key="filter" class="filter_content_list">
-        <label class="filter_label">
-          <input type="checkbox" style="cursor: pointer" @click="swap_filter(filter,lengthFilters);applyFilters()">
-          {{ filter + "h" }}
-        </label>
-      </div>
-    </div>
-
-    <div class="filter_genres">
-      <h1 style="text-decoration: underline;padding-bottom: 5px">Genre</h1>
-      <div v-for="filter in availableGenres" :key="filter" class="filter_content_list">
-        <label class="filter_label">
-          <input type="checkbox" style="cursor: pointer" @click="swap_filter(filter,genreFilters);applyFilters()">
+          <input type="checkbox" style="cursor: pointer" @click="swap_filter(filter,elem['filter']);">
           {{ filter }}
         </label>
       </div>
@@ -49,7 +23,7 @@ import MovieContainer from "@/components/MovieContainer";
 
   </div>
   <div class="feed">
-    <div class="movie_grid" v-for="rating in filteredMovies" :key="rating">
+    <div class="movie_grid" v-for="rating in computeFilters" :key="rating">
 
       <div v-if="rating[0]" class="rating_container">
         <h1 class="rating_title">{{ rating[0]['my_rating'] }}</h1>
@@ -70,32 +44,49 @@ export default {
   data() {
     return {
       movies: [],
-      availableGenres: ["Action", "Adventure", "Crime", "Comedy", "Drama", "Family", "Horror", "Mystery", "Science Fiction", "Thriller"],
-      availableTypes: ["Movie", "Animation", "Tv-series", "Documentary"],
-      availableRatings: [9, 8, 7, 6, 5, 4, 3, 2, 1],
-      availableLength: [1, 2, 3],
-      filterElements: [
-        {
-          'name': 'Type',
-          'target': this.typeFilters,
-        }
-      ],
       filteredMovies: [],
-      genreFilters: [],
-      typeFilters: [],
-      lengthFilters: [],
-      ratingFilters: [],
+      filters: {
+        'type': {
+          'name': 'Type',
+          'available': ["Movie", "Tv-series"],
+          'filter': [],
+        },
+        'format': {
+          'name': 'Format',
+          'available': ["Live-action", "Animated", "Documentary"],
+          'filter': [],
+        },
+        'genre': {
+          'name': 'Genre',
+          'available': ["Action", "Adventure", "Crime", "Comedy", "Drama", "Family", "Horror", "Mystery", "Science Fiction", "Thriller"],
+          'filter': [],
+        },
+        'rating': {
+          'name': 'Rating',
+          'available': [9, 8, 7, 6, 5, 4, 3, 2, 1],
+          'filter': [],
+        },
+        'length': {
+          'name': 'Length',
+          'available': [1, 2, 3],
+          'filter': [],
+        },
+      },
+      excludeMode: false
     }
   },
   async created() {
     this.movies = [...this.sortMovies()]
     this.filteredMovies = []
-    this.applyFilters()
+  },
+  computed: {
+    computeFilters() {
+      return this.applyFilters()
+    }
   },
   methods: {
     sortMovies() {
       let movies_sorted = []
-      // console.log(MovieLib)
 
       for (let i = 10; i > 0; i--) {
         let list = []
@@ -113,7 +104,6 @@ export default {
         // export
         movies_sorted.push(list)
       }
-      console.log(movies_sorted)
       return movies_sorted
 
     },
@@ -143,58 +133,73 @@ export default {
       let ratings = []
       let reversedMovies = [...this.movies].reverse()
 
+      let f_type = this.filters['type']['filter']
+      let f_format = this.filters['format']['filter']
+      let f_genre = this.filters['genre']['filter']
+      let f_rating = this.filters['rating']['filter']
+      let f_length = this.filters['length']['filter']
+
+      let exclude_mode = this.excludeMode
+
       let lenMin
       let lenMax
-      if (this.lengthFilters.length > 0) {
-        lenMin = Math.min(...this.lengthFilters)
-        lenMax = Math.max(...this.lengthFilters)
+      if (f_length.length > 0) {
+        lenMin = Math.min(...f_length)
+        lenMax = Math.max(...f_length)
       }
 
-      if (this.ratingFilters.length < 1) {
+      if (f_rating.length < 1) {
         ratings = [1, 2, 3, 4, 5, 6, 7, 8, 9]
       } else {
-        ratings = this.ratingFilters.sort()
+        ratings = f_rating.sort()
       }
-      console.log("reverse", reversedMovies)
 
       // filter rating
       ratings.forEach((rating) => {
         let list = reversedMovies[rating - 1]
 
         // filter length
-        console.log(lenMin)
-        if (this.lengthFilters.length > 0) {
-          list = (list.filter(mov => mov['runtime'] > lenMin * 60 && mov['runtime'] < (lenMax + 1) * 60 && mov['media_type'].includes("tv") === false))
+        if (f_length.length > 0) {
+          list = (list.filter(mov => mov['runtime'] > lenMin * 60 && mov['runtime'] < (lenMax + 1) * 60 && mov['media_type'].includes("tv") === exclude_mode))
         }
 
         // filter type
-        let temp = []
-        let toExclude = ["Animation", "Documentary"]
-        this.typeFilters.forEach((type) => {
+        f_type.forEach((type) => {
           // filter movies
           if (type === "Movie") {
-            temp = list.filter(mov => mov['media_type'].includes("movie") === true)
-
-            toExclude.forEach((exclude) => {
-              temp = list.filter(mov => mov['genres'].includes(exclude) === false)
-            })
+            list = list.filter(mov => mov['media_type'].includes("movie") === !exclude_mode)
           }
           // filter tv
           if (type === "Tv-series") {
-            temp = list.filter(mov => mov['media_type'].includes("tv") === true)
+            list = list.filter(mov => mov['media_type'].includes("tv") === !exclude_mode)
           }
+        })
 
-          list = temp
+        // filter format
+        f_format.forEach((format) => {
+          // filter Live-action
+          if (format === "Live-action") {
+            list = list.filter(mov => mov['genres'].includes("Animation") === exclude_mode)
+          }
+          // filter Animated
+          if (format === "Animated") {
+            list = list.filter(mov => mov['genres'].includes("Animation") === !exclude_mode)
+          }
+          // filter Documentary
+          if (format === "Documentary") {
+            list = list.filter(mov => mov['genres'].includes("Documentary") === !exclude_mode)
+          }
         })
 
         // filter genre
-        this.genreFilters.forEach((genre) => {
-          list = (list.filter(mov => mov['genres'].includes(genre) === true))
+        f_genre.forEach((genre) => {
+          list = (list.filter(mov => mov['genres'].includes(genre) === !exclude_mode))
         })
 
         result.push(list)
       })
-      this.filteredMovies = [...result].reverse()
+      // this.filteredMovies = [...result].reverse()
+      return result.reverse()
     }
   }
 }
