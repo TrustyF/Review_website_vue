@@ -9,10 +9,9 @@ import DbHelper from "@/components/DbHelper";
   <div class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [isSeen ? ' seen' : '']">
     <div class="main_block">
 
-<!--      <div class="settings">-->
-<!--        <button @click="settingsOpen = !settingsOpen">...</button>-->
-<!--      </div>-->
-
+      <!--      <div class="settings">-->
+      <!--        <button @click="settingsOpen = !settingsOpen">...</button>-->
+      <!--      </div>-->
 
 
       <div class="tags_list_poster">
@@ -38,7 +37,8 @@ import DbHelper from "@/components/DbHelper";
         <div class="details_wrapper">
           <p class="rank" v-if="data['genres']" style="margin-bottom:5px;">
             {{ data['genres'].map(elem => elem).join(', ') }}</p>
-          <p class="rank" style="margin-bottom:5px;" v-if="data['runtime']"> {{ "Duration: " + timeConvert(data['runtime']) }}</p>
+          <p class="rank" style="margin-bottom:5px;" v-if="data['runtime']">
+            {{ "Duration: " + timeConvert(data['runtime']) }}</p>
           <p class="rank" v-if="data['contentRating']">{{ "Rating: " + data['contentRating'] }}</p>
 
           <h3 class="heading">Public reception</h3>
@@ -55,11 +55,15 @@ import DbHelper from "@/components/DbHelper";
       </div>
     </div>
 
-    <div class="seen_block">
-<!--      <div class="checkmark"></div>-->
+    <div class="seen_block_cover">
+
     </div>
-    <div class="seen_checkbox">
-      <input type="checkbox" @change="isSeen = !isSeen"/>
+    <div class="seen_checkbox_wrapper">
+      <div class="seen_checkbox_hitBox" @mousedown="isSeen = !isSeen">
+        <div class="seen_checkbox_box">
+          <div :class="'checkmark' + [isSeen ? '' : ' seen' ]"></div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -122,14 +126,65 @@ export default {
 .settings {
   position: absolute;
 }
-.seen_checkbox {
+
+.seen_checkbox_wrapper {
+  /*outline: red 1px solid;*/
   position: absolute;
-  margin-left: 166px;
-  margin-top: 12px;
-  transform: scale(1.5);
+  /*margin-left: 0px;*/
+  margin-top: 335px;
 }
+
+.seen_checkbox_box {
+  user-select: none;
+  position: absolute;
+  top: 58%;
+  left: 89%;
+  /*transform: translate(0%, -50%);*/
+  width: 15px;
+  height: 15px;
+  /*border: 2px solid black;*/
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.35);
+  background-color: white;
+  border-radius: 3px;
+  transition: 0.2s ease;
+  opacity: 0;
+}
+.seen .seen_checkbox_box {
+  background-color: royalblue;
+  border-color: royalblue;
+  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.5);
+  opacity: 1;
+}
+.seen_checkbox_hitBox:hover .seen_checkbox_box  {
+  opacity: 1;
+}
+
+.seen_checkbox_hitBox {
+  /*outline: 1px purple solid;*/
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(0%, -67%);
+  cursor: pointer;
+  width: 200px;
+  height: 53px;
+}
+
+.seen .checkmark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) translate(0,-1px) rotate(45deg);
+  display: inline-block;
+  /*margin-left: 60%;*/
+  height: 7px;
+  width: 3px;
+  border-bottom: 2px solid white;
+  border-right: 2px solid white;
+}
+
 .main_block {
-  /*outline: 2px solid yellow;*/
+  /*outline: 2px solid purple;*/
   width: 200px;
   display: block;
 }
@@ -159,35 +214,24 @@ export default {
   opacity: 1;
 }
 
-.seen_block {
-  /*outline: 1px red solid;*/
+.seen_block_cover {
   border-radius: 8px;
+  /*outline: 1px red solid;*/
 
   padding: 20px 20px 20px 20px;
   position: absolute;
 
   width: 160px;
-  height: 315px;
+  height: 313px;
 
   background-color: rgba(255, 255, 255, 0.85);
 
   visibility: hidden;
   opacity: 0;
-  transition: all 0.2s;
+  transition: all 0.5s;
 }
 
-.checkmark {
-  display: inline-block;
-  transform: rotate(45deg);
-  height: 25px;
-  width: 12px;
-  margin-left: 90%;
-  margin-top: -10%;
-  border-bottom: 7px solid rgba(173, 255, 47, 1);
-  border-right: 7px solid rgba(173, 255, 47, 1);
-}
-
-.seen .seen_block {
+.seen .seen_block_cover {
   visibility: visible;
   opacity: 1;
 }
@@ -199,6 +243,7 @@ export default {
 }
 
 .poster {
+  cursor: help;
   user-select: none;
   border-radius: 8px 8px 0 0;
   width: 200px;
@@ -206,6 +251,7 @@ export default {
 }
 
 .content {
+  user-select: none;
   /*outline: 1px solid red;*/
   display: grid;
   justify-content: space-between;
