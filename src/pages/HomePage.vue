@@ -9,9 +9,9 @@ import MovieContainer from "@/components/MovieContainer";
 
     <div class="filter_types">
       <h1 style="text-decoration: underline;padding-bottom: 5px">Type</h1>
-      <div v-for="filter in availableTypes" :key="filter">
+      <div v-for="filter in availableTypes" :key="filter" class="filter_content_list">
         <label class="filter_label">
-          <input type="checkbox" @click="swap_filter(filter,typeFilters);applyFilters()">
+          <input type="checkbox" style="cursor: pointer" @click="swap_filter(filter,typeFilters);applyFilters()">
           {{ filter }}
         </label>
       </div>
@@ -19,9 +19,9 @@ import MovieContainer from "@/components/MovieContainer";
 
     <div class="filter_rating">
       <h1 style="text-decoration: underline;padding-bottom: 5px">Rating</h1>
-      <div v-for="filter in availableRatings" :key="filter">
+      <div v-for="filter in availableRatings" :key="filter" class="filter_content_list">
         <label class="filter_label">
-          <input type="checkbox" @click="swap_filter(filter,ratingFilters);applyFilters()">
+          <input type="checkbox" style="cursor: pointer" @click="swap_filter(filter,ratingFilters);applyFilters()">
           {{ filter }}
         </label>
       </div>
@@ -29,9 +29,9 @@ import MovieContainer from "@/components/MovieContainer";
 
     <div class="filter_time">
       <h1 style="text-decoration: underline;padding-bottom: 5px">Length</h1>
-      <div v-for="filter in availableLength" :key="filter">
+      <div v-for="filter in availableLength" :key="filter" class="filter_content_list">
         <label class="filter_label">
-          <input type="checkbox" @click="swap_filter(filter,lengthFilters);applyFilters()">
+          <input type="checkbox" style="cursor: pointer" @click="swap_filter(filter,lengthFilters);applyFilters()">
           {{ filter + "h" }}
         </label>
       </div>
@@ -39,9 +39,9 @@ import MovieContainer from "@/components/MovieContainer";
 
     <div class="filter_genres">
       <h1 style="text-decoration: underline;padding-bottom: 5px">Genre</h1>
-      <div v-for="filter in availableGenres" :key="filter">
+      <div v-for="filter in availableGenres" :key="filter" class="filter_content_list">
         <label class="filter_label">
-          <input type="checkbox" @click="swap_filter(filter,genreFilters);applyFilters()">
+          <input type="checkbox" style="cursor: pointer" @click="swap_filter(filter,genreFilters);applyFilters()">
           {{ filter }}
         </label>
       </div>
@@ -74,6 +74,12 @@ export default {
       availableTypes: ["Movie", "Animation", "Tv-series", "Documentary"],
       availableRatings: [9, 8, 7, 6, 5, 4, 3, 2, 1],
       availableLength: [1, 2, 3],
+      filterElements: [
+        {
+          'name': 'Type',
+          'target': this.typeFilters,
+        }
+      ],
       filteredMovies: [],
       genreFilters: [],
       typeFilters: [],
@@ -121,6 +127,17 @@ export default {
         }
       }
     },
+    getRankDetails(rank) {
+      if (rank === '9') return 'Near perfect masterpiece'
+      if (rank === '8') return 'Extremely good'
+      if (rank === '7') return 'Quite good'
+      if (rank === '6') return 'Good with flaws'
+      if (rank === '5') return "Mid"
+      if (rank === '4') return 'Bad'
+      if (rank === '3') return 'Fucking bad'
+      if (rank === '2') return 'Holy shit bad'
+      if (rank === '1') return 'Affront to god'
+    },
     applyFilters() {
       let result = []
       let ratings = []
@@ -147,17 +164,27 @@ export default {
         // filter length
         console.log(lenMin)
         if (this.lengthFilters.length > 0) {
-          let temp = (list.filter(mov => mov['media_type'].includes("tv") === false))
-          list = (temp.filter(mov => mov['runtime'] > lenMin * 60 && mov['runtime'] < (lenMax + 1) * 60))
+          list = (list.filter(mov => mov['runtime'] > lenMin * 60 && mov['runtime'] < (lenMax + 1) * 60 && mov['media_type'].includes("tv") === false))
         }
 
         // filter type
+        let temp = []
+        let toExclude = ["Animation", "Documentary"]
         this.typeFilters.forEach((type) => {
-          if (type === "Tv-series") type = "tv"
-          let lower_type = type.toLowerCase()
-          let temp1 = (list.filter(mov => mov['media_type'].includes(lower_type) === true))
-          let temp2 = (list.filter(mov => mov['genres'].includes(type) === true))
-          list = temp1.concat(temp2)
+          // filter movies
+          if (type === "Movie") {
+            temp = list.filter(mov => mov['media_type'].includes("movie") === true)
+
+            toExclude.forEach((exclude) => {
+              temp = list.filter(mov => mov['genres'].includes(exclude) === false)
+            })
+          }
+          // filter tv
+          if (type === "Tv-series") {
+            temp = list.filter(mov => mov['media_type'].includes("tv") === true)
+          }
+
+          list = temp
         })
 
         // filter genre
@@ -168,17 +195,6 @@ export default {
         result.push(list)
       })
       this.filteredMovies = [...result].reverse()
-    },
-    getRankDetails(rank) {
-      if (rank === '9') return 'Near perfect masterpiece'
-      if (rank === '8') return 'Extremely good'
-      if (rank === '7') return 'Quite good'
-      if (rank === '6') return 'Good with flaws'
-      if (rank === '5') return "Mid"
-      if (rank === '4') return 'Bad'
-      if (rank === '3') return 'Fucking bad'
-      if (rank === '2') return 'Holy shit bad'
-      if (rank === '1') return 'Affront to god'
     }
   }
 }
@@ -231,7 +247,6 @@ export default {
 
 .filters {
   font-family: Calibri;
-
   user-select: none;
   position: fixed;
   width: 150px;
@@ -249,22 +264,13 @@ export default {
   gap: 8px;
 }
 
+.filter_content_list {
+  outline: red 1px solid;
+  width: 100%;
+}
+
 .filter_label {
   font-size: 0.9em;
-}
-
-.filter_genres {
-  /*outline: red 1px solid;*/
-  /*grid-area: left;*/
-  display: flex;
-  flex-flow: column;
-}
-
-.filter_types {
-  /*outline: green 1px solid;*/
-  /*grid-area: right;*/
-  display: flex;
-  flex-flow: column;
-
+  cursor: pointer;
 }
 </style>
