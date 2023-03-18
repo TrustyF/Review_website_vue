@@ -1,9 +1,14 @@
 <script setup>
 import '../styles/globals.css'
 import MovieContainer from "@/components/MovieContainer";
+import DbHelper from "@/components/DbHelper";
+
 </script>
 
 <template>
+
+  <db-helper :open="true" :input-data="currentSelectedMovie"></db-helper>
+
   <div class="filters">
     <h1 style="font-weight: bold; font-size: 1.5em">Filters</h1>
     <label class="filter_label">
@@ -30,7 +35,7 @@ import MovieContainer from "@/components/MovieContainer";
         <p class="rating_desc"> {{ getRankDetails(rating[0]['my_rating']) }}</p>
       </div>
       <div class="movie_container_wrapper" v-for="mov in rating" :key="mov.id">
-        <MovieContainer :key="mov.id" :data="mov"></MovieContainer>
+        <MovieContainer :key="mov.id" :data="mov" @debug_current_movie_data="debugSetCurrentMovie"></MovieContainer>
       </div>
 
     </div>
@@ -75,7 +80,8 @@ export default {
           'filter': [],
         },
       },
-      excludeMode: false
+      excludeMode: false,
+      currentSelectedMovie: {},
     }
   },
   async created() {
@@ -85,7 +91,7 @@ export default {
   computed: {
     computeFilters() {
       return this.applyFilters()
-    }
+    },
   },
   methods: {
     sortMovies() {
@@ -93,20 +99,18 @@ export default {
 
       for (let i = 10; i > 0; i--) {
         let list = []
-        Object.keys(MovieLib).forEach((type) => {
-          if (type.length > 0) {
-            MovieLib[type].forEach((elem) => {
-              if (elem.my_rating === i.toString() && elem['result_count'] !== 0) {
-                list.push(elem)
-              }
-            })
-          }
-        })
+          MovieLib.forEach((elem) => {
+            if (elem.my_rating === i.toString() && elem['result_count'] !== 0) {
+              list.push(elem)
+            }
+          })
+
         // sort by reception
         list.sort((a, b) => b['vote_average'] - a['vote_average'])
         // export
         movies_sorted.push(list)
       }
+      console.log(movies_sorted)
       return movies_sorted
 
     },
@@ -121,6 +125,7 @@ export default {
       }
     },
     getRankDetails(rank) {
+      if (rank === '10') return 'Perfect'
       if (rank === '9') return 'Near perfect masterpiece'
       if (rank === '8') return 'Extremely good'
       if (rank === '7') return 'Quite good'
@@ -152,7 +157,7 @@ export default {
       }
 
       if (f_rating.length < 1) {
-        ratings = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        ratings = [1, 2, 3, 4, 5, 6, 7, 8, 9,10]
       } else {
         ratings = f_rating.sort()
       }
@@ -203,6 +208,9 @@ export default {
       })
       // this.filteredMovies = [...result].reverse()
       return result.reverse()
+    },
+    debugSetCurrentMovie(input){
+      this.currentSelectedMovie = input
     }
   }
 }

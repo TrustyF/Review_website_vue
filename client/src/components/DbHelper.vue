@@ -1,6 +1,8 @@
 <script setup>
 import TagContainer from "@/components/TagContainer";
+import MovieContainer from "@/components/MovieContainer";
 import asset_paths from '../../public/assets/tags/assets.json'
+
 </script>
 <template>
   <div v-if="open" class="db_helper">
@@ -8,109 +10,109 @@ import asset_paths from '../../public/assets/tags/assets.json'
       <div class="wrapper">
         <div class="wrapper">
           <div>
-            <div>
-              <label style="padding: 10px">Rating</label>
-              <input type="number" @change="data['my_rating'] = $event.target.value" :value="data['my_rating']">
-            </div>
+
+            <!--            <MovieContainer :data="data"></MovieContainer>-->
+
+            <h1 style="padding: 10px">{{ data['title'] }}</h1>
 
             <div>
-              <label style="padding: 10px">Difficulty</label>
-              <input type="number" value="2">
+              <label>Rating</label>
+              <input type="number" :value="data['my_rating']" @change="data['my_rating'] = $event.target.value">
             </div>
 
+            <!--            <div>-->
+            <!--              <label style="padding: 10px" @change="data['difficulty'] = $event.target.value">Difficulty</label>-->
+            <!--              <input type="number" value="2">-->
+            <!--            </div>-->
+
             <div>
-              <button style="margin: 10px" type="button" @click="writeJson">Confirm</button>
+              <button v-if="confirmed === false" style="margin: 10px" type="button" @click="editData">Confirm</button>
+              <button style="margin: 10px" type="button" @click="pushData">Push</button>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-<!--    <div class="wrapper" id="icon_adder">-->
-<!--      <div id="icon_description">-->
-<!--        <div style="width: min-content">-->
-<!--          <TagContainer class="preview" v-if="iconTitle || iconDesc || iconImg"-->
-<!--                        :tag="{'path':iconImg,'description':iconDesc,'name':iconTitle}"/>-->
-<!--        </div>-->
-<!--        <label>Title </label>-->
-<!--        <input type="text" v-model="iconTitle"/>-->
-<!--        <label>Description </label>-->
-<!--        <input type="text" v-model="iconDesc"/>-->
+    <div class="wrapper" id="icon_adder">
 
-<!--        <button type="button" @click="addIcon">Add to movie</button>-->
-<!--        <button type="button" @click="removeIcon">Remove from movie</button>-->
-<!--        <span>&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</span>-->
-<!--        <button type="button" @click="addPreset">Add to presets</button>-->
-<!--        <button type="button" @click="removePreset">Remove from presets</button>-->
-<!--        <span>&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</span>-->
-<!--        <div v-if="asset_paths">-->
-<!--          <button type="button" @click="iconTier=i; loadPresets()" v-for="(tier,i) in asset_paths['icons']" :key="tier"-->
-<!--                  :style="`background:${i};border-radius: 5px;padding:5px`">{{ i }}-->
-<!--          </button>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div id="icons_preset">-->
-<!--        <button type="button" v-for="(tag,i) in tag_presets" :key="tag" :name="i" class="icon_button"-->
-<!--                @click="selectPreset(tag)">-->
-<!--          <TagContainer :tag="tag"/>-->
-<!--        </button>-->
-<!--      </div>-->
-<!--      <div id="icons_selector">-->
-<!--        <button type="button" v-for="asset in asset_paths['icons'][iconTier]" :key="asset" :name="asset"-->
-<!--                class="icon_button"-->
-<!--                @click="iconImg = `./assets/tags/icons/${iconTier}/` + asset">-->
-<!--          <img :key="asset" :src="`./assets/tags/icons/${iconTier}/` + asset" class="icon_image" alt="icon">-->
-<!--        </button>-->
-<!--      </div>-->
-<!--    </div>-->
+      <div id="icon_description">
+
+        <div style="width: min-content">
+          <img :src="`./assets/tags/icons/${iconTier}/${iconId}`" class="icon_image" alt="icon">
+        </div>
+
+        <label>Title </label>
+        <input type="text" v-model="iconTitle"/>
+
+        <label>Description </label>
+        <input type="text" v-model="iconDesc"/>
+
+        <button type="button" @click="addIcon">Add to movie</button>
+        <button type="button" @click="removeIcon">Remove from movie</button>
+        <span>----------------</span>
+        <button type="button" @click="addPreset">Add to presets</button>
+        <button type="button" @click="removePreset">Remove from presets</button>
+        <span>----------------</span>
+
+        <div v-if="asset_paths">
+          <button type="button" @click="iconTier=tier" v-for="tier in availableTiers" :key="tier"
+                  :style="`background:${tier};border-radius: 5px;padding:5px`">{{ tier }}
+          </button>
+        </div>
+      </div>
+
+      <div id="icons_selector">
+        <button type="button" v-for="asset in asset_paths['icons'][iconTier]" :key="asset" :name="asset"
+                class="icon_button" @click="iconId=asset">
+          <img :key="asset" v-lazy="`./assets/tags/icons/${iconTier}/${asset}`" class="icon_image" alt="icon">
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import MovieLib from "../../public/assets/movie_db_lib.json"
 import axios from 'axios'
+// import asset_paths from '../../public/assets/tags/assets.json'
 
 export default {
   name: "DbHelper",
   props: {
     open: Boolean,
-    inputData: Object,
+    inputData: {},
+  },
+  watch: {
+    inputData: function (newVal, oldVal) {
+      console.log(newVal)
+      this.data = this.inputData
+      this.confirmed = false
+    }
   },
   data() {
     return {
-      data: Object,
-      tag_presets: String,
-      iconTitle: String,
-      iconDesc: String,
-      iconImg: String,
-      iconTier: String,
-      movieId: String,
-      presetId: String,
+      data: {},
+      availableTiers: ['gold', 'green', 'silver', 'red', 'purple', 'cyan'],
+      iconId: "",
+      iconTier: "gold",
+      iconTitle: "",
+      iconDesc: "",
+      confirmed: false,
     }
   },
-  created() {
-    this.data = this.inputData
-  },
   methods: {
-    Icons: {
-      addIcon() {
-
-      },
-      removeIcon() {
-
-      },
-      addPreset() {
-
-      },
-      removePreset() {
-
-      },
-      loadPresets() {
-
-      },
+    editData() {
+      axios.post('http://localhost:5000/edit_movie/', this.data)
+          .then(response => {
+            if (response.status === 200) this.confirmed = true
+          })
+          .catch(error => {
+          })
     },
-    postData(){
-      axios.post()
+    pushData() {
+      axios.get('http://localhost:5000/push_movie/')
+          .catch(error => {
+          })
     }
   }
 
@@ -120,10 +122,10 @@ export default {
 <style>
 .db_helper {
   /*border-style: solid;*/
-  position: absolute;
-  transform: translate(-200px, 300px);
+  position: fixed;
   display: flex;
   z-index: 10;
+  top: 490px;
 
   /*background-color: green;*/
 }

@@ -1,24 +1,22 @@
 <script setup>
 import TagContainer from "./TagContainer";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
-import DbHelper from "@/components/DbHelper";
 </script>
 
 <template>
-  <!--  <db-helper :open="settingsOpen" :input-data="data"></db-helper>-->
   <div class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [isSeen ? ' seen' : '']">
     <div class="main_block">
 
-      <!--      <div class="settings">-->
-      <!--        <button @click="settingsOpen = !settingsOpen">...</button>-->
-      <!--      </div>-->
+      <div class="settings">
+        <button @click="settingsOpen = !settingsOpen" @mousedown="sendData">...</button>
+      </div>
 
 
       <div class="tags_list_poster">
         <tag-container v-for="tag in data['tags']" :key="tag" :tag="tag"/>
       </div>
 
-      <img v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`" class="poster" alt="poster"
+      <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`" class="poster" alt="poster"
            v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
 
       <div class="content">
@@ -98,6 +96,12 @@ export default {
     clickOutside(input) {
       this.isOpen = false
     },
+    sendData() {
+      this.$emit('debug_current_movie_data', this.data)
+    },
+    emitSettingsOpen(){
+      this.$emit('settings_open', this.settingsOpen)
+    }
   }
 }
 </script>
@@ -149,13 +153,15 @@ export default {
   transition: 0.2s ease;
   opacity: 0;
 }
+
 .seen .seen_checkbox_box {
   background-color: royalblue;
   border-color: royalblue;
   box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.5);
   opacity: 1;
 }
-.seen_checkbox_hitBox:hover .seen_checkbox_box  {
+
+.seen_checkbox_hitBox:hover .seen_checkbox_box {
   opacity: 1;
 }
 
@@ -174,7 +180,7 @@ export default {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) translate(0,-1px) rotate(45deg);
+  transform: translate(-50%, -50%) translate(0, -1px) rotate(45deg);
   display: inline-block;
   /*margin-left: 60%;*/
   height: 7px;
