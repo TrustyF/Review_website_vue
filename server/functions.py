@@ -1,10 +1,13 @@
 import json
+import os
 from tinydb import TinyDB, Query, where
 from tinydb.storages import JSONStorage, MemoryStorage
 from tinydb.middlewares import CachingMiddleware
 from pprint import pprint
 
-unsorted_database = TinyDB('database/unsorted_db.json')
+my_dir = os.path.dirname(__file__)
+json_file_path = os.path.join(my_dir, 'database/unsorted_db.json')
+unsorted_database = TinyDB(json_file_path)
 
 
 # sorted_database = TinyDB('database/sorted_db.json')
