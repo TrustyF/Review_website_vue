@@ -1,12 +1,4 @@
-<script setup>
-import '../styles/globals.css'
-import MovieContainer from "@/components/MovieContainer";
-import DbHelper from "@/components/DbHelper";
-
-</script>
-
 <template>
-
   <db-helper :open="true" :input-data="currentSelectedMovie"></db-helper>
 
   <div class="filters">
@@ -28,8 +20,7 @@ import DbHelper from "@/components/DbHelper";
 
   </div>
   <div class="feed">
-    <div class="movie_grid" v-for="rating in computeFilters" :key="rating">
-
+    <div class="movie_grid" v-for="rating in movies" :key="rating">
       <div v-if="rating[0]" class="rating_container">
         <h1 class="rating_title">{{ rating[0]['my_rating'] }}</h1>
         <p class="rating_desc"> {{ getRankDetails(rating[0]['my_rating']) }}</p>
@@ -42,178 +33,87 @@ import DbHelper from "@/components/DbHelper";
   </div>
 </template>
 
-<script>
-import MovieLib from "../../public/assets/movie_db_lib.json"
+<script setup>
+import '../styles/globals.css'
+import MovieContainer from "@/components/MovieContainer";
+import DbHelper from "@/components/DbHelper";
+
+import axios from 'axios'
+import {ref, onMounted} from 'vue'
 
 // to do
 // add addedDate, add fresh review, fix long titles
 
-export default {
-  data() {
-    return {
-      movies: [],
-      filteredMovies: [],
-      filters: {
-        'type': {
-          'name': 'Type',
-          'available': ["Movie", "Tv-series"],
-          'filter': [],
-        },
-        'format': {
-          'name': 'Format',
-          'available': ["Live-action", "Animated", "Documentary"],
-          'filter': [],
-        },
-        'genre': {
-          'name': 'Genre',
-          'available': ["Action", "Adventure", "Crime", "Comedy", "Drama", "Family", "Horror", "Mystery", "Science Fiction", "Thriller"],
-          'filter': [],
-        },
-        'rating': {
-          'name': 'Rating',
-          'available': [9, 8, 7, 6, 5, 4, 3, 2, 1],
-          'filter': [],
-        },
-        'length': {
-          'name': 'Length',
-          'available': [1, 2, 3],
-          'filter': [],
-        },
-      },
-      excludeMode: false,
-      currentSelectedMovie: {},
-    }
+
+const movies = ref([])
+const excludeMode = ref(false)
+const currentSelectedMovie = ref({})
+const filters = {
+  'type': {
+    'name': 'Type',
+    'available': ["Movie", "Tv-series"],
+    'filter': [],
   },
-  async created() {
-    this.movies = [...this.sortMovies()]
-    this.filteredMovies = []
+  'format': {
+    'name': 'Format',
+    'available': ["Live-action", "Animated", "Documentary"],
+    'filter': [],
   },
-  computed: {
-    computeFilters() {
-      return this.applyFilters()
-    },
+  'genre': {
+    'name': 'Genre',
+    'available': ["Action", "Adventure", "Crime", "Comedy", "Drama", "Family", "Horror", "Mystery", "Science Fiction", "Thriller"],
+    'filter': [],
   },
-  methods: {
-    sortMovies() {
-      let movies_sorted = []
+  'rating': {
+    'name': 'Rating',
+    'available': [9, 8, 7, 6, 5, 4, 3, 2, 1],
+    'filter': [],
+  },
+  'length': {
+    'name': 'Length',
+    'available': [1, 2, 3],
+    'filter': [],
+  },
+}
 
-      for (let i = 10; i > 0; i--) {
-        let list = []
-          MovieLib.forEach((elem) => {
-            if (elem.my_rating === i.toString() && elem['result_count'] !== 0) {
-              list.push(elem)
-            }
-          })
-
-        // sort by reception
-        list.sort((a, b) => b['vote_average'] - a['vote_average'])
-        // export
-        movies_sorted.push(list)
-      }
-      console.log(movies_sorted)
-      return movies_sorted
-
-    },
-    swap_filter(filter, target) {
-      if (target.includes(filter) === false) {
-        target.push(filter)
-      } else {
-        let index = target.indexOf(filter)
-        if (index > -1) { // only splice array when item is found
-          target.splice(index, 1); // 2nd parameter means remove one item only
-        }
-      }
-    },
-    getRankDetails(rank) {
-      if (rank === '10') return 'Perfect'
-      if (rank === '9') return 'Near perfect masterpiece'
-      if (rank === '8') return 'Extremely good'
-      if (rank === '7') return 'Quite good'
-      if (rank === '6') return 'Good with flaws'
-      if (rank === '5') return "Mid"
-      if (rank === '4') return 'Bad'
-      if (rank === '3') return 'Fucking bad'
-      if (rank === '2') return 'Holy shit bad'
-      if (rank === '1') return 'Affront to god'
-    },
-    applyFilters() {
-      let result = []
-      let ratings = []
-      let reversedMovies = [...this.movies].reverse()
-
-      let f_type = this.filters['type']['filter']
-      let f_format = this.filters['format']['filter']
-      let f_genre = this.filters['genre']['filter']
-      let f_rating = this.filters['rating']['filter']
-      let f_length = this.filters['length']['filter']
-
-      let exclude_mode = this.excludeMode
-
-      let lenMin
-      let lenMax
-      if (f_length.length > 0) {
-        lenMin = Math.min(...f_length)
-        lenMax = Math.max(...f_length)
-      }
-
-      if (f_rating.length < 1) {
-        ratings = [1, 2, 3, 4, 5, 6, 7, 8, 9,10]
-      } else {
-        ratings = f_rating.sort()
-      }
-
-      // filter rating
-      ratings.forEach((rating) => {
-        let list = reversedMovies[rating - 1]
-
-        // filter length
-        if (f_length.length > 0) {
-          list = (list.filter(mov => mov['runtime'] > lenMin * 60 && mov['runtime'] < (lenMax + 1) * 60 && mov['media_type'].includes("tv") === exclude_mode))
-        }
-
-        // filter type
-        f_type.forEach((type) => {
-          // filter movies
-          if (type === "Movie") {
-            list = list.filter(mov => mov['media_type'].includes("movie") === !exclude_mode)
-          }
-          // filter tv
-          if (type === "Tv-series") {
-            list = list.filter(mov => mov['media_type'].includes("tv") === !exclude_mode)
-          }
-        })
-
-        // filter format
-        f_format.forEach((format) => {
-          // filter Live-action
-          if (format === "Live-action") {
-            list = list.filter(mov => mov['genres'].includes("Animation") === exclude_mode)
-          }
-          // filter Animated
-          if (format === "Animated") {
-            list = list.filter(mov => mov['genres'].includes("Animation") === !exclude_mode)
-          }
-          // filter Documentary
-          if (format === "Documentary") {
-            list = list.filter(mov => mov['genres'].includes("Documentary") === !exclude_mode)
-          }
-        })
-
-        // filter genre
-        f_genre.forEach((genre) => {
-          list = (list.filter(mov => mov['genres'].includes(genre) === !exclude_mode))
-        })
-
-        result.push(list)
+onMounted(() => {
+  axios.get('http://localhost:5000/get_movies/')
+      .then(response => {
+        console.log(response.data)
+        movies.value = response.data
       })
-      // this.filteredMovies = [...result].reverse()
-      return result.reverse()
-    },
-    debugSetCurrentMovie(input){
-      this.currentSelectedMovie = input
+})
+
+
+function swap_filter(filter, target) {
+  if (target.includes(filter) === false) {
+    target.push(filter)
+  } else {
+    let index = target.indexOf(filter)
+    if (index > -1) { // only splice array when item is found
+      target.splice(index, 1); // 2nd parameter means remove one item only
     }
   }
 }
+
+function getRankDetails(rank) {
+  if (rank === '10') return 'Perfect'
+  if (rank === '9') return 'Near perfect masterpiece'
+  if (rank === '8') return 'Extremely good'
+  if (rank === '7') return 'Quite good'
+  if (rank === '6') return 'Good with flaws'
+  if (rank === '5') return "Mid"
+  if (rank === '4') return 'Bad'
+  if (rank === '3') return 'Fucking bad'
+  if (rank === '2') return 'Holy shit bad'
+  if (rank === '1') return 'Affront to god'
+}
+
+function debugSetCurrentMovie(input) {
+  currentSelectedMovie.value = input
+}
+
+
 </script>
 
 <style scoped>
@@ -236,7 +136,7 @@ export default {
 }
 
 .rating_title {
-  font-family: "Arial Black";
+  font-family: "Arial Black", serif;
   padding: 10px 5px 5px 0;
   font-size: 2em;
   border-bottom: solid black 1px;
@@ -262,7 +162,7 @@ export default {
 }
 
 .filters {
-  font-family: Calibri;
+  font-family: Calibri, serif;
   user-select: none;
   position: fixed;
   width: 150px;
