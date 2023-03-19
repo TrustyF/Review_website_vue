@@ -1,5 +1,5 @@
 <template>
-  <db-helper :open="true" :input-data="currentSelectedMovie"></db-helper>
+<!--  <db-helper :open="true" :input-data="currentSelectedMovie"></db-helper>-->
 
   <div class="filters">
     <h1 style="font-weight: bold; font-size: 1.5em">Filters</h1>
@@ -76,8 +76,11 @@ const filters = {
   },
 }
 
+const local_api = "http://localhost:5000"
+const curr_api = "https://trustyfox.pythonanywhere.com"
+
 onMounted(() => {
-  axios.get('http://localhost:5000/get_movies/')
+  axios.get(`${local_api}/get_movies/`)
       .then(response => {
         console.log(response.data)
         movies.value = response.data
