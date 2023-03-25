@@ -73,7 +73,17 @@ def filter_movies(query):
 
     #  filter rating
     if len(rating_filters) > 0:
-        rating_query = Query().my_rating.all(rating_filters)
+        rating_query = Query().my_rating.any(rating_filters)
+
+    # filter length
+    for length_filter in length_filters:
+        match length_filter:
+            case "1":
+                length_query = Query().runtime <= 120
+            case "2":
+                length_query = 120 < Query().runtime < 180
+            case "3":
+                length_query = Query().runtime >= 180
 
     # output
     filtered_movies = {}
@@ -83,7 +93,9 @@ def filter_movies(query):
         filtered_movies[f'ranked_{rank}'] = sorted_database.table(f'ranked_{rank}').search(
             type_query &
             format_query &
-            genre_query
+            genre_query &
+            rating_query &
+            length_query
         )
 
     return filtered_movies
