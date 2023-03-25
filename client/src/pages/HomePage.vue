@@ -86,7 +86,7 @@ onMounted(() => {
 
 function update_movies() {
   console.log('updating movies', filters)
-  axios.post(`${local_api}/get_movies/`, filters)
+  axios.post(`${curr_api}/get_movies/`, filters)
       .then(response => {
         console.log(response.data)
         movies.value = response.data
