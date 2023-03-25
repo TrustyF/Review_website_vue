@@ -8,7 +8,7 @@ CORS(app)
 
 
 # routes
-@app.route('/get_movies/', methods=["POST"])
+@app.route('/get_movies/', methods=["GET","POST"])
 def get_movies():
     return functions.get_all_movies(request.json)
 

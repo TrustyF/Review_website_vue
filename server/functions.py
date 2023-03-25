@@ -101,4 +101,19 @@ def filter_movies(query):
 
 
 def edit_movie(query):
-    sorted_database.update(query, where('title') == query['title'])
+    old_data = query['oldData']
+    new_rating = query['newRating']
+
+    curr_table = f'ranked_{old_data["my_rating"]}'
+    target_table = f'ranked_{new_rating}'
+
+    title_query = Query().title == str(old_data['title'])
+
+    element = sorted_database.table(curr_table).get(title_query)
+    element['my_rating'] = new_rating
+    try:
+        sorted_database.table(target_table).insert(element)
+    except ValueError:
+        print('already in table')
+    sorted_database.table(curr_table).remove(title_query)
+
