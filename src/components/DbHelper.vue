@@ -68,6 +68,9 @@ import asset_paths from '../../public/assets/tags/assets.json'
           <img :key="asset" v-lazy="`./assets/tags/icons/${iconTier}/${asset}`" class="icon_image" alt="icon">
         </button>
       </div>
+
+      <button style="position: absolute">x</button>
+
     </div>
   </div>
 </template>

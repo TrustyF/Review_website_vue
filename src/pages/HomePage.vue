@@ -1,5 +1,5 @@
 <template>
-  <!--  <db-helper :open="true" :input-data="currentSelectedMovie"></db-helper>-->
+    <db-helper :open="settingsOpen" :input-data="currentSelectedMovie"></db-helper>
 
   <div class="filters">
     <h1 style="font-weight: bold; font-size: 1.5em">Filters</h1>
@@ -26,7 +26,7 @@
         <p class="rating_desc"> {{ getRankDetails(rating) }}</p>
       </div>
       <div class="movie_container_wrapper" v-for="mov in movies[`ranked_${rating}`]" :key="mov.id">
-        <MovieContainer :key="mov.id" :data="mov" @debug_current_movie_data="debugSetCurrentMovie"></MovieContainer>
+        <MovieContainer :key="mov.id" :data="mov" @debug_current_movie_data="debugSetCurrentMovie" @settings_open="settingsOpen = true"></MovieContainer>
       </div>
 
     </div>
@@ -48,6 +48,7 @@ import {ref, onMounted} from 'vue'
 const movies = ref([])
 const excludeMode = ref(false)
 const currentSelectedMovie = ref({})
+const settingsOpen = ref(false)
 const filters = {
   'type': {
     'name': 'Type',
@@ -110,7 +111,7 @@ function getRankDetails(rank) {
   if (rank === 8) return 'Extremely good'
   if (rank === 7) return 'Quite good'
   if (rank === 6) return 'Good with flaws'
-  if (rank === 5) return "Mid"
+  if (rank === 5) return "Meh"
   if (rank === 4) return 'Bad'
   if (rank === 3) return 'Fucking bad'
   if (rank === 2) return 'Holy shit bad'
