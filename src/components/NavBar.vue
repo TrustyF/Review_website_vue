@@ -19,7 +19,7 @@ export default {
 
 <style scoped>
 nav {
-  /*position: relative;*/
+  position: relative;
   /*width: 100%;*/
   /*display: flex;*/
   justify-content: center;

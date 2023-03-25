@@ -5,7 +5,7 @@ import asset_paths from '../../public/assets/tags/assets.json'
 
 </script>
 <template>
-  <div v-if="open" class="db_helper">
+  <div v-if="isOpen" class="db_helper">
     <div class="load_movie">
       <div class="wrapper">
         <div class="wrapper">
@@ -17,7 +17,7 @@ import asset_paths from '../../public/assets/tags/assets.json'
 
             <div>
               <label>Rating</label>
-              <input type="number" :value="data['my_rating']" @change="data['my_rating'] = $event.target.value">
+              <input type="number" :value="data['my_rating']" @change="newRating = $event.target.value">
             </div>
 
             <!--            <div>-->
@@ -26,8 +26,7 @@ import asset_paths from '../../public/assets/tags/assets.json'
             <!--            </div>-->
 
             <div>
-              <button v-if="confirmed === false" style="margin: 10px" type="button" @click="editData">Confirm</button>
-              <button style="margin: 10px" type="button" @click="pushData">Push</button>
+              <button v-if="!editConfirmed" style="margin: 10px" type="button" @click="editData">Confirm</button>
             </div>
           </div>
         </div>
@@ -50,26 +49,26 @@ import asset_paths from '../../public/assets/tags/assets.json'
 
         <button type="button" @click="addIcon">Add to movie</button>
         <button type="button" @click="removeIcon">Remove from movie</button>
-        <span>----------------</span>
+
         <button type="button" @click="addPreset">Add to presets</button>
         <button type="button" @click="removePreset">Remove from presets</button>
-        <span>----------------</span>
 
-        <div v-if="asset_paths">
-          <button type="button" @click="iconTier=tier" v-for="tier in availableTiers" :key="tier"
-                  :style="`background:${tier};border-radius: 5px;padding:5px`">{{ tier }}
-          </button>
-        </div>
+      </div>
+
+      <div id="tier_selector" v-if="asset_paths">
+        <button type="button" @click="iconTier=tier" v-for="tier in availableTiers" :key="tier"
+                :style="`background:${tier};border-radius: 5px;padding:5px`">{{ tier }}
+        </button>
       </div>
 
       <div id="icons_selector">
         <button type="button" v-for="asset in asset_paths['icons'][iconTier]" :key="asset" :name="asset"
                 class="icon_button" @click="iconId=asset">
-          <img :key="asset" v-lazy="`./assets/tags/icons/${iconTier}/${asset}`" class="icon_image" alt="icon">
+          <tag-container :key="asset" v-lazy="`./assets/tags/icons/${iconTier}/${asset}`" class="icon_image" alt="icon"></tag-container>
         </button>
       </div>
 
-      <button style="position: absolute">x</button>
+      <button @click="this.$emit('settingsClosed', false)" style="position: absolute; right: 0">x</button>
 
     </div>
   </div>
@@ -77,45 +76,50 @@ import asset_paths from '../../public/assets/tags/assets.json'
 
 <script>
 import axios from 'axios'
+import {reactive} from "vue"
 // import asset_paths from '../../public/assets/tags/assets.json'
 
 export default {
   name: "DbHelper",
   props: {
-    open: Boolean,
-    inputData: {},
+    inputData: Object,
+    isOpen: Boolean
   },
   watch: {
     inputData: function (newVal, oldVal) {
       console.log(newVal)
       this.data = this.inputData
-      this.confirmed = false
-    }
+    },
+    isOpen: function (newVal, oldVal) {
+      console.log(newVal)
+      this.opened = this.isOpen
+    },
+
   },
   data() {
     return {
       data: {},
+      opened:false,
       availableTiers: ['gold', 'green', 'silver', 'red', 'purple', 'cyan'],
       iconId: "",
       iconTier: "gold",
       iconTitle: "",
       iconDesc: "",
-      confirmed: false,
+
+      newRating: Number,
+      editConfirmed:false
     }
   },
   methods: {
     editData() {
-      axios.post('http://localhost:5000/edit_movie/', this.data)
-          .then(response => {
-            if (response.status === 200) this.confirmed = true
-          })
-          .catch(error => {
-          })
-    },
-    pushData() {
-      axios.get('http://localhost:5000/push_movie/')
-          .catch(error => {
-          })
+      axios.post('http://localhost:5000/edit_movie/', {
+        oldData: this.data,
+        newRating: this.newRating
+      }) .then((response) =>{
+        if (response.status === 200){
+          this.editConfirmed = true
+        }
+      })
     }
   }
 
@@ -128,7 +132,9 @@ export default {
   position: fixed;
   display: flex;
   z-index: 10;
-  top: 490px;
+  bottom: 0;
+  width: 1500px;
+  height: 270px;
 
   /*background-color: green;*/
 }
@@ -154,16 +160,22 @@ export default {
   display: flex;
   grid-template-columns: repeat(3, 1fr);
   /*justify-content: space-evenly;*/
-  height: 400px;
+  /*height: 400px;*/
   gap: 10px;
 }
 
 #icon_description {
   outline: 1px solid grey;
   padding: 5px;
-  max-width: 150px;
-  /*display: flex;*/
-  /*flex-flow: column;*/
+  max-width: 300px;
+  display: flex;
+  flex-flow: column;
+}
+
+#tier_selector {
+  display: flex;
+  flex-flow: column;
+  /*width: 100px;*/
 }
 
 #icons_selector {

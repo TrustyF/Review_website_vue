@@ -7,7 +7,7 @@ import '@/styles/tag_container.css'
     <PopperComp :hover="true" :arrow="true" placement="right">
       <img class="tag_icon" :src="tag['path']" :alt="tag['path']">
       <template #content>
-<!--        <img class="description_icon" :src="tag['path']" alt="desc_icon">-->
+        <img class="description_icon" :src="tag['path']" alt="desc_icon">
         <div class="description">
           <h3 class=tag_name>{{ tag['name'] }}</h3>
           <h1 class="tag_description">{{ tag['description'] }}</h1>

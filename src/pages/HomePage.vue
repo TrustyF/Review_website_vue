@@ -1,5 +1,5 @@
 <template>
-    <db-helper :open="settingsOpen" :input-data="currentSelectedMovie"></db-helper>
+  <db-helper :inputData="currentSelectedMovie" :isOpen="settingsOpen" @settingsClosed="closeSettings"></db-helper>
 
   <div class="filters">
     <h1 style="font-weight: bold; font-size: 1.5em">Filters</h1>
@@ -26,7 +26,7 @@
         <p class="rating_desc"> {{ getRankDetails(rating) }}</p>
       </div>
       <div class="movie_container_wrapper" v-for="mov in movies[`ranked_${rating}`]" :key="mov.id">
-        <MovieContainer :key="mov.id" :data="mov" @debug_current_movie_data="debugSetCurrentMovie" @settings_open="settingsOpen = true"></MovieContainer>
+        <MovieContainer :key="mov.id" :data="mov" @debug_current_movie_data="debugSetCurrentMovie"></MovieContainer>
       </div>
 
     </div>
@@ -52,7 +52,7 @@ const settingsOpen = ref(false)
 const filters = {
   'type': {
     'name': 'Type',
-    'available': ["Movie", "Tv-series","Documentary"],
+    'available': ["Movie", "Tv-series", "Documentary"],
     'filter': [],
   },
   'format': {
@@ -85,7 +85,7 @@ onMounted(() => {
 })
 
 function update_movies() {
-  console.log('updating movies',filters)
+  console.log('updating movies', filters)
   axios.post(`${local_api}/get_movies/`, filters)
       .then(response => {
         console.log(response.data)
@@ -119,7 +119,11 @@ function getRankDetails(rank) {
 }
 
 function debugSetCurrentMovie(input) {
+  settingsOpen.value = true
   currentSelectedMovie.value = input
+}
+function closeSettings(input){
+  settingsOpen.value = input
 }
 
 

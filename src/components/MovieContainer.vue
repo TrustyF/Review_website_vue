@@ -97,9 +97,8 @@ export default {
     },
     sendData() {
       console.log('sending data')
-      this.$emit('debug_current_movie_data', this.data)
       this.$emit('settings_open', this.settingsOpen)
-
+      this.$emit('debug_current_movie_data', this.data)
     }
   }
 }
