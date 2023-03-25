@@ -7,7 +7,7 @@ from tinydb.middlewares import CachingMiddleware
 from pprint import pprint
 
 my_dir = os.path.dirname(__file__)
-sorted_json_file_path = os.path.join(my_dir, r'database\sorted_db.json')
+sorted_json_file_path = os.path.join(my_dir, r'database/sorted_db.json')
 
 sorted_database = TinyDB(sorted_json_file_path)
 
