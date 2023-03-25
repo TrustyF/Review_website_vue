@@ -66,12 +66,12 @@ const filters = {
   },
   'rating': {
     'name': 'Rating',
-    'available': [9, 8, 7, 6, 5, 4, 3, 2, 1],
+    'available': ["9", "8", "7", "6", "5", "4", "3", "2", "1"],
     'filter': [],
   },
   'length': {
     'name': 'Length',
-    'available': [1, 2, 3],
+    'available': ["1", "2", "3"],
     'filter': [],
   },
 }

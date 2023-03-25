@@ -8,7 +8,7 @@ import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
     <div class="main_block">
 
       <div class="settings">
-        <button @click="settingsOpen = !settingsOpen" @mousedown="sendData">...</button>
+<!--        <button @click="settingsOpen = !settingsOpen" @mousedown="sendData">...</button>-->
       </div>
 
 
