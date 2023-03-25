@@ -6,9 +6,9 @@ import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
   <div class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [isSeen ? ' seen' : '']">
     <div class="main_block">
 
-      <div class="settings">
-        <button @click="settingsOpen = !settingsOpen" @mousedown="sendData">...</button>
-      </div>
+<!--      <div class="settings">-->
+<!--        <button @click="settingsOpen = !settingsOpen" @mousedown="sendData">...</button>-->
+<!--      </div>-->
 
 
       <div class="tags_list_poster">
