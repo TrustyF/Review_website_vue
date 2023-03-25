@@ -32,7 +32,7 @@ def get_all_movies(query):
     print('getting movies!!')
     # filtered_movies = filter_movies(query)
     # return filtered_movies
-    print(sorted_database.all())
+    print(sorted_database.table('ranked_9').all())
     return sorted_database.table('ranked_9')
 
 
