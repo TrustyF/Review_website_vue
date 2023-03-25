@@ -1,5 +1,5 @@
 <template>
-<!--  <db-helper :open="true" :input-data="currentSelectedMovie"></db-helper>-->
+  <!--  <db-helper :open="true" :input-data="currentSelectedMovie"></db-helper>-->
 
   <div class="filters">
     <h1 style="font-weight: bold; font-size: 1.5em">Filters</h1>
@@ -12,7 +12,7 @@
       <h1 style="text-decoration: underline;padding-bottom: 5px">{{ elem['name'] }}</h1>
       <div v-for="filter in elem['available']" :key="filter" class="filter_content_list">
         <label class="filter_label">
-          <input type="checkbox" style="cursor: pointer" @change="swap_filter(filter,elem['filter'])">
+          <input type="checkbox" style="cursor: pointer" @change="swap_filter(filter,elem['filter']);update_movies()">
           {{ filter }}
         </label>
       </div>
@@ -20,12 +20,12 @@
 
   </div>
   <div class="feed">
-    <div class="movie_grid" v-for="rating in movies" :key="rating">
-      <div v-if="rating[0]" class="rating_container">
-        <h1 class="rating_title">{{ rating[0]['my_rating'] }}</h1>
-        <p class="rating_desc"> {{ getRankDetails(rating[0]['my_rating']) }}</p>
+    <div class="movie_grid" v-for="rating in [9,8,7,6,5,4,3,2,1]" :key="rating">
+      <div class="rating_container">
+        <h1 class="rating_title">{{ rating }}</h1>
+        <p class="rating_desc"> {{ getRankDetails(rating) }}</p>
       </div>
-      <div class="movie_container_wrapper" v-for="mov in rating" :key="mov.id">
+      <div class="movie_container_wrapper" v-for="mov in movies[`ranked_${rating}`]" :key="mov.id">
         <MovieContainer :key="mov.id" :data="mov" @debug_current_movie_data="debugSetCurrentMovie"></MovieContainer>
       </div>
 
@@ -51,12 +51,12 @@ const currentSelectedMovie = ref({})
 const filters = {
   'type': {
     'name': 'Type',
-    'available': ["Movie", "Tv-series"],
+    'available': ["Movie", "Tv-series","Documentary"],
     'filter': [],
   },
   'format': {
     'name': 'Format',
-    'available': ["Live-action", "Animated", "Documentary"],
+    'available': ["Live-action", "Animated"],
     'filter': [],
   },
   'genre': {
@@ -80,15 +80,20 @@ const local_api = "http://localhost:5000"
 const curr_api = "https://trustyfox.pythonanywhere.com"
 
 onMounted(() => {
-  axios.get(`${local_api}/get_movies/`)
+  update_movies()
+})
+
+function update_movies() {
+  console.log('updating movies',filters)
+  axios.post(`${local_api}/get_movies/`, filters)
       .then(response => {
         console.log(response.data)
         movies.value = response.data
       })
-})
-
+}
 
 function swap_filter(filter, target) {
+  console.log('swapping filter')
   if (target.includes(filter) === false) {
     target.push(filter)
   } else {
@@ -100,16 +105,16 @@ function swap_filter(filter, target) {
 }
 
 function getRankDetails(rank) {
-  if (rank === '10') return 'Perfect'
-  if (rank === '9') return 'Near perfect masterpiece'
-  if (rank === '8') return 'Extremely good'
-  if (rank === '7') return 'Quite good'
-  if (rank === '6') return 'Good with flaws'
-  if (rank === '5') return "Mid"
-  if (rank === '4') return 'Bad'
-  if (rank === '3') return 'Fucking bad'
-  if (rank === '2') return 'Holy shit bad'
-  if (rank === '1') return 'Affront to god'
+  if (rank === 10) return 'Perfect'
+  if (rank === 9) return 'Near perfect masterpiece'
+  if (rank === 8) return 'Extremely good'
+  if (rank === 7) return 'Quite good'
+  if (rank === 6) return 'Good with flaws'
+  if (rank === 5) return "Mid"
+  if (rank === 4) return 'Bad'
+  if (rank === 3) return 'Fucking bad'
+  if (rank === 2) return 'Holy shit bad'
+  if (rank === 1) return 'Affront to god'
 }
 
 function debugSetCurrentMovie(input) {
