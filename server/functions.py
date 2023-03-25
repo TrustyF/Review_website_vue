@@ -29,9 +29,6 @@ sorted_database = TinyDB(sorted_json_file_path)
 
 
 def get_all_movies(query):
-    print('getting movies!!')
-    print(my_dir)
-    print(sorted_json_file_path)
     filtered_movies = filter_movies(query)
     return filtered_movies
 
@@ -93,7 +90,6 @@ def filter_movies(query):
 
     #  loop over ranks and apply queries
     for rank in range(1, 11):
-        print(f'test {rank}', sorted_database.table(f'ranked_{rank}').all())
         filtered_movies[f'ranked_{rank}'] = sorted_database.table(f'ranked_{rank}').search(
             type_query &
             format_query &
@@ -101,8 +97,8 @@ def filter_movies(query):
             rating_query &
             length_query
         )
-    print('returning filtered!')
     return filtered_movies
 
-# def edit_movie(query):
-#     unsorted_database.update(query, where('title') == query['title'])
+
+def edit_movie(query):
+    sorted_database.update(query, where('title') == query['title'])
