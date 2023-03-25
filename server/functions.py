@@ -91,7 +91,7 @@ def filter_movies(query):
 
     #  loop over ranks and apply queries
     for rank in range(1, 11):
-        print('test', sorted_database.table(f'ranked_{rank}').all())
+        print(f'test {rank}', sorted_database.table(f'ranked_{rank}').all())
         filtered_movies[f'ranked_{rank}'] = sorted_database.table(f'ranked_{rank}').search(
             type_query &
             format_query &
