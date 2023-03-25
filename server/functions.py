@@ -30,8 +30,10 @@ sorted_database = TinyDB(sorted_json_file_path)
 
 def get_all_movies(query):
     print('getting movies!!')
-    filtered_movies = filter_movies(query)
-    return filtered_movies
+    # filtered_movies = filter_movies(query)
+    # return filtered_movies
+    with open(sorted_json_file_path, 'r') as infile:
+        return json.load(infile)
 
 
 def filter_movies(query):
