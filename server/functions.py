@@ -32,9 +32,8 @@ def get_all_movies(query):
     print('getting movies!!')
     # filtered_movies = filter_movies(query)
     # return filtered_movies
-    with open(sorted_json_file_path, 'r') as infile:
-        print(json.load(infile))
-        return json.load(infile)
+    print(sorted_database.all())
+    return sorted_database.table('ranked_9')
 
 
 def filter_movies(query):
