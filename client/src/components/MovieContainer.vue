@@ -2,13 +2,12 @@
 import TagContainer from "./TagContainer";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 </script>
-
 <template>
   <div class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [isSeen ? ' seen' : '']">
     <div class="main_block">
 
       <div class="settings">
-<!--        <button @click="settingsOpen = !settingsOpen" @mousedown="sendData">...</button>-->
+        <button @click="settingsOpen = !settingsOpen" @mousedown="sendData">...</button>
       </div>
 
 
@@ -16,7 +15,8 @@ import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
         <tag-container v-for="tag in data['tags']" :key="tag" :tag="tag"/>
       </div>
 
-      <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`" class="poster" alt="poster"
+      <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
+           class="poster" alt="poster"
            v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
 
       <div class="content">
@@ -72,7 +72,6 @@ export default {
   name: "MovieContainer",
   props: {
     data: Object,
-
   },
   data() {
     return {
@@ -97,10 +96,10 @@ export default {
       this.isOpen = false
     },
     sendData() {
+      console.log('sending data')
       this.$emit('debug_current_movie_data', this.data)
-    },
-    emitSettingsOpen(){
       this.$emit('settings_open', this.settingsOpen)
+
     }
   }
 }
