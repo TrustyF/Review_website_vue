@@ -1,4 +1,4 @@
-from flask import Flask, request, Response
+from flask import Flask, Request, request, Response
 from flask_cors import CORS
 
 import functions
@@ -8,16 +8,16 @@ CORS(app)
 
 
 # routes
-@app.route('/get_movies/', methods=["GET"])
+@app.route('/get_movies/', methods=["POST"])
 def get_movies():
-    return functions.get_all_movies()
+    return functions.get_all_movies(request.json)
 
 
-@app.route('/edit_movie/', methods=["POST"])
-def edit_movie():
-    functions.edit_movie(request.json)
-    return Response(status=200)
+# @app.route('/edit_movie/', methods=["POST"])
+# def edit_movie():
+#     functions.edit_movie(request.json)
+#     return Response(status=200)
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
