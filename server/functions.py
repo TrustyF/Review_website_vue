@@ -33,6 +33,7 @@ def get_all_movies(query):
     # filtered_movies = filter_movies(query)
     # return filtered_movies
     with open(sorted_json_file_path, 'r') as infile:
+        print(json.load(infile))
         return json.load(infile)
 
 
