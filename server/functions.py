@@ -12,20 +12,20 @@ sorted_json_file_path = os.path.join(my_dir, r'database\sorted_db.json')
 sorted_database = TinyDB(sorted_json_file_path)
 
 
-def init_sorted():
-    def load_init():
-        print('loading init')
-        with open('../client/public/assets/movie_db_lib.json', 'rb') as infile:
-            data = json.load(infile)
-
-        for entry in data:
-            unsorted_database.insert(entry)
-
-    unsorted_database = TinyDB(unsorted_json_file_path)
-    for i in reversed(range(1, 11)):
-        curr_table = sorted_database.table(f'ranked_{i}')
-        records = unsorted_database.search(where('my_rating') == str(i))
-        curr_table.insert_multiple(records)
+# def init_sorted():
+#     def load_init():
+#         print('loading init')
+#         with open('../client/public/assets/movie_db_lib.json', 'rb') as infile:
+#             data = json.load(infile)
+#
+#         for entry in data:
+#             unsorted_database.insert(entry)
+#
+#     unsorted_database = TinyDB(unsorted_json_file_path)
+#     for i in reversed(range(1, 11)):
+#         curr_table = sorted_database.table(f'ranked_{i}')
+#         records = unsorted_database.search(where('my_rating') == str(i))
+#         curr_table.insert_multiple(records)
 
 
 def get_all_movies(query):
