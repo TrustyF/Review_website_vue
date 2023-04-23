@@ -9,7 +9,7 @@ import axios from 'axios'
 import {ref, onMounted} from 'vue'
 
 // to do
-// add addedDate, add fresh review, fix long titles
+// add fresh review, fix long titles
 
 const movies = ref([])
 
@@ -30,10 +30,10 @@ onMounted(() => {
 })
 
 function update_movies() {
-  console.log('updating movies')
-  axios.post(`${curr_api}/get_movies/`, filters.value)
+  // console.log('updating movies')
+  axios.post(`${local_api}/get_movies/`, filters.value)
       .then(response => {
-        console.log(response)
+        // console.log("response",response)
         movies.value = response.data
         servStatus.value = response.status
       })
