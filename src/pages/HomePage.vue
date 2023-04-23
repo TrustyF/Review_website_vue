@@ -1,42 +1,8 @@
-<template>
-  <db-helper :inputData="currentSelectedMovie" :isOpen="settingsOpen" @settingsClosed="closeSettings"></db-helper>
-
-  <div class="filters">
-    <h1 style="font-weight: bold; font-size: 1.5em">Filters</h1>
-    <label class="filter_label">
-      <input type="checkbox" style="cursor: pointer" @click="excludeMode = !excludeMode">
-      Invert
-    </label>
-
-    <div class="filter_types" v-for="elem in filters" :key="elem['name']">
-      <h1 style="text-decoration: underline;padding-bottom: 5px">{{ elem['name'] }}</h1>
-      <div v-for="filter in elem['available']" :key="filter" class="filter_content_list">
-        <label class="filter_label">
-          <input type="checkbox" style="cursor: pointer" @change="swap_filter(filter,elem['filter']);update_movies()">
-          {{ filter }}
-        </label>
-      </div>
-    </div>
-
-  </div>
-  <div class="feed">
-    <div class="movie_grid" v-for="rating in [9,8,7,6,5,4,3,2,1]" :key="rating">
-      <div class="rating_container">
-        <h1 class="rating_title">{{ rating }}</h1>
-        <p class="rating_desc"> {{ getRankDetails(rating) }}</p>
-      </div>
-      <div class="movie_container_wrapper" v-for="mov in movies[`ranked_${rating}`]" :key="mov.id">
-        <MovieContainer :key="mov.id" :data="mov" @debug_current_movie_data="debugSetCurrentMovie"></MovieContainer>
-      </div>
-
-    </div>
-  </div>
-</template>
-
 <script setup>
 import '../styles/globals.css'
 import MovieContainer from "@/components/MovieContainer";
 import DbHelper from "@/components/DbHelper";
+import HomeFilter from "@/components/Homepage/HomeFilter";
 
 import axios from 'axios'
 import {ref, onMounted} from 'vue'
@@ -44,38 +10,15 @@ import {ref, onMounted} from 'vue'
 // to do
 // add addedDate, add fresh review, fix long titles
 
-
 const movies = ref([])
+
 const excludeMode = ref(false)
+const filters = ref({})
+
 const currentSelectedMovie = ref({})
+
+const servStatus = ref(0)
 const settingsOpen = ref(false)
-const filters = {
-  'type': {
-    'name': 'Type',
-    'available': ["Movie", "Tv-series", "Documentary"],
-    'filter': [],
-  },
-  'format': {
-    'name': 'Format',
-    'available': ["Live-action", "Animated"],
-    'filter': [],
-  },
-  'genre': {
-    'name': 'Genre',
-    'available': ["Action", "Adventure", "Crime", "Comedy", "Drama", "Family", "Horror", "Mystery", "Science Fiction", "Thriller"],
-    'filter': [],
-  },
-  'rating': {
-    'name': 'Rating',
-    'available': ["9", "8", "7", "6", "5", "4", "3", "2", "1"],
-    'filter': [],
-  },
-  'length': {
-    'name': 'Length',
-    'available': ["1", "2", "3"],
-    'filter': [],
-  },
-}
 
 const local_api = "http://localhost:5000"
 const curr_api = "https://trustyfox.pythonanywhere.com"
@@ -85,24 +28,13 @@ onMounted(() => {
 })
 
 function update_movies() {
-  console.log('updating movies', filters)
-  axios.post(`${curr_api}/get_movies/`, filters)
+  console.log('updating movies')
+  axios.post(`${local_api}/get_movies/`, filters.value)
       .then(response => {
-        console.log(response.data)
+        console.log(response)
         movies.value = response.data
+        servStatus.value = response.status
       })
-}
-
-function swap_filter(filter, target) {
-  console.log('swapping filter')
-  if (target.includes(filter) === false) {
-    target.push(filter)
-  } else {
-    let index = target.indexOf(filter)
-    if (index > -1) { // only splice array when item is found
-      target.splice(index, 1); // 2nd parameter means remove one item only
-    }
-  }
 }
 
 function getRankDetails(rank) {
@@ -117,17 +49,44 @@ function getRankDetails(rank) {
   if (rank === 2) return 'Holy shit bad'
   if (rank === 1) return 'Affront to god'
 }
-
-function debugSetCurrentMovie(input) {
-  settingsOpen.value = true
-  currentSelectedMovie.value = input
-}
 function closeSettings(input){
   settingsOpen.value = input
 }
 
+function reactCurrentMovie(input) {
+  settingsOpen.value = true
+  currentSelectedMovie.value = input
+}
+function reactFilters(input){
+  console.log('reacting to filter change',input)
+  filters.value = input
+  update_movies()
+}
 
 </script>
+<template>
+  <db-helper :inputData="currentSelectedMovie" :isOpen="settingsOpen" @settingsClosed="closeSettings"></db-helper>
+
+  <HomeFilter @filters="reactFilters"></HomeFilter>
+
+  <div class="feed" v-if="servStatus===200">
+
+    <div class="movie_grid" v-for="rating in [9,8,7,6,5,4,3,2,1]" :key="rating">
+      <div class="rating_container">
+        <h1 class="rating_title">{{ rating }}</h1>
+        <p class="rating_desc"> {{ getRankDetails(rating) }}</p>
+      </div>
+
+      <div class="movie_container_wrapper" v-for="mov in movies[`ranked_${rating}`]" :key="mov.id">
+
+        <MovieContainer :key="mov.id" :data="mov" @debug_current_movie_data="reactCurrentMovie"></MovieContainer>
+
+      </div>
+
+    </div>
+  </div>
+  <div class="feed" v-else>Loading...</div>
+</template>
 
 <style scoped>
 .feed {
@@ -174,32 +133,5 @@ function closeSettings(input){
   margin: auto;
 }
 
-.filters {
-  font-family: Calibri, serif;
-  user-select: none;
-  position: fixed;
-  width: 150px;
-  font-min-size: 1em;
-  /*height: 200px;*/
 
-  padding: 20px;
-  margin: 15px 0 0 25px;
-  border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-
-  display: flex;
-  flex-flow: column;
-  /*grid-template-areas:"left right";*/
-  gap: 8px;
-}
-
-.filter_content_list {
-  /*outline: red 1px solid;*/
-  width: 100%;
-}
-
-.filter_label {
-  font-size: 0.9em;
-  cursor: pointer;
-}
 </style>
