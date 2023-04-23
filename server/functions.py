@@ -2,30 +2,13 @@ import json
 import os
 from flask import jsonify, Request
 from tinydb import TinyDB, Query, where
-from tinydb.storages import JSONStorage, MemoryStorage
-from tinydb.middlewares import CachingMiddleware
-from pprint import pprint
+from datetime import datetime
+import csv
 
 my_dir = os.path.dirname(__file__)
 sorted_json_file_path = os.path.join(my_dir, r'database/sorted_db.json')
 
 sorted_database = TinyDB(sorted_json_file_path)
-
-
-# def init_sorted():
-#     def load_init():
-#         print('loading init')
-#         with open('../client/public/assets/movie_db_lib.json', 'rb') as infile:
-#             data = json.load(infile)
-#
-#         for entry in data:
-#             unsorted_database.insert(entry)
-#
-#     unsorted_database = TinyDB(unsorted_json_file_path)
-#     for i in reversed(range(1, 11)):
-#         curr_table = sorted_database.table(f'ranked_{i}')
-#         records = unsorted_database.search(where('my_rating') == str(i))
-#         curr_table.insert_multiple(records)
 
 
 def get_all_movies(query):
@@ -36,6 +19,7 @@ def get_all_movies(query):
 def filter_movies(query):
     # output
     filtered_movies = {}
+    sorted_movies = {}
     # print(query)
 
     # return all if empty query
@@ -50,12 +34,14 @@ def filter_movies(query):
     genre_filters = query['genre']['filter']
     format_filters = query['format']['filter']
     type_filters = query['type']['filter']
+    date_rated_filters = query['date_rated']['filter']
 
     rating_query = ~Query().doc_id.exists()
     length_query = ~Query().doc_id.exists()
     genre_query = ~Query().doc_id.exists()
     format_query = ~Query().doc_id.exists()
     type_query = ~Query().doc_id.exists()
+    date_rated_query = ~Query().doc_id.exists()
 
     # filter type
     for type_filter in type_filters:
@@ -107,6 +93,10 @@ def filter_movies(query):
             rating_query &
             length_query
         )
+
+        # # apply sorting
+        # sorted_movies[f'ranked_{rank}'] = sorted(filtered_movies,
+        #                                          key=lambda x: datetime.strptime(x['date_rated'], '%y-%m-%d'))
 
     return filtered_movies
 

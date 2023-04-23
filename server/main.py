@@ -8,7 +8,7 @@ CORS(app)
 
 
 # routes
-@app.route('/get_movies/', methods=["GET","POST"])
+@app.route('/get_movies/', methods=["GET", "POST"])
 def get_movies():
     return functions.get_all_movies(request.json)
 
@@ -21,3 +21,4 @@ def edit_movie():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    # functions.add_date_added()
