@@ -34,6 +34,17 @@ def get_all_movies(query):
 
 
 def filter_movies(query):
+    # output
+    filtered_movies = {}
+    # print(query)
+
+    # return all if empty query
+    if not query:
+        for rank in range(1, 11):
+            filtered_movies[f'ranked_{rank}'] = sorted_database.table(f'ranked_{rank}').all()
+
+        return filtered_movies
+
     rating_filters = query['rating']['filter']
     length_filters = query['length']['filter']
     genre_filters = query['genre']['filter']
@@ -78,15 +89,14 @@ def filter_movies(query):
     # filter length
     for length_filter in length_filters:
         match length_filter:
+            case "0":
+                length_query = Query().runtime <= 60
             case "1":
                 length_query = Query().runtime <= 120
             case "2":
                 length_query = 120 < Query().runtime < 180
             case "3":
                 length_query = Query().runtime >= 180
-
-    # output
-    filtered_movies = {}
 
     #  loop over ranks and apply queries
     for rank in range(1, 11):
@@ -97,6 +107,7 @@ def filter_movies(query):
             rating_query &
             length_query
         )
+
     return filtered_movies
 
 
@@ -116,4 +127,3 @@ def edit_movie(query):
     except ValueError:
         print('already in table')
     sorted_database.table(curr_table).remove(title_query)
-
