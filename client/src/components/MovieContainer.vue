@@ -6,9 +6,9 @@ import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
   <div class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [isSeen ? ' seen' : '']">
     <div class="main_block">
 
-<!--      <div class="settings">-->
-<!--        <button @click="settingsOpen = !settingsOpen" @mousedown="sendData">...</button>-->
-<!--      </div>-->
+      <!--      <div class="settings">-->
+      <!--        <button @click="settingsOpen = !settingsOpen" @mousedown="sendData">...</button>-->
+      <!--      </div>-->
 
 
       <div class="tags_list_poster">
@@ -17,7 +17,7 @@ import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 
       <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
            class="poster" alt="poster"
-           v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
+           v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false" >
 
       <div class="content">
         <p class="title" v-if="data['title']">{{ data['title'] }}</p>
@@ -41,7 +41,10 @@ import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 
           <h3 class="heading">Public reception</h3>
           <p class="rank" v-if="data['vote_average']">{{ Math.round(data['vote_average'] * 10) / 10 }}/10</p>
-          <!--          <round-progress-classic :data="data['rating']['ratingValue']" :number="true"></round-progress-classic>-->
+
+          <h3 class="heading">Date rated</h3>
+          <p class="rank" v-if="data['date_rated']">{{ data['date_rated'] }}</p>
+
           <h3 class="heading">Extras</h3>
           <a :href="data['imdb_url']" target="_blank" rel="noopener noreferrer">
             <button type="button"

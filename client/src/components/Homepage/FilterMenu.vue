@@ -36,6 +36,12 @@ const filters = {
     'display': ["-1 hour", "1-2 hours", "2-3 hours", "3+ hours"],
     'filter': [],
   },
+  'date_rated': {
+    'name': 'Date rated',
+    'available': ["0", "1"],
+    'display': ["Ascending", "Descending"],
+    'filter': [],
+  },
   'extra_settings': {
     'exclude_mode': false
   }
@@ -88,17 +94,20 @@ function swap_filter(filter, target) {
 .collapse {
   transition: height 300ms ease-in-out;
 }
+
 .button_padding {
   /*outline: 1px red solid;*/
   position: absolute;
   width: 90px;
   height: 45px;
   margin: 10px;
-  transform: translate(-20px,-25px);
+  transform: translate(-20px, -25px);
 }
+
 .filter_wrapper {
   padding: 25px 25px 5px 25px;
 }
+
 .filter_button {
   cursor: pointer;
   user-select: none;
