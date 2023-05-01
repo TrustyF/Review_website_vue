@@ -5,6 +5,7 @@ import RatingBumper from "@/components/MovieContainer/RatingBumper";
 import {defineProps, defineEmits, ref, watch} from 'vue'
 
 const props = defineProps(['data'])
+const emits = defineEmits(['MovieEdit'])
 
 const isOpen = ref(false)
 const isSeen = ref(false)
@@ -20,7 +21,12 @@ function timeConvert(n) {
 }
 
 function clickOutside(input) {
-  this.isOpen = false
+  isOpen.value = false
+}
+
+function emitSelectedMovie(input) {
+  emits('MovieEdit', props['data'])
+  console.log('emit')
 }
 
 </script>
@@ -28,11 +34,12 @@ function clickOutside(input) {
   <div class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [isSeen ? ' seen' : '']">
     <div class="main_block">
 
-      <!--      <div class="settings">-->
-      <!--        <button @click="settingsOpen = !settingsOpen" @mousedown="sendData">...</button>-->
-      <!--      </div>-->
 
       <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
+
+      <div class="settings">
+        <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
+      </div>
 
       <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :rating="data['my_rating']"
                     :user_rating="data['vote_average']"></RatingBumper>
@@ -78,16 +85,16 @@ function clickOutside(input) {
       </div>
     </div>
 
-    <div class="seen_block_cover">
+    <!--    <div class="seen_block_cover">-->
 
-    </div>
-    <div class="seen_checkbox_wrapper">
-      <div class="seen_checkbox_hitBox" @mousedown="isSeen = !isSeen">
-        <div class="seen_checkbox_box">
-          <div :class="'checkmark' + [isSeen ? '' : ' seen' ]"></div>
-        </div>
-      </div>
-    </div>
+    <!--    </div>-->
+    <!--    <div class="seen_checkbox_wrapper">-->
+    <!--      <div class="seen_checkbox_hitBox" @mousedown="isSeen = !isSeen">-->
+    <!--        <div class="seen_checkbox_box">-->
+    <!--          <div :class="'checkmark' + [isSeen ? '' : ' seen' ]"></div>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
   </div>
 </template>
 
@@ -122,12 +129,14 @@ export default {
 .settings {
   position: absolute;
 }
+
 .tag_container {
   position: absolute;
 }
+
 .rating_bumper {
   position: absolute;
-  transform: translate(0,252px);
+  transform: translate(0, 252px);
 }
 
 .seen_checkbox_wrapper {
@@ -264,6 +273,7 @@ export default {
 
   margin: 5px 10px 10px 10px;
 }
+
 .title {
   /*outline: 1px solid red;*/
   font-size: 0.8em;
