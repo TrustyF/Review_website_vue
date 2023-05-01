@@ -1,6 +1,6 @@
 <script setup>
 import '../styles/globals.css'
-import MovieContainer from "@/components/MovieContainer";
+import MovieContainer from "@/components/MovieContainer/MovieContainer";
 import DbHelper from "@/components/DbHelper";
 import FilterMenu from "@/components/Homepage/FilterMenu";
 import RatingHeader from "@/components/Homepage/RatingHeader";
@@ -33,7 +33,7 @@ function update_movies() {
   // console.log('updating movies')
   axios.post(`${local_api}/get_movies/`, filters.value)
       .then(response => {
-        // console.log("response",response)
+        console.log("response",response)
         movies.value = response.data
         servStatus.value = response.status
       })
@@ -59,7 +59,7 @@ function reactFilters(input) {
 
 </script>
 <template>
-  <db-helper :inputData="currentSelectedMovie" :isOpen="settingsOpen" @settingsClosed="closeSettings"></db-helper>
+<!--  <db-helper :inputData="currentSelectedMovie" :isOpen="settingsOpen" @settingsClosed="closeSettings"></db-helper>-->
 
   <FilterMenu @filters="reactFilters"></FilterMenu>
 
