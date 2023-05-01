@@ -1,6 +1,28 @@
 <script setup>
-import TagContainer from "./TagContainer";
+import TagContainer from "@/components/MovieContainer/TagContainer";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
+import RatingBumper from "@/components/MovieContainer/RatingBumper";
+import {defineProps, defineEmits, ref, watch} from 'vue'
+
+const props = defineProps(['data'])
+
+const isOpen = ref(false)
+const isSeen = ref(false)
+const outOfFocus = ref(false)
+const settingsOpen = ref(false)
+
+function timeConvert(n) {
+  const hours = (n / 60);
+  const rhours = Math.floor(hours);
+  const minutes = (hours - rhours) * 60;
+  const rminutes = Math.round(minutes);
+  return rhours + " h " + rminutes + " minutes";
+}
+
+function clickOutside(input) {
+  this.isOpen = false
+}
+
 </script>
 <template>
   <div class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [isSeen ? ' seen' : '']">
@@ -10,19 +32,19 @@ import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
       <!--        <button @click="settingsOpen = !settingsOpen" @mousedown="sendData">...</button>-->
       <!--      </div>-->
 
+      <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
 
-      <div class="tags_list_poster">
-        <tag-container v-for="tag in data['tags']" :key="tag" :tag="tag"/>
-      </div>
+      <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :rating="data['my_rating']"
+                    :user_rating="data['vote_average']"></RatingBumper>
 
       <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
            class="poster" alt="poster"
-           v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false" >
+           v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
 
       <div class="content">
         <p class="title" v-if="data['title']">{{ data['title'] }}</p>
         <p class="date" v-if="data['release_date']">{{ data['release_date'].split("-")[0] }}</p>
-        <p class="rating">{{ data['my_rating'] + "★" }} </p>
+        <!--        <p class="rating">{{ data['my_rating'] + "★" }} </p>-->
       </div>
 
 
@@ -39,8 +61,8 @@ import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
             {{ "Duration: " + timeConvert(data['runtime']) }}</p>
           <p class="rank" v-if="data['contentRating']">{{ "Rating: " + data['contentRating'] }}</p>
 
-          <h3 class="heading">Public reception</h3>
-          <p class="rank" v-if="data['vote_average']">{{ Math.round(data['vote_average'] * 10) / 10 }}/10</p>
+          <!--          <h3 class="heading">Public reception</h3>-->
+          <!--          <p class="rank" v-if="data['vote_average']">{{ Math.round(data['vote_average'] * 10) / 10 }}/10</p>-->
 
           <h3 class="heading">Date rated</h3>
           <p class="rank" v-if="data['date_rated']">{{ data['date_rated'] }}</p>
@@ -72,38 +94,7 @@ import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 
 <script>
 export default {
-  name: "MovieContainer",
-  props: {
-    data: Object,
-  },
-  data() {
-    return {
-      isOpen: false,
-      isSeen: false,
-      outOfFocus: false,
-      settingsOpen: false
-    }
-  },
-  mounted() {
-    // console.log(`${this.data['name']} is mounted!`)
-  },
-  methods: {
-    timeConvert(n) {
-      const hours = (n / 60);
-      const rhours = Math.floor(hours);
-      const minutes = (hours - rhours) * 60;
-      const rminutes = Math.round(minutes);
-      return rhours + " h " + rminutes + " minutes";
-    },
-    clickOutside(input) {
-      this.isOpen = false
-    },
-    sendData() {
-      console.log('sending data')
-      this.$emit('settings_open', this.settingsOpen)
-      this.$emit('debug_current_movie_data', this.data)
-    }
-  }
+  name: "MovieContainer"
 }
 </script>
 <style scoped>
@@ -130,6 +121,13 @@ export default {
 
 .settings {
   position: absolute;
+}
+.tag_container {
+  position: absolute;
+}
+.rating_bumper {
+  position: absolute;
+  transform: translate(0,252px);
 }
 
 .seen_checkbox_wrapper {
@@ -266,12 +264,6 @@ export default {
 
   margin: 5px 10px 10px 10px;
 }
-
-.extra_content {
-  position: absolute;
-  transform: translate(0px, 280px);
-}
-
 .title {
   /*outline: 1px solid red;*/
   font-size: 0.8em;
@@ -293,38 +285,6 @@ export default {
   /*overflow-wrap: normal;*/
 }
 
-.overview {
-}
-
-.genres {
-  /*outline: 1px red solid;*/
-  display: flex;
-  flex-wrap: nowrap;
-
-  gap: 10px;
-}
-
-.tags_list {
-  /*outline: red 1px solid;*/
-  display: flex;
-  flex-wrap: nowrap;
-}
-
-.tags_list_poster {
-  /*outline: red 1px solid;*/
-  position: absolute;
-  /*transform: translate(+7.5vw);*/
-
-  display: flex;
-  flex-wrap: nowrap;
-  flex-direction: column;
-  opacity: 1;
-  visibility: visible;
-
-  transition: 0.3s ease-in-out;
-
-}
-
 .open .tags_list_poster {
   opacity: 0;
   visibility: hidden;
@@ -333,21 +293,5 @@ export default {
 .editor_button {
   position: absolute;
   transform: translate(174px, 2px);
-}
-
-.rank_content {
-  /*outline: red 1px solid;*/
-
-  display: flex;
-  flex-wrap: nowrap;
-  margin: 0;
-}
-
-.ranking_title {
-  /*outline: red 1px solid;*/
-
-  display: flex;
-  flex-wrap: nowrap;
-  margin: 0;
 }
 </style>

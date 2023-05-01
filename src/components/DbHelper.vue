@@ -1,6 +1,6 @@
 <script setup>
-import TagContainer from "@/components/TagContainer";
-import MovieContainer from "@/components/MovieContainer";
+import TagContainer from "@/components/MovieContainer/TagContainer";
+import MovieContainer from "@/components/MovieContainer/MovieContainer";
 import asset_paths from '../../public/assets/tags/assets.json'
 
 </script>
@@ -64,7 +64,7 @@ import asset_paths from '../../public/assets/tags/assets.json'
       <div id="icons_selector">
         <button type="button" v-for="asset in asset_paths['icons'][iconTier]" :key="asset" :name="asset"
                 class="icon_button" @click="iconId=asset">
-          <tag-container :key="asset" v-lazy="`./assets/tags/icons/${iconTier}/${asset}`" class="icon_image" alt="icon"></tag-container>
+<!--          <tag-container :key="asset" v-lazy="`./assets/tags/icons/${iconTier}/${asset}`" class="icon_image" alt="icon"></tag-container>-->
         </button>
       </div>
 

@@ -84,16 +84,3 @@ nav ul li {
     margin-right: 3vh;
     color: white;
 }
-
-.feed_wrapper {
-    outline: 10px solid red;
-
-    position: relative;
-    top: 100px;
-
-    width: 90%;
-    margin: auto;
-
-    display: flex;
-
-}
