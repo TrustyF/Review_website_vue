@@ -6,7 +6,7 @@ import VueLazyload from "vue-lazyload";
 
 const app = createApp(App)
 
-app.component("PopperComp", Popper)
+// app.component("PopperComp", Popper)
 app.use(router)
 app.use(VueLazyload, {
     preLoad: 2,

@@ -1,29 +1,55 @@
 <script setup>
-import TagContainer from "@/components/MovieContainer/TagContainer";
-import MovieContainer from "@/components/MovieContainer/MovieContainer";
+import {defineProps, defineEmits, ref, watch} from 'vue'
 import asset_paths from '../../public/assets/tags/assets.json'
+import axios from 'axios'
+import TagContainer from "@/components/MovieContainer/TagContainer";
 
+const props = defineProps(['data', 'open'])
+
+const currentMovie = ref({})
+const editConfirmed = ref(false)
+
+const iconTitle = ref("")
+const iconDesc = ref("")
+const iconImg = ref("")
+const iconTier = ref("")
+
+const availableTiers = ref(["cyan", "gold", "green", "purple", "red", "silver"])
+
+
+watch(props, (newVal, oldVal) => {
+  currentMovie.value = props['data']
+})
+
+watch(iconTier, (newVal, oldVal) => {
+  console.log('new', newVal)
+})
+
+function editData() {
+  axios.post('http://localhost:5000/edit_movie/', {
+    oldData: this.data,
+    newRating: this.newRating
+  }).then((response) => {
+    if (response.status === 200) {
+      editConfirmed.value = true
+    }
+  })
+}
 </script>
 <template>
-  <div v-if="isOpen" class="db_helper">
+  <div v-if="props['open']" class="db_helper">
     <div class="load_movie">
       <div class="wrapper">
         <div class="wrapper">
           <div>
-
             <!--            <MovieContainer :data="data"></MovieContainer>-->
 
-            <h1 style="padding: 10px">{{ data['title'] }}</h1>
-
+            <h1 style="padding: 10px">{{ currentMovie['title'] }}</h1>
             <div>
               <label>Rating</label>
-              <input type="number" :value="data['my_rating']" @change="newRating = $event.target.value">
+              <input type="number" :value="currentMovie['my_rating']"
+                     @change="currentMovie['my_rating'].value = $event.target.value">
             </div>
-
-            <!--            <div>-->
-            <!--              <label style="padding: 10px" @change="data['difficulty'] = $event.target.value">Difficulty</label>-->
-            <!--              <input type="number" value="2">-->
-            <!--            </div>-->
 
             <div>
               <button v-if="!editConfirmed" style="margin: 10px" type="button" @click="editData">Confirm</button>
@@ -38,7 +64,7 @@ import asset_paths from '../../public/assets/tags/assets.json'
       <div id="icon_description">
 
         <div style="width: min-content">
-          <img :src="`./assets/tags/icons/${iconTier}/${iconId}`" class="icon_image" alt="icon">
+          <img :src="`./assets/tags/icons/${iconTier}/${iconImg}`" class="icon_image" alt="icon">
         </div>
 
         <label>Title </label>
@@ -47,82 +73,37 @@ import asset_paths from '../../public/assets/tags/assets.json'
         <label>Description </label>
         <input type="text" v-model="iconDesc"/>
 
-        <button type="button" @click="addIcon">Add to movie</button>
-        <button type="button" @click="removeIcon">Remove from movie</button>
+        <!--        <button type="button" @click="addIcon">Add to movie</button>-->
+        <!--        <button type="button" @click="removeIcon">Remove from movie</button>-->
 
-        <button type="button" @click="addPreset">Add to presets</button>
-        <button type="button" @click="removePreset">Remove from presets</button>
+        <!--        <button type="button" @click="addPreset">Add to presets</button>-->
+        <!--        <button type="button" @click="removePreset">Remove from presets</button>-->
 
       </div>
 
       <div id="tier_selector" v-if="asset_paths">
-        <button type="button" @click="iconTier=tier" v-for="tier in availableTiers" :key="tier"
+        <button type="button" v-for="tier in availableTiers" :key="tier" @click="iconTier.value=tier"
                 :style="`background:${tier};border-radius: 5px;padding:5px`">{{ tier }}
         </button>
       </div>
 
       <div id="icons_selector">
         <button type="button" v-for="asset in asset_paths['icons'][iconTier]" :key="asset" :name="asset"
-                class="icon_button" @click="iconId=asset">
-<!--          <tag-container :key="asset" v-lazy="`./assets/tags/icons/${iconTier}/${asset}`" class="icon_image" alt="icon"></tag-container>-->
+                class="icon_button" @click="iconImg.value=asset">
+          <img :key="asset" v-lazy="`./assets/tags/icons/${iconTier}/${asset}`" class="icon_image"
+                         alt="icon">
         </button>
       </div>
 
-      <button @click="this.$emit('settingsClosed', false)" style="position: absolute; right: 0">x</button>
+      <button @click="this.$emit('settingsClosed', false)">x</button>
 
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
-import {reactive} from "vue"
-// import asset_paths from '../../public/assets/tags/assets.json'
-
 export default {
-  name: "DbHelper",
-  props: {
-    inputData: Object,
-    isOpen: Boolean
-  },
-  watch: {
-    inputData: function (newVal, oldVal) {
-      console.log(newVal)
-      this.data = this.inputData
-    },
-    isOpen: function (newVal, oldVal) {
-      console.log(newVal)
-      this.opened = this.isOpen
-    },
-
-  },
-  data() {
-    return {
-      data: {},
-      opened:false,
-      availableTiers: ['gold', 'green', 'silver', 'red', 'purple', 'cyan'],
-      iconId: "",
-      iconTier: "gold",
-      iconTitle: "",
-      iconDesc: "",
-
-      newRating: Number,
-      editConfirmed:false
-    }
-  },
-  methods: {
-    editData() {
-      axios.post('http://localhost:5000/edit_movie/', {
-        oldData: this.data,
-        newRating: this.newRating
-      }) .then((response) =>{
-        if (response.status === 200){
-          this.editConfirmed = true
-        }
-      })
-    }
-  }
-
+  name: "DbHelper"
 }
 </script>
 

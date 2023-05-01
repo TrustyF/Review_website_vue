@@ -33,7 +33,7 @@ function update_movies() {
   // console.log('updating movies')
   axios.post(`${local_api}/get_movies/`, filters.value)
       .then(response => {
-        console.log("response",response)
+        // console.log("response",response)
         movies.value = response.data
         servStatus.value = response.status
       })
@@ -43,13 +43,14 @@ function closeSettings(input) {
   settingsOpen.value = input
 }
 
-function reactCurrentMovie(input) {
+function editMovie(input) {
   settingsOpen.value = true
   currentSelectedMovie.value = input
+  console.log('emit caught')
 }
 
 function reactFilters(input) {
-  console.log('reacting to filter change', input)
+  // console.log('reacting to filter change', input)
   filters.value = input
 
   // currentSelectedRatings.value = input['rating']['filter']
@@ -59,7 +60,7 @@ function reactFilters(input) {
 
 </script>
 <template>
-<!--  <db-helper :inputData="currentSelectedMovie" :isOpen="settingsOpen" @settingsClosed="closeSettings"></db-helper>-->
+  <db-helper :data="currentSelectedMovie" :open="settingsOpen" @settingsClosed="closeSettings"></db-helper>
 
   <FilterMenu @filters="reactFilters"></FilterMenu>
 
@@ -67,7 +68,7 @@ function reactFilters(input) {
     <div class="movie_grid" v-for="rating in currentSelectedRatings" :key="rating">
     <rating-header :rating="rating"></rating-header>
       <div class="movie_container_wrapper" v-for="mov in movies[`ranked_${rating}`]" :key="mov.id">
-        <MovieContainer :key="mov.id" :data="mov" @debug_current_movie_data="reactCurrentMovie"></MovieContainer>
+        <MovieContainer :key="mov.id" :data="mov" @MovieEdit="editMovie"></MovieContainer>
       </div>
     </div>
   </div>
