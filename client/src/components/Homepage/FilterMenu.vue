@@ -8,8 +8,8 @@ const emits = defineEmits(['filters'])
 const filters = {
   'type': {
     'name': 'Type',
-    'available': ["Movie", "Tv-series", "Documentary"],
-    'display': ["Movie", "Tv-series", "Documentary"],
+    'available': ["Movie", "Tv-series","Anime", "Documentary"],
+    'display': ["Movie", "Tv-series","Anime", "Documentary"],
     'filter': [],
   },
   'format': {

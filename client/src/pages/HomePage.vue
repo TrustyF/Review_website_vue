@@ -31,7 +31,7 @@ onMounted(() => {
 
 function update_movies(filters={}) {
   // console.log('updating movies')
-  axios.post(`${curr_api}/get_movies/`, filters)
+  axios.post(`${local_api}/get_movies/`, filters)
       .then(response => {
         console.log("response",response)
         movies.value = response.data
@@ -46,7 +46,7 @@ function editMovie(input) {
 
 </script>
 <template>
-  <db-helper :data="currentSelectedMovie" :open="settingsOpen" @settingsClosed="settingsOpen=!settingsOpen"></db-helper>
+  <db-helper class="db_helper" :data="currentSelectedMovie" :open="settingsOpen" @settingsClosed="settingsOpen=!settingsOpen"></db-helper>
 
   <FilterMenu @filters="update_movies"></FilterMenu>
 
@@ -81,5 +81,11 @@ function editMovie(input) {
   justify-content: center;
   flex-flow: row wrap;
   margin: auto;
+}
+.db_helper {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 20;
 }
 </style>

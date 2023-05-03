@@ -5,10 +5,8 @@ import axios from 'axios'
 import TagContainer from "@/components/MovieContainer/TagContainer";
 
 const props = defineProps(['data', 'open'])
+let MovChanges = {}
 
-const MovChanges = ref({
-  'my_rating': String
-})
 const editConfirmed = ref(false)
 
 const iconTitle = ref("")
@@ -16,21 +14,44 @@ const iconDesc = ref("")
 const iconImg = ref("")
 const iconTier = ref("")
 
-const availableTiers = ref(["cyan", "gold", "green", "purple", "red", "silver"])
+const availableTypes = ["movie", "tv", "anime"]
+const availableTiers = ["cyan", "gold", "green", "purple", "red", "silver"]
 
-function addChange(target,change){
-  console.log(target,change)
-  MovChanges.value[target]=change
+function addChange(target, change) {
+  console.log(target, change)
+  console.log(MovChanges)
+  MovChanges[target] = change
+}
+
+function pushChange() {
+  axios.post("http://localhost:5000/edit_movie/", {'newData': MovChanges, 'oldData': props.data})
+      .then(response => {
+        console.log("edit status", response.status)
+      })
 }
 
 </script>
 <template>
   <div class="main_win">
-    <div class="metadata">
+    <div class="metadata box_wrapper">
       <p>{{ data.title }}</p>
-      <input type="number" :value="data['my_rating']" @change="addChange('my_rating',String($event.target.value))">
-      <input type="date" :value="data['my_rating']" @change="addChange('date_rated',String($event.target.value))">
 
+<!--      Rating-->
+      <label for="rating_input">Rating</label>
+      <input type="number" id="rating_input" :value="data['my_rating']"
+             @change="addChange('my_rating',String($event.target.value))">
+<!--      type-->
+      <label for="media_type">Type</label>
+      <form id="media_type" @change="addChange('media_type',String($event.target.value))">
+        <select>
+          <option v-for="elem in availableTypes" :key="elem">{{ elem }}</option>
+        </select>
+      </form>
+
+    </div>
+
+    <div class="upload box_wrapper">
+      <button @click="pushChange">upload changes</button>
     </div>
   </div>
 </template>
@@ -42,6 +63,19 @@ export default {
 </script>
 
 <style>
-.db_helper {
+.box_wrapper {
+  width: 200px;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  gap: 5px;
+
+  background-color: white;
+
+  border: 1px solid black;
+  border-radius: 5px;
+
+  padding: 5px;
+  margin: 5px;
 }
 </style>

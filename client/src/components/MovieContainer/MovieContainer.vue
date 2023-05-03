@@ -35,14 +35,16 @@ function emitSelectedMovie(input) {
   <div class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [isSeen ? ' seen' : '']">
     <div class="main_block">
 
-      <RatingBumperV2 class="rating_bumperV2" v-if="props['data']['my_rating']!==undefined" :rating="props['data']['my_rating']"
-                      :user_rating="props['data']['vote_average']"></RatingBumperV2>
+      <RatingBumperV2 class="rating_bumperV2" v-if="data['my_rating']!==undefined" :rating="data['my_rating']"
+                      :user_rating="data['vote_average']"></RatingBumperV2>
 
       <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
 
       <div class="settings">
         <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
       </div>
+
+      <p v-if="data['is_anime']"> is anime</p>
 
       <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
            class="poster" alt="poster"
@@ -63,12 +65,6 @@ function emitSelectedMovie(input) {
           <p class="rank" style="margin-bottom:5px;" v-if="data['runtime']">
             {{ "Duration: " + timeConvert(data['runtime']) }}</p>
           <p class="rank" v-if="data['contentRating']">{{ "Rating: " + data['contentRating'] }}</p>
-
-          <!--          <h3 class="heading">Public reception</h3>-->
-          <!--          <p class="rank" v-if="data['vote_average']">{{ Math.round(data['vote_average'] * 10) / 10 }}/10</p>-->
-
-          <h3 class="heading">Date rated</h3>
-          <p class="rank" v-if="data['date_rated']">{{ data['date_rated'] }}</p>
 
           <h3 class="heading">Extras</h3>
           <a :href="data['imdb_url']" target="_blank" rel="noopener noreferrer">
@@ -129,6 +125,7 @@ export default {
 .tag_container {
   position: absolute;
 }
+
 .rating_bumperV2 {
   position: absolute;
   transform: translate(3px, 277px);
@@ -258,10 +255,10 @@ export default {
   width: 200px;
   aspect-ratio: 1/1.5;
 }
-.poster::after {
-  background-image: linear-gradient(to bottom, rgba(255,255,0,0) 0%,rgba(0,0,0,1) 100%);
-}
 
+.poster::after {
+  background-image: linear-gradient(to bottom, rgba(255, 255, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+}
 
 
 .open .tags_list_poster {
