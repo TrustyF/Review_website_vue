@@ -36,17 +36,16 @@ function emitSelectedMovie(input) {
   <div class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [isSeen ? ' seen' : '']">
     <div class="main_block">
 
-<!--      <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :rating="data['my_rating']"-->
-<!--                    :user_rating="data['vote_average']"></RatingBumper>-->
-
-      <RatingBumperV2 class="rating_bumperV2" v-if="data['my_rating']!==undefined" :rating="data['my_rating']"
-                      :user_rating="data['vote_average']"></RatingBumperV2>
+      <RatingBumperV2 class="rating_bumperV2" v-if="props['data']['my_rating']!==undefined" :rating="props['data']['my_rating']"
+                      :user_rating="props['data']['vote_average']"></RatingBumperV2>
 
       <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
 
-      <div class="settings">
-        <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
-      </div>
+<!--      <p>{{data}}</p>-->
+
+<!--      <div class="settings">-->
+<!--        <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>-->
+<!--      </div>-->
 
       <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
            class="poster" alt="poster"
