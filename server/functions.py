@@ -32,6 +32,7 @@ def filter_movies(query):
     rating_filters = query['rating']['filter']
     length_filters = query['length']['filter']
     genre_filters = query['genre']['filter']
+    region_filters = query['region']['filter']
     format_filters = query['format']['filter']
     type_filters = query['type']['filter']
     date_rated_filters = query['date_rated']['filter']
@@ -39,6 +40,7 @@ def filter_movies(query):
     rating_query = ~Query().doc_id.exists()
     length_query = ~Query().doc_id.exists()
     genre_query = ~Query().doc_id.exists()
+    region_query = ~Query().doc_id.exists()
     format_query = ~Query().doc_id.exists()
     type_query = ~Query().doc_id.exists()
     date_rated_query = ~Query().doc_id.exists()
@@ -52,8 +54,8 @@ def filter_movies(query):
             case "Tv-series":
                 type_query = Query().media_type == "tv"
 
-            case "Anime":
-                type_query = Query().media_type == "anime"
+            # case "Anime":
+            #     type_query = Query().media_type == "anime"
 
             case "Documentary":
                 type_query = Query().genres.any("Documentary")
@@ -66,6 +68,15 @@ def filter_movies(query):
 
             case "Animated":
                 format_query = Query().genres.any("Animation")
+
+    # filter region
+    for region_filter in region_filters:
+        match region_filter:
+            case "western":
+                region_query = ~Query().region.any("asian")
+
+            case "asian":
+                region_query = Query().region.any("western")
 
     # filter genre
     if len(genre_filters) > 0:
@@ -92,6 +103,7 @@ def filter_movies(query):
         filtered_movies[f'ranked_{rank}'] = sorted_database.table(f'ranked_{rank}').search(
             type_query &
             format_query &
+            region_query &
             genre_query &
             rating_query &
             length_query
