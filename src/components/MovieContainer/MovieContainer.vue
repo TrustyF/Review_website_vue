@@ -28,7 +28,6 @@ function clickOutside(input) {
 
 function emitSelectedMovie(input) {
   emits('MovieEdit', props['data'])
-  console.log('emit')
 }
 
 </script>
@@ -41,11 +40,9 @@ function emitSelectedMovie(input) {
 
       <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
 
-<!--      <p>{{data}}</p>-->
-
-<!--      <div class="settings">-->
-<!--        <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>-->
-<!--      </div>-->
+      <div class="settings">
+        <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
+      </div>
 
       <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
            class="poster" alt="poster"
@@ -132,14 +129,9 @@ export default {
 .tag_container {
   position: absolute;
 }
-
-.rating_bumper {
-  position: absolute;
-  transform: translate(0px, 250px);
-}
 .rating_bumperV2 {
   position: absolute;
-  transform: translate(3px, 279px);
+  transform: translate(3px, 277px);
 }
 
 .seen_checkbox_wrapper {

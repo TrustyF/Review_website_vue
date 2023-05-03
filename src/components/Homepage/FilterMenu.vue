@@ -20,8 +20,8 @@ const filters = {
   },
   'genre': {
     'name': 'Genre',
-    'available': ["Action", "Adventure", "Crime", "Comedy", "Drama", "Family", "Horror", "Mystery", "Science Fiction", "Thriller"],
-    'display': ["Action", "Adventure", "Crime", "Comedy", "Drama", "Family", "Horror", "Mystery", "Science Fiction", "Thriller"],
+    'available': ["Action", "Adventure", "Crime", "Comedy", "Drama", "Family", "Horror", "Mystery","Romance", "Science Fiction", "Thriller"],
+    'display': ["Action", "Adventure", "Crime", "Comedy", "Drama", "Family", "Horror", "Mystery","Romance", "Science Fiction", "Thriller"],
     'filter': [],
   },
   'rating': {
@@ -121,7 +121,7 @@ function swap_filter(filter, target) {
   user-select: none;
   font-min-size: 1em;
 
-  height: 220px;
+  height: 240px;
   padding: 20px;
 
   /*margin: 25px 25px 0 25px;*/
