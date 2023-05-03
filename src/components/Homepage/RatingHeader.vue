@@ -20,7 +20,7 @@ function getRankDetails(rank) {
 <template>
   <div class="rating_container">
     <div class="rating_content">
-      <h1 class="rating_title">{{ rating + "★" }}</h1>
+      <h1 class="rating_title">{{ rating }}</h1>
       <h1 class="rating_desc"> {{ getRankDetails(rating) }}</h1>
     </div>
   </div>
@@ -38,6 +38,7 @@ export default {
   position: sticky;
   top: 20px;
   margin-bottom: 10px;
+  z-index: 10;
   /*outline: 1px red solid;*/
 }
 
@@ -55,18 +56,22 @@ export default {
 
   gap: 15px;
 
-  padding: 10px 15px 10px 15px;
+  padding: 10px;
   border-radius: 8px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .rating_title {
-  font-family: "Arial Black", serif;
-  font-size: 2em;
+  /*font-family: "Arial Black", serif;*/
+  font-size: 1em;
+}
+.rating_title::after {
+  /*display: block;*/
+  content: "★";
 }
 
 .rating_desc {
-  font-family: Calibri, serif;
-  font-size: 1em;
+  /*font-family: Calibri, serif;*/
+  font-size: 0.8em;
 }
 </style>

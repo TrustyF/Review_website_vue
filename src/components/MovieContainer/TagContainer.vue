@@ -8,7 +8,7 @@ const tag_path = "./assets/tags/icons/"
 
 <template>
   <div class="tag_wrapper">
-    <div class="tooltip" v-for="tag in props['tag_input']" :key="tag['name']">
+    <div class="tooltip" v-for="tag in tag_input" :key="tag['name']">
       <img class="tag_icon" :src="tag_path + tag['image']" :alt="tag['image']">
       <div class="hover_box">
 <!--        <img class="description_icon" :src="tag_path + tag['image']" alt="desc_icon">-->
@@ -44,7 +44,7 @@ export default {
   position: absolute;
   left: 0;
   top: 0;
-  transform: translate(50px,0);
+  transform: translate(55px,0);
   background-color: white;
   padding: 10px;
   border-radius: 5px;
@@ -52,6 +52,18 @@ export default {
   visibility: hidden;
   opacity: 0;
   transition: 0.1s ease-in-out;
+}
+.hover_box:after {
+  content:'';
+  position: absolute;
+  top: 0;
+  left: -5px;
+  margin: 10px auto;
+  width: 0;
+  height: 0;
+  border-right: 15px solid white;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
 }
 .tooltip:hover .hover_box {
   visibility: visible;

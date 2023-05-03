@@ -2,7 +2,9 @@
 import TagContainer from "@/components/MovieContainer/TagContainer";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 import RatingBumper from "@/components/MovieContainer/RatingBumper";
+import RatingBumperV2 from "@/components/MovieContainer/RatingBumperV2";
 import {defineProps, defineEmits, ref, watch} from 'vue'
+import ContentBox from "@/components/MovieContainer/ContentBox";
 
 const props = defineProps(['data'])
 const emits = defineEmits(['MovieEdit'])
@@ -34,6 +36,11 @@ function emitSelectedMovie(input) {
   <div class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [isSeen ? ' seen' : '']">
     <div class="main_block">
 
+<!--      <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :rating="data['my_rating']"-->
+<!--                    :user_rating="data['vote_average']"></RatingBumper>-->
+
+      <RatingBumperV2 class="rating_bumperV2" v-if="data['my_rating']!==undefined" :rating="data['my_rating']"
+                      :user_rating="data['vote_average']"></RatingBumperV2>
 
       <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
 
@@ -41,18 +48,11 @@ function emitSelectedMovie(input) {
         <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
       </div>
 
-      <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :rating="data['my_rating']"
-                    :user_rating="data['vote_average']"></RatingBumper>
-
       <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
            class="poster" alt="poster"
            v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
 
-      <div class="content">
-        <p class="title" v-if="data['title']">{{ data['title'] }}</p>
-        <p class="date" v-if="data['release_date']">{{ data['release_date'].split("-")[0] }}</p>
-        <!--        <p class="rating">{{ data['my_rating'] + "★" }} </p>-->
-      </div>
+      <ContentBox :data="data"></ContentBox>
 
 
     </div>
@@ -136,7 +136,11 @@ export default {
 
 .rating_bumper {
   position: absolute;
-  transform: translate(0, 252px);
+  transform: translate(0px, 250px);
+}
+.rating_bumperV2 {
+  position: absolute;
+  transform: translate(3px, 279px);
 }
 
 .seen_checkbox_wrapper {
@@ -263,37 +267,11 @@ export default {
   width: 200px;
   aspect-ratio: 1/1.5;
 }
-
-.content {
-  user-select: none;
-  /*outline: 1px solid red;*/
-  display: grid;
-  justify-content: space-between;
-  flex-direction: column;
-
-  margin: 5px 10px 10px 10px;
+.poster::after {
+  background-image: linear-gradient(to bottom, rgba(255,255,0,0) 0%,rgba(0,0,0,1) 100%);
 }
 
-.title {
-  /*outline: 1px solid red;*/
-  font-size: 0.8em;
-  text-align: left;
-  margin: 0;
-  /*overflow: hidden;*/
-  white-space: nowrap;
-}
 
-.date, .rating {
-  /*outline: 1px solid red;*/
-
-  font-size: 0.7em;
-  text-align: left;
-  margin: 0;
-
-  color: rgba(0, 0, 0, 0.6);
-
-  /*overflow-wrap: normal;*/
-}
 
 .open .tags_list_poster {
   opacity: 0;
