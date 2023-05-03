@@ -9,7 +9,7 @@ import axios from 'axios'
 import {ref, onMounted} from 'vue'
 
 // to do
-// add fresh review, fix long titles
+// add fresh review
 
 const movies = ref([])
 
@@ -33,14 +33,10 @@ function update_movies() {
   // console.log('updating movies')
   axios.post(`${local_api}/get_movies/`, filters.value)
       .then(response => {
-        // console.log("response",response)
+        console.log("response",response)
         movies.value = response.data
         servStatus.value = response.status
       })
-}
-
-function closeSettings(input) {
-  settingsOpen.value = input
 }
 
 function editMovie(input) {
@@ -49,25 +45,16 @@ function editMovie(input) {
   console.log('emit caught')
 }
 
-function reactFilters(input) {
-  // console.log('reacting to filter change', input)
-  filters.value = input
-
-  // currentSelectedRatings.value = input['rating']['filter']
-
-  update_movies()
-}
-
 </script>
 <template>
-  <db-helper :data="currentSelectedMovie" :open="settingsOpen" @settingsClosed="closeSettings"></db-helper>
+<!--  <db-helper :data="currentSelectedMovie" :open="settingsOpen" @settingsClosed="closeSettings"></db-helper>-->
 
-  <FilterMenu @filters="reactFilters"></FilterMenu>
+  <FilterMenu></FilterMenu>
 
   <div class="feed" v-if="servStatus===200">
-    <div class="movie_grid" v-for="rating in currentSelectedRatings" :key="rating">
+    <div class="movie_grid" v-for="rating in [9,8,7,6,5,4,3,2,1]" :key="rating">
     <rating-header :rating="rating"></rating-header>
-      <div class="movie_container_wrapper" v-for="mov in movies[`ranked_${rating}`]" :key="mov.id">
+      <div class="movie_container_wrapper" v-for="mov in movies[`ranked_${rating}`]" :key="mov['imdb_url']">
         <MovieContainer :key="mov.id" :data="mov" @MovieEdit="editMovie"></MovieContainer>
       </div>
     </div>
