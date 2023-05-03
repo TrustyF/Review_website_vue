@@ -14,7 +14,8 @@ const iconDesc = ref("")
 const iconImg = ref("")
 const iconTier = ref("")
 
-const availableTypes = ["movie", "tv", "anime"]
+// const availableTypes = ["movie", "tv", "documentary"]
+const availableRegions = ["western", "asian"]
 const availableTiers = ["cyan", "gold", "green", "purple", "red", "silver"]
 
 function addChange(target, change) {
@@ -36,15 +37,15 @@ function pushChange() {
     <div class="metadata box_wrapper">
       <p>{{ data.title }}</p>
 
-<!--      Rating-->
+      <!--      Rating-->
       <label for="rating_input">Rating</label>
       <input type="number" id="rating_input" :value="data['my_rating']"
              @change="addChange('my_rating',String($event.target.value))">
-<!--      type-->
-      <label for="media_type">Type</label>
-      <form id="media_type" @change="addChange('media_type',String($event.target.value))">
+      <!--      Region-->
+      <label for="region">Region</label>
+      <form id="region" @change="addChange('region',String($event.target.value))">
         <select>
-          <option v-for="elem in availableTypes" :key="elem">{{ elem }}</option>
+          <option v-for="elem in availableRegions" :key="elem">{{ elem }}</option>
         </select>
       </form>
 

@@ -8,33 +8,45 @@ const emits = defineEmits(['filters'])
 const filters = {
   'type': {
     'name': 'Type',
-    'available': ["Movie", "Tv-series","Anime", "Documentary"],
-    'display': ["Movie", "Tv-series","Anime", "Documentary"],
+    'available': ["Movie", "Tv-series", "Documentary"],
+    'display': ["Movie", "Tv-series", "Documentary"],
     'filter': [],
+    'checkbox': true,
   },
   'format': {
     'name': 'Format',
     'available': ["Live-action", "Animated"],
     'display': ["Filmed", "Animated"],
     'filter': [],
+    'checkbox': false,
+  },
+  'region': {
+    'name': 'Region',
+    'available': ["western", "asian"],
+    'display': ["Western", "Asian"],
+    'filter': [],
+    'checkbox': false,
   },
   'genre': {
     'name': 'Genre',
-    'available': ["Action", "Adventure", "Crime", "Comedy", "Drama", "Family", "Horror", "Mystery","Romance", "Science Fiction", "Thriller"],
-    'display': ["Action", "Adventure", "Crime", "Comedy", "Drama", "Family", "Horror", "Mystery","Romance", "Science Fiction", "Thriller"],
+    'available': ["Action", "Adventure", "Crime", "Comedy", "Drama", "Family", "Horror", "Mystery", "Romance", "Science Fiction", "Thriller"],
+    'display': ["Action", "Adventure", "Crime", "Comedy", "Drama", "Family", "Horror", "Mystery", "Romance", "Science Fiction", "Thriller"],
     'filter': [],
+    'checkbox': true
   },
   'rating': {
     'name': 'Rating',
     'available': ["9", "8", "7", "6", "5", "4", "3", "2", "1"],
     'display': ["9★", "8★", "7★", "6★", "5★", "4★", "3★", "2★", "1★"],
     'filter': [],
+    'checkbox': true
   },
   'length': {
     'name': 'Length',
     'available': ["0", "1", "2", "3"],
     'display': ["-1 hour", "1-2 hours", "2-3 hours", "3+ hours"],
     'filter': [],
+    'checkbox': true
   },
   'date_rated': {
     'name': 'Date rated',
@@ -46,20 +58,25 @@ const filters = {
     'exclude_mode': false
   }
 }
-const state = ref(false)
+const state = ref(true)
 
 const excludeMode = ref(false)
 
-function swap_filter(filter, target) {
-  console.log('swapping filter')
-  if (target.includes(filter) === false) {
-    target.push(filter)
+function swap_filter(filter, target, checkbox) {
+  console.log('swapping filter', filter, target)
+  if (checkbox === false) {
+    target = [filter]
   } else {
-    let index = target.indexOf(filter)
-    if (index > -1) { // only splice array when item is found
-      target.splice(index, 1); // 2nd parameter means remove one item only
+    if (target.includes(filter) === false) {
+      target.push(filter)
+    } else {
+      let index = target.indexOf(filter)
+      if (index > -1) { // only splice array when item is found
+        target.splice(index, 1); // 2nd parameter means remove one item only
+      }
     }
   }
+
   emits('filters', filters)
 }
 
@@ -79,7 +96,8 @@ function swap_filter(filter, target) {
           <h1 style="text-decoration: underline;padding-bottom: 5px">{{ elem['name'] }}</h1>
           <div v-for="(filter,index) in elem['available']" :key="filter" class="filter_content_list">
             <label class="filter_label">
-              <input type="checkbox" style="cursor: pointer" @change="swap_filter(filter,elem['filter'])">
+              <input :type="elem['checkbox'] ? 'checkbox' : 'radio'" :name="elem['name']" style="cursor: pointer"
+                     @click="swap_filter(filter,elem['filter'],elem['checkbox'])">
               {{ elem['display'][index] }}
             </label>
           </div>
@@ -121,10 +139,9 @@ function swap_filter(filter, target) {
   user-select: none;
   font-min-size: 1em;
 
-  height: 240px;
+  height: 250px;
   padding: 20px;
 
-  /*margin: 25px 25px 0 25px;*/
   border-radius: 8px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
   overflow: hidden;
@@ -141,5 +158,11 @@ function swap_filter(filter, target) {
 .filter_label {
   font-size: 0.9em;
   cursor: pointer;
+}
+
+.filter_types {
+  min-width: 60px;
+  /*outline: 1px solid red;*/
+  margin-right: 10px;
 }
 </style>
