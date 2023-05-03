@@ -52,6 +52,9 @@ def filter_movies(query):
             case "Tv-series":
                 type_query = Query().media_type == "tv"
 
+            case "Anime":
+                type_query = Query().media_type == "anime"
+
             case "Documentary":
                 type_query = Query().genres.any("Documentary")
 
@@ -102,18 +105,27 @@ def filter_movies(query):
 
 
 def edit_movie(query):
+    # print(query)
     old_data = query['oldData']
-    new_rating = query['newRating']
+    new_data = query['newData']
 
     curr_table = f'ranked_{old_data["my_rating"]}'
-    target_table = f'ranked_{new_rating}'
-
     title_query = Query().title == str(old_data['title'])
 
     element = sorted_database.table(curr_table).get(title_query)
-    element['my_rating'] = new_rating
-    try:
-        sorted_database.table(target_table).insert(element)
-    except ValueError:
-        print('already in table')
-    sorted_database.table(curr_table).remove(title_query)
+
+    print('updated')
+    sorted_database.table(curr_table).update(new_data, title_query)
+    print(sorted_database.table(curr_table).get(title_query))
+
+    if "my_rating" in new_data:
+        print('changed tables')
+        target_table = f'ranked_{new_data["my_rating"]}'
+
+        try:
+            sorted_database.table(target_table).insert(element)
+        except ValueError:
+            print('already in table')
+        sorted_database.table(curr_table).remove(title_query)
+
+
