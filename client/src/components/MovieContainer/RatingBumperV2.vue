@@ -14,11 +14,14 @@ const arrow_state = ref(0)
 
 if (props.rating > scaled_user_rating.value + 1.5) {
   arrow_state.value = 1
-} else if (props.rating > scaled_user_rating.value + 3) {
-  arrow_state.value = 2
-} else if (props.rating < scaled_user_rating.value - 3) {
+}
+if (props.rating < scaled_user_rating.value - 1.5) {
   arrow_state.value = 3
-} else if (props.rating < scaled_user_rating.value - 5) {
+}
+if (props.rating > scaled_user_rating.value + 3) {
+  arrow_state.value = 2
+}
+if (props.rating < scaled_user_rating.value - 3) {
   arrow_state.value = 4
 }
 
@@ -48,8 +51,30 @@ onMounted(() => {
       </div>
     </div>
 
+    <div v-if="arrow_state===2" class="tooltip">
+      <p class="rating green">🡅🡅</p>
+      <div class="hover_box">
+        <div class="description">
+          <h1 class="tag_description">My rating is 3 points higher than the scaled average imdb rating</h1>
+          <h1 class="tag_description" style="font-size: 0.6em;margin-top: 5px;  color: rgba(0, 0, 0, 0.4);">
+            {{ "The unscaled imdb rating is: " + round_user_rating }}</h1>
+        </div>
+      </div>
+    </div>
+
     <div v-if="arrow_state===3" class="tooltip">
       <p class="rating red">🡅</p>
+      <div class="hover_box">
+        <div class="description">
+          <h1 class="tag_description">My rating is 1.5 points lower than the scaled average imdb rating</h1>
+          <h1 class="tag_description" style="font-size: 0.6em;margin-top: 5px;  color: rgba(0, 0, 0, 0.4);">
+            {{ "The unscaled imdb rating is: " + round_user_rating }}</h1>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="arrow_state===4" class="tooltip">
+      <p class="rating red">🡅🡅</p>
       <div class="hover_box">
         <div class="description">
           <h1 class="tag_description">My rating is 3 points lower than the scaled average imdb rating</h1>
@@ -58,6 +83,7 @@ onMounted(() => {
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -82,7 +108,7 @@ export default {
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 
   /*color: white;*/
-  font-size: 0.7em;
+  font-size: 0.8em;
   padding: 3px;
   border-radius: 5px;
 }

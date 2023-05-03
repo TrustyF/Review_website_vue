@@ -29,9 +29,9 @@ onMounted(() => {
   update_movies()
 })
 
-function update_movies() {
+function update_movies(filters={}) {
   // console.log('updating movies')
-  axios.post(`${local_api}/get_movies/`, filters.value)
+  axios.post(`${curr_api}/get_movies/`, filters)
       .then(response => {
         console.log("response",response)
         movies.value = response.data
@@ -42,19 +42,18 @@ function update_movies() {
 function editMovie(input) {
   settingsOpen.value = true
   currentSelectedMovie.value = input
-  console.log('emit caught')
 }
 
 </script>
 <template>
-<!--  <db-helper :data="currentSelectedMovie" :open="settingsOpen" @settingsClosed="closeSettings"></db-helper>-->
+  <db-helper :data="currentSelectedMovie" :open="settingsOpen" @settingsClosed="settingsOpen=!settingsOpen"></db-helper>
 
-  <FilterMenu></FilterMenu>
+  <FilterMenu @filters="update_movies"></FilterMenu>
 
   <div class="feed" v-if="servStatus===200">
     <div class="movie_grid" v-for="rating in [9,8,7,6,5,4,3,2,1]" :key="rating">
     <rating-header :rating="rating"></rating-header>
-      <div class="movie_container_wrapper" v-for="mov in movies[`ranked_${rating}`]" :key="mov['imdb_url']">
+      <div class="movie_container_wrapper" v-for="mov in movies[`ranked_${rating}`]" :key="mov.title">
         <MovieContainer :key="mov.id" :data="mov" @MovieEdit="editMovie"></MovieContainer>
       </div>
     </div>
