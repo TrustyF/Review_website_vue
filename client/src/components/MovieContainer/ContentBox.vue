@@ -8,6 +8,7 @@ const props = defineProps(['data'])
   <div class="content">
     <p class="title" v-if="data['title']">{{ data['title'] }}</p>
     <p class="date" v-if="data['release_date']">{{ data['release_date'].split("-")[0] }}</p>
+    <p class="date" v-if="data['region']">{{ data['region'] }}</p>
 <!--    <p class="rating">{{ data['my_rating'] + "★" }} </p>-->
   </div>
 
