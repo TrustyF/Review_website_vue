@@ -2,7 +2,6 @@
 import TagContainer from "@/components/MovieContainer/TagContainer";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 import RatingBumper from "@/components/MovieContainer/RatingBumper";
-import RatingBumperV2 from "@/components/MovieContainer/RatingBumperV2";
 import {defineProps, defineEmits, ref, watch} from 'vue'
 import ContentBox from "@/components/MovieContainer/ContentBox";
 
@@ -35,8 +34,8 @@ function emitSelectedMovie(input) {
   <div class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [isSeen ? ' seen' : '']">
     <div class="main_block">
 
-      <RatingBumperV2 class="rating_bumperV2" v-if="data['my_rating']!==undefined" :rating="data['my_rating']"
-                      :user_rating="data['vote_average']"></RatingBumperV2>
+      <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :rating="data['my_rating']"
+                      :user_rating="data['vote_average']"></RatingBumper>
 
       <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
 
@@ -44,7 +43,7 @@ function emitSelectedMovie(input) {
         <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
       </div>
 
-      <p v-if="data['is_anime']"> is anime</p>
+<!--      <p v-if="data['region']"> {{ data['region'] }}</p>-->
 
       <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
            class="poster" alt="poster"
@@ -126,7 +125,7 @@ export default {
   position: absolute;
 }
 
-.rating_bumperV2 {
+.rating_bumper {
   position: absolute;
   transform: translate(3px, 277px);
 }

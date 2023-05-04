@@ -58,22 +58,29 @@ const filters = {
     'exclude_mode': false
   }
 }
-const state = ref(true)
+const state = ref(false)
 
 const excludeMode = ref(false)
 
-function swap_filter(filter, target, checkbox) {
-  console.log('swapping filter', filter, target)
-  if (checkbox === false) {
-    target = [filter]
-  } else {
-    if (target.includes(filter) === false) {
+function swap_filter(filter, target, checkbox, button) {
+
+  console.log('swapping filter', filter, target, checkbox, button)
+
+  if (target.includes(filter) === false) {
+    if (checkbox === true) {
       target.push(filter)
     } else {
+      target[0] = filter
+    }
+  } else {
+    if (checkbox === true) {
       let index = target.indexOf(filter)
       if (index > -1) { // only splice array when item is found
         target.splice(index, 1); // 2nd parameter means remove one item only
       }
+    } else {
+      target[0] = []
+      button.target.checked = false
     }
   }
 
@@ -97,7 +104,7 @@ function swap_filter(filter, target, checkbox) {
           <div v-for="(filter,index) in elem['available']" :key="filter" class="filter_content_list">
             <label class="filter_label">
               <input :type="elem['checkbox'] ? 'checkbox' : 'radio'" :name="elem['name']" style="cursor: pointer"
-                     @click="swap_filter(filter,elem['filter'],elem['checkbox'])">
+                     @click="swap_filter(filter,elem['filter'],elem['checkbox'],$event)">
               {{ elem['display'][index] }}
             </label>
           </div>
