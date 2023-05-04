@@ -19,6 +19,12 @@ def edit_movie():
     return Response(status=200)
 
 
+@app.route('/add_movie/', methods=["POST"])
+def add_movie():
+    functions.add_movie(request.json)
+    return Response(status=200)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
     # functions.add_date_added()

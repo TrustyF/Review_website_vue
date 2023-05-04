@@ -117,7 +117,7 @@ def filter_movies(query):
 
 
 def edit_movie(query):
-    # print(query)
+    print('query', query)
     old_data = query['oldData']
     new_data = query['newData']
 
@@ -141,3 +141,6 @@ def edit_movie(query):
         sorted_database.table(curr_table).remove(title_query)
 
 
+def add_movie(query):
+    print(query)
+    return
