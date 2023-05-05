@@ -4,7 +4,7 @@ import MovieContainer from "@/components/MovieContainer/MovieContainer";
 import DbHelper from "@/components/DbHelper";
 import FilterMenu from "@/components/Homepage/FilterMenu";
 import RatingHeader from "@/components/Homepage/RatingHeader";
-import { inject } from 'vue'
+import {inject} from 'vue'
 
 import axios from 'axios'
 import {ref, onMounted} from 'vue'
@@ -19,7 +19,7 @@ const excludeMode = ref(false)
 const filters = ref({})
 
 const currentSelectedMovie = ref({})
-const currentSelectedRatings = ref([9,8,7,6,5,4,3,2,1])
+const currentSelectedRatings = ref([9, 8, 7, 6, 5, 4, 3, 2, 1])
 
 const servStatus = ref(0)
 const settingsOpen = ref(false)
@@ -28,11 +28,11 @@ onMounted(() => {
   update_movies()
 })
 
-function update_movies(filters={}) {
+function update_movies(filters = {}) {
   // console.log('updating movies')
   axios.post(`${current_api}/get_movies/`, filters)
       .then(response => {
-        console.log("response",response)
+        console.log("response", response)
         movies.value = response.data
         servStatus.value = response.status
       })
@@ -45,13 +45,14 @@ function editMovie(input) {
 
 </script>
 <template>
-  <db-helper class="db_helper" :data="currentSelectedMovie" :open="settingsOpen" @settingsClosed="settingsOpen=!settingsOpen"></db-helper>
+  <db-helper class="db_helper" :data="currentSelectedMovie" :open="settingsOpen"
+             @settingsClosed="settingsOpen=!settingsOpen"></db-helper>
 
   <FilterMenu @filters="update_movies"></FilterMenu>
 
   <div class="feed" v-if="servStatus===200">
     <div class="movie_grid" v-for="rating in [9,8,7,6,5,4,3,2,1]" :key="rating">
-    <rating-header :rating="rating"></rating-header>
+      <rating-header :rating="rating"></rating-header>
       <div class="movie_container_wrapper" v-for="mov in movies[`rank_${rating}`]" :key="mov.title">
         <MovieContainer :key="mov.id" :data="mov" @MovieEdit="editMovie"></MovieContainer>
       </div>
@@ -81,6 +82,7 @@ function editMovie(input) {
   flex-flow: row wrap;
   margin: auto;
 }
+
 .db_helper {
   position: fixed;
   left: 0;

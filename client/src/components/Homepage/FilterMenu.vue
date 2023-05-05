@@ -5,7 +5,7 @@ import filterButton from '/public/assets/ui/filter_button.png'
 
 const props = defineProps(['props'])
 const emits = defineEmits(['filters'])
-const filters = {
+let filters = {
   'type': {
     'name': 'Type',
     'available': ["Movie", "Tv-series", "Documentary"],
@@ -54,11 +54,14 @@ const filters = {
     'display': ["Ascending", "Descending"],
     'filter': [],
   },
+  'search_bar': "",
   'extra_settings': {
     'exclude_mode': false
   }
 }
 const state = ref(false)
+
+let throttle_search = false
 
 const excludeMode = ref(false)
 
@@ -87,13 +90,33 @@ function swap_filter(filter, target, checkbox, button) {
   emits('filters', filters)
 }
 
+function search_bar(event) {
+  if (throttle_search === false) {
+    throttle_search = true
+
+    setTimeout(function () {
+      filters['search_bar'] = event.target.value
+      console.log(filters)
+      emits('filters', filters)
+      throttle_search = false
+    }, 300)
+
+  }
+}
+
 </script>
 <template>
+  <div class="filters_nav_wrapper">
+    <div class="filter_button_wrapper" @click="state = !state">
+      <h1>Filters</h1>
+      <img :src="filterButton" alt="filter button" style="width: 15px">
+    </div>
 
-  <div class="filter_button" @click="state = !state">
-    <div class="button_padding"></div>
-    <img :src="filterButton" alt="filter button" style="width: 15px;margin-right: 5px">
-    <h1>Filters</h1>
+    <div class="search_bar_wrapper">
+      <label for="search_bar">Search</label>
+      <input class="search_bar" type="search" id="search_bar" @input="search_bar">
+    </div>
+
   </div>
 
   <Collapse :when="state" class="collapse">
@@ -116,29 +139,36 @@ function swap_filter(filter, target, checkbox, button) {
 </template>
 
 <style scoped>
+.filters_nav_wrapper {
+  /*outline: 1px solid red;*/
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+  justify-items: center;
+  padding: 5px;
+
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  gap: 20px;
+}
+
 .collapse {
   transition: height 300ms ease-in-out;
 }
 
-.button_padding {
-  /*outline: 1px red solid;*/
-  position: absolute;
-  width: 90px;
-  height: 45px;
-  margin: 10px;
-  transform: translate(-20px, -25px);
-}
-
 .filter_wrapper {
   padding: 25px 25px 5px 25px;
+  /*outline: 2px solid blue;*/
 }
 
-.filter_button {
+.filter_button_wrapper {
+  /*outline: 1px solid red;*/
+  padding: 12px;
   cursor: pointer;
   user-select: none;
-  margin: 20px 25px 0 25px;
   display: flex;
   flex-flow: row wrap;
+  gap: 5px;
 }
 
 .filters {
@@ -158,8 +188,6 @@ function swap_filter(filter, target, checkbox, button) {
   align-items: flex-start;
   flex-flow: column wrap;
   align-content: flex-start;
-
-  gap: 10px;
 }
 
 .filter_label {
@@ -171,5 +199,23 @@ function swap_filter(filter, target, checkbox, button) {
   min-width: 60px;
   /*outline: 1px solid red;*/
   margin-right: 10px;
+}
+
+.search_bar_wrapper {
+  /*outline: 1px solid red;*/
+
+  padding: 5px;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.search_bar {
+  border-radius: 5px;
+  border-width: 2px;
+  outline: none;
+  padding: 2px;
 }
 </style>

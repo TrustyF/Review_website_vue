@@ -1,14 +1,14 @@
 <script setup>
-import TagContainer from "@/components/MovieContainer/TagContainer";
+import TagContainer from "@/components/MovieContainer/components/TagContainer";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
-import RatingBumper from "@/components/MovieContainer/RatingBumper";
+import RatingBumper from "@/components/MovieContainer/components/RatingBumper";
 import {defineProps, defineEmits, ref, watch} from 'vue'
-import ContentBox from "@/components/MovieContainer/ContentBox";
+import ContentBox from "@/components/MovieContainer/components/ContentBox";
 
 const props = defineProps(['data'])
 const emits = defineEmits(['MovieEdit'])
 
-const isOpen = ref(false)
+let isOpen = ref(false)
 const isSeen = ref(false)
 const outOfFocus = ref(false)
 const settingsOpen = ref(false)
@@ -34,16 +34,13 @@ function emitSelectedMovie(input) {
   <div class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [isSeen ? ' seen' : '']">
     <div class="main_block">
 
-      <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :rating="data['my_rating']"
-                      :user_rating="data['vote_average']"></RatingBumper>
+      <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"></RatingBumper>
 
       <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
 
       <div class="settings">
         <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
       </div>
-
-<!--      <p v-if="data['region']"> {{ data['region'] }}</p>-->
 
       <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
            class="poster" alt="poster"
@@ -59,13 +56,13 @@ function emitSelectedMovie(input) {
 
         <h3 class="heading">Overview</h3>
         <div class="details_wrapper">
-          <p class="rank" v-if="data['overview']" style="margin-bottom:5px;">
-            {{ data['overview'] }}
-          </p>
+          <!--          <p class="rank" v-if="data['overview']" style="margin-bottom:5px;">-->
+          <!--            {{ data['overview'] }}-->
+          <!--          </p>-->
           <p class="rank" v-if="data['genres']" style="margin-bottom:5px;">
             {{ data['genres'].map(elem => elem).join(', ') }}
           </p>
-          <p class="rank" style="margin-bottom:5px;" v-if="data['runtime']">
+          <p class="rank" style="margin-bottom:5px;" v-if="data['runtime'] && data['media_type']==='movie'">
             {{ "Duration: " + timeConvert(data['runtime']) }}
           </p>
           <p class="rank" v-if="data['contentRating']">
@@ -95,8 +92,6 @@ function emitSelectedMovie(input) {
     <!--    </div>-->
   </div>
 </template>
-
-
 <script>
 export default {
   name: "MovieContainer"
