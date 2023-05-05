@@ -5,6 +5,7 @@ from tinydb import TinyDB, Query, where
 from datetime import datetime
 import csv
 import time
+import re
 
 my_dir = os.path.dirname(__file__)
 sorted_json_file_path = os.path.join(my_dir, r'database/sorted_db.json')
@@ -34,7 +35,7 @@ def filter_movies(query):
     region_filters = query['region']['filter']
     format_filters = query['format']['filter']
     type_filters = query['type']['filter']
-    date_rated_filters = query['date_rated']['filter']
+    searchbar_filters = query['search_bar']
 
     rating_query = ~Query().doc_id.exists()
     length_query = ~Query().doc_id.exists()
@@ -42,7 +43,7 @@ def filter_movies(query):
     region_query = ~Query().doc_id.exists()
     format_query = ~Query().doc_id.exists()
     type_query = ~Query().doc_id.exists()
-    date_rated_query = ~Query().doc_id.exists()
+    searchbar_query = ~Query().doc_id.exists()
 
     # filter type
     for type_filter in type_filters:
@@ -97,6 +98,11 @@ def filter_movies(query):
             case "3":
                 length_query = Query().runtime >= 180
 
+    # filter searchbar
+    print(searchbar_filters)
+    if len(searchbar_filters) > 0:
+        searchbar_query = Query().title.test(lambda val: re.search(searchbar_filters, val, re.IGNORECASE))
+
     #  apply queries
     return sorted_database.table('movies').search(
         type_query &
@@ -104,7 +110,8 @@ def filter_movies(query):
         region_query &
         genre_query &
         rating_query &
-        length_query
+        length_query &
+        searchbar_query
     )
 
 
@@ -126,5 +133,8 @@ def edit_movie(query):
 
 
 def add_movie(data):
-    print(data)
-    return
+    sorted_database.table('movies').insert(data)
+
+
+def del_movie(data):
+    sorted_database.table('movies').remove(Query().title == str(data['title'])[0])

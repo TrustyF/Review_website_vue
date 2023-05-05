@@ -25,6 +25,12 @@ def add_movie():
     return Response(status=200)
 
 
+@app.route('/del_movie/', methods=["POST"])
+def del_movie():
+    functions.del_movie(request.json)
+    return Response(status=200)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
     # functions.reset_db()
