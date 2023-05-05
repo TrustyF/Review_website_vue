@@ -14,7 +14,7 @@ import NavBar from "@/components/NavBar";
 .main {
   /*outline: 3px solid purple;*/
   position: relative;
-  margin-top: 10px;
+  /*margin-top: 10px;*/
   width: 100%;
 }
 </style>

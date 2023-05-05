@@ -2,7 +2,7 @@
 import {defineProps, defineEmits, ref, watchEffect, watch, onMounted, computed, inject} from 'vue'
 import asset_paths from '../../public/assets/tags/assets.json'
 import axios from 'axios'
-import TagContainer from "@/components/MovieContainer/TagContainer";
+import TagContainer from "@/components/MovieContainer/components/TagContainer";
 import MovieContainer from "@/components/MovieContainer/MovieContainer";
 
 const props = defineProps(['data', 'open'])
@@ -27,6 +27,8 @@ const iconTier = ref("")
 const availableRegions = ["western", "asian"]
 const availableTiers = ["cyan", "gold", "green", "purple", "red", "silver"]
 
+let throttle_search = false
+
 function pushChange(button) {
   button.target.disabled = true
   // button.target.lastChild.data = " ❌"
@@ -39,25 +41,51 @@ function pushChange(button) {
 }
 
 async function searchMovie(query, type = "movie") {
-  console.log('searching', query.target.value)
+  let search_text = query.target.value
 
-  MovChanges.value = await axios.get(`https://api.themoviedb.org/3/search/${type}?api_key=${apiKey}&language=en-US&query=${query.target.value}`)
-      .then(response => {
-        return axios.get(`https://api.themoviedb.org/3/${type}/${response.data['results'][0]['id']}?api_key=${apiKey}&language=en-US&append_to_response=credits`)
-            .then(response => {
-              const full_data = response.data
+  if (throttle_search === true) return
+  if (search_text.length < 1) return
 
-              //replace genres
-              full_data['genres'].map(a => a.name)
+  throttle_search = true
+  console.log('searching', search_text)
+  setTimeout(async function () {
+    MovChanges.value = await axios.get(`https://api.themoviedb.org/3/search/${type}?api_key=${apiKey}&language=en-US&query=${search_text}`)
+        .then(response => {
 
-              // add others
-              full_data['media_type'] = type
-              full_data['date_rated'] = new Date().toISOString().slice(0, 10)
+          if (response.data['results'].length < 1) {
+            throttle_search = false
+            return
+          }
 
-              console.log(full_data)
-              return full_data
-            })
-      })
+          const simple_data = response.data['results'][0]
+
+          return axios.get(`https://api.themoviedb.org/3/${type}/${simple_data['id']}?api_key=${apiKey}&language=en-US&append_to_response=credits`)
+              .then(response => {
+                const full_data = response.data
+
+                //replace genres
+                simple_data['genres'] = full_data['genres'].map(a => a.name)
+
+                // add others
+                simple_data['media_type'] = type
+                simple_data['date_rated'] = new Date().toISOString().slice(0, 10)
+
+                // tv exceptions
+                if (type === 'tv') {
+
+                  simple_data['title'] = full_data['name']
+                  delete simple_data['name']
+
+                  simple_data['release_date'] = full_data['first_air_date']
+                  delete simple_data['first_air_date']
+                }
+
+                console.log(simple_data)
+                throttle_search = false
+                return simple_data
+              })
+        })
+  }, 300)
 }
 
 function addMovie(button) {
@@ -65,6 +93,15 @@ function addMovie(button) {
   axios.post(`${current_api}/add_movie/`, MovChanges.value)
       .then(response => {
         console.log("added movie")
+        button.target.disabled = false
+      })
+}
+
+function delMovie(button) {
+  button.target.disabled = true
+  axios.post(`${current_api}/del_movie/`, MovChanges.value)
+      .then(response => {
+        console.log("removed movie")
         button.target.disabled = false
       })
 }
@@ -98,12 +135,13 @@ function addMovie(button) {
     <div class="movie_adder box_wrapper">
 
       <label for="search_m_input">Search movie</label>
-      <input type="search" @keyup.enter="searchMovie($event,'movie')" id="search_m_input">
+      <input type="search" @input="searchMovie($event,'movie')" id="search_m_input">
 
       <label for="search_t_input">Search tv</label>
-      <input type="search" @keyup.enter="searchMovie($event,'tv')" id="search_t_input">
+      <input type="search" @input="searchMovie($event,'tv')" id="search_t_input">
 
       <button @click="addMovie">add movie</button>
+      <button @click="delMovie">remove movie</button>
     </div>
 
 
@@ -123,7 +161,7 @@ export default {
 }
 
 .metadata {
-  outline: 1px solid red;
+  /*outline: 1px solid red;*/
 }
 
 .box_wrapper {

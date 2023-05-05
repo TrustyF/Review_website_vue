@@ -1,7 +1,7 @@
 <script setup>
-import {defineProps, defineEmits, ref, onMounted} from 'vue'
+import {defineProps, defineEmits, watch, ref, onMounted} from 'vue'
 
-const props = defineProps({'rating': String, 'user_rating': Number})
+const props = defineProps(['data'])
 const arrow_up_single = './assets/ui/arrow_up_single.png'
 const arrow_up_double = './assets/ui/arrow_up_double.png'
 const arrow_down_single = './assets/ui/arrow_down_single.png'
@@ -11,28 +11,34 @@ function map_range(value, low1, high1, low2, high2) {
   return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 }
 
-const scaled_user_rating = ref(Math.round(map_range(props.user_rating, 4.5, 9, 1, 10) * 10) / 10)
-const round_user_rating = ref(Math.round(props.user_rating * 10) / 10)
+const scaled_user_rating = ref(Math.round(map_range(props.data['vote_average'], 4.5, 9, 1, 10) * 10) / 10)
+const round_user_rating = ref(Math.round(props.data['vote_average'] * 10) / 10)
 
-const rating_diff = Math.abs(props.rating - scaled_user_rating.value).toFixed(0)
+const rating_diff = Math.abs(props.data['my_rating'] - scaled_user_rating.value).toFixed(0)
 
 const arrow_state = ref(0)
 
-if (props.rating > scaled_user_rating.value + 1.5) {
-  arrow_state.value = 1
-}
-if (props.rating < scaled_user_rating.value - 1.5) {
-  arrow_state.value = 3
-}
-if (props.rating > scaled_user_rating.value + 2.5) {
-  arrow_state.value = 2
-}
-if (props.rating < scaled_user_rating.value - 2.5) {
-  arrow_state.value = 4
-}
-
-onMounted(() => {
-
+watch(props, (newV, oldV) => {
+  if (props.data['my_rating'] > scaled_user_rating.value + 1.5) {
+    arrow_state.value = 1
+  } else {
+    arrow_state.value = 0
+  }
+  if (props.data['my_rating'] < scaled_user_rating.value - 1.5) {
+    arrow_state.value = 3
+  } else {
+    arrow_state.value = 0
+  }
+  if (props.data['my_rating'] > scaled_user_rating.value + 2.5) {
+    arrow_state.value = 2
+  } else {
+    arrow_state.value = 0
+  }
+  if (props.data['my_rating'] < scaled_user_rating.value - 2.5) {
+    arrow_state.value = 4
+  } else {
+    arrow_state.value = 0
+  }
 })
 
 
@@ -40,8 +46,8 @@ onMounted(() => {
 
 <template>
   <div class="bumper_wrapper">
-    <p class="rating star_blue">{{ rating }} </p>
-    <p class="rating star_gold">{{ scaled_user_rating }} </p>
+    <p class="rating star_blue">{{ data['my_rating'] }} </p>
+    <p class="rating star_gold" >{{ scaled_user_rating }} </p>
     <!--    <p class="rating star_gold">{{ round_user_rating }} </p>-->
     <!--    <p class="rating ">{{ props['rating'] }} </p>-->
     <!--    <p class="rating ">{{ props['user_rating'] }} </p>-->
@@ -52,7 +58,8 @@ onMounted(() => {
       <div class="hover_box">
         <div class="description">
           <h1 class="tag_name">Better than they say</h1>
-          <h1 class="tag_description">My rating is {{ rating_diff }} points higher than the scaled average imdb rating</h1>
+          <h1 class="tag_description">My rating is {{ rating_diff }} points higher than the scaled average imdb
+            rating</h1>
           <h1 class="tag_description" style="font-size: 0.6em;margin-top: 5px;  color: rgba(0, 0, 0, 0.4);">
             {{ "The unscaled imdb rating is: " + round_user_rating }}</h1>
         </div>
@@ -64,7 +71,8 @@ onMounted(() => {
       <div class="hover_box">
         <div class="description">
           <h1 class="tag_name">Underrated</h1>
-          <h1 class="tag_description">My rating is {{ rating_diff }} points higher than the scaled average imdb rating</h1>
+          <h1 class="tag_description">My rating is {{ rating_diff }} points higher than the scaled average imdb
+            rating</h1>
           <h1 class="tag_description" style="font-size: 0.6em;margin-top: 5px;  color: rgba(0, 0, 0, 0.4);">
             {{ "The unscaled imdb rating is: " + round_user_rating }}</h1>
         </div>
@@ -76,7 +84,8 @@ onMounted(() => {
       <div class="hover_box">
         <div class="description">
           <h1 class="tag_name">Not that good</h1>
-          <h1 class="tag_description">My rating is {{ rating_diff }} points lower than the scaled average imdb rating</h1>
+          <h1 class="tag_description">My rating is {{ rating_diff }} points lower than the scaled average imdb
+            rating</h1>
           <h1 class="tag_description" style="font-size: 0.6em;margin-top: 5px;  color: rgba(0, 0, 0, 0.4);">
             {{ "The unscaled imdb rating is: " + round_user_rating }}</h1>
         </div>
@@ -88,7 +97,8 @@ onMounted(() => {
       <div class="hover_box">
         <div class="description">
           <h1 class="tag_name">Overrated</h1>
-          <h1 class="tag_description">My rating is {{ rating_diff }} points lower than the scaled average imdb rating</h1>
+          <h1 class="tag_description">My rating is {{ rating_diff }} points lower than the scaled average imdb
+            rating</h1>
           <h1 class="tag_description" style="font-size: 0.6em;margin-top: 5px;  color: rgba(0, 0, 0, 0.4);">
             {{ "The unscaled imdb rating is: " + round_user_rating }}</h1>
         </div>
@@ -185,6 +195,7 @@ export default {
   /*outline: 1px solid blue;*/
   height: 0.8em;
 }
+
 .tag_name {
   font-size: 0.9em;
   margin-bottom: 5px;
