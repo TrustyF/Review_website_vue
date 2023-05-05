@@ -59,11 +59,18 @@ function emitSelectedMovie(input) {
 
         <h3 class="heading">Overview</h3>
         <div class="details_wrapper">
+          <p class="rank" v-if="data['overview']" style="margin-bottom:5px;">
+            {{ data['overview'] }}
+          </p>
           <p class="rank" v-if="data['genres']" style="margin-bottom:5px;">
-            {{ data['genres'].map(elem => elem).join(', ') }}</p>
+            {{ data['genres'].map(elem => elem).join(', ') }}
+          </p>
           <p class="rank" style="margin-bottom:5px;" v-if="data['runtime']">
-            {{ "Duration: " + timeConvert(data['runtime']) }}</p>
-          <p class="rank" v-if="data['contentRating']">{{ "Rating: " + data['contentRating'] }}</p>
+            {{ "Duration: " + timeConvert(data['runtime']) }}
+          </p>
+          <p class="rank" v-if="data['contentRating']">
+            {{ "Rating: " + data['contentRating'] }}
+          </p>
 
           <h3 class="heading">Extras</h3>
           <a :href="data['imdb_url']" target="_blank" rel="noopener noreferrer">
