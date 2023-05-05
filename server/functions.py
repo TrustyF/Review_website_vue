@@ -4,6 +4,7 @@ from flask import jsonify, Request
 from tinydb import TinyDB, Query, where
 from datetime import datetime
 import csv
+import time
 
 my_dir = os.path.dirname(__file__)
 sorted_json_file_path = os.path.join(my_dir, r'database/sorted_db.json')
@@ -12,8 +13,9 @@ sorted_database = TinyDB(sorted_json_file_path)
 
 
 def get_all_movies(query):
-    filtered_movies = filter_movies(query)
-    return filtered_movies
+    filtered = filter_movies(query)
+    organized = organize_by_rank(filtered)
+    return organized
 
 
 def filter_movies(query):
@@ -24,10 +26,7 @@ def filter_movies(query):
 
     # return all if empty query
     if not query:
-        for rank in range(1, 11):
-            filtered_movies[f'ranked_{rank}'] = sorted_database.table(f'ranked_{rank}').all()
-
-        return filtered_movies
+        return sorted_database.table('movies').all()
 
     rating_filters = query['rating']['filter']
     length_filters = query['length']['filter']
@@ -98,22 +97,23 @@ def filter_movies(query):
             case "3":
                 length_query = Query().runtime >= 180
 
-    #  loop over ranks and apply queries
-    for rank in range(1, 11):
-        filtered_movies[f'ranked_{rank}'] = sorted_database.table(f'ranked_{rank}').search(
-            type_query &
-            format_query &
-            region_query &
-            genre_query &
-            rating_query &
-            length_query
-        )
+    #  apply queries
+    return sorted_database.table('movies').search(
+        type_query &
+        format_query &
+        region_query &
+        genre_query &
+        rating_query &
+        length_query
+    )
 
-        # # apply sorting
-        # sorted_movies[f'ranked_{rank}'] = sorted(filtered_movies,
-        #                                          key=lambda x: datetime.strptime(x['date_rated'], '%y-%m-%d'))
 
-    return filtered_movies
+def organize_by_rank(movies):
+    ranked = {}
+    for rank in range(1, 10):
+        ranked[f'rank_{rank}'] = [mov for mov in movies if mov['my_rating'] == str(rank)]
+
+    return ranked
 
 
 def edit_movie(query):
@@ -121,26 +121,10 @@ def edit_movie(query):
     old_data = query['oldData']
     new_data = query['newData']
 
-    curr_table = f'ranked_{old_data["my_rating"]}'
     title_query = Query().title == str(old_data['title'])
-
-    element = sorted_database.table(curr_table).get(title_query)
-
-    print('updated')
-    sorted_database.table(curr_table).update(new_data, title_query)
-    print(sorted_database.table(curr_table).get(title_query))
-
-    if "my_rating" in new_data:
-        print('changed tables')
-        target_table = f'ranked_{new_data["my_rating"]}'
-
-        try:
-            sorted_database.table(target_table).insert(element)
-        except ValueError:
-            print('already in table')
-        sorted_database.table(curr_table).remove(title_query)
+    sorted_database.table('movies').update(new_data, title_query)
 
 
-def add_movie(query):
-    print(query)
+def add_movie(data):
+    print(data)
     return

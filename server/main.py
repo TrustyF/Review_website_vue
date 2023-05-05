@@ -27,4 +27,4 @@ def add_movie():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    # functions.add_date_added()
+    # functions.reset_db()
