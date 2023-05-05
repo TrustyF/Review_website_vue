@@ -1,15 +1,20 @@
 <script setup>
-import {defineProps, defineEmits, ref, watch, onMounted, computed} from 'vue'
+import {defineProps, defineEmits, ref, watchEffect,watch, onMounted, computed, inject} from 'vue'
 import asset_paths from '../../public/assets/tags/assets.json'
 import axios from 'axios'
 import TagContainer from "@/components/MovieContainer/TagContainer";
 import MovieContainer from "@/components/MovieContainer/MovieContainer";
 
 const props = defineProps(['data', 'open'])
-let MovChanges = {}
-const foundMovie = ref()
+let MovChanges = ref()
+
+watch(props,(newV,oldV) => {
+  console.log(newV)
+  MovChanges.value = newV.data
+})
 
 const apiKey = '063ccf740a391dee9759aaa3564661c2'
+const current_api = inject('curr_api')
 
 const editConfirmed = ref(false)
 
@@ -22,16 +27,10 @@ const iconTier = ref("")
 const availableRegions = ["western", "asian"]
 const availableTiers = ["cyan", "gold", "green", "purple", "red", "silver"]
 
-function addChange(target, change) {
-  console.log(target, change)
-  console.log(MovChanges)
-  MovChanges[target] = change
-}
-
 function pushChange(button) {
   button.target.disabled = true
   // button.target.lastChild.data = " ❌"
-  axios.post("http://localhost:5000/edit_movie/", {'newData': MovChanges, 'oldData': props.data})
+  axios.post(`${current_api}/edit_movie/`, {'newData': MovChanges.value, 'oldData': props.data})
       .then(response => {
         console.log("edit status", response.status)
         button.target.disabled = false
@@ -39,19 +38,20 @@ function pushChange(button) {
       })
 }
 
-function searchMovie(query) {
+function searchMovie(query,type="movie") {
   console.log('searching', query.target.value)
-  axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&language=en-US&query=${query.target.value}`)
+  axios.get(`https://api.themoviedb.org/3/search/${type}?api_key=${apiKey}&language=en-US&query=${query.target.value}`)
       .then(response => {
         console.log("found movie", response.data['results'][0])
-        foundMovie.value = response.data['results'][0]
+        MovChanges.value = response.data['results'][0]
+        console.log("curr movie", MovChanges)
       })
 
 }
 
 function addMovie(button) {
   button.target.disabled = true
-  axios.post("http://localhost:5000/add_movie/", foundMovie.value)
+  axios.post(`${current_api}/add_movie/`, MovChanges.value)
       .then(response => {
         console.log("added movie")
         button.target.disabled = false
@@ -63,15 +63,16 @@ function addMovie(button) {
   <div class="main_win">
 
     <div class="metadata box_wrapper">
-      <p>{{ data.title }}</p>
+
+      <MovieContainer v-if="MovChanges" :data="MovChanges"></MovieContainer>
 
       <!--      Rating-->
       <label for="rating_input">Rating</label>
       <input type="number" id="rating_input" :value="data['my_rating']"
-             @change="addChange('my_rating',String($event.target.value))">
+             @change="MovChanges['my_rating'] = String($event.target.value)">
       <!--      Region-->
       <label for="region">Region</label>
-      <form id="region" @change="addChange('region',String($event.target.value))">
+      <form id="region" @change="MovChanges['region'] = String($event.target.value)">
         <select>
           <option v-for="elem in availableRegions" :key="elem" :selected="data['region']">{{ elem }}</option>
         </select>
@@ -84,11 +85,13 @@ function addMovie(button) {
     </div>
 
     <div class="movie_adder box_wrapper">
-      <label for="search_input">Search movie</label>
-      <input @input="searchMovie">
-      <!--      <p v-if="foundMovie">{{  foundMovie['poster_path'] }}</p>-->
-      <img v-if="foundMovie" :src="`https://image.tmdb.org/t/p/w500${foundMovie['poster_path']}`" style="height: 150px"
-           alt="poster">
+
+      <label for="search_m_input">Search movie</label>
+      <input type="search" @submit="searchMovie($event,'movie')" id="search_m_input">
+
+      <label for="search_t_input">Search tv</label>
+      <input type="search" @keydown="searchMovie($event,'tv')" id="search_t_input">
+
       <button @click="addMovie">add movie</button>
     </div>
 

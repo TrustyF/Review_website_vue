@@ -4,12 +4,14 @@ import MovieContainer from "@/components/MovieContainer/MovieContainer";
 import DbHelper from "@/components/DbHelper";
 import FilterMenu from "@/components/Homepage/FilterMenu";
 import RatingHeader from "@/components/Homepage/RatingHeader";
+import { inject } from 'vue'
 
 import axios from 'axios'
 import {ref, onMounted} from 'vue'
 
 // to do
 // add fresh review
+const current_api = inject('curr_api')
 
 const movies = ref([])
 
@@ -22,16 +24,13 @@ const currentSelectedRatings = ref([9,8,7,6,5,4,3,2,1])
 const servStatus = ref(0)
 const settingsOpen = ref(false)
 
-const local_api = "http://localhost:5000"
-const curr_api = "https://trustyfox.pythonanywhere.com"
-
 onMounted(() => {
   update_movies()
 })
 
 function update_movies(filters={}) {
   // console.log('updating movies')
-  axios.post(`${local_api}/get_movies/`, filters)
+  axios.post(`${current_api}/get_movies/`, filters)
       .then(response => {
         console.log("response",response)
         movies.value = response.data
