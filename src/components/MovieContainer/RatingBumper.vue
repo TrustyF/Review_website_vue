@@ -14,6 +14,8 @@ function map_range(value, low1, high1, low2, high2) {
 const scaled_user_rating = ref(Math.round(map_range(props.user_rating, 4.5, 9, 1, 10) * 10) / 10)
 const round_user_rating = ref(Math.round(props.user_rating * 10) / 10)
 
+const rating_diff = Math.abs(props.rating - scaled_user_rating.value).toFixed(0)
+
 const arrow_state = ref(0)
 
 if (props.rating > scaled_user_rating.value + 1.5) {
@@ -22,10 +24,10 @@ if (props.rating > scaled_user_rating.value + 1.5) {
 if (props.rating < scaled_user_rating.value - 1.5) {
   arrow_state.value = 3
 }
-if (props.rating > scaled_user_rating.value + 3) {
+if (props.rating > scaled_user_rating.value + 2.5) {
   arrow_state.value = 2
 }
-if (props.rating < scaled_user_rating.value - 3) {
+if (props.rating < scaled_user_rating.value - 2.5) {
   arrow_state.value = 4
 }
 
@@ -50,7 +52,7 @@ onMounted(() => {
       <div class="hover_box">
         <div class="description">
           <h1 class="tag_name">Better than they say</h1>
-          <h1 class="tag_description">My rating is 1.5 points higher than the scaled average imdb rating</h1>
+          <h1 class="tag_description">My rating is {{ rating_diff }} points higher than the scaled average imdb rating</h1>
           <h1 class="tag_description" style="font-size: 0.6em;margin-top: 5px;  color: rgba(0, 0, 0, 0.4);">
             {{ "The unscaled imdb rating is: " + round_user_rating }}</h1>
         </div>
@@ -62,7 +64,7 @@ onMounted(() => {
       <div class="hover_box">
         <div class="description">
           <h1 class="tag_name">Underrated</h1>
-          <h1 class="tag_description">My rating is 3 points higher than the scaled average imdb rating</h1>
+          <h1 class="tag_description">My rating is {{ rating_diff }} points higher than the scaled average imdb rating</h1>
           <h1 class="tag_description" style="font-size: 0.6em;margin-top: 5px;  color: rgba(0, 0, 0, 0.4);">
             {{ "The unscaled imdb rating is: " + round_user_rating }}</h1>
         </div>
@@ -74,7 +76,7 @@ onMounted(() => {
       <div class="hover_box">
         <div class="description">
           <h1 class="tag_name">Not that good</h1>
-          <h1 class="tag_description">My rating is 1.5 points lower than the scaled average imdb rating</h1>
+          <h1 class="tag_description">My rating is {{ rating_diff }} points lower than the scaled average imdb rating</h1>
           <h1 class="tag_description" style="font-size: 0.6em;margin-top: 5px;  color: rgba(0, 0, 0, 0.4);">
             {{ "The unscaled imdb rating is: " + round_user_rating }}</h1>
         </div>
@@ -86,7 +88,7 @@ onMounted(() => {
       <div class="hover_box">
         <div class="description">
           <h1 class="tag_name">Overrated</h1>
-          <h1 class="tag_description">My rating is 3 points lower than the scaled average imdb rating</h1>
+          <h1 class="tag_description">My rating is {{ rating_diff }} points lower than the scaled average imdb rating</h1>
           <h1 class="tag_description" style="font-size: 0.6em;margin-top: 5px;  color: rgba(0, 0, 0, 0.4);">
             {{ "The unscaled imdb rating is: " + round_user_rating }}</h1>
         </div>

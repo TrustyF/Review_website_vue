@@ -1,5 +1,5 @@
 <script setup>
-import {defineProps, defineEmits, ref, watchEffect,watch, onMounted, computed, inject} from 'vue'
+import {defineProps, defineEmits, ref, watchEffect, watch, onMounted, computed, inject} from 'vue'
 import asset_paths from '../../public/assets/tags/assets.json'
 import axios from 'axios'
 import TagContainer from "@/components/MovieContainer/TagContainer";
@@ -8,7 +8,7 @@ import MovieContainer from "@/components/MovieContainer/MovieContainer";
 const props = defineProps(['data', 'open'])
 let MovChanges = ref()
 
-watch(props,(newV,oldV) => {
+watch(props, (newV, oldV) => {
   console.log(newV)
   MovChanges.value = newV.data
 })
@@ -38,15 +38,26 @@ function pushChange(button) {
       })
 }
 
-function searchMovie(query,type="movie") {
+async function searchMovie(query, type = "movie") {
   console.log('searching', query.target.value)
-  axios.get(`https://api.themoviedb.org/3/search/${type}?api_key=${apiKey}&language=en-US&query=${query.target.value}`)
-      .then(response => {
-        console.log("found movie", response.data['results'][0])
-        MovChanges.value = response.data['results'][0]
-        console.log("curr movie", MovChanges)
-      })
 
+  MovChanges.value = await axios.get(`https://api.themoviedb.org/3/search/${type}?api_key=${apiKey}&language=en-US&query=${query.target.value}`)
+      .then(response => {
+        return axios.get(`https://api.themoviedb.org/3/${type}/${response.data['results'][0]['id']}?api_key=${apiKey}&language=en-US&append_to_response=credits`)
+            .then(response => {
+              const full_data = response.data
+
+              //replace genres
+              full_data['genres'].map(a => a.name)
+
+              // add others
+              full_data['media_type'] = type
+              full_data['date_rated'] = new Date().toISOString().slice(0, 10)
+
+              console.log(full_data)
+              return full_data
+            })
+      })
 }
 
 function addMovie(button) {
@@ -87,10 +98,10 @@ function addMovie(button) {
     <div class="movie_adder box_wrapper">
 
       <label for="search_m_input">Search movie</label>
-      <input type="search" @submit="searchMovie($event,'movie')" id="search_m_input">
+      <input type="search" @keyup.enter="searchMovie($event,'movie')" id="search_m_input">
 
       <label for="search_t_input">Search tv</label>
-      <input type="search" @keydown="searchMovie($event,'tv')" id="search_t_input">
+      <input type="search" @keyup.enter="searchMovie($event,'tv')" id="search_t_input">
 
       <button @click="addMovie">add movie</button>
     </div>

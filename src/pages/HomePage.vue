@@ -52,7 +52,7 @@ function editMovie(input) {
   <div class="feed" v-if="servStatus===200">
     <div class="movie_grid" v-for="rating in [9,8,7,6,5,4,3,2,1]" :key="rating">
     <rating-header :rating="rating"></rating-header>
-      <div class="movie_container_wrapper" v-for="mov in movies[`ranked_${rating}`]" :key="mov.title">
+      <div class="movie_container_wrapper" v-for="mov in movies[`rank_${rating}`]" :key="mov.title">
         <MovieContainer :key="mov.id" :data="mov" @MovieEdit="editMovie"></MovieContainer>
       </div>
     </div>
