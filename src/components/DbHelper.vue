@@ -1,10 +1,24 @@
 <script setup>
 import {defineProps, defineEmits, ref, watchEffect, watch, onMounted, computed, inject} from 'vue'
+import TagContainer from "@/components/MovieContainer/components/TagContainer";
 import asset_paths from '../../public/assets/tags/assets.json'
+
+const tag_path = "./assets/tags/icons/"
+
 import axios from 'axios'
 
 const props = defineProps(['data', 'open'])
 let MovChanges = ref()
+let iconData = ref({
+  'name':"",
+  'description':"",
+  'tier':"gold",
+  'image':""
+})
+
+watch(iconData.value, (newV, oldV) => {
+  console.log(iconData)
+})
 
 watch(props, (newV, oldV) => {
   console.log(newV)
@@ -16,10 +30,6 @@ const current_api = inject('curr_api')
 
 const editConfirmed = ref(false)
 
-const iconTitle = ref("")
-const iconDesc = ref("")
-const iconImg = ref("")
-const iconTier = ref("")
 
 // const availableTypes = ["movie", "tv", "documentary"]
 const availableRegions = ["western", "asian"]
@@ -109,8 +119,8 @@ function delMovie(button) {
 }
 
 function changePoster(input) {
-  if (MovChanges.value['extra_images'] === undefined ) return
-  if (MovChanges.value['extra_images']['posters'] === undefined ) return
+  if (MovChanges.value['extra_images'] === undefined) return
+  if (MovChanges.value['extra_images']['posters'] === undefined) return
 
   if (input.target.value <= MovChanges.value['extra_images']['posters'].length) {
     MovChanges.value['poster_path'] = MovChanges.value['extra_images']['posters'][input.target.value]['file_path']
@@ -121,7 +131,7 @@ function changePoster(input) {
 <template>
   <div class="main_win">
 
-<!--    <MovieContainer v-if="MovChanges" :data="MovChanges"></MovieContainer>-->
+    <!--    <MovieContainer v-if="MovChanges" :data="MovChanges"></MovieContainer>-->
 
     <div class="metadata box_wrapper">
       <!--      Rating-->
@@ -161,11 +171,22 @@ function changePoster(input) {
     </div>
 
     <div class="icon_adder box_wrapper row_flow">
-      <div class="icon_settings box_wrapper"></div>
+      <div class="icon_settings box_wrapper">
+        <TagContainer :tag_input="[iconData]"></TagContainer>
+
+        <input @change="iconData['name'] = String($event.target.value)">
+
+        <form id="tier" @change="iconData['tier'] = String($event.target.value)">
+          <select>
+            <option v-for="tier in availableTiers" :key="tier">{{ tier }}</option>
+          </select>
+        </form>
+
+      </div>
       <div class="icon_selector box_wrapper">
-        <div class="icon_selectable" v-for="icon in asset_paths['icons']['gold']" :key="icon">
-          <img :src="`../../public/assets/tags/icons/gold/${icon}`">
-          <p>{{`@public/assets/tags/icons/gold/${icon}`}}</p>
+        <div class="icon_selectable" v-for="icon in asset_paths['icons'][iconData['tier']]" :key="icon"
+             @click="iconData['image']=icon">
+          <img v-lazy="`${tag_path}/${iconData['tier']}/${icon}`" style="width: 50px; height: 50px">
         </div>
       </div>
     </div>
@@ -186,6 +207,7 @@ export default {
   flex-flow: row;
   max-height: 300px;
 }
+
 .box_wrapper {
   /*width: 200px;*/
   display: flex;
@@ -206,8 +228,19 @@ export default {
   flex-flow: row;
 }
 
+.icon_adder {
+  width: 1000px;
+}
+
 .icon_selector {
+  display: flex;
+  flex-flow: row wrap;
   overflow: scroll;
   height: 88%;
+}
+
+.icon_selectable {
+  cursor: pointer;
+  /*outline: 1px saddlebrown solid;*/
 }
 </style>

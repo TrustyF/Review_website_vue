@@ -9,7 +9,7 @@ const tag_path = "./assets/tags/icons/"
 <template>
   <div class="tag_wrapper">
     <div class="tooltip" v-for="tag in tag_input" :key="tag['name']">
-      <img class="tag_icon" :src="tag_path + tag['image']" :alt="tag['image']">
+      <img class="tag_icon" :src="`${tag_path}${tag['tier']}/${tag['image']}`" :alt="tag['image']">
       <div class="hover_box">
 <!--        <img class="description_icon" :src="tag_path + tag['image']" alt="desc_icon">-->
         <div class="description">
