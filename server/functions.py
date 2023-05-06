@@ -6,6 +6,7 @@ from datetime import datetime
 import csv
 import time
 import re
+import random
 
 my_dir = os.path.dirname(__file__)
 sorted_json_file_path = os.path.join(my_dir, r'database/sorted_db.json')
@@ -119,6 +120,7 @@ def organize_by_rank(movies):
     ranked = {}
     for rank in range(1, 10):
         ranked[f'rank_{rank}'] = [mov for mov in movies if mov['my_rating'] == str(rank)]
+        # random.shuffle(ranked[f'rank_{rank}'])
 
     return ranked
 
@@ -137,4 +139,4 @@ def add_movie(data):
 
 
 def del_movie(data):
-    sorted_database.table('movies').remove(Query().title == str(data['title'])[0])
+    sorted_database.table('movies').remove(Query().title == str(data['title']))
