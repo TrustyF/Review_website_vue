@@ -222,14 +222,8 @@ function delTagPresets() {
             <TagContainer :tag_input="[iconData]" :tooltip_override="false"></TagContainer>
           </div>
 
-          <input @input="iconData['name'] = $event.target.value" :value="iconData['name']">
+          <textarea @input="iconData['name'] = $event.target.value" :value="iconData['name']" style="height: 15px"></textarea>
           <textarea class="input_tag_description" @input="iconData['description'] = $event.target.value" :value="iconData['description']"></textarea>
-
-          <form id="tier" @input="iconData['tier'] = $event.target.value">
-            <select>
-              <option v-for="tier in availableTiers" :key="tier">{{ tier }}</option>
-            </select>
-          </form>
 
           <div class="box_wrapper">
             <button @click="addTagMovie">add to movie</button>
@@ -238,7 +232,7 @@ function delTagPresets() {
 
         </div>
 
-        <div class="box_wrapper">
+        <div class="box_wrapper" style="height: 800px">
         <div class="icon_selector box_wrapper">
           <div class="icon_selectable" v-for="preset in tagPresets" :key="preset['name']"
                @click="iconData={...preset}">
@@ -252,6 +246,12 @@ function delTagPresets() {
         </div>
 
         </div>
+
+        <form id="tier" @input="iconData['tier'] = $event.target.value">
+          <select>
+            <option v-for="tier in availableTiers" :key="tier">{{ tier }}</option>
+          </select>
+        </form>
 
         <div class="icon_selector box_wrapper">
           <div class="icon_selectable" v-for="icon in asset_paths['icons'][iconData['tier']]" :key="icon"
@@ -296,7 +296,7 @@ export default {
   right: 0;
   bottom: 0;
   width: 100%;
-  height: 100%;
+  height: 300%;
   /*outline: 1px solid red;*/
   z-index: 25;
   background-color: rgba(0, 0, 0, 75%);

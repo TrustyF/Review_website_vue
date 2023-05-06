@@ -6,11 +6,11 @@ import VueLazyload from "vue-lazyload";
 
 const local_api = "http://localhost:5000"
 const server_api = "https://trustyfox.pythonanywhere.com"
-const devMode = false
+const devMode = true
 
 const app = createApp(App)
 
-app.provide('curr_api', server_api)
+app.provide('curr_api', devMode ? local_api : server_api)
 app.provide('devMode', devMode)
 app.use(router)
 app.use(VueLazyload, {
