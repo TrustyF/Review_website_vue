@@ -50,4 +50,4 @@ def del_preset():
 
 if __name__ == '__main__':
     app.run(debug=True)
-    # functions.reset_db()
+    # functions.add_missing_data()

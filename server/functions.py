@@ -1,12 +1,15 @@
 import json
 import os
 from flask import jsonify, Request
-from tinydb import TinyDB, Query, where
+from tinydb import TinyDB, Query, where, operations
 from datetime import datetime
 import csv
 import time
 import re
 import random
+import urllib.request
+import json
+import pprint
 
 my_dir = os.path.dirname(__file__)
 sorted_json_file_path = os.path.join(my_dir, r'database/sorted_db.json')
@@ -120,8 +123,7 @@ def organize_by_rank(movies):
     ranked = {}
     for rank in range(1, 10):
         ranked[f'rank_{rank}'] = [mov for mov in movies if mov['my_rating'] == str(rank)]
-        # random.shuffle(ranked[f'rank_{rank}'])
-
+        # random.shuffle(ranked)
     return ranked
 
 
