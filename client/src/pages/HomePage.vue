@@ -12,6 +12,7 @@ import {ref, onMounted} from 'vue'
 // to do
 // add fresh review
 const current_api = inject('curr_api')
+const devMode = inject('devMode')
 
 const movies = ref([])
 
@@ -49,7 +50,7 @@ function test() {
 
 </script>
 <template>
-  <db-helper :data="currentSelectedMovie" :open="settingsOpen" @closed="settingsOpen=!settingsOpen"></db-helper>
+  <db-helper v-if="devMode" :data="currentSelectedMovie" :open="settingsOpen" @closed="settingsOpen=!settingsOpen"></db-helper>
 
   <FilterMenu @filters="update_movies"></FilterMenu>
 

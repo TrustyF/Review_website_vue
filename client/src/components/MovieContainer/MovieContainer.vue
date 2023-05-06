@@ -2,11 +2,13 @@
 import TagContainer from "@/components/MovieContainer/components/TagContainer";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 import RatingBumper from "@/components/MovieContainer/components/RatingBumper";
-import {defineProps, defineEmits, ref, watch} from 'vue'
+import {defineProps, defineEmits, ref, watch, inject} from 'vue'
 import ContentBox from "@/components/MovieContainer/components/ContentBox";
 
 const props = defineProps(['data'])
 const emits = defineEmits(['MovieEdit'])
+
+const devMode = inject('devMode')
 
 let isOpen = ref(false)
 const isSeen = ref(false)
@@ -38,7 +40,7 @@ function emitSelectedMovie(input) {
 
       <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
 
-      <div class="settings">
+      <div v-if="devMode" class="settings">
         <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
       </div>
 
