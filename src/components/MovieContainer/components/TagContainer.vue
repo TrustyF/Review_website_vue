@@ -54,7 +54,7 @@ export default {
   opacity: 0;
   transition: 0.1s ease-in-out;
   filter: drop-shadow(0px 0 2px rgba(0, 0, 0, 1));
-  z-index: 40;
+  z-index: 400000;
 }
 
 .hover_box:after {
