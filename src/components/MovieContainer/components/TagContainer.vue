@@ -2,7 +2,7 @@
 import {defineProps, defineEmits, ref, watch} from 'vue'
 import FloatingVue from 'floating-vue'
 
-const props = defineProps(['tag_input'])
+const props = defineProps(['tag_input', 'tooltip_override'])
 const tag_path = "./assets/tags/icons/"
 </script>
 
@@ -10,8 +10,9 @@ const tag_path = "./assets/tags/icons/"
   <div class="tag_wrapper">
     <div class="tooltip" v-for="tag in tag_input" :key="tag['name']">
       <img class="tag_icon" :src="`${tag_path}${tag['tier']}/${tag['image']}`" :alt="tag['image']">
-      <div class="hover_box">
-<!--        <img class="description_icon" :src="tag_path + tag['image']" alt="desc_icon">-->
+      <div v-if="tag['name']!==''" :class="tooltip_override ? 'hover_box visible_override':'hover_box'">
+<!--        <p>{{tag}}</p>-->
+        <!--        <img class="description_icon" :src="tag_path + tag['image']" alt="desc_icon">-->
         <div class="description">
           <h3 class=tag_name>{{ tag['name'] }}</h3>
           <h1 class="tag_description">{{ tag['description'] }}</h1>
@@ -44,7 +45,7 @@ export default {
   position: absolute;
   left: 0;
   top: 0;
-  transform: translate(55px,0);
+  transform: translate(55px, 0);
   background-color: white;
   padding: 10px;
   border-radius: 5px;
@@ -52,9 +53,12 @@ export default {
   visibility: hidden;
   opacity: 0;
   transition: 0.1s ease-in-out;
+  filter: drop-shadow(0px 0 2px rgba(0, 0, 0, 1));
+  z-index: 40;
 }
+
 .hover_box:after {
-  content:'';
+  content: '';
   position: absolute;
   top: 0;
   left: -5px;
@@ -65,7 +69,13 @@ export default {
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
 }
+
 .tooltip:hover .hover_box {
+  visibility: visible;
+  opacity: 100%;
+}
+
+.visible_override {
   visibility: visible;
   opacity: 100%;
 }
