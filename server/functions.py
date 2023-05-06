@@ -140,3 +140,15 @@ def add_movie(data):
 
 def del_movie(data):
     sorted_database.table('movies').remove(Query().title == str(data['title']))
+
+
+def get_all_presets():
+    return sorted_database.table('tag_presets').all()
+
+
+def add_preset(data):
+    sorted_database.table('tag_presets').insert(data)
+
+
+def del_preset(data):
+    sorted_database.table('tag_presets').remove(Query().name == str(data['name']))

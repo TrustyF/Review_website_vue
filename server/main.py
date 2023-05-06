@@ -31,6 +31,23 @@ def del_movie():
     return Response(status=200)
 
 
+@app.route('/get_presets/', methods=["GET"])
+def get_presets():
+    return functions.get_all_presets()
+
+
+@app.route('/add_preset/', methods=["POST"])
+def add_preset():
+    functions.add_preset(request.json)
+    return Response(status=200)
+
+
+@app.route('/del_preset/', methods=["POST"])
+def del_preset():
+    functions.del_preset(request.json)
+    return Response(status=200)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
     # functions.reset_db()
