@@ -59,7 +59,7 @@ let filters = {
     'exclude_mode': false
   }
 }
-const state = ref(false)
+let state = ref(false)
 
 let throttle_search = false
 
@@ -91,12 +91,12 @@ function swap_filter(filter, target, checkbox, button) {
 }
 
 function search_bar(event) {
+
   if (throttle_search === false) {
     throttle_search = true
 
     setTimeout(function () {
       filters['search_bar'] = event.target.value
-      console.log(filters)
       emits('filters', filters)
       throttle_search = false
     }, 300)
