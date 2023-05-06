@@ -22,7 +22,7 @@ const currentSelectedMovie = ref({})
 const currentSelectedRatings = ref([9, 8, 7, 6, 5, 4, 3, 2, 1])
 
 const servStatus = ref(0)
-const settingsOpen = ref(false)
+let settingsOpen = ref(false)
 
 onMounted(() => {
   update_movies()
@@ -43,10 +43,13 @@ function editMovie(input) {
   currentSelectedMovie.value = input
 }
 
+function test() {
+  console.log('caught emit!!!')
+}
+
 </script>
 <template>
-  <db-helper class="db_helper" :data="currentSelectedMovie" :open="settingsOpen"
-             @settingsClosed="settingsOpen=!settingsOpen"></db-helper>
+  <db-helper :data="currentSelectedMovie" :open="settingsOpen" @closed="settingsOpen=!settingsOpen"></db-helper>
 
   <FilterMenu @filters="update_movies"></FilterMenu>
 
@@ -84,9 +87,5 @@ function editMovie(input) {
 }
 
 .db_helper {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  z-index: 20;
 }
 </style>
