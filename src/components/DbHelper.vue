@@ -2,8 +2,6 @@
 import {defineProps, defineEmits, ref, watchEffect, watch, onMounted, computed, inject} from 'vue'
 import asset_paths from '../../public/assets/tags/assets.json'
 import axios from 'axios'
-import TagContainer from "@/components/MovieContainer/components/TagContainer";
-import MovieContainer from "@/components/MovieContainer/MovieContainer";
 
 const props = defineProps(['data', 'open'])
 let MovChanges = ref()
@@ -59,16 +57,20 @@ async function searchMovie(query, type = "movie") {
 
           const simple_data = response.data['results'][0]
 
-          return axios.get(`https://api.themoviedb.org/3/${type}/${simple_data['id']}?api_key=${apiKey}&language=en-US&append_to_response=credits`)
+          return axios.get(`https://api.themoviedb.org/3/${type}/${simple_data['id']}?api_key=${apiKey}&language=en-US&append_to_response=credits,images&include_image_language=en,null`)
               .then(response => {
                 const full_data = response.data
+                console.log('full_data', full_data)
 
                 //replace genres
                 simple_data['genres'] = full_data['genres'].map(a => a.name)
+                delete simple_data['genre_ids']
 
                 // add others
                 simple_data['media_type'] = type
                 simple_data['date_rated'] = new Date().toISOString().slice(0, 10)
+                simple_data['extra_images'] = full_data['images']
+                simple_data['runtime'] = full_data['runtime']
 
                 // tv exceptions
                 if (type === 'tv') {
@@ -106,18 +108,27 @@ function delMovie(button) {
       })
 }
 
+function changePoster(input) {
+  if (MovChanges.value['extra_images'] === undefined ) return
+  if (MovChanges.value['extra_images']['posters'] === undefined ) return
+
+  if (input.target.value <= MovChanges.value['extra_images']['posters'].length) {
+    MovChanges.value['poster_path'] = MovChanges.value['extra_images']['posters'][input.target.value]['file_path']
+  }
+}
+
 </script>
 <template>
   <div class="main_win">
 
+<!--    <MovieContainer v-if="MovChanges" :data="MovChanges"></MovieContainer>-->
+
     <div class="metadata box_wrapper">
-
-      <MovieContainer v-if="MovChanges" :data="MovChanges"></MovieContainer>
-
       <!--      Rating-->
       <label for="rating_input">Rating</label>
       <input type="number" id="rating_input" :value="data['my_rating']"
              @change="MovChanges['my_rating'] = String($event.target.value)">
+
       <!--      Region-->
       <label for="region">Region</label>
       <form id="region" @change="MovChanges['region'] = String($event.target.value)">
@@ -125,6 +136,11 @@ function delMovie(button) {
           <option v-for="elem in availableRegions" :key="elem" :selected="data['region']">{{ elem }}</option>
         </select>
       </form>
+
+      <!--      Poster-->
+      <label for="poster_input">Poster</label>
+      <input type="number" id="poster_input" value="0"
+             @change="changePoster">
 
       <div class="upload box_wrapper">
         <button @click="pushChange($event)">upload changes</button>
@@ -144,6 +160,16 @@ function delMovie(button) {
       <button @click="delMovie">remove movie</button>
     </div>
 
+    <div class="icon_adder box_wrapper row_flow">
+      <div class="icon_settings box_wrapper"></div>
+      <div class="icon_selector box_wrapper">
+        <div class="icon_selectable" v-for="icon in asset_paths['icons']['gold']" :key="icon">
+          <img :src="`../../public/assets/tags/icons/gold/${icon}`">
+          <p>{{`@public/assets/tags/icons/gold/${icon}`}}</p>
+        </div>
+      </div>
+    </div>
+
 
   </div>
 </template>
@@ -158,12 +184,8 @@ export default {
 .main_win {
   display: flex;
   flex-flow: row;
+  max-height: 300px;
 }
-
-.metadata {
-  /*outline: 1px solid red;*/
-}
-
 .box_wrapper {
   /*width: 200px;*/
   display: flex;
@@ -178,5 +200,14 @@ export default {
 
   padding: 10px;
   margin: 5px;
+}
+
+.row_flow {
+  flex-flow: row;
+}
+
+.icon_selector {
+  overflow: scroll;
+  height: 88%;
 }
 </style>

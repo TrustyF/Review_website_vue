@@ -46,6 +46,10 @@ function emitSelectedMovie(input) {
            class="poster" alt="poster"
            v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
 
+      <!--      <img v-if="data['extra_images']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['extra_images']['posters'][selectedPoster]['file_path']}`"-->
+      <!--           class="poster" alt="poster"-->
+      <!--           v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">-->
+
       <ContentBox :data="data"></ContentBox>
 
 
@@ -56,20 +60,17 @@ function emitSelectedMovie(input) {
 
         <h3 class="heading">Overview</h3>
         <div class="details_wrapper">
-          <!--          <p class="rank" v-if="data['overview']" style="margin-bottom:5px;">-->
-          <!--            {{ data['overview'] }}-->
-          <!--          </p>-->
+          <p class="rank" v-if="data['overview']" style="margin-bottom:5px;">
+            {{ data['overview'] }}
+          </p>
+
+          <h3 class="heading">Extras</h3>
           <p class="rank" v-if="data['genres']" style="margin-bottom:5px;">
             {{ data['genres'].map(elem => elem).join(', ') }}
           </p>
           <p class="rank" style="margin-bottom:5px;" v-if="data['runtime'] && data['media_type']==='movie'">
             {{ "Duration: " + timeConvert(data['runtime']) }}
           </p>
-          <p class="rank" v-if="data['contentRating']">
-            {{ "Rating: " + data['contentRating'] }}
-          </p>
-
-          <h3 class="heading">Extras</h3>
           <a :href="data['imdb_url']" target="_blank" rel="noopener noreferrer">
             <button type="button"
                     style="background-color: #F5C518;border-radius: 3px;padding: 3px;outline: 1px black solid;border-style: none;cursor:pointer ">
@@ -200,11 +201,9 @@ export default {
   /*outline: 1px red solid;*/
   border-radius: 8px 8px 0 0;
 
-  padding: 20px 20px 20px 20px;
   position: absolute;
-
-  width: 160px;
-  height: 260px;
+  width: 200px;
+  height: 300px;
 
   background-color: rgba(255, 255, 255, 0.9);
 
@@ -219,6 +218,10 @@ export default {
 .open .expanded {
   visibility: visible;
   opacity: 1;
+}
+
+.overview {
+  padding: 10px;
 }
 
 .seen_block_cover {
