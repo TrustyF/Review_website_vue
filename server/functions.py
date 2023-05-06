@@ -123,7 +123,7 @@ def organize_by_rank(movies):
     ranked = {}
     for rank in range(1, 10):
         ranked[f'rank_{rank}'] = [mov for mov in movies if mov['my_rating'] == str(rank)]
-        # random.shuffle(ranked)
+        random.shuffle(ranked[f'rank_{rank}'])
     return ranked
 
 
