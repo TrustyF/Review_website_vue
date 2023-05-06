@@ -89,7 +89,7 @@ async function searchMovie(query, type = "movie") {
                 // add others
                 simple_data['media_type'] = type
                 simple_data['date_rated'] = new Date().toISOString().slice(0, 10)
-                simple_data['extra_images'] = full_data['images']
+                simple_data['images'] = full_data['images']
                 simple_data['runtime'] = full_data['runtime']
 
                 // tv exceptions
@@ -129,11 +129,13 @@ function delMovie(button) {
 }
 
 function changePoster(input) {
-  if (MovChanges.value['extra_images'] === undefined) return
-  if (MovChanges.value['extra_images']['posters'] === undefined) return
+  console.log('posters',MovChanges.value)
+  if (MovChanges.value['images'] === undefined) return
+  if (MovChanges.value['images']['posters'] === undefined) return
 
-  if (input.target.value <= MovChanges.value['extra_images']['posters'].length) {
-    MovChanges.value['poster_path'] = MovChanges.value['extra_images']['posters'][input.target.value]['file_path']
+  console.log('changing poster')
+  if (input.target.value <= MovChanges.value['images']['posters'].length) {
+    MovChanges.value['poster_path'] = MovChanges.value['images']['posters'][input.target.value]['file_path']
   }
 }
 
@@ -185,8 +187,6 @@ function delTagPresets() {
         <label for="search_t_input">Search tv</label>
         <input type="search" @input="searchMovie($event,'tv')" id="search_t_input">
 
-        <button @click="addMovie">add movie</button>
-        <button @click="delMovie">remove movie</button>
       </div>
 
       <div class="metadata box_wrapper">
@@ -211,14 +211,19 @@ function delTagPresets() {
 
       </div>
 
+      <div class="box_wrapper">
+        <button @click="addMovie">add movie</button>
+        <button @click="delMovie">remove movie</button>
+      </div>
+
       <div class="icon_adder box_wrapper row_flow">
         <div class="icon_settings box_wrapper">
           <div class="icon_metadata box_wrapper">
-            <TagContainer :tag_input="[iconData]" :tooltip_override="true"></TagContainer>
+            <TagContainer :tag_input="[iconData]" :tooltip_override="false"></TagContainer>
           </div>
 
           <input @input="iconData['name'] = $event.target.value" :value="iconData['name']">
-          <input @input="iconData['description'] = $event.target.value" :value="iconData['description']">
+          <textarea class="input_tag_description" @input="iconData['description'] = $event.target.value" :value="iconData['description']"></textarea>
 
           <form id="tier" @input="iconData['tier'] = $event.target.value">
             <select>
@@ -231,18 +236,21 @@ function delTagPresets() {
             <button @click="delTagMovie">remove from movie</button>
           </div>
 
-          <div class="box_wrapper">
-            <button @click="addTagPresets">add to presets</button>
-            <button @click="delTagPresets">remove from presets</button>
-          </div>
-
         </div>
 
+        <div class="box_wrapper">
         <div class="icon_selector box_wrapper">
           <div class="icon_selectable" v-for="preset in tagPresets" :key="preset['name']"
                @click="iconData={...preset}">
             <TagContainer :tag_input="[preset]"></TagContainer>
           </div>
+        </div>
+
+        <div class="box_wrapper">
+          <button @click="addTagPresets">add to presets</button>
+          <button @click="delTagPresets">remove from presets</button>
+        </div>
+
         </div>
 
         <div class="icon_selector box_wrapper">
@@ -253,10 +261,12 @@ function delTagPresets() {
         </div>
 
       </div>
+
       <div class="upload box_wrapper">
         <button @click="pushChange($event)">upload changes</button>
         <button @click="emits('closed',true)">Close</button>
       </div>
+
     </div>
   </div>
 </template>
@@ -311,6 +321,12 @@ export default {
 .row_flow {
   flex-flow: row;
 }
+.input_tag_description {
+  width: 200px;
+  font-family: inherit;
+  font-weight: lighter;
+  font-size: 0.7em;
+}
 
 .icon_adder {
   /*width: 500px;*/
@@ -321,7 +337,7 @@ export default {
   flex-flow: row wrap;
   overflow: scroll;
   max-height: 800px;
-  min-width: 300px;
+  min-width: 500px;
 }
 
 .icon_selectable {

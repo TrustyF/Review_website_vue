@@ -117,6 +117,7 @@ export default {
 
 .settings {
   position: absolute;
+  transform: translate(173px,3px);
 }
 
 .tag_container {
