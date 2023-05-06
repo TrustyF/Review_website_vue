@@ -46,12 +46,7 @@ function emitSelectedMovie(input) {
            class="poster" alt="poster"
            v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
 
-      <!--      <img v-if="data['extra_images']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['extra_images']['posters'][selectedPoster]['file_path']}`"-->
-      <!--           class="poster" alt="poster"-->
-      <!--           v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">-->
-
       <ContentBox :data="data"></ContentBox>
-
 
     </div>
 

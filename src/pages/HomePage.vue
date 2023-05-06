@@ -49,7 +49,7 @@ function test() {
 
 </script>
 <template>
-  <db-helper :data="currentSelectedMovie" :open="settingsOpen" @closed="settingsOpen=!settingsOpen"></db-helper>
+<!--  <db-helper :data="currentSelectedMovie" :open="settingsOpen" @closed="settingsOpen=!settingsOpen"></db-helper>-->
 
   <FilterMenu @filters="update_movies"></FilterMenu>
 

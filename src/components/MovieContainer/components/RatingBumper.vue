@@ -18,28 +18,25 @@ const rating_diff = Math.abs(props.data['my_rating'] - scaled_user_rating.value)
 
 const arrow_state = ref(0)
 
-watch(props, (newV, oldV) => {
+calc()
+
+function calc() {
   if (props.data['my_rating'] > scaled_user_rating.value + 1.5) {
     arrow_state.value = 1
-  } else {
-    arrow_state.value = 0
+    if (props.data['my_rating'] > scaled_user_rating.value + 2.5) {
+      arrow_state.value = 2
+    }
+    return
   }
   if (props.data['my_rating'] < scaled_user_rating.value - 1.5) {
     arrow_state.value = 3
-  } else {
-    arrow_state.value = 0
+    if (props.data['my_rating'] < scaled_user_rating.value - 2.5) {
+      arrow_state.value = 4
+    }
+    return
   }
-  if (props.data['my_rating'] > scaled_user_rating.value + 2.5) {
-    arrow_state.value = 2
-  } else {
-    arrow_state.value = 0
-  }
-  if (props.data['my_rating'] < scaled_user_rating.value - 2.5) {
-    arrow_state.value = 4
-  } else {
-    arrow_state.value = 0
-  }
-})
+  arrow_state.value = 0
+}
 
 
 </script>
@@ -47,7 +44,7 @@ watch(props, (newV, oldV) => {
 <template>
   <div class="bumper_wrapper">
     <p class="rating star_blue">{{ data['my_rating'] }} </p>
-    <p class="rating star_gold" >{{ scaled_user_rating }} </p>
+    <p class="rating star_gold">{{ scaled_user_rating }} </p>
     <!--    <p class="rating star_gold">{{ round_user_rating }} </p>-->
     <!--    <p class="rating ">{{ props['rating'] }} </p>-->
     <!--    <p class="rating ">{{ props['user_rating'] }} </p>-->
