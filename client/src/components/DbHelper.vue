@@ -155,6 +155,10 @@ function delTagMovie() {
   })
 }
 
+function delAllTagMovie() {
+  MovChanges.value['tags'] = []
+}
+
 function addTagPresets() {
   axios.post(`${current_api}/add_preset/`, iconData.value)
       .then(response => {
@@ -228,6 +232,7 @@ function delTagPresets() {
           <div class="box_wrapper">
             <button @click="addTagMovie">add to movie</button>
             <button @click="delTagMovie">remove from movie</button>
+            <button @click="delAllTagMovie">remove all from movie</button>
           </div>
 
         </div>

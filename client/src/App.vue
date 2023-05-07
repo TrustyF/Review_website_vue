@@ -1,6 +1,7 @@
 <script setup>
 import {RouterView, RouterLink} from 'vue-router'
 import NavBar from "@/components/NavBar";
+
 </script>
 
 <template>
@@ -8,6 +9,7 @@ import NavBar from "@/components/NavBar";
   <div class="main">
     <RouterView/>
   </div>
+
 </template>
 
 <style>

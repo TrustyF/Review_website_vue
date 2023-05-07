@@ -87,6 +87,10 @@ function test() {
   margin: auto;
 }
 
+.darkMode {
+
+}
+
 .db_helper {
 }
 </style>
