@@ -12,6 +12,7 @@ const app = createApp(App)
 
 app.provide('curr_api', devMode ? local_api : server_api)
 app.provide('devMode', devMode)
+
 app.use(router)
 app.use(VueLazyload, {
     preLoad: 2,

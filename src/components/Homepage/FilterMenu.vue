@@ -1,5 +1,5 @@
 <script setup>
-import {defineProps, defineEmits, ref, watch} from 'vue'
+import {defineProps, defineEmits, ref, watch, inject} from 'vue'
 import {Collapse} from 'vue-collapsed'
 import filterButton from '/public/assets/ui/filter_button.png'
 
@@ -117,13 +117,17 @@ function search_bar(event) {
       <input class="search_bar" type="search" id="search_bar" @input="search_bar">
     </div>
 
+<!--    <div class="dark_mode_switch">-->
+<!--      <button type="button" @click="darkMode = !darkMode">enable dark mode</button>-->
+<!--    </div>-->
+
   </div>
 
   <Collapse :when="state" class="collapse">
     <div class="filter_wrapper">
       <div class="filters">
         <div class="filter_types" v-for="elem in filters" :key="elem['name']">
-          <h1 style="text-decoration: underline;padding-bottom: 5px">{{ elem['name'] }}</h1>
+          <h1 class="filter_heading">{{ elem['name'] }}</h1>
           <div v-for="(filter,index) in elem['available']" :key="filter" class="filter_content_list">
             <label class="filter_label">
               <input :type="elem['checkbox'] ? 'checkbox' : 'radio'" :name="elem['name']" style="cursor: pointer"
@@ -172,9 +176,10 @@ function search_bar(event) {
 }
 
 .filters {
-  font-family: Calibri, serif;
+  /*font-family: Calibri, serif;*/
   user-select: none;
-  font-min-size: 1em;
+  font-size: 1em;
+  font-weight: lighter;
 
   height: 250px;
   padding: 20px;
@@ -188,6 +193,12 @@ function search_bar(event) {
   align-items: flex-start;
   flex-flow: column wrap;
   align-content: flex-start;
+}
+.filter_heading {
+  text-decoration: underline;
+  font-weight: normal;
+  padding-bottom: 5px;
+  padding-top: 5px;
 }
 
 .filter_label {
