@@ -124,12 +124,12 @@ def organize_by_rank(movies):
     ranked = {}
     for rank in range(1, 10):
         ranked[f'rank_{rank}'] = [mov for mov in movies if mov['my_rating'] == str(rank)]
-        # random.shuffle(ranked[f'rank_{rank}'])
+        random.shuffle(ranked[f'rank_{rank}'])
 
     return ranked
 
 
-def cull_max_page(movies, max_cull=10):
+def cull_max_page(movies, max_cull):
     max_movies = max_cull
     curr_movie = 0
     culled_movies = {}
