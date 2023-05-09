@@ -20,7 +20,8 @@ sorted_database = TinyDB(sorted_json_file_path)
 def get_all_movies(query):
     filtered = filter_movies(query)
     organized = organize_by_rank(filtered)
-    return organized
+    culled = cull_max_page(organized, query['extra_settings']['max_movies'])
+    return culled
 
 
 def filter_movies(query):
@@ -123,12 +124,39 @@ def organize_by_rank(movies):
     ranked = {}
     for rank in range(1, 10):
         ranked[f'rank_{rank}'] = [mov for mov in movies if mov['my_rating'] == str(rank)]
-        random.shuffle(ranked[f'rank_{rank}'])
+        # random.shuffle(ranked[f'rank_{rank}'])
+
     return ranked
 
 
+def cull_max_page(movies, max_cull=10):
+    max_movies = max_cull
+    curr_movie = 0
+    culled_movies = {}
+
+    # print(movies)
+
+    for rank in reversed(movies):
+
+        if rank not in culled_movies:
+            culled_movies[rank] = []
+
+        for mov in movies[rank]:
+            # pprint.pprint(mov)
+            culled_movies[rank].append(mov)
+            curr_movie += 1
+
+            if curr_movie >= max_movies:
+                break
+
+        if curr_movie >= max_movies:
+            break
+
+    return culled_movies
+
+
 def edit_movie(query):
-    print('query', query)
+    # print('query', query)
     old_data = query['oldData']
     new_data = query['newData']
 
@@ -145,7 +173,9 @@ def del_movie(data):
 
 
 def get_all_presets():
-    return sorted_database.table('tag_presets').all()
+    presets = (sorted_database.table('tag_presets').all())
+    sorted_presets = sorted(presets, key=lambda d: d['tier'])
+    return sorted_presets
 
 
 def add_preset(data):
