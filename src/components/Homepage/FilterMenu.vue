@@ -1,11 +1,11 @@
 <script setup>
-import {defineProps, defineEmits, ref, watch, inject} from 'vue'
+import {defineProps, defineEmits, ref, onMounted, watch, inject} from 'vue'
 import {Collapse} from 'vue-collapsed'
 import filterButton from '/public/assets/ui/filter_button.png'
 
 const props = defineProps(['props'])
 const emits = defineEmits(['filters'])
-let filters = {
+let filters = ref({
   'type': {
     'name': 'Type',
     'available': ["Movie", "Tv-series", "Documentary"],
@@ -56,14 +56,18 @@ let filters = {
   },
   'search_bar': "",
   'extra_settings': {
-    'exclude_mode': false
+    'exclude_mode': false,
+    'max_movies': 50
   }
-}
+})
 let state = ref(false)
 
 let throttle_search = false
+let fetch_more_movies = false
 
 const excludeMode = ref(false)
+
+const scrollAtBottom = ref(false)
 
 function swap_filter(filter, target, checkbox, button) {
 
@@ -86,8 +90,8 @@ function swap_filter(filter, target, checkbox, button) {
       button.target.checked = false
     }
   }
-
-  emits('filters', filters)
+  filters.value['extra_settings']['max_movies'] = 50
+  emits('filters', filters.value)
 }
 
 function search_bar(event) {
@@ -96,13 +100,41 @@ function search_bar(event) {
     throttle_search = true
 
     setTimeout(function () {
-      filters['search_bar'] = event.target.value
-      emits('filters', filters)
+      filters.value['search_bar'] = event.target.value
+      emits('filters', filters.value)
       throttle_search = false
     }, 300)
 
   }
 }
+
+function handleScroll() {
+  const scrollTop = document.documentElement.scrollTop
+  const scrollHeight = document.documentElement.scrollHeight
+  const clientHeight = document.documentElement.clientHeight
+
+  if (scrollTop + clientHeight >= (scrollHeight - (scrollHeight/10)) && fetch_more_movies === false) {
+
+    fetch_more_movies = true
+    setTimeout(() => {
+      fetch_more_movies = false
+    }, 1000)
+
+    console.log('fetching movies busy', fetch_more_movies, clientHeight, scrollHeight)
+    scrollAtBottom.value = true
+    filters.value['extra_settings']['max_movies'] += 50
+    emits('filters', filters.value)
+    console.log('requesting more movies')
+
+  } else {
+    scrollAtBottom.value = false
+  }
+}
+
+onMounted(() => {
+  emits('filters', filters.value)
+  window.addEventListener('scroll', handleScroll)
+})
 
 </script>
 <template>
@@ -117,9 +149,9 @@ function search_bar(event) {
       <input class="search_bar" type="search" id="search_bar" @input="search_bar">
     </div>
 
-<!--    <div class="dark_mode_switch">-->
-<!--      <button type="button" @click="darkMode = !darkMode">enable dark mode</button>-->
-<!--    </div>-->
+    <!--    <div class="dark_mode_switch">-->
+    <!--      <button type="button" @click="darkMode = !darkMode">enable dark mode</button>-->
+    <!--    </div>-->
 
   </div>
 
@@ -194,6 +226,7 @@ function search_bar(event) {
   flex-flow: column wrap;
   align-content: flex-start;
 }
+
 .filter_heading {
   text-decoration: underline;
   font-weight: normal;
