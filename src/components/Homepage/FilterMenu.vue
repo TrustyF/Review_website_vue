@@ -113,14 +113,14 @@ function handleScroll() {
   const scrollHeight = document.documentElement.scrollHeight
   const clientHeight = document.documentElement.clientHeight
 
-  if (scrollTop + clientHeight >= (scrollHeight - (scrollHeight/10)) && fetch_more_movies === false) {
+  if (scrollTop + clientHeight >= (scrollHeight - (scrollHeight/5)) && fetch_more_movies === false) {
 
     fetch_more_movies = true
     setTimeout(() => {
       fetch_more_movies = false
-    }, 1000)
+    }, 500)
 
-    console.log('fetching movies busy', fetch_more_movies, clientHeight, scrollHeight)
+    console.log('fetching movies busy', fetch_more_movies)
     scrollAtBottom.value = true
     filters.value['extra_settings']['max_movies'] += 50
     emits('filters', filters.value)
