@@ -2,7 +2,7 @@
 import {defineProps, defineEmits, ref, watch} from 'vue'
 import FloatingVue from 'floating-vue'
 
-const props = defineProps(['tag_input', 'tooltip_override'])
+const props = defineProps(['tag_input', 'screen_side'])
 const tag_path = "./assets/tags/icons/"
 </script>
 
@@ -10,7 +10,7 @@ const tag_path = "./assets/tags/icons/"
   <div class="tag_wrapper">
     <div class="tooltip" v-for="tag in tag_input" :key="tag['name']">
       <img class="tag_icon" :src="`${tag_path}${tag['tier']}/${tag['image']}`" :alt="tag['image']">
-      <div v-if="tag['name']!==''" :class="tooltip_override ? 'hover_box visible_override':'hover_box'">
+      <div :class="props['screen_side'] ? 'hover_box_left' : 'hover_box'">
         <div class="description">
           <p class=tag_name>{{ tag['name'] }}</p>
           <p class="tag_description">{{ tag['description'] }}</p>
@@ -30,13 +30,11 @@ export default {
 .tag_wrapper {
   display: flex;
   flex-flow: column;
-  outline: green solid 1px;
+  /*outline: green solid 1px;*/
   /*min-width: 200px;*/
 }
 
 .hover_box {
-  outline: red solid 1px;
-
   position: absolute;
   left: 0;
   top: 0;
@@ -44,8 +42,6 @@ export default {
   background-color: white;
   padding: 10px;
   border-radius: 5px;
-
-  /*max-width: 200px;*/
 
   visibility: hidden;
   opacity: 0;
@@ -68,16 +64,50 @@ export default {
   border-bottom: 15px solid transparent;
 }
 
+.hover_box_left {
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translate(-205px, 0);
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+
+  visibility: hidden;
+  opacity: 0;
+
+  transition: 0.1s ease-in-out;
+  filter: drop-shadow(0px 0 2px rgba(0, 0, 0, 1));
+  z-index: 400000;
+}
+
+.hover_box_left:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -5px;
+  margin: 10px auto;
+  /*width: 0;*/
+  /*height: 0;*/
+  border-left: 15px solid white;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+}
+
 .tooltip {
   /*display: inline-block;*/
-  outline: 1px purple solid;
+  /*outline: 1px purple solid;*/
   position: relative;
   text-align: left;
   font-size: 0.7em;
   width: 200px;
 }
 
-.tooltip:hover .hover_box {
+.tag_icon:hover + .hover_box {
+  visibility: visible;
+  opacity: 100%;
+}
+.tag_icon:hover + .hover_box_left {
   visibility: visible;
   opacity: 100%;
 }
@@ -90,8 +120,9 @@ export default {
 .description {
   display: inline-block;
   position: relative;
-  outline: 1px solid blue;
-  /*max-width: 200px;*/
+  /*outline: 1px solid blue;*/
+  max-width: 200px;
+  text-overflow: ellipsis;
 }
 
 .tag_name {
@@ -109,5 +140,6 @@ export default {
   width: 40px;
   filter: drop-shadow(0px 0 2px rgba(0, 0, 0, 1)) drop-shadow(0px 0 4px rgba(0, 0, 0, 1))
 }
+
 
 </style>

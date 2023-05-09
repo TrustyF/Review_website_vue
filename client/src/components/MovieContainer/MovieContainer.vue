@@ -2,7 +2,7 @@
 import TagContainer from "@/components/MovieContainer/components/TagContainer";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 import RatingBumper from "@/components/MovieContainer/components/RatingBumper";
-import {defineProps, defineEmits, ref, watch, inject} from 'vue'
+import {defineProps, defineEmits, ref, onMounted, watch, inject} from 'vue'
 import ContentBox from "@/components/MovieContainer/components/ContentBox";
 
 const props = defineProps(['data'])
@@ -14,6 +14,9 @@ let isOpen = ref(false)
 const isSeen = ref(false)
 const outOfFocus = ref(false)
 const settingsOpen = ref(false)
+
+const screenRect = ref(null)
+const screenSide = ref(false)
 
 function timeConvert(n) {
   const hours = (n / 60);
@@ -31,14 +34,25 @@ function emitSelectedMovie(input) {
   emits('MovieEdit', props['data'])
 }
 
+function calcScreenSide() {
+  const rect = screenRect.value.getBoundingClientRect()
+  const screen = [window.innerWidth, window.innerHeight]
+
+  if (rect.right > (screen[0]/2)) screenSide.value = true
+}
+
+onMounted(() => {
+  calcScreenSide()
+})
+
 </script>
 <template>
-  <div class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [isSeen ? ' seen' : '']">
+  <div ref="screenRect" class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [isSeen ? ' seen' : '']">
     <div class="main_block">
 
       <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"></RatingBumper>
 
-      <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
+      <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']" :screen_side="screenSide"></TagContainer>
 
       <div v-if="devMode" class="settings">
         <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
@@ -119,7 +133,7 @@ export default {
 
 .settings {
   position: absolute;
-  transform: translate(173px,3px);
+  transform: translate(173px, 3px);
 }
 
 .tag_container {
