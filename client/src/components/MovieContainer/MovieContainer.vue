@@ -2,7 +2,7 @@
 import TagContainer from "@/components/MovieContainer/components/TagContainer";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 import RatingBumper from "@/components/MovieContainer/components/RatingBumper";
-import {defineProps, defineEmits, ref, onMounted, watch, inject} from 'vue'
+import {defineProps, defineEmits, ref, onMounted,onUnmounted, watch, inject} from 'vue'
 import ContentBox from "@/components/MovieContainer/components/ContentBox";
 
 const props = defineProps(['data'])
@@ -35,15 +35,19 @@ function emitSelectedMovie(input) {
 }
 
 function calcScreenSide() {
-  const rect = screenRect.value.getBoundingClientRect()
-  const screen = [window.innerWidth, window.innerHeight]
+  let rect = screenRect.value.getBoundingClientRect()
+  let screen = [window.outerWidth, window.outerHeight]
 
-  if (rect.right > (screen[0] / 2)) screenSide.value = true
+  screenSide.value = rect.right > (screen[0] / 2);
 }
 
 onMounted(() => {
   calcScreenSide()
   window.addEventListener('resize', calcScreenSide)
+})
+
+onUnmounted(()=>{
+  window.removeEventListener('resize', calcScreenSide)
 })
 
 </script>
