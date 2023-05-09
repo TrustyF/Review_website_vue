@@ -25,15 +25,15 @@ const currentSelectedRatings = ref([9, 8, 7, 6, 5, 4, 3, 2, 1])
 const servStatus = ref(0)
 let settingsOpen = ref(false)
 
-onMounted(() => {
-  update_movies()
-})
+// onMounted(() => {
+//   update_movies()
+// })
 
-function update_movies(filters = {}) {
+function update_movies(input = {}) {
   // console.log('updating movies')
-  axios.post(`${current_api}/get_movies/`, filters)
+  axios.post(`${current_api}/get_movies/`, input)
       .then(response => {
-        console.log("response", response)
+        // console.log("response", response)
         movies.value = response.data
         servStatus.value = response.status
       })
@@ -48,9 +48,11 @@ function test() {
   console.log('caught emit!!!')
 }
 
+
 </script>
 <template>
-  <db-helper v-if="devMode" :data="currentSelectedMovie" :open="settingsOpen" @closed="settingsOpen=!settingsOpen"></db-helper>
+  <db-helper v-if="devMode" :data="currentSelectedMovie" :open="settingsOpen"
+             @closed="settingsOpen=!settingsOpen"></db-helper>
 
   <FilterMenu @filters="update_movies"></FilterMenu>
 

@@ -239,7 +239,7 @@ function delTagPresets() {
 
         <div class="box_wrapper" style="height: 800px">
         <div class="icon_selector box_wrapper">
-          <div class="icon_selectable" v-for="preset in tagPresets" :key="preset['name']"
+          <div class="icon_selectable preset_icons" v-for="preset in tagPresets" :key="preset['name']"
                @click="iconData={...preset}">
             <TagContainer :tag_input="[preset]"></TagContainer>
           </div>
@@ -343,6 +343,10 @@ export default {
   overflow: scroll;
   max-height: 800px;
   min-width: 500px;
+}
+
+.preset_icons {
+  margin-right: -150px;
 }
 
 .icon_selectable {
