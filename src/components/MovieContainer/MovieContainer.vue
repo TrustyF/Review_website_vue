@@ -38,11 +38,12 @@ function calcScreenSide() {
   const rect = screenRect.value.getBoundingClientRect()
   const screen = [window.innerWidth, window.innerHeight]
 
-  if (rect.right > (screen[0]/2)) screenSide.value = true
+  if (rect.right > (screen[0] / 2)) screenSide.value = true
 }
 
 onMounted(() => {
   calcScreenSide()
+  window.addEventListener('resize', calcScreenSide)
 })
 
 </script>
@@ -52,7 +53,8 @@ onMounted(() => {
 
       <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"></RatingBumper>
 
-      <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']" :screen_side="screenSide"></TagContainer>
+      <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"
+                    :screen_side="screenSide"></TagContainer>
 
       <div v-if="devMode" class="settings">
         <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
