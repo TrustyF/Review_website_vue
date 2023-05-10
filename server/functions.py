@@ -18,7 +18,7 @@ sorted_database = TinyDB(sorted_json_file_path)
 
 
 def get_all_movies(query):
-    pprint.pprint(query)
+    # pprint.pprint(query)
     filtered = filter_movies(query)
     organized = organize_by_rank(filtered, query['extra_settings']['session_seed'])
     culled = cull_max_page(organized, query['extra_settings']['max_movies'])
@@ -123,8 +123,17 @@ def filter_movies(query):
 
 def organize_by_rank(movies, seed):
     ranked = {}
+
+    if len(movies) < 1:
+        return ranked
+
     for rank in range(1, 10):
-        ranked[f'rank_{rank}'] = [mov for mov in movies if mov['my_rating'] == str(rank)]
+        for mov in movies:
+            try:
+                ranked[f'rank_{rank}'] = [mov for mov in movies if mov['my_rating'] == str(rank)]
+            except KeyError:
+                print(mov['title'])
+
         random.Random(seed).shuffle(ranked[f'rank_{rank}'])
 
     return ranked
@@ -161,16 +170,19 @@ def edit_movie(query):
     old_data = query['oldData']
     new_data = query['newData']
 
-    title_query = Query().title == str(old_data['title'])
+    title_query = Query().id == int(old_data['id'])
     sorted_database.table('movies').update(new_data, title_query)
 
 
 def add_movie(data):
-    sorted_database.table('movies').insert(data)
+    if check_dupe({'text': data['title']}):
+        sorted_database.table('movies').insert(data)
+    else:
+        print('movie already found! not added')
 
 
 def del_movie(data):
-    sorted_database.table('movies').remove(Query().title == str(data['title']))
+    sorted_database.table('movies').remove(Query().id == int(data['id']))
 
 
 def get_all_presets():
@@ -185,3 +197,16 @@ def add_preset(data):
 
 def del_preset(data):
     sorted_database.table('tag_presets').remove(Query().name == str(data['name']))
+
+
+def check_dupe(data):
+    title_query = Query().title == str(data['text'])
+    entries = sorted_database.table('movies').search(title_query)
+
+    if len(entries) > 0:
+        state = True
+    else:
+        state = False
+
+    # print(state, " - ", data['text'])
+    return state

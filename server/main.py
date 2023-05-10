@@ -48,6 +48,12 @@ def del_preset():
     return Response(status=200)
 
 
+@app.route('/check_dupe/', methods=["POST"])
+def check_dupe():
+    state = functions.check_dupe(request.json)
+    return Response(status=200), state
+
+
 if __name__ == '__main__':
     app.run(debug=True)
     # functions.add_missing_data()
