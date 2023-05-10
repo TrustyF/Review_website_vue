@@ -153,8 +153,7 @@ def organize(movies, query):
                 temp = organize_date_rated(temp)
 
         ranked[f'rank_{rank}'] = temp
-
-    # random.Random(seed).shuffle(ranked[f'rank_{rank}'])
+        random.Random(seed).shuffle(ranked[f'rank_{rank}'])
 
     return ranked
 
