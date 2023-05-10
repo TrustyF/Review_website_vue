@@ -102,6 +102,10 @@ function calc() {
       </div>
     </div>
 
+    <div v-if="data['region']==='asian'" class="tooltip">
+      <p class="rating arrow" >X</p>
+    </div>
+
   </div>
 </template>
 
