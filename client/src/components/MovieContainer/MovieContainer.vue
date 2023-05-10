@@ -225,7 +225,7 @@ export default {
 
   background-color: rgba(255, 255, 255, 0.9);
 
-  font-size: 0.7em;
+  font-size: 0.65em;
   text-align: left;
 
   visibility: hidden;

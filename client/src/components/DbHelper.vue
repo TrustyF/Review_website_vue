@@ -21,22 +21,25 @@ let iconData = ref({
   'tier': "gold",
   'image': ""
 })
+
 let tagPresets = ref({})
+
+const currentPoster = ref(0)
 loadPresets()
 
 watch(props, (newV, oldV) => {
-  console.log('prop change', newV)
+  // console.log('prop change', newV)
   MovChanges.value = newV.data
 })
 
-watch(iconData.value, (newV, oldV) => {
-  console.log('icon change', newV)
-})
+// watch(iconData.value, (newV, oldV) => {
+//   console.log('icon change', newV)
+// })
 
 async function loadPresets() {
   tagPresets.value = await axios.get(`${current_api}/get_presets/`)
       .then(response => {
-        console.log(response.data)
+        // console.log(response.data)
         return response.data
       })
 }
@@ -52,7 +55,7 @@ function pushChange(button) {
   // button.target.lastChild.data = " ❌"
   axios.post(`${current_api}/edit_movie/`, {'newData': MovChanges.value, 'oldData': props.data})
       .then(response => {
-        console.log("edit status", response.status)
+        // console.log("edit status", response.status)
         button.target.disabled = false
         // button.target.lastChild.data = " ✓"
       })
@@ -65,7 +68,7 @@ async function searchMovie(query, type = "movie") {
   if (search_text.length < 1) return
 
   throttle_search = true
-  console.log('searching', search_text)
+  // console.log('searching', search_text)
   setTimeout(async function () {
     MovChanges.value = await axios.get(`https://api.themoviedb.org/3/search/${type}?api_key=${apiKey}&language=en-US&query=${search_text}`)
         .then(response => {
@@ -80,7 +83,7 @@ async function searchMovie(query, type = "movie") {
           return axios.get(`https://api.themoviedb.org/3/${type}/${simple_data['id']}?api_key=${apiKey}&language=en-US&append_to_response=credits,images&include_image_language=en,null`)
               .then(response => {
                 const full_data = response.data
-                console.log('full_data', full_data)
+                // console.log('full_data', full_data)
 
                 //replace genres
                 simple_data['genres'] = full_data['genres'].map(a => a.name)
@@ -102,7 +105,7 @@ async function searchMovie(query, type = "movie") {
                   delete simple_data['first_air_date']
                 }
 
-                console.log(simple_data)
+                // console.log(simple_data)
                 throttle_search = false
                 return simple_data
               })
@@ -114,7 +117,7 @@ function addMovie(button) {
   button.target.disabled = true
   axios.post(`${current_api}/add_movie/`, MovChanges.value)
       .then(response => {
-        console.log("added movie")
+        // console.log("added movie")
         button.target.disabled = false
       })
 }
@@ -123,20 +126,21 @@ function delMovie(button) {
   button.target.disabled = true
   axios.post(`${current_api}/del_movie/`, MovChanges.value)
       .then(response => {
-        console.log("removed movie")
+        // console.log("removed movie")
         button.target.disabled = false
       })
 }
 
 function changePoster(input) {
-  console.log('posters',MovChanges.value)
   if (MovChanges.value['images'] === undefined) return
   if (MovChanges.value['images']['posters'] === undefined) return
 
-  console.log('changing poster')
-  if (input.target.value <= MovChanges.value['images']['posters'].length) {
-    MovChanges.value['poster_path'] = MovChanges.value['images']['posters'][input.target.value]['file_path']
+  // console.log('changing poster')
+  if (input <= MovChanges.value['images']['posters'].length) {
+    currentPoster.value = input
+    MovChanges.value['poster_path'] = MovChanges.value['images']['posters'][currentPoster.value]['file_path']
   }
+  console.log('posters', input, currentPoster.value)
 }
 
 function addTagMovie() {
@@ -144,7 +148,7 @@ function addTagMovie() {
     MovChanges.value['tags'] = []
   }
   MovChanges.value['tags'].push({...iconData.value})
-  console.log('added tag', MovChanges.value)
+  // console.log('added tag', MovChanges.value)
 }
 
 function delTagMovie() {
@@ -162,7 +166,7 @@ function delAllTagMovie() {
 function addTagPresets() {
   axios.post(`${current_api}/add_preset/`, iconData.value)
       .then(response => {
-        console.log("added preset")
+        // console.log("added preset")
         loadPresets()
       })
 }
@@ -170,7 +174,7 @@ function addTagPresets() {
 function delTagPresets() {
   axios.post(`${current_api}/del_preset/`, iconData.value)
       .then(response => {
-        console.log("removed preset")
+        // console.log("removed preset")
         loadPresets()
       })
 }
@@ -181,84 +185,101 @@ function delTagPresets() {
     <div class="background_blackout">...</div>
     <div class="main_win">
 
-      <MovieContainer class="preview_movie" v-if="MovChanges" :data="MovChanges"></MovieContainer>
-
-      <div class="movie_adder box_wrapper">
-
-        <label for="search_m_input">Search movie</label>
-        <input type="search" @input="searchMovie($event,'movie')" id="search_m_input">
-
-        <label for="search_t_input">Search tv</label>
-        <input type="search" @input="searchMovie($event,'tv')" id="search_t_input">
-
+      <div class="poster_preview box_wrapper" v-if="MovChanges['images']"
+           style="overflow: scroll; height:90vh; width: 150px">
+        <div class="poster_box" style="width: 120px"
+             v-for="(poster,index) in MovChanges['images']['posters']"
+             :key="index">
+          <img v-lazy="`https://image.tmdb.org/t/p/w500${poster['file_path']}`"
+               @click="changePoster(index)" style="width: 100%;">
+        </div>
       </div>
 
-      <div class="metadata box_wrapper">
-        <!--      Rating-->
-        <label for="rating_input">Rating</label>
-        <input type="number" id="rating_input" :value="data['my_rating']"
-               @change="MovChanges['my_rating'] = String($event.target.value)">
+      <div class="metadata_wrapper box_wrapper">
 
-        <!--      Region-->
-        <label for="region">Region</label>
-        <form id="region" @change="MovChanges['region'] = String($event.target.value)">
-          <select>
-            <option v-for="elem in availableRegions" :key="elem" :selected="data['region']">{{ elem }}</option>
-          </select>
-        </form>
+        <MovieContainer class="preview_movie" v-if="MovChanges" :data="MovChanges"></MovieContainer>
 
-        <!--      Poster-->
-        <label for="poster_input">Poster</label>
-        <input type="number" id="poster_input" value="0"
-               @change="changePoster">
+        <div class="movie_adder box_wrapper">
 
+          <label for="search_m_input">Search movie</label>
+          <input type="search" @input="searchMovie($event,'movie')" id="search_m_input">
 
-      </div>
-
-      <div class="box_wrapper">
-        <button @click="addMovie">add movie</button>
-        <button @click="delMovie">remove movie</button>
-      </div>
-
-      <div class="icon_adder box_wrapper row_flow">
-        <div class="icon_settings box_wrapper">
-          <div class="icon_metadata box_wrapper">
-            <TagContainer :tag_input="[iconData]" :tooltip_override="false"></TagContainer>
-          </div>
-
-          <textarea @input="iconData['name'] = $event.target.value" :value="iconData['name']" style="height: 15px"></textarea>
-          <textarea class="input_tag_description" @input="iconData['description'] = $event.target.value" :value="iconData['description']"></textarea>
-
-          <div class="box_wrapper">
-            <button @click="addTagMovie">add to movie</button>
-            <button @click="delTagMovie">remove from movie</button>
-            <button @click="delAllTagMovie">remove all from movie</button>
-          </div>
+          <label for="search_t_input">Search tv</label>
+          <input type="search" @input="searchMovie($event,'tv')" id="search_t_input">
 
         </div>
 
-        <div class="box_wrapper" style="height: 800px">
-        <div class="icon_selector box_wrapper">
-          <div class="icon_selectable preset_icons" v-for="preset in tagPresets" :key="preset['name']"
-               @click="iconData={...preset}">
-            <TagContainer :tag_input="[preset]"></TagContainer>
-          </div>
+        <div class="metadata box_wrapper">
+          <!--      Rating-->
+          <label for="rating_input">Rating</label>
+          <input type="number" id="rating_input" :value="data['my_rating']"
+                 @change="MovChanges['my_rating'] = String($event.target.value)">
+
+          <!--      Region-->
+          <label for="region">Region</label>
+          <form id="region" @change="MovChanges['region'] = String($event.target.value)">
+            <select>
+              <option v-for="elem in availableRegions" :key="elem" :selected="data['region']">{{ elem }}</option>
+            </select>
+          </form>
+
+          <!--      Poster-->
+          <!--        <label for="poster_input">Poster</label>-->
+          <!--        <input type="number" id="poster_input" value="0"-->
+          <!--               @change="changePoster($event.target.value)">-->
+
+
         </div>
 
         <div class="box_wrapper">
-          <button @click="addTagPresets">add to presets</button>
-          <button @click="delTagPresets">remove from presets</button>
+          <button @click="addMovie">add movie</button>
+          <button @click="delMovie">remove movie</button>
+        </div>
+      </div>
+
+      <div class="icon_adder box_wrapper row_flow">
+        <div class="box_wrapper">
+
+          <div class="icon_settings box_wrapper">
+            <div class="icon_metadata box_wrapper">
+              <TagContainer :tag_input="[iconData]" :tooltip_override="false" style="min-height: 55px"></TagContainer>
+            </div>
+
+            <textarea @input="iconData['name'] = $event.target.value" :value="iconData['name']"
+                      style="height: 15px"></textarea>
+            <textarea class="input_tag_description" @input="iconData['description'] = $event.target.value"
+                      :value="iconData['description']"></textarea>
+
+            <div class="box_wrapper">
+              <button @click="addTagMovie">add to movie</button>
+              <button @click="delTagMovie">remove from movie</button>
+              <button @click="delAllTagMovie">remove all from movie</button>
+            </div>
+
+          </div>
+
+          <div class="icon_selector box_wrapper">
+            <div class="icon_selectable preset_icons" v-for="preset in tagPresets" :key="preset['name']"
+                 @click="iconData={...preset}">
+              <TagContainer :tag_input="[preset]"></TagContainer>
+            </div>
+          </div>
+
+          <div class="box_wrapper">
+            <button @click="addTagPresets">add to presets</button>
+            <button @click="delTagPresets">remove from presets</button>
+          </div>
+
+
         </div>
 
-        </div>
+        <div class="icon_selector box_wrapper" style="min-height: 90vh">
+          <form id="tier" @input="iconData['tier'] = $event.target.value">
+            <select>
+              <option v-for="tier in availableTiers" :key="tier">{{ tier }}</option>
+            </select>
+          </form>
 
-        <form id="tier" @input="iconData['tier'] = $event.target.value">
-          <select>
-            <option v-for="tier in availableTiers" :key="tier">{{ tier }}</option>
-          </select>
-        </form>
-
-        <div class="icon_selector box_wrapper">
           <div class="icon_selectable" v-for="icon in asset_paths['icons'][iconData['tier']]" :key="icon"
                @click="iconData['image']=icon">
             <img v-lazy="`${tag_path}${iconData['tier']}/${icon}`" style="width: 50px; height: 50px">
@@ -284,14 +305,21 @@ export default {
 
 <style scoped>
 .main_win {
+  /*outline: 1px solid red;*/
   position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-60%, -50%);
+
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+
   display: flex;
   flex-flow: column wrap;
-  height: 800px;
-  z-index: 30;
+  /*height: 800px;*/
+  height: 90vh;
+  width: 95vw;
+  z-index: 3000;
 }
 
 .background_blackout {
@@ -326,6 +354,7 @@ export default {
 .row_flow {
   flex-flow: row;
 }
+
 .input_tag_description {
   width: 200px;
   font-family: inherit;
@@ -333,20 +362,17 @@ export default {
   font-size: 0.7em;
 }
 
-.icon_adder {
-  /*width: 500px;*/
-}
-
 .icon_selector {
   display: flex;
   flex-flow: row wrap;
   overflow: scroll;
-  max-height: 800px;
-  min-width: 500px;
+  max-height: 90vh;
+  max-width: 30vw;
 }
 
 .preset_icons {
-  margin-right: -150px;
+  margin-right: -155px;
+  margin-bottom: -5px;
 }
 
 .icon_selectable {

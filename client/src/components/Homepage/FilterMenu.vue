@@ -3,6 +3,8 @@ import {defineProps, defineEmits, ref, onMounted, watch, inject} from 'vue'
 import {Collapse} from 'vue-collapsed'
 import filterButton from '/public/assets/ui/filter_button.png'
 
+const sessionSeed = inject('sessionSeed')
+
 const props = defineProps(['props'])
 const emits = defineEmits(['filters'])
 let filters = ref({
@@ -57,7 +59,8 @@ let filters = ref({
   'search_bar': "",
   'extra_settings': {
     'exclude_mode': false,
-    'max_movies': 50
+    'max_movies': 50,
+    'session_seed' : sessionSeed
   }
 })
 let state = ref(false)
