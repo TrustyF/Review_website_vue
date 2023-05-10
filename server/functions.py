@@ -105,7 +105,7 @@ def filter_movies(query):
                 length_query = Query().runtime >= 180
 
     # filter searchbar
-    print(searchbar_filters)
+    # print(searchbar_filters)
     if len(searchbar_filters) > 0:
         searchbar_query = Query().title.test(lambda val: re.search(searchbar_filters, val, re.IGNORECASE))
 
@@ -123,13 +123,13 @@ def filter_movies(query):
 
 def organize(movies, query):
     seed = query['extra_settings']['session_seed']
-    print(query['sort'])
+    # print(query['sort'])
 
     def organize_rating(arr):
         return [mov for mov in arr if mov['my_rating'] == str(rank)]
 
     def organize_avg_rating(arr):
-        print('average rating')
+        # print('average rating')
         arr = sorted(arr, key=lambda k: k['vote_average'])
         arr.reverse()
         return arr
