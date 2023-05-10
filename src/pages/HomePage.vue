@@ -33,7 +33,7 @@ function update_movies(input = {}) {
   // console.log('updating movies')
   axios.post(`${current_api}/get_movies/`, input)
       .then(response => {
-        // console.log("response", response)
+        console.log("response", response)
         movies.value = response.data
         servStatus.value = response.status
       })
@@ -87,12 +87,5 @@ function test() {
   justify-content: center;
   flex-flow: row wrap;
   margin: auto;
-}
-
-.darkMode {
-
-}
-
-.db_helper {
 }
 </style>
