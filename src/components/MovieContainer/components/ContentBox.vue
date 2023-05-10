@@ -7,6 +7,8 @@ const props = defineProps(['data'])
 <template>
   <div class="content">
     <p class="title" v-if="data['title']">{{ data['title'] }}</p>
+<!--    <p class="title" v-if="data['original_title']">{{ data['original_title'] }}</p>-->
+<!--    <p class="title" v-if="data['original_name']">{{ data['original_name'] }}</p>-->
     <p class="date" v-if="data['release_date']">{{ data['release_date'].split("-")[0] }}</p>
 <!--    <p class="date" v-if="data['region']">{{ data['region'] }}</p>-->
 <!--    <p class="rating">{{ data['my_rating'] + "★" }} </p>-->
@@ -21,7 +23,7 @@ export default {
 </script>
 <style scoped>
 .content {
-  user-select: none;
+  /*user-select: none;*/
   /*outline: 1px solid red;*/
   display: grid;
   justify-content: space-between;

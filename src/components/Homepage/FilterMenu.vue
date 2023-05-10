@@ -51,11 +51,11 @@ let filters = ref({
     'filter': [],
     'checkbox': true
   },
-  'date_rated': {
-    'name': 'Date rated',
+  'sort': {
+    'name': 'Sort',
     'available': ["0", "1"],
-    'display': ["Ascending", "Descending"],
-    'filter': [],
+    'display': ["Popular vote", "Date rated"],
+    'filter': [null],
   },
   'search_bar': "",
   'extra_settings': {
@@ -113,7 +113,7 @@ function search_bar(event) {
 
   }
 
-  if (event === ""){
+  if (event === "") {
     clearTimeout(timeOutId)
     filters.value['search_bar'] = event
     emits('filters', filters.value)

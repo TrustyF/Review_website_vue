@@ -67,7 +67,7 @@ onUnmounted(()=>{
       <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
            class="poster" alt="poster"
            v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
-
+      <p v-if="data['date_rated']">{{data['date_rated']}}</p>
       <ContentBox :data="data"></ContentBox>
 
     </div>

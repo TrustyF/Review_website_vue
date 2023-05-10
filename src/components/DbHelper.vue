@@ -58,6 +58,7 @@ function pushChange(button) {
         button.target.disabled = false
         // button.target.lastChild.data = " ✓"
       })
+  emits('closed',true)
 }
 
 async function searchMovie() {
@@ -193,8 +194,8 @@ function delTagPresets() {
     <div class="main_win">
 
       <div class="poster_preview box_wrapper" v-if="MovChanges['images']"
-           style="overflow: scroll; height:90vh; width: 150px">
-        <div class="poster_box" style="width: 120px"
+           style="overflow: scroll; height:90vh; width: 10vw">
+        <div class="poster_box" style="width: 9vw"
              v-for="(poster,index) in MovChanges['images']['posters']"
              :key="index">
           <img v-lazy="`https://image.tmdb.org/t/p/w500${poster['file_path']}`"
@@ -238,6 +239,10 @@ function delTagPresets() {
               <option v-for="elem in availableRegions" :key="elem" :selected="data['region']">{{ elem }}</option>
             </select>
           </form>
+          <!--          Date rated-->
+          <label for="date_rated_input">Date rated</label>
+          <input type="text" id="date_rated_input"
+                 @change="MovChanges['date_rated'] = String($event.target.value)">
 
         </div>
 
@@ -284,7 +289,7 @@ function delTagPresets() {
 
         </div>
 
-        <div class="icon_selector box_wrapper" style="min-height: 90vh">
+        <div class="icon_selector box_wrapper" style="min-height: 90vh; max-width: 30vw">
           <form id="tier" @input="iconData['tier'] = $event.target.value">
             <select>
               <option v-for="tier in availableTiers" :key="tier">{{ tier }}</option>
@@ -316,7 +321,7 @@ export default {
 
 <style scoped>
 .main_win {
-  /*outline: 1px solid red;*/
+  outline: 1px solid red;
   position: fixed;
 
   left: 0;
@@ -329,7 +334,7 @@ export default {
   flex-flow: column wrap;
   /*height: 800px;*/
   height: 90vh;
-  width: 95vw;
+  width: 85vw;
   z-index: 3000;
 }
 
@@ -340,7 +345,7 @@ export default {
   right: 0;
   bottom: 0;
   width: 100%;
-  height: 300%;
+  height: 100%;
   /*outline: 1px solid red;*/
   z-index: 25;
   background-color: rgba(0, 0, 0, 75%);
@@ -378,7 +383,7 @@ export default {
   flex-flow: row wrap;
   overflow: scroll;
   max-height: 90vh;
-  max-width: 30vw;
+  max-width: 20vw;
 }
 
 .preset_icons {
