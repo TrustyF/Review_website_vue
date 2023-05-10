@@ -122,7 +122,7 @@ export default {
   background-color: white;
 
   width: 200px;
-  /*height: 355px;*/
+  min-height: 340px;
   /*max-width: 400px;*/
   /*min-width: 200px;*/
 

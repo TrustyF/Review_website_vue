@@ -2,6 +2,7 @@
 import {defineProps, defineEmits, ref, onMounted, watch, inject} from 'vue'
 import {Collapse} from 'vue-collapsed'
 import filterButton from '/public/assets/ui/filter_button.png'
+import crossButton from '/public/assets/ui/cross_button.png'
 
 const sessionSeed = inject('sessionSeed')
 
@@ -60,7 +61,7 @@ let filters = ref({
   'extra_settings': {
     'exclude_mode': false,
     'max_movies': 50,
-    'session_seed' : sessionSeed
+    'session_seed': sessionSeed
   }
 })
 let state = ref(false)
@@ -71,6 +72,7 @@ let fetch_more_movies = false
 const excludeMode = ref(false)
 
 const scrollAtBottom = ref(false)
+let searchBarRef = ref()
 
 function swap_filter(filter, target, checkbox, button) {
 
@@ -98,16 +100,24 @@ function swap_filter(filter, target, checkbox, button) {
 }
 
 function search_bar(event) {
+  let timeOutId = 0
 
   if (throttle_search === false) {
     throttle_search = true
 
-    setTimeout(function () {
-      filters.value['search_bar'] = event.target.value
+    timeOutId = setTimeout(function () {
+      filters.value['search_bar'] = event
       emits('filters', filters.value)
       throttle_search = false
-    }, 300)
+    }, 500)
 
+  }
+
+  if (event === ""){
+    clearTimeout(timeOutId)
+    filters.value['search_bar'] = event
+    emits('filters', filters.value)
+    throttle_search = false
   }
 }
 
@@ -116,7 +126,7 @@ function handleScroll() {
   const scrollHeight = document.documentElement.scrollHeight
   const clientHeight = document.documentElement.clientHeight
 
-  if (scrollTop + clientHeight >= (scrollHeight - (scrollHeight/5)) && fetch_more_movies === false) {
+  if (scrollTop + clientHeight >= (scrollHeight - (scrollHeight / 5)) && fetch_more_movies === false && scrollTop + clientHeight <= (scrollHeight - (scrollHeight / 7))) {
 
     fetch_more_movies = true
     setTimeout(() => {
@@ -149,7 +159,10 @@ onMounted(() => {
 
     <div class="search_bar_wrapper">
       <label for="search_bar">Search</label>
-      <input class="search_bar" type="search" id="search_bar" @input="search_bar">
+      <input ref="searchBarRef" class="search_bar" type="search" id="search_bar"
+             @input="search_bar($event.target.value)">
+      <img :src="crossButton" alt="cross button" @click="searchBarRef.value='';search_bar('')"
+           style="margin-left: -30px; width: 15px; padding: 5px; margin-bottom: 1px">
     </div>
 
     <!--    <div class="dark_mode_switch">-->

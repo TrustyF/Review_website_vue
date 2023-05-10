@@ -8,8 +8,8 @@ from functools import reduce
 from pathlib import Path
 from itertools import zip_longest
 
-dir_path = "D://A_Mod//A_Projects//Web design//movie_site_vue//public//assets//tags"
-target = "D://A_Mod//A_Projects//Web design//movie_site_vue//public//assets//tags//assets.json"
+dir_path = "D://A_Mod//A_Projects//Web design//movie_site_vue//client//public//assets//tags"
+target = "D://A_Mod//A_Projects//Web design//movie_site_vue//client//public//assets//tags//assets.json"
 
 ignore_files = ['assets.json', 'update_assets.py']
 

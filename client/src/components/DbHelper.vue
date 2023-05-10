@@ -14,7 +14,7 @@ import axios from 'axios'
 const props = defineProps(['data', 'open'])
 const emits = defineEmits(['closed'])
 
-let MovChanges = ref({'title': 'test'})
+let MovChanges = ref({'title': 'test', 'my_rating': '0'})
 let iconData = ref({
   'name': "",
   'description': "",
@@ -24,17 +24,22 @@ let iconData = ref({
 
 let tagPresets = ref({})
 
+const currentSearchMovie = ref("")
+const currentSearchType = ref("movie")
+const currentSearchPage = ref(0)
 const currentPoster = ref(0)
+const presentInDb = ref(false)
+
 loadPresets()
 
 watch(props, (newV, oldV) => {
-  // console.log('prop change', newV)
   MovChanges.value = newV.data
 })
 
-// watch(iconData.value, (newV, oldV) => {
-//   console.log('icon change', newV)
-// })
+const availableRegions = ["western", "asian"]
+const availableTiers = ["cyan", "gold", "green", "purple", "red", "silver"]
+
+let throttle_search = false
 
 async function loadPresets() {
   tagPresets.value = await axios.get(`${current_api}/get_presets/`)
@@ -43,12 +48,6 @@ async function loadPresets() {
         return response.data
       })
 }
-
-// const availableTypes = ["movie", "tv", "documentary"]
-const availableRegions = ["western", "asian"]
-const availableTiers = ["cyan", "gold", "green", "purple", "red", "silver"]
-
-let throttle_search = false
 
 function pushChange(button) {
   button.target.disabled = true
@@ -61,8 +60,10 @@ function pushChange(button) {
       })
 }
 
-async function searchMovie(query, type = "movie") {
-  let search_text = query.target.value
+async function searchMovie() {
+  let search_text = currentSearchMovie.value
+
+  console.log(search_text, currentSearchType.value, currentSearchPage.value)
 
   if (throttle_search === true) return
   if (search_text.length < 1) return
@@ -70,7 +71,7 @@ async function searchMovie(query, type = "movie") {
   throttle_search = true
   // console.log('searching', search_text)
   setTimeout(async function () {
-    MovChanges.value = await axios.get(`https://api.themoviedb.org/3/search/${type}?api_key=${apiKey}&language=en-US&query=${search_text}`)
+    MovChanges.value = await axios.get(`https://api.themoviedb.org/3/search/${currentSearchType.value}?api_key=${apiKey}&language=en-US&query=${search_text}`)
         .then(response => {
 
           if (response.data['results'].length < 1) {
@@ -78,9 +79,9 @@ async function searchMovie(query, type = "movie") {
             return
           }
 
-          const simple_data = response.data['results'][0]
+          let simple_data = response.data['results'][currentSearchPage.value]
 
-          return axios.get(`https://api.themoviedb.org/3/${type}/${simple_data['id']}?api_key=${apiKey}&language=en-US&append_to_response=credits,images&include_image_language=en,null`)
+          return axios.get(`https://api.themoviedb.org/3/${currentSearchType.value}/${simple_data['id']}?api_key=${apiKey}&language=en-US&append_to_response=credits,images&include_image_language=en,null`)
               .then(response => {
                 const full_data = response.data
                 // console.log('full_data', full_data)
@@ -90,13 +91,13 @@ async function searchMovie(query, type = "movie") {
                 delete simple_data['genre_ids']
 
                 // add others
-                simple_data['media_type'] = type
+                simple_data['media_type'] = currentSearchType.value
                 simple_data['date_rated'] = new Date().toISOString().slice(0, 10)
                 simple_data['images'] = full_data['images']
                 simple_data['runtime'] = full_data['runtime']
 
                 // tv exceptions
-                if (type === 'tv') {
+                if (currentSearchType.value === 'tv') {
 
                   simple_data['title'] = full_data['name']
                   delete simple_data['name']
@@ -109,6 +110,12 @@ async function searchMovie(query, type = "movie") {
                 throttle_search = false
                 return simple_data
               })
+        })
+
+    presentInDb.value = await axios.post(`${current_api}/check_dupe/`, {'text': MovChanges.value['title']})
+        .then(response => {
+          if (response.statusText === 'True') return true
+          if (response.statusText === 'False') return false
         })
   }, 300)
 }
@@ -201,18 +208,27 @@ function delTagPresets() {
 
         <div class="movie_adder box_wrapper">
 
-          <label for="search_m_input">Search movie</label>
-          <input type="search" @input="searchMovie($event,'movie')" id="search_m_input">
+          <label for="search_m_input">Search</label>
+          <input type="search" @input="currentSearchMovie = $event.target.value" @change="searchMovie"
+                 id="search_m_input">
 
-          <label for="search_t_input">Search tv</label>
-          <input type="search" @input="searchMovie($event,'tv')" id="search_t_input">
+          <label for="type">Type</label>
+          <form id="type" @change="currentSearchType = String($event.target.value)">
+            <select>
+              <option v-for="elem in ['movie','tv']" :key="elem">{{ elem }}</option>
+            </select>
+          </form>
+
+          <label for="search_list_input">Search scroll</label>
+          <input type="number" @change="currentSearchPage = Number($event.target.value)" @input="searchMovie" value="0"
+                 id="search_list_input">
 
         </div>
 
         <div class="metadata box_wrapper">
           <!--      Rating-->
           <label for="rating_input">Rating</label>
-          <input type="number" id="rating_input" :value="data['my_rating']"
+          <input type="number" id="rating_input"
                  @change="MovChanges['my_rating'] = String($event.target.value)">
 
           <!--      Region-->
@@ -223,16 +239,11 @@ function delTagPresets() {
             </select>
           </form>
 
-          <!--      Poster-->
-          <!--        <label for="poster_input">Poster</label>-->
-          <!--        <input type="number" id="poster_input" value="0"-->
-          <!--               @change="changePoster($event.target.value)">-->
-
-
         </div>
 
         <div class="box_wrapper">
-          <button @click="addMovie">add movie</button>
+          <p v-if="presentInDb">!! Movie already added !!</p>
+          <button @click="addMovie" v-if="!presentInDb">add movie</button>
           <button @click="delMovie">remove movie</button>
         </div>
       </div>
@@ -289,8 +300,8 @@ function delTagPresets() {
       </div>
 
       <div class="upload box_wrapper">
-        <button @click="pushChange($event)">upload changes</button>
-        <button @click="emits('closed',true)">Close</button>
+        <button @click="pushChange($event)" v-if="MovChanges['my_rating']" style="width: 100%">upload changes</button>
+        <button @click="emits('closed',true)" style="width: 100%">Close</button>
       </div>
 
     </div>
