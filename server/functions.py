@@ -123,6 +123,7 @@ def filter_movies(query):
 
 def organize(movies, query):
     seed = query['extra_settings']['session_seed']
+
     # print(query['sort'])
 
     def organize_rating(arr):
@@ -153,7 +154,9 @@ def organize(movies, query):
                 temp = organize_date_rated(temp)
 
         ranked[f'rank_{rank}'] = temp
-        random.Random(seed).shuffle(ranked[f'rank_{rank}'])
+
+        if query['sort']['filter'][0] == "":
+            random.Random(seed).shuffle(ranked[f'rank_{rank}'])
 
     return ranked
 
