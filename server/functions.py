@@ -20,7 +20,7 @@ sorted_database = TinyDB(sorted_json_file_path)
 def get_all_movies(query):
     # pprint.pprint(query)
     filtered = filter_movies(query)
-    organized = organize_by_rank(filtered, query['extra_settings']['session_seed'])
+    organized = organize(filtered, query)
     culled = cull_max_page(organized, query['extra_settings']['max_movies'])
     return culled
 
@@ -121,20 +121,41 @@ def filter_movies(query):
     )
 
 
-def organize_by_rank(movies, seed):
-    ranked = {}
+def organize(movies, query):
+    seed = query['extra_settings']['session_seed']
+    print(query['sort'])
 
+    def organize_rating(arr):
+        return [mov for mov in arr if mov['my_rating'] == str(rank)]
+
+    def organize_avg_rating(arr):
+        print('average rating')
+        arr = sorted(arr, key=lambda k: k['vote_average'])
+        arr.reverse()
+        return arr
+
+    def organize_date_rated(arr):
+        ex = [d for d in arr if 'date_rated' not in d]
+        arr = sorted(ex, key=lambda k: k['release_date'])
+        arr.reverse()
+        return ex
+
+    ranked = {}
     if len(movies) < 1:
         return ranked
 
     for rank in range(1, 10):
-        for mov in movies:
-            try:
-                ranked[f'rank_{rank}'] = [mov for mov in movies if mov['my_rating'] == str(rank)]
-            except KeyError:
-                print(mov['title'])
+        temp = organize_rating(movies)
 
-        random.Random(seed).shuffle(ranked[f'rank_{rank}'])
+        match query['sort']['filter'][0]:
+            case '0':
+                temp = organize_avg_rating(temp)
+            case '1':
+                temp = organize_date_rated(temp)
+
+        ranked[f'rank_{rank}'] = temp
+
+    # random.Random(seed).shuffle(ranked[f'rank_{rank}'])
 
     return ranked
 
