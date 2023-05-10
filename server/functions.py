@@ -18,8 +18,9 @@ sorted_database = TinyDB(sorted_json_file_path)
 
 
 def get_all_movies(query):
+    pprint.pprint(query)
     filtered = filter_movies(query)
-    organized = organize_by_rank(filtered)
+    organized = organize_by_rank(filtered, query['extra_settings']['session_seed'])
     culled = cull_max_page(organized, query['extra_settings']['max_movies'])
     return culled
 
@@ -120,11 +121,11 @@ def filter_movies(query):
     )
 
 
-def organize_by_rank(movies):
+def organize_by_rank(movies, seed):
     ranked = {}
     for rank in range(1, 10):
         ranked[f'rank_{rank}'] = [mov for mov in movies if mov['my_rating'] == str(rank)]
-        random.shuffle(ranked[f'rank_{rank}'])
+        random.Random(seed).shuffle(ranked[f'rank_{rank}'])
 
     return ranked
 
