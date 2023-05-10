@@ -22,7 +22,7 @@ def get_all_movies(query):
     filtered = filter_movies(query)
     organized = organize(filtered, query)
     culled = cull_max_page(organized, query['extra_settings']['max_movies'])
-    return culled
+    return organized
 
 
 def filter_movies(query):
@@ -135,10 +135,9 @@ def organize(movies, query):
         return arr
 
     def organize_date_rated(arr):
-        ex = [d for d in arr if 'date_rated' not in d]
-        arr = sorted(ex, key=lambda k: k['release_date'])
+        arr = sorted(arr, key=lambda k: datetime.strptime(k['date_rated'], '%Y-%m-%d'))
         arr.reverse()
-        return ex
+        return arr
 
     ranked = {}
     if len(movies) < 1:
