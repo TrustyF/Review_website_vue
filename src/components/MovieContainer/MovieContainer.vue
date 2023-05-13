@@ -54,6 +54,7 @@ onUnmounted(()=>{
 <template>
   <div ref="screenRect" class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [isSeen ? ' seen' : '']">
     <div class="main_block">
+      <div class="gradient_fill"></div>
 
       <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"></RatingBumper>
 
@@ -68,9 +69,11 @@ onUnmounted(()=>{
            class="poster" alt="poster"
            v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
 <!--      <p v-if="data['date_rated']">{{data['date_rated']}}</p>-->
+
       <ContentBox :data="data"></ContentBox>
 
     </div>
+
 
     <div class="expanded">
       <div class="overview">
@@ -97,17 +100,6 @@ onUnmounted(()=>{
         </div>
       </div>
     </div>
-
-    <!--    <div class="seen_block_cover">-->
-
-    <!--    </div>-->
-    <!--    <div class="seen_checkbox_wrapper">-->
-    <!--      <div class="seen_checkbox_hitBox" @mousedown="isSeen = !isSeen">-->
-    <!--        <div class="seen_checkbox_box">-->
-    <!--          <div :class="'checkmark' + [isSeen ? '' : ' seen' ]"></div>-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </div>-->
   </div>
 </template>
 <script>
@@ -130,7 +122,7 @@ export default {
   border-radius: 8px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
 
-  overflow: hidden;
+  /*overflow: hidden;*/
   transition: 0.2s ease;
 
   display: flex;
@@ -149,64 +141,6 @@ export default {
 .rating_bumper {
   position: absolute;
   transform: translate(3px, 277px);
-}
-
-.seen_checkbox_wrapper {
-  /*outline: red 1px solid;*/
-  position: absolute;
-  /*margin-left: 0px;*/
-  margin-top: 335px;
-}
-
-.seen_checkbox_box {
-  user-select: none;
-  position: absolute;
-  top: 58%;
-  left: 89%;
-  /*transform: translate(0%, -50%);*/
-  width: 15px;
-  height: 15px;
-  /*border: 2px solid black;*/
-  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.35);
-  background-color: white;
-  border-radius: 3px;
-  transition: 0.2s ease;
-  opacity: 0;
-}
-
-.seen .seen_checkbox_box {
-  background-color: royalblue;
-  border-color: royalblue;
-  box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.5);
-  opacity: 1;
-}
-
-.seen_checkbox_hitBox:hover .seen_checkbox_box {
-  opacity: 1;
-}
-
-.seen_checkbox_hitBox {
-  /*outline: 1px purple solid;*/
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(0%, -67%);
-  cursor: pointer;
-  width: 200px;
-  height: 53px;
-}
-
-.seen .checkmark {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) translate(0, -1px) rotate(45deg);
-  display: inline-block;
-  /*margin-left: 60%;*/
-  height: 7px;
-  width: 3px;
-  border-bottom: 2px solid white;
-  border-right: 2px solid white;
 }
 
 .main_block {
@@ -278,8 +212,12 @@ export default {
   aspect-ratio: 1/1.5;
 }
 
-.poster::after {
-  background-image: linear-gradient(to bottom, rgba(255, 255, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+.gradient_fill {
+  width: 200px;
+  position: absolute;
+  height:300px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 0.5) 100%);
+  pointer-events: none;
 }
 
 
