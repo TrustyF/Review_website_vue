@@ -1,20 +1,37 @@
 <script setup>
-import {defineProps, defineEmits, ref, watch} from 'vue'
+import {defineProps, defineEmits, ref, watch, onMounted, onUnmounted} from 'vue'
 import FloatingVue from 'floating-vue'
 
-const props = defineProps(['tag_input', 'screen_side'])
+const props = defineProps(['tag_input'])
 const tag_path = "./assets/tags/icons/"
+
+const screenRect = ref(null)
+const screenSide = ref(false)
+
+function calcScreenSide() {
+  let rect = screenRect.value.getBoundingClientRect()
+  let screen = [window.outerWidth, window.outerHeight]
+
+  screenSide.value = rect.right > (screen[0] / 2);
+}
+
+onMounted(() => {
+  calcScreenSide()
+  window.addEventListener('resize', calcScreenSide)
+})
+
+
+onUnmounted(() => {
+  window.removeEventListener('resize', calcScreenSide)
+})
 </script>
 
 <template>
-  <div class="tag_wrapper">
-    <div class="gradient_wrapper">
-      <div class="gradient_background"></div>
-    </div>
+  <div ref="screenRect" class="tag_wrapper">
     <div class="tooltip" v-for="tag in tag_input" :key="tag['name']">
       <img :class="`${tag['tier']}_glow` + ' tag_icon'" :src="`${tag_path}${tag['tier']}/${tag['image']}`"
            :alt="tag['image']">
-      <div :class="props['screen_side'] ? 'hover_box_left' : 'hover_box'">
+      <div :class="screenSide ? 'hover_box_left' : 'hover_box'">
         <div class="description">
           <p class=tag_name>{{ tag['name'] }}</p>
           <p class="tag_description">{{ tag['description'] }}</p>
@@ -37,25 +54,6 @@ export default {
   /*overflow: hidden;*/
   /*border-radius: 8px 0 0 0;*/
   /*outline: green solid 1px;*/
-}
-.gradient_wrapper{
-  position: absolute;
-  width: 200px;
-  height: 180%;
-  overflow: hidden;
-  border-radius: 8px 0 0 0;
-}
-.gradient_background {
-  /*outline: green solid 1px;*/
-  overflow: hidden;
-  width: 100px;
-  position: absolute;
-  height: 70%;
-  transform: translate(-70%, -15%);
-  background-color: rgba(0,0,0,0.9);
-  /*background: linear-gradient(to left, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 1) 100%);*/
-  filter: blur(20px);
-  pointer-events: none;
 }
 
 .hover_box {
@@ -153,6 +151,7 @@ export default {
 .tag_name {
   font-size: 1.4em;
   text-align: left;
+  margin-bottom: 5px;
 }
 
 .tag_description {

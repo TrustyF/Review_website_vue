@@ -2,7 +2,7 @@
 import TagContainer from "@/components/MovieContainer/components/TagContainer";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 import RatingBumper from "@/components/MovieContainer/components/RatingBumper";
-import {defineProps, defineEmits, ref, onMounted,onUnmounted, watch, inject} from 'vue'
+import {defineProps, defineEmits, ref, onMounted, onUnmounted, watch, inject} from 'vue'
 import ContentBox from "@/components/MovieContainer/components/ContentBox";
 
 const props = defineProps(['data'])
@@ -15,10 +15,8 @@ const isSeen = ref(false)
 const outOfFocus = ref(false)
 const settingsOpen = ref(false)
 
-const screenRect = ref(null)
-const screenSide = ref(false)
-
-const golden = ref(false)
+let golden = false
+let tagAmount = "50px"
 
 function timeConvert(n) {
   const hours = (n / 60);
@@ -36,47 +34,42 @@ function emitSelectedMovie(input) {
   emits('MovieEdit', props['data'])
 }
 
-function calcScreenSide() {
-  let rect = screenRect.value.getBoundingClientRect()
-  let screen = [window.outerWidth, window.outerHeight]
-
-  screenSide.value = rect.right > (screen[0] / 2);
-}
-
-function calcGolden(){
-  if (props.data['tags'] !== undefined){
+function calcGolden() {
+  if (props.data['tags'] !== undefined) {
     let numGold = 0
-    props.data['tags'].forEach(tag =>{
-      if (tag['tier'] === "gold"){
-        numGold ++
+    props.data['tags'].forEach(tag => {
+      if (tag['tier'] === "gold") {
+        numGold++
       }
     })
-    if (numGold >= 3){
-      golden.value = true
+    if (numGold >= 3) {
+      golden = true
     }
   }
 }
 
-onMounted(() => {
-  calcScreenSide()
-  calcGolden()
-  window.addEventListener('resize', calcScreenSide)
-})
+function calcTagAmount(){
+  if (props.data['tags'] !== undefined) {
+    tagAmount = props.data['tags'].length
+  }
+}
 
-onUnmounted(()=>{
-  window.removeEventListener('resize', calcScreenSide)
-})
+calcGolden()
+calcTagAmount()
 
 </script>
 <template>
-  <div ref="screenRect" class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [golden ? ' gold_glow' : '' ]">
+  <div class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [golden ? ' gold_glow' : '' ]">
     <div class="main_block">
+
       <div class="gradient_fill"></div>
+      <div class="tag_gradient_wrapper">
+        <div :class="'tag_gradient_background' + [tagAmount===1 ? ' one_tag' : ''] + [tagAmount===2 ? ' two_tag' : ''] + [tagAmount===3 ? ' three_tag' : '']"></div>
+      </div>
 
       <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"></RatingBumper>
 
-      <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"
-                    :screen_side="screenSide"></TagContainer>
+      <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
 
       <div v-if="devMode" class="settings">
         <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
@@ -85,7 +78,7 @@ onUnmounted(()=>{
       <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
            class="poster" alt="poster"
            v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
-<!--      <p v-if="data['date_rated']">{{data['date_rated']}}</p>-->
+      <!--      <p v-if="data['date_rated']">{{data['date_rated']}}</p>-->
 
       <ContentBox :data="data"></ContentBox>
 
@@ -232,14 +225,43 @@ export default {
 .gradient_fill {
   width: 200px;
   position: absolute;
-  height:300px;
+  height: 300px;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 85%, rgba(0, 0, 0, 0.5) 100%);
   /*border-radius: 8px;*/
   pointer-events: none;
 }
 
+.tag_gradient_wrapper {
+  position: absolute;
+  width: 200px;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 8px 0 0 0;
+  pointer-events: none;
+  /*outline: green solid 1px;*/
+}
+
+.tag_gradient_background {
+  /*outline: green solid 1px;*/
+  overflow: hidden;
+  width: 100px;
+  position: absolute;
+  transform: translate(-70%, -15%);
+  background-color: rgba(0, 0, 0, 0.9);
+  filter: blur(20px);
+}
+.one_tag {
+  height: 50px;
+  }
+.two_tag {
+  height: 130px;
+}
+.three_tag {
+  height: 190px;
+}
+
 .gold_glow {
-  box-shadow: 0 0 8px rgb(0, 0, 0),0 0 16px rgb(255, 204, 109);
+  box-shadow: 0 0 8px rgb(0, 0, 0), 0 0 16px rgb(255, 204, 109);
 }
 
 

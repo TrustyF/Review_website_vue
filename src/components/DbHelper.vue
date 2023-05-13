@@ -38,7 +38,7 @@ watch(props, (newV, oldV) => {
 
 const availableRegions = ["western", "asian"]
 const availableTiers = ["cyan", "gold", "green", "purple", "red", "silver"]
-const availableReWatch = ["up", "down"]
+const availableReWatch = ["none", "up", "down"]
 
 let throttle_search = false
 
@@ -59,7 +59,7 @@ function pushChange(button) {
         button.target.disabled = false
         // button.target.lastChild.data = " ✓"
       })
-  emits('closed',true)
+  emits('closed', true)
 }
 
 async function searchMovie() {
@@ -235,14 +235,14 @@ function delTagPresets() {
 
           <!--      Region-->
           <label for="region">Region</label>
-          <form id="region" @change="MovChanges['region'] = String($event.target.value)">
+          <form id="region" @click="MovChanges['region'] = String($event.target.value)">
             <select>
               <option v-for="elem in availableRegions" :key="elem" :selected="data['region']">{{ elem }}</option>
             </select>
           </form>
           <!--      Re-watch-->
           <label for="region">Re-watch</label>
-          <form id="region" @change="MovChanges['re_watch'] = String($event.target.value)">
+          <form id="region" @input="MovChanges['re_watch'] = String($event.target.value)">
             <select>
               <option v-for="elem in availableReWatch" :key="elem">{{ elem }}</option>
             </select>
@@ -282,7 +282,7 @@ function delTagPresets() {
 
           </div>
 
-          <div class="icon_selector box_wrapper">
+          <div class="icon_selector box_wrapper"  style="overflow-x: hidden">
             <div class="icon_selectable preset_icons" v-for="preset in tagPresets" :key="preset['name']"
                  @click="iconData={...preset}">
               <TagContainer :tag_input="[preset]"></TagContainer>
