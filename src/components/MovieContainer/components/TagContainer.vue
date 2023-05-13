@@ -9,7 +9,7 @@ const tag_path = "./assets/tags/icons/"
 <template>
   <div class="tag_wrapper">
     <div class="tooltip" v-for="tag in tag_input" :key="tag['name']">
-      <img class="tag_icon" :src="`${tag_path}${tag['tier']}/${tag['image']}`" :alt="tag['image']">
+      <img :class="'tag_icon ' + `${tag['tier']}_glow`" :src="`${tag_path}${tag['tier']}/${tag['image']}`" :alt="tag['image']">
       <div :class="props['screen_side'] ? 'hover_box_left' : 'hover_box'">
         <div class="description">
           <p class=tag_name>{{ tag['name'] }}</p>
@@ -138,8 +138,22 @@ export default {
 .tag_icon {
   padding: 5px;
   width: 40px;
-  filter: drop-shadow(0px 0 2px rgba(0, 0, 0, 1)) drop-shadow(0px 0 4px rgba(0, 0, 0, 1))
+  /*filter: drop-shadow(0px 0 2px rgba(0, 0, 0, 1)) drop-shadow(0px 0 4px rgba(0, 0, 0, 1))*/
 }
-
+.gold_glow {
+  filter: drop-shadow(0px 0 4px #f6df86)
+}
+.green_glow {
+  filter: drop-shadow(0px 0 4px #aace9f)
+}
+.purple_glow {
+  filter: drop-shadow(0px 0 4px #C58CC0FF)
+}
+.red_glow {
+  filter: drop-shadow(0px 0 4px #ff74a1)
+}
+.silver_glow {
+  filter: drop-shadow(0px 0 4px #a6caf8)
+}
 
 </style>

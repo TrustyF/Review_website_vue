@@ -6,6 +6,8 @@ const arrow_up_single = './assets/ui/arrow_up_single.png'
 const arrow_up_double = './assets/ui/arrow_up_double.png'
 const arrow_down_single = './assets/ui/arrow_down_single.png'
 const arrow_down_double = './assets/ui/arrow_down_double.png'
+const re_watch_down = './assets/ui/rewind_down.png'
+const re_watch_up = './assets/ui/rewind_up.png'
 
 function map_range(value, low1, high1, low2, high2) {
   return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
@@ -102,8 +104,26 @@ function calc() {
       </div>
     </div>
 
-    <div v-if="data['region']==='asian'" class="tooltip">
-      <p class="rating arrow" >X</p>
+    <div v-if="data['re_watch']==='down'" class="tooltip">
+      <img class="rating arrow" v-lazy="re_watch_down">
+      <div class="hover_box">
+        <div class="description">
+          <h1 class="tag_name">Watch listed</h1>
+          <h1 class="tag_description">I'm not too sure about the current rating, will probably be adjusted <strong> down </strong> after
+            re-watching</h1>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="data['re_watch']==='up'" class="tooltip">
+      <img class="rating arrow" v-lazy="re_watch_up" style="transform: rotate(180deg)">
+      <div class="hover_box">
+        <div class="description">
+          <h1 class="tag_name">Watch listed</h1>
+          <h1 class="tag_description">I'm not too sure about the current rating, will probably be adjusted <strong> up</strong> after
+            re-watching</h1>
+        </div>
+      </div>
     </div>
 
   </div>
