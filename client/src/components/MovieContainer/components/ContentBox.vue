@@ -1,17 +1,20 @@
 <script setup>
-import {defineProps, defineEmits, ref, watch} from 'vue'
+import {defineProps, defineEmits, ref, watch, inject} from 'vue'
 
+const devMode = inject('devMode')
 const props = defineProps(['data'])
 </script>
 
 <template>
   <div class="content">
     <p class="title" v-if="data['title']">{{ data['title'] }}</p>
-<!--    <p class="title" v-if="data['original_title']">{{ data['original_title'] }}</p>-->
-<!--    <p class="title" v-if="data['original_name']">{{ data['original_name'] }}</p>-->
     <p class="date" v-if="data['release_date']">{{ data['release_date'].split("-")[0] }}</p>
-<!--    <p class="date" v-if="data['region']">{{ data['region'] }}</p>-->
-<!--    <p class="rating">{{ data['my_rating'] + "★" }} </p>-->
+
+    <div v-if="devMode">
+<!--      <span> -&#45;&#45; </span>-->
+<!--      <p class="date" v-if="data['images']">{{ data['images']['posters'].length }}</p>-->
+<!--      <p class="date" v-if="data['date_rated']">{{ data['date_rated'] }}</p>-->
+    </div>
   </div>
 
 </template>

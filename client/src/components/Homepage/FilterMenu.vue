@@ -61,7 +61,8 @@ let filters = ref({
   'extra_settings': {
     'exclude_mode': false,
     'max_movies': 50,
-    'session_seed': sessionSeed
+    'session_seed': sessionSeed,
+    're_watch':""
   }
 })
 let state = ref(false)

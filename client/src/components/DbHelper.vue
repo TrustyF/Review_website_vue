@@ -24,11 +24,11 @@ let iconData = ref({
 
 let tagPresets = ref({})
 
-const currentSearchMovie = ref("")
-const currentSearchType = ref("movie")
-const currentSearchPage = ref(0)
-const currentPoster = ref(0)
-const presentInDb = ref(false)
+let currentSearchMovie = ref("")
+let currentSearchType = ref("movie")
+let currentSearchPage = ref(0)
+let currentPoster = ref(0)
+let presentInDb = ref(false)
 
 loadPresets()
 
@@ -38,6 +38,7 @@ watch(props, (newV, oldV) => {
 
 const availableRegions = ["western", "asian"]
 const availableTiers = ["cyan", "gold", "green", "purple", "red", "silver"]
+const availableReWatch = ["up", "down"]
 
 let throttle_search = false
 
@@ -93,7 +94,7 @@ async function searchMovie() {
 
                 // add others
                 simple_data['media_type'] = currentSearchType.value
-                simple_data['date_rated'] = new Date().toISOString().slice(0, 10)
+                // simple_data['date_rated'] = new Date().toISOString().slice(0, 10)
                 simple_data['images'] = full_data['images']
                 simple_data['runtime'] = full_data['runtime']
 
@@ -239,9 +240,16 @@ function delTagPresets() {
               <option v-for="elem in availableRegions" :key="elem" :selected="data['region']">{{ elem }}</option>
             </select>
           </form>
+          <!--      Re-watch-->
+          <label for="region">Re-watch</label>
+          <form id="region" @change="MovChanges['re_watch'] = String($event.target.value)">
+            <select>
+              <option v-for="elem in availableReWatch" :key="elem">{{ elem }}</option>
+            </select>
+          </form>
           <!--          Date rated-->
           <label for="date_rated_input">Date rated</label>
-          <input type="text" id="date_rated_input"
+          <input type="date" id="date_rated_input" :value="data['date_rated']"
                  @change="MovChanges['date_rated'] = String($event.target.value)">
 
         </div>
