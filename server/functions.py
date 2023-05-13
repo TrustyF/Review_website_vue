@@ -18,11 +18,13 @@ sorted_database = TinyDB(sorted_json_file_path)
 
 
 def get_all_movies(query):
-    # pprint.pprint(query)
+    # t0 = time.time()
     filtered = filter_movies(query)
     organized = organize(filtered, query)
     culled = cull_max_page(organized, query['extra_settings']['max_movies'])
-    return organized
+    # t1 = time.time()
+    # print('returned in ', t1 - t0)
+    return culled
 
 
 def get_recent_movie_ratings(query):
@@ -42,10 +44,6 @@ def filter_movies(query):
     sorted_movies = {}
     # print(query)
 
-    # return all if empty query
-    if not query:
-        return sorted_database.table('movies').all()
-
     rating_filters = query['rating']['filter']
     length_filters = query['length']['filter']
     genre_filters = query['genre']['filter']
@@ -53,6 +51,11 @@ def filter_movies(query):
     format_filters = query['format']['filter']
     type_filters = query['type']['filter']
     searchbar_filters = query['search_bar']
+
+    # return all if empty query
+    if not rating_filters and not length_filters and not genre_filters and not region_filters and not format_filters and not type_filters and not searchbar_filters:
+        print('query empty returning')
+        return sorted_database.table('movies').all()
 
     rating_query = ~Query().doc_id.exists()
     length_query = ~Query().doc_id.exists()
@@ -174,6 +177,7 @@ def organize(movies, query):
 
 def cull_max_page(movies, max_cull):
     max_movies = max_cull
+    # max_movies = 10
     curr_movie = 0
     culled_movies = {}
 
