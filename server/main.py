@@ -13,6 +13,11 @@ def get_movies():
     return functions.get_all_movies(request.json)
 
 
+@app.route('/get_recent_movie_ratings/', methods=["GET", "POST"])
+def get_recent_movie_ratings():
+    return functions.get_recent_movie_ratings(request.json)
+
+
 @app.route('/edit_movie/', methods=["POST"])
 def edit_movie():
     functions.edit_movie(request.json)

@@ -25,6 +25,17 @@ def get_all_movies(query):
     return organized
 
 
+def get_recent_movie_ratings(query):
+    window_width = query['window']
+    max_cards = round(window_width / 250)
+
+    arr = sorted_database.table('movies').all()
+    arr = sorted(arr, key=lambda k: k['date_rated'])
+    arr.reverse()
+
+    return arr[0:max_cards]
+
+
 def filter_movies(query):
     # output
     filtered_movies = {}
@@ -155,8 +166,8 @@ def organize(movies, query):
 
         ranked[f'rank_{rank}'] = temp
 
-        if query['sort']['filter'][0] == "":
-            random.Random(seed).shuffle(ranked[f'rank_{rank}'])
+        # if query['sort']['filter'][0] is None:
+        #     random.Random(seed).shuffle(ranked[f'rank_{rank}'])
 
     return ranked
 
