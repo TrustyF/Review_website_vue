@@ -166,8 +166,8 @@ def organize(movies, query):
 
         ranked[f'rank_{rank}'] = temp
 
-        # if query['sort']['filter'][0] is None:
-        #     random.Random(seed).shuffle(ranked[f'rank_{rank}'])
+        if query['sort']['filter'][0] is None:
+            random.Random(seed).shuffle(ranked[f'rank_{rank}'])
 
     return ranked
 
@@ -208,7 +208,9 @@ def edit_movie(query):
 
 
 def add_movie(data):
+    print('adding movie')
     if check_dupe({'text': data['title']}):
+        print('adding ', data['title'])
         sorted_database.table('movies').insert(data)
     else:
         print('movie already found! not added')
@@ -233,7 +235,8 @@ def del_preset(data):
 
 
 def check_dupe(data):
-    title_query = Query().title == str(data['text'])
+    print('checking dupe ', data)
+    title_query = Query().title.matches(str(data['text']))
     entries = sorted_database.table('movies').search(title_query)
 
     if len(entries) > 0:
