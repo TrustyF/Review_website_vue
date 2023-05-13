@@ -108,7 +108,6 @@ function editMovie(input) {
 .movie_grid {
   /*outline: 3px solid blue;*/
   width: 100%;
-
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
