@@ -18,6 +18,8 @@ const settingsOpen = ref(false)
 const screenRect = ref(null)
 const screenSide = ref(false)
 
+const golden = ref(false)
+
 function timeConvert(n) {
   const hours = (n / 60);
   const rhours = Math.floor(hours);
@@ -41,8 +43,23 @@ function calcScreenSide() {
   screenSide.value = rect.right > (screen[0] / 2);
 }
 
+function calcGolden(){
+  if (props.data['tags'] !== undefined){
+    let numGold = 0
+    props.data['tags'].forEach(tag =>{
+      if (tag['tier'] === "gold"){
+        numGold ++
+      }
+    })
+    if (numGold >= 3){
+      golden.value = true
+    }
+  }
+}
+
 onMounted(() => {
   calcScreenSide()
+  calcGolden()
   window.addEventListener('resize', calcScreenSide)
 })
 
@@ -52,7 +69,7 @@ onUnmounted(()=>{
 
 </script>
 <template>
-  <div ref="screenRect" class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [isSeen ? ' seen' : '']">
+  <div ref="screenRect" class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [golden ? ' gold_glow' : '' ]">
     <div class="main_block">
       <div class="gradient_fill"></div>
 
@@ -216,8 +233,13 @@ export default {
   width: 200px;
   position: absolute;
   height:300px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 80%, rgba(0, 0, 0, 0.5) 100%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 85%, rgba(0, 0, 0, 0.5) 100%);
+  /*border-radius: 8px;*/
   pointer-events: none;
+}
+
+.gold_glow {
+  box-shadow: 0 0 8px rgb(0, 0, 0),0 0 16px rgb(255, 204, 109);
 }
 
 

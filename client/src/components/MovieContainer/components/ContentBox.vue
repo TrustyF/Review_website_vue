@@ -1,26 +1,32 @@
 <script setup>
-import {defineProps, defineEmits, ref, watch, inject} from 'vue'
+import {defineProps, defineEmits, onMounted, ref, watch, inject} from 'vue'
 
 const devMode = inject('devMode')
 const props = defineProps(['data'])
 
-let overflowTitleLength = '-100%'
+let overflowTitleLength = ref()
+let overflowTitleSpeed = ref()
+const titleRef = ref()
 
 function calcTitleOverflow() {
-  if (props.data['title'].length > 10) {
-    overflowTitleLength = 100
+  const text_len = props.data['title'].length
+  const text_size = titleRef.value.clientWidth/text_len
+  if (text_len > 30) {
+    overflowTitleLength.value = `-${(text_len - 30) * text_size}px`
+    overflowTitleSpeed.value = `${ ((text_len - 30) * text_size) / 80}s`
   }
 }
 
-// calcTitleOverflow()
+onMounted(() => {
+  calcTitleOverflow()
+})
 
 </script>
 
 <template>
   <div class="content">
-    <p class="title" v-if="data['title']">{{ data['title'] }}</p>
+    <p class="title" ref="titleRef" v-if="data['title']">{{ data['title'] }}</p>
     <p class="date" v-if="data['release_date']">{{ data['release_date'].split("-")[0] }}</p>
-
     <div v-if="devMode">
       <!--      <span> -&#45;&#45; </span>-->
       <!--      <p class="date" v-if="data['images']">{{ data['images']['posters'].length }}</p>-->
@@ -54,11 +60,12 @@ export default {
   margin: 0;
   white-space: nowrap;
   transition: linear;
+  cursor: default;
 }
 
 .title:hover {
   transform: translate(v-bind('overflowTitleLength'));
-  transition: linear 10s;
+  transition: linear v-bind('overflowTitleSpeed');
 }
 
 .date, .rating {
