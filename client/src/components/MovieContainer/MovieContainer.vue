@@ -15,8 +15,7 @@ const isSeen = ref(false)
 const outOfFocus = ref(false)
 const settingsOpen = ref(false)
 
-let golden = false
-let tagAmount = "50px"
+let tagAmount = ref(0)
 
 function timeConvert(n) {
   const hours = (n / 60);
@@ -34,32 +33,17 @@ function emitSelectedMovie(input) {
   emits('MovieEdit', props['data'])
 }
 
-function calcGolden() {
-  if (props.data['tags'] !== undefined) {
-    let numGold = 0
-    props.data['tags'].forEach(tag => {
-      if (tag['tier'] === "gold") {
-        numGold++
-      }
-    })
-    if (numGold >= 3) {
-      golden = true
-    }
-  }
-}
-
 function calcTagAmount(){
   if (props.data['tags'] !== undefined) {
-    tagAmount = props.data['tags'].length
+    tagAmount.value = props.data['tags'].length
   }
 }
 
-calcGolden()
 calcTagAmount()
 
 </script>
 <template>
-  <div class="movie_container" :class="[isOpen ? 'open' : 'closed'] + [golden ? ' gold_glow' : '' ]">
+  <div class="movie_container" :class="[isOpen ? 'open' : 'closed']">
     <div class="main_block">
 
       <div class="gradient_fill"></div>
@@ -184,28 +168,6 @@ export default {
 
 .overview {
   padding: 10px;
-}
-
-.seen_block_cover {
-  border-radius: 8px;
-  /*outline: 1px red solid;*/
-
-  padding: 20px 20px 20px 20px;
-  position: absolute;
-
-  width: 160px;
-  height: 313px;
-
-  background-color: rgba(255, 255, 255, 0.85);
-
-  visibility: hidden;
-  opacity: 0;
-  transition: all 0.5s;
-}
-
-.seen .seen_block_cover {
-  visibility: visible;
-  opacity: 1;
 }
 
 .heading {

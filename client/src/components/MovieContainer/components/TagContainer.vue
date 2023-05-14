@@ -157,6 +157,7 @@ export default {
 .tag_description {
   font-size: 1.2em;
   color: rgba(0, 0, 0, 0.6);
+  line-height: 15px;
 }
 
 .tag_icon {

@@ -1,5 +1,5 @@
 <script setup>
-import {defineProps, defineEmits, ref, watch, onMounted, computed, inject} from 'vue'
+import {defineProps, defineEmits, ref, watch, onMounted, onUnmounted, computed, inject} from 'vue'
 import TagContainer from "@/components/MovieContainer/components/TagContainer";
 import asset_paths from '../../public/assets/tags/assets.json'
 import MovieContainer from "@/components/MovieContainer/MovieContainer";
@@ -12,7 +12,7 @@ const tag_path = "./assets/tags/icons/"
 import axios from 'axios'
 
 const props = defineProps(['data', 'open'])
-const emits = defineEmits(['closed'])
+const emits = defineEmits(['opened', 'closed'])
 
 let MovChanges = ref({'title': 'test', 'my_rating': '0'})
 let iconData = ref({
@@ -36,7 +36,7 @@ watch(props, (newV, oldV) => {
   MovChanges.value = newV.data
 })
 
-const availableRegions = ["western", "asian"]
+const availableRegions = ["none","western", "asian"]
 const availableTiers = ["cyan", "gold", "green", "purple", "red", "silver"]
 const availableReWatch = ["none", "up", "down"]
 
@@ -282,7 +282,7 @@ function delTagPresets() {
 
           </div>
 
-          <div class="icon_selector box_wrapper"  style="overflow-x: hidden">
+          <div class="icon_selector box_wrapper" style="overflow-x: hidden">
             <div class="icon_selectable preset_icons" v-for="preset in tagPresets" :key="preset['name']"
                  @click="iconData={...preset}">
               <TagContainer :tag_input="[preset]"></TagContainer>
@@ -329,13 +329,10 @@ export default {
 
 <style scoped>
 .main_win {
-  outline: 1px solid red;
+  /*outline: 1px solid red;*/
   position: fixed;
 
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   margin: auto;
 
   display: flex;
@@ -347,15 +344,12 @@ export default {
 }
 
 .background_blackout {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: fixed;
+  inset: 0;
   width: 100%;
   height: 100%;
   /*outline: 1px solid red;*/
-  z-index: 25;
+  z-index: 205;
   background-color: rgba(0, 0, 0, 75%);
 }
 
