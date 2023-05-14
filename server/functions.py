@@ -1,260 +1,29 @@
-import json
-import os
-from flask import jsonify, Request
-from tinydb import TinyDB, Query, where, operations
 from datetime import datetime
-import csv
-import time
-import re
 import random
-import urllib.request
-import json
-import pprint
 
 
-class Media:
-
-    def __init__(self, media_type):
-        my_dir = os.path.dirname(__file__)
-        sorted_json_file_path = os.path.join(my_dir, f'database/{media_type}_db.json')
-        self.sorted_database = TinyDB(sorted_json_file_path)
-        pass
+# sorts
+def sort_by_my_rating(f_arr):
+    return sorted(f_arr, key=lambda k: k['my_rating'], reverse=True)
 
 
-# def get_all_movies(query):
-#     print(query)
-#     # t0 = time.time()
-#     filtered = filter_movies(query)
-#     organized = organize(filtered, query)
-#     culled = cull_max_page(organized, query['extra_settings']['max_movies'])
-#     # t1 = time.time()
-#     # print('returned in ', t1 - t0)
-#     return culled
-#
-#
-# def get_recent_movie_ratings(query):
-#     window_width = query['window']
-#     max_cards = round(window_width / 250)
-#
-#     arr = sorted_database.table(query['extra_settings']['media_type']).all()
-#     arr = sorted(arr, key=lambda k: k['date_rated'])
-#     arr.reverse()
-#
-#     return arr[0:max_cards]
-#
-#
-# def filter_movies(query):
-#     media_type = query['extra_settings']['media_type']
-#     # output
-#     filtered_movies = {}
-#     sorted_movies = {}
-#     # print(query)
-#
-#     rating_filters = query['rating']['filter']
-#     length_filters = query['length']['filter']
-#     genre_filters = query['genre']['filter']
-#     region_filters = query['region']['filter']
-#     format_filters = query['format']['filter']
-#     type_filters = query['type']['filter']
-#     searchbar_filters = query['search_bar']
-#
-#     # return all if empty query
-#     if not rating_filters and not length_filters and not genre_filters and not region_filters and not format_filters and not type_filters and not searchbar_filters:
-#         print('query empty returning')
-#         return sorted_database.table(media_type).all()
-#
-#     rating_query = ~Query().doc_id.exists()
-#     length_query = ~Query().doc_id.exists()
-#     genre_query = ~Query().doc_id.exists()
-#     region_query = ~Query().doc_id.exists()
-#     format_query = ~Query().doc_id.exists()
-#     type_query = ~Query().doc_id.exists()
-#     searchbar_query = ~Query().doc_id.exists()
-#
-#     # filter type
-#     for type_filter in type_filters:
-#         match type_filter:
-#             case "Movie":
-#                 type_query = Query().media_type == "movie"
-#
-#             case "Tv-series":
-#                 type_query = Query().media_type == "tv"
-#
-#             # case "Anime":
-#             #     type_query = Query().media_type == "anime"
-#
-#             case "Documentary":
-#                 type_query = Query().genres.any("Documentary")
-#
-#     # filter format
-#     for format_filter in format_filters:
-#         match format_filter:
-#             case "Live-action":
-#                 format_query = ~Query().genres.any("Animation")
-#
-#             case "Animated":
-#                 format_query = Query().genres.any("Animation")
-#
-#     # filter region
-#     for region_filter in region_filters:
-#         match region_filter:
-#             case "western":
-#                 region_query = ~Query().region.any("asian")
-#
-#             case "asian":
-#                 region_query = Query().region.any("western")
-#
-#     # filter genre
-#     if len(genre_filters) > 0:
-#         genre_query = Query().genres.all(genre_filters)
-#
-#     #  filter rating
-#     if len(rating_filters) > 0:
-#         rating_query = Query().my_rating.any(rating_filters)
-#
-#     # filter length
-#     for length_filter in length_filters:
-#         # ignore tv
-#         type_query = Query().media_type != "tv"
-#
-#         match length_filter:
-#             case "0":
-#                 length_query = Query().runtime <= 60
-#             case "1":
-#                 length_query = Query().runtime <= 120
-#             case "2":
-#                 length_query = 120 < Query().runtime < 180
-#             case "3":
-#                 length_query = Query().runtime >= 180
-#
-#     # filter searchbar
-#     # print(searchbar_filters)
-#     if len(searchbar_filters) > 0:
-#         searchbar_query = Query().title.test(lambda val: re.search(searchbar_filters, val, re.IGNORECASE))
-#
-#     #  apply queries
-#     return sorted_database.table(media_type).search(
-#         type_query &
-#         format_query &
-#         region_query &
-#         genre_query &
-#         rating_query &
-#         length_query &
-#         searchbar_query
-#     )
-#
-#
-# def organize(movies, query):
-#     seed = query['extra_settings']['session_seed']
-#
-#     # print(query['sort'])
-#
-#     def organize_rating(arr):
-#         return [mov for mov in arr if mov['my_rating'] == str(rank)]
-#
-#     def organize_avg_rating(arr):
-#         # print('average rating')
-#         arr = sorted(arr, key=lambda k: k['vote_average'])
-#         arr.reverse()
-#         return arr
-#
-#     def organize_date_rated(arr):
-#         arr = sorted(arr, key=lambda k: datetime.strptime(k['date_rated'], '%Y-%m-%d'))
-#         arr.reverse()
-#         return arr
-#
-#     ranked = {}
-#     if len(movies) < 1:
-#         return ranked
-#
-#     for rank in range(1, 10):
-#         temp = organize_rating(movies)
-#
-#         match query['sort']['filter'][0]:
-#             case '0':
-#                 temp = organize_avg_rating(temp)
-#             case '1':
-#                 temp = organize_date_rated(temp)
-#
-#         ranked[f'rank_{rank}'] = temp
-#
-#         if query['sort']['filter'][0] is None:
-#             random.Random(seed).shuffle(ranked[f'rank_{rank}'])
-#
-#     return ranked
-#
-#
-# def cull_max_page(movies, max_cull):
-#     max_movies = max_cull
-#     # max_movies = 10
-#     curr_movie = 0
-#     culled_movies = {}
-#
-#     # print(movies)
-#
-#     for rank in reversed(movies):
-#
-#         if rank not in culled_movies:
-#             culled_movies[rank] = []
-#
-#         for mov in movies[rank]:
-#             # pprint.pprint(mov)
-#             culled_movies[rank].append(mov)
-#             curr_movie += 1
-#
-#             if curr_movie >= max_movies:
-#                 break
-#
-#         if curr_movie >= max_movies:
-#             break
-#
-#     return culled_movies
-#
-#
-# def edit_movie(query):
-#     # print('query', query)
-#     old_data = query['oldData']
-#     new_data = query['newData']
-#
-#     title_query = Query().id == int(old_data['id'])
-#     sorted_database.table(query['extra_settings']['media_type']).update(new_data, title_query)
-#
-#
-# def add_movie(data):
-#     print('adding movie', data)
-#     if check_dupe(data):
-#         print('adding ', data['title'])
-#         sorted_database.table(data['media_type']).insert(data)
-#     else:
-#         print('movie already found! not added')
-#
-#
-# def del_movie(data):
-#     sorted_database.table(data['extra_settings']['media_type']).remove(Query().id == int(data['id']))
-#
-#
-# def get_all_presets():
-#     presets = (sorted_database.table('tag_presets').all())
-#     sorted_presets = sorted(presets, key=lambda d: d['tier'])
-#     return sorted_presets
-#
-#
-# def add_preset(data):
-#     sorted_database.table('tag_presets').insert(data)
-#
-#
-# def del_preset(data):
-#     sorted_database.table('tag_presets').remove(Query().name == str(data['name']))
-#
-#
-# def check_dupe(data):
-#     print('checking dupe ', data['title'])
-#     title_query = Query().title.matches(str(data['title']))
-#     entries = sorted_database.table(data['media_type']).search(title_query)
-#
-#     if len(entries) > 0:
-#         state = True
-#     else:
-#         state = False
-#
-#     return state
+def sort_by_avg_rating(f_arr):
+    return sorted(f_arr, key=lambda k: k['vote_average'], reverse=True)
+
+
+def sort_by_date_rated(f_arr):
+    return sorted(f_arr, key=lambda k: datetime.strptime(k['date_rated'], '%Y-%m-%d'), reverse=True)
+
+
+def sort_randomize(f_arr, f_seed):
+    return random.Random(f_seed).shuffle(f_arr)
+
+
+# rank
+def place_in_rank_category(f_arr, f_rank_range):
+    ranked = {}
+
+    for rank in range(f_rank_range[0], f_rank_range[1]):
+        ranked[rank] = [mov for mov in f_arr if mov['my_rating'] == str(rank)]
+
+    return ranked
