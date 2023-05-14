@@ -82,7 +82,7 @@ let settingsOpen = ref(false)
 let scrollPosition = 0
 
 onMounted(() => {
-  get_recent_ratings()
+  // get_recent_ratings()
   update_movies()
 })
 
@@ -92,9 +92,9 @@ watch(settingsOpen, (newV, oldV) => {
 
 function update_movies() {
   // console.log('updating movies')
-  axios.post(`${current_api}/get_movies/`, filters.value)
+  axios.post(`${current_api}/get_media/`, filters.value)
       .then(response => {
-        // console.log("response", response)
+        console.log("response", response)
         movies.value = response.data
         servStatus.value = response.status
       })
@@ -148,7 +148,7 @@ function settingsOpened() {
 
     <div class="movie_grid" v-for="rating in [9,8,7,6,5,4,3,2,1]" :key="rating">
       <rating-header :rating="rating"></rating-header>
-      <div class="movie_container_wrapper" v-for="mov in movies[`rank_${rating}`]" :key="mov.title">
+      <div class="movie_container_wrapper" v-for="mov in movies[rating]" :key="mov.title">
         <MovieContainer :key="mov.id" :data="mov" @MovieEdit="editMovie"></MovieContainer>
       </div>
     </div>

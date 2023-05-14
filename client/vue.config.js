@@ -5,5 +5,10 @@ module.exports = defineConfig({
     transpileDependencies: true
 })
 module.exports = {
-    publicPath: ''
+    publicPath: '',
+    configureWebpack: {
+        devServer: {
+            historyApiFallback: true
+        }
+    }
 }
