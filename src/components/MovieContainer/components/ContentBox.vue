@@ -9,6 +9,8 @@ let overflowTitleSpeed = ref()
 const titleRef = ref()
 
 function calcTitleOverflow() {
+  if(props.data['title'] === undefined) return
+
   const text_len = props.data['title'].length
   const text_size = titleRef.value.clientWidth/text_len
   if (text_len > 30) {

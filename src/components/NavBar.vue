@@ -6,7 +6,7 @@ import {RouterLink} from "vue-router";
   <nav>
     <ul>
       <li><RouterLink active-class="active" class="link" to="/">Movies</RouterLink></li>
-<!--      <li><RouterLink active-class="active" class="link" to="/helper">Db Helper</RouterLink></li>-->
+      <li><RouterLink active-class="active" class="link" to="/manga">Manga</RouterLink></li>
     </ul>
   </nav>
 </template>

@@ -1,70 +1,14 @@
 <script setup>
-import {defineProps, defineEmits, ref, onMounted, watch, inject} from 'vue'
+import {defineProps, defineEmits, ref, watchEffect, onMounted, watch, toRefs, inject} from 'vue'
 import {Collapse} from 'vue-collapsed'
 import filterButton from '/public/assets/ui/filter_button.png'
 import crossButton from '/public/assets/ui/cross_button.png'
 
-const sessionSeed = inject('sessionSeed')
+let props = defineProps(['props'])
+const emits = defineEmits(['filtersChange'])
 
-const props = defineProps(['props'])
-const emits = defineEmits(['filters'])
-let filters = ref({
-  'type': {
-    'name': 'Type',
-    'available': ["Movie", "Tv-series", "Documentary"],
-    'display': ["Movie", "Tv-series", "Documentary"],
-    'filter': [],
-    'checkbox': true,
-  },
-  'format': {
-    'name': 'Format',
-    'available': ["Live-action", "Animated"],
-    'display': ["Filmed", "Animated"],
-    'filter': [],
-    'checkbox': false,
-  },
-  'region': {
-    'name': 'Region',
-    'available': ["western", "asian"],
-    'display': ["Western", "Asian"],
-    'filter': [],
-    'checkbox': false,
-  },
-  'genre': {
-    'name': 'Genre',
-    'available': ["Action", "Adventure", "Crime", "Comedy", "Drama", "Family", "Horror", "Mystery", "Romance", "Science Fiction", "Thriller"],
-    'display': ["Action", "Adventure", "Crime", "Comedy", "Drama", "Family", "Horror", "Mystery", "Romance", "Science Fiction", "Thriller"],
-    'filter': [],
-    'checkbox': true
-  },
-  'rating': {
-    'name': 'Rating',
-    'available': ["9", "8", "7", "6", "5", "4", "3", "2", "1"],
-    'display': ["9★", "8★", "7★", "6★", "5★", "4★", "3★", "2★", "1★"],
-    'filter': [],
-    'checkbox': true
-  },
-  'length': {
-    'name': 'Length',
-    'available': ["0", "1", "2", "3"],
-    'display': ["-1 hour", "1-2 hours", "2-3 hours", "3+ hours"],
-    'filter': [],
-    'checkbox': true
-  },
-  'sort': {
-    'name': 'Sort',
-    'available': ["0", "1"],
-    'display': ["Popular vote", "Date rated"],
-    'filter': [null],
-  },
-  'search_bar': "",
-  'extra_settings': {
-    'exclude_mode': false,
-    'max_movies': 50,
-    'session_seed': sessionSeed,
-    're_watch':""
-  }
-})
+let filters = toRefs(props)
+
 let state = ref(false)
 
 let throttle_search = false
@@ -77,7 +21,7 @@ let searchBarRef = ref()
 
 function swap_filter(filter, target, checkbox, button) {
 
-  console.log('swapping filter', filter, target, checkbox, button)
+  // console.log('swapping filter', filter, target, checkbox, button)
 
   if (target.includes(filter) === false) {
     if (checkbox === true) {
@@ -96,8 +40,8 @@ function swap_filter(filter, target, checkbox, button) {
       button.target.checked = false
     }
   }
-  filters.value['extra_settings']['max_movies'] = 50
-  emits('filters', filters.value)
+  filters['extra_settings']['max_movies'] = 50
+  emits('filtersChange', filters)
 }
 
 function search_bar(event) {
@@ -107,8 +51,8 @@ function search_bar(event) {
     throttle_search = true
 
     timeOutId = setTimeout(function () {
-      filters.value['search_bar'] = event
-      emits('filters', filters.value)
+      filters['search_bar'] = event
+      emits('filtersChange', filters)
       throttle_search = false
     }, 500)
 
@@ -116,8 +60,8 @@ function search_bar(event) {
 
   if (event === "") {
     clearTimeout(timeOutId)
-    filters.value['search_bar'] = event
-    emits('filters', filters.value)
+    filters['search_bar'] = event
+    emits('filtersChange', filters)
     throttle_search = false
   }
 }
@@ -134,11 +78,11 @@ function handleScroll() {
       fetch_more_movies = false
     }, 500)
 
-    console.log('fetching movies busy', fetch_more_movies)
+    // console.log('fetching movies busy', fetch_more_movies)
     scrollAtBottom.value = true
     filters.value['extra_settings']['max_movies'] += 50
-    emits('filters', filters.value)
-    console.log('requesting more movies')
+    emits('filtersChange', filters.value)
+    // console.log('requesting more movies')
 
   } else {
     scrollAtBottom.value = false
@@ -146,7 +90,7 @@ function handleScroll() {
 }
 
 onMounted(() => {
-  emits('filters', filters.value)
+  filters = filters.props.value
   window.addEventListener('scroll', handleScroll)
 })
 
@@ -166,16 +110,13 @@ onMounted(() => {
            style="margin-left: -30px; width: 15px; padding: 5px; margin-bottom: 1px">
     </div>
 
-    <!--    <div class="dark_mode_switch">-->
-    <!--      <button type="button" @click="darkMode = !darkMode">enable dark mode</button>-->
-    <!--    </div>-->
-
   </div>
 
   <Collapse :when="state" class="collapse">
     <div class="filter_wrapper">
       <div class="filters">
         <div class="filter_types" v-for="elem in filters" :key="elem['name']">
+          <p>{{ props.value }}</p>
           <h1 class="filter_heading">{{ elem['name'] }}</h1>
           <div v-for="(filter,index) in elem['available']" :key="filter" class="filter_content_list">
             <label class="filter_label">
