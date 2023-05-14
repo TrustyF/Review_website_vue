@@ -4,7 +4,7 @@ import MovieContainer from "@/components/MovieContainer/MovieContainer";
 import DbHelper from "@/components/DbHelper";
 import FilterMenu from "@/components/Homepage/FilterMenu";
 import RatingHeader from "@/components/Homepage/RatingHeader";
-import {inject} from 'vue'
+import {inject, watch} from 'vue'
 
 import axios from 'axios'
 import {ref, onMounted} from 'vue'
@@ -26,9 +26,14 @@ let recentRatings = ref({})
 
 const servStatus = ref(0)
 let settingsOpen = ref(false)
+let scrollPosition = 0
 
 onMounted(() => {
   get_recent_ratings()
+})
+
+watch(settingsOpen, (newV, oldV) => {
+  settingsOpened()
 })
 
 function update_movies(input = {}) {
@@ -54,11 +59,23 @@ function editMovie(input) {
   currentSelectedMovie.value = input
 }
 
+function settingsOpened() {
+
+  if (settingsOpen.value === false) {
+    document.getElementsByClassName('feed')[0].style.position = 'relative'
+    document.getElementsByClassName('feed')[0].style.overflowY = 'auto'
+    window.scrollTo({top: scrollPosition, behavior: 'instant'})
+  } else {
+    scrollPosition = window.scrollY;
+    document.getElementsByClassName('feed')[0].style.position = 'fixed'
+    document.getElementsByClassName('feed')[0].style.overflowY = 'hidden'
+  }
+}
 
 </script>
 <template>
   <db-helper v-if="devMode" :data="currentSelectedMovie" :open="settingsOpen"
-             @closed="settingsOpen=!settingsOpen"></db-helper>
+             @closed="settingsOpen = !settingsOpen"></db-helper>
 
   <FilterMenu @filters="update_movies"></FilterMenu>
 
