@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from "vue-router";
 
 import HomePage from '@/pages/HomePage'
+import MangaPage from "@/pages/MangaPage";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -9,6 +10,11 @@ const router = createRouter({
             path: "/",
             name: "home",
             component: HomePage
+        },
+        {
+            path: "/manga",
+            name: "manga",
+            component: MangaPage
         },
     ]
 })
