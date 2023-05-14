@@ -33,7 +33,7 @@ function emitSelectedMovie(input) {
   emits('MovieEdit', props['data'])
 }
 
-function calcTagAmount() {
+function calcTagAmount(){
   if (props.data['tags'] !== undefined) {
     tagAmount.value = props.data['tags'].length
   }
@@ -48,8 +48,7 @@ calcTagAmount()
 
       <div class="gradient_fill"></div>
       <div class="tag_gradient_wrapper">
-        <div
-            :class="'tag_gradient_background' + [tagAmount===1 ? ' one_tag' : ''] + [tagAmount===2 ? ' two_tag' : ''] + [tagAmount===3 ? ' three_tag' : '']"></div>
+        <div :class="'tag_gradient_background' + [tagAmount===1 ? ' one_tag' : ''] + [tagAmount===2 ? ' two_tag' : ''] + [tagAmount===3 ? ' three_tag' : '']"></div>
       </div>
 
       <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"></RatingBumper>
@@ -59,7 +58,8 @@ calcTagAmount()
       <div v-if="devMode" class="settings">
         <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
       </div>
-      <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
+
+      <img v-if="data['poster_path']" v-lazy="`https://uploads.mangadex.org/covers/${data['poster_path']}.256.jpg`"
            class="poster" alt="poster"
            v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
 
@@ -211,15 +211,12 @@ export default {
   background-color: rgba(0, 0, 0, 0.9);
   filter: blur(20px);
 }
-
 .one_tag {
   height: 50px;
-}
-
+  }
 .two_tag {
   height: 130px;
 }
-
 .three_tag {
   height: 190px;
 }

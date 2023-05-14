@@ -9,6 +9,7 @@ const server_api = "https://trustyfox.pythonanywhere.com"
 const devMode = true
 const sessionSeed = Math.random()
 
+
 const app = createApp(App)
 
 app.provide('curr_api', devMode ? local_api : server_api)

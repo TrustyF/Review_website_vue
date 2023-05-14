@@ -3,6 +3,7 @@ import {defineProps, defineEmits, ref, watch, onMounted, onUnmounted, computed, 
 import TagContainer from "@/components/MovieContainer/components/TagContainer";
 import asset_paths from '../../public/assets/tags/assets.json'
 import MovieContainer from "@/components/MovieContainer/MovieContainer";
+import MangaContainer from "@/components/MovieContainer/MangaContainer";
 
 const apiKey = '063ccf740a391dee9759aaa3564661c2'
 const current_api = inject('curr_api')
@@ -10,8 +11,9 @@ const current_api = inject('curr_api')
 const tag_path = "./assets/tags/icons/"
 
 import axios from 'axios'
+import MangaPage from "@/pages/MangaPage";
 
-const props = defineProps(['data', 'open'])
+const props = defineProps(['data', 'open', 'mediaType'])
 const emits = defineEmits(['opened', 'closed'])
 
 let MovChanges = ref({'title': 'test', 'my_rating': '0'})
@@ -25,18 +27,18 @@ let iconData = ref({
 let tagPresets = ref({})
 
 let currentSearchMovie = ref("")
-let currentSearchType = ref("movie")
+let currentSearchType = ref(props['mediaType'])
 let currentSearchPage = ref(0)
 let currentPoster = ref(0)
 let presentInDb = ref(false)
 
-loadPresets()
+// loadPresets()
 
 watch(props, (newV, oldV) => {
   MovChanges.value = newV.data
 })
 
-const availableRegions = ["none","western", "asian"]
+const availableRegions = ["none", "western", "asian"]
 const availableTiers = ["cyan", "gold", "green", "purple", "red", "silver"]
 const availableReWatch = ["none", "up", "down"]
 
@@ -72,54 +74,119 @@ async function searchMovie() {
 
   throttle_search = true
   // console.log('searching', search_text)
-  setTimeout(async function () {
-    MovChanges.value = await axios.get(`https://api.themoviedb.org/3/search/${currentSearchType.value}?api_key=${apiKey}&language=en-US&query=${search_text}`)
-        .then(response => {
 
-          if (response.data['results'].length < 1) {
-            throttle_search = false
-            return
-          }
+  if (currentSearchType.value === 'movie' || currentSearchType.value === 'tv') {
+    setTimeout(async function () {
+      MovChanges.value = await axios.get(`https://api.themoviedb.org/3/search/${currentSearchType.value}?api_key=${apiKey}&language=en-US&query=${search_text}`)
+          .then(response => {
 
-          let simple_data = response.data['results'][currentSearchPage.value]
+            if (response.data['results'].length < 1) {
+              throttle_search = false
+              return
+            }
 
-          return axios.get(`https://api.themoviedb.org/3/${currentSearchType.value}/${simple_data['id']}?api_key=${apiKey}&language=en-US&append_to_response=credits,images&include_image_language=en,null`)
+            let simple_data = response.data['results'][currentSearchPage.value]
+
+            return axios.get(`https://api.themoviedb.org/3/${currentSearchType.value}/${simple_data['id']}?api_key=${apiKey}&language=en-US&append_to_response=credits,images&include_image_language=en,null`)
+                .then(response => {
+                  const full_data = response.data
+                  // console.log('full_data', full_data)
+
+                  //replace genres
+                  simple_data['genres'] = full_data['genres'].map(a => a.name)
+                  delete simple_data['genre_ids']
+
+                  // add others
+                  simple_data['media_type'] = currentSearchType.value
+                  // simple_data['date_rated'] = new Date().toISOString().slice(0, 10)
+                  simple_data['images'] = full_data['images']
+                  simple_data['runtime'] = full_data['runtime']
+
+                  // tv exceptions
+                  if (currentSearchType.value === 'tv') {
+
+                    simple_data['title'] = full_data['name']
+                    delete simple_data['name']
+
+                    simple_data['release_date'] = full_data['first_air_date']
+                    delete simple_data['first_air_date']
+                  }
+
+                  // console.log(simple_data)
+                  throttle_search = false
+                  return simple_data
+                })
+          })
+
+      presentInDb.value = await axios.post(`${current_api}/check_dupe/`, {
+        'text': MovChanges.value['title'],
+        'media_type': 'movies'
+      })
+          .then(response => {
+            if (response.statusText === 'True') return true
+            if (response.statusText === 'False') return false
+          })
+    }, 300)
+  }
+
+  if (currentSearchType.value === 'manga') {
+
+    setTimeout(async function () {
+          // console.log('searching manga')
+          MovChanges.value = await axios.get(`https://api.mangadex.org/manga?title=${search_text}&includes[]=cover_art`)
               .then(response => {
-                const full_data = response.data
-                // console.log('full_data', full_data)
 
-                //replace genres
-                simple_data['genres'] = full_data['genres'].map(a => a.name)
-                delete simple_data['genre_ids']
-
-                // add others
-                simple_data['media_type'] = currentSearchType.value
-                // simple_data['date_rated'] = new Date().toISOString().slice(0, 10)
-                simple_data['images'] = full_data['images']
-                simple_data['runtime'] = full_data['runtime']
-
-                // tv exceptions
-                if (currentSearchType.value === 'tv') {
-
-                  simple_data['title'] = full_data['name']
-                  delete simple_data['name']
-
-                  simple_data['release_date'] = full_data['first_air_date']
-                  delete simple_data['first_air_date']
+                if (response.data.data.length < 1) {
+                  throttle_search = false
+                  return
                 }
 
-                // console.log(simple_data)
-                throttle_search = false
-                return simple_data
-              })
-        })
+                let simple_data = response.data.data[currentSearchPage.value]['attributes']
+                let all_data = response.data.data[currentSearchPage.value]
+                let formatted_data = {}
+                console.log(simple_data)
+                console.log(all_data)
 
-    presentInDb.value = await axios.post(`${current_api}/check_dupe/`, {'text': MovChanges.value['title']})
-        .then(response => {
-          if (response.statusText === 'True') return true
-          if (response.statusText === 'False') return false
-        })
-  }, 300)
+                formatted_data['title'] = simple_data['title']['en']
+                formatted_data['manga_id'] = all_data['id']
+                formatted_data['release_date'] = simple_data['createdAt'].split("T")[0]
+                formatted_data['overview'] = simple_data['description']['en']
+                formatted_data['links'] = simple_data['links']
+                formatted_data['media_type'] = 'manga'
+                formatted_data['genres'] = []
+                formatted_data['genres'] = simple_data['tags'].map((elem) => {
+                  if (elem['attributes']['group'] === 'genre') {
+                    return elem['attributes']['name']['en']
+                  }
+                }).filter(Boolean)
+
+                formatted_data['images'] = {'posters': []}
+
+
+                console.log('returned formatted', formatted_data)
+                throttle_search = false
+                return formatted_data
+              })
+
+          await axios.get(`https://api.mangadex.org/cover?limit=50&manga%5B%5D=${MovChanges.value['manga_id']}`)
+              .then(response => {
+                console.log('covers', response.data.data)
+                MovChanges.value['images']['posters'] = response.data.data.map((elem) => {
+                  return {'file_path': `${MovChanges.value['manga_id']}/${elem['attributes']['fileName']}`}
+                })
+                MovChanges.value['poster_path'] = MovChanges.value['images']['posters'][0]['file_path']
+              })
+
+          presentInDb.value = await axios.post(`${current_api}/check_dupe/`, MovChanges.value)
+              .then(response => {
+                if (response.statusText === 'True') return true
+                if (response.statusText === 'False') return false
+              })
+        },
+        300
+    )
+  }
+
 }
 
 function addMovie(button) {
@@ -199,14 +266,19 @@ function delTagPresets() {
         <div class="poster_box" style="width: 9vw"
              v-for="(poster,index) in MovChanges['images']['posters']"
              :key="index">
-          <img v-lazy="`https://image.tmdb.org/t/p/w500${poster['file_path']}`"
+          <img v-if="currentSearchType === 'movies'" v-lazy="`https://image.tmdb.org/t/p/w500${poster['file_path']}`"
+               @click="changePoster(index)" style="width: 100%;">
+          <img v-if="currentSearchType === 'manga'"
+               v-lazy="`https://uploads.mangadex.org/covers/${poster['file_path']}.256.jpg`"
                @click="changePoster(index)" style="width: 100%;">
         </div>
       </div>
 
       <div class="metadata_wrapper box_wrapper">
 
-        <MovieContainer class="preview_movie" v-if="MovChanges" :data="MovChanges"></MovieContainer>
+        <MovieContainer class="preview_movie" v-if="currentSearchType==='movies'" :data="MovChanges"></MovieContainer>
+        <MangaContainer class="preview_movie" v-if="currentSearchType==='manga'" :data="MovChanges"></MangaContainer>
+
 
         <div class="movie_adder box_wrapper">
 
@@ -217,7 +289,10 @@ function delTagPresets() {
           <label for="type">Type</label>
           <form id="type" @change="currentSearchType = String($event.target.value)">
             <select>
-              <option v-for="elem in ['movie','tv']" :key="elem">{{ elem }}</option>
+              <option v-for="elem in ['none','movie','manga']" :key="elem" :selected="props['mediaType']">{{
+                  elem
+                }}
+              </option>
             </select>
           </form>
 
