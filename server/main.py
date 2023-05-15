@@ -1,33 +1,39 @@
 from flask import Flask, Request, request, Response
 from flask_cors import CORS
 
-import storage
+from storage import store
 
 app = Flask(__name__)
 CORS(app)
 
 
 # routes
-@app.route('/get_media/', methods=["GET"])
-def get_media():
-    return storage.movies.get_all_media()
+@app.route('/set_media_type', methods=["POST"])
+def set_media_type():
+    store.set_current_media(request.json['media_type'])
+    return Response(status=200)
 
 
-@app.route('/set_settings/', methods=["POST"])
+@app.route('/set_settings', methods=["POST"])
 def set_settings():
-    storage.movies.set_settings(request.json)
+    store.get_curr_media().set_settings(request.json)
     return Response(status=200)
 
 
-@app.route('/set_filters/', methods=["POST"])
+@app.route('/set_filters', methods=["POST"])
 def set_filters():
-    storage.movies.set_filters(request.json)
+    store.get_curr_media().set_filters(request.json)
     return Response(status=200)
 
 
-@app.route('/load_more/', methods=["POST"])
+@app.route('/get_media', methods=["GET"])
+def get_media():
+    return store.get_curr_media().get_all_media()
+
+
+@app.route('/load_more', methods=["POST"])
 def load_more():
-    return storage.movies.load_more()
+    return store.get_curr_media().load_more()
 
 
 # @app.route('/get_recent_movie_ratings/', methods=["GET", "POST"])

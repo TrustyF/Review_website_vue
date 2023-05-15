@@ -6,6 +6,23 @@ from flask import Response
 import functions
 
 
+class StorageManager:
+    def __init__(self):
+        self.stores = {}
+        self.curr_media = 'movie'
+
+    def add_store(self, name, media):
+        self.stores[name] = media
+
+    def set_current_media(self, media_type):
+        print('set current', media_type)
+        self.curr_media = media_type
+
+    def get_curr_media(self):
+        print('returning', self.curr_media, self.stores[self.curr_media])
+        return self.stores[self.curr_media]
+
+
 class Media:
 
     def __init__(self, media_type):
@@ -263,7 +280,6 @@ class Series(Media):
 #         state = False
 #
 #     return state
-
-movies = Movies()
-series = Series()
-# mangas = Mangas()
+store = StorageManager()
+store.add_store('movie', Movies())
+store.add_store('tv', Series())
