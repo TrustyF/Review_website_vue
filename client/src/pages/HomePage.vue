@@ -17,13 +17,6 @@ const sessionSeed = inject('sessionSeed')
 
 const movies = ref([])
 let filters = ref({
-  'type': {
-    'name': 'Type',
-    'available': ["Movie", "Tv-series", "Documentary"],
-    'display': ["Movie", "Tv-series", "Documentary"],
-    'filter': [],
-    'checkbox': true,
-  },
   'format': {
     'name': 'Format',
     'available': ["Live-action", "Animated"],
@@ -66,33 +59,49 @@ let filters = ref({
     'filter': [null],
   },
   'search_bar': "",
-  'extra_settings': {
-    'max_movies': 50,
-    'session_seed': sessionSeed,
-    're_watch':"",
-    'media_type':"movies"
-  }
 })
-
+let settings = ref({
+  'session_seed': sessionSeed,
+})
 const currentSelectedMovie = ref({})
 let recentRatings = ref({})
 
 const servStatus = ref(0)
-let settingsOpen = ref(false)
-let scrollPosition = 0
 
-onMounted(() => {
-  // get_recent_ratings()
-  update_movies()
-})
+// API
+function setSettings() {
+  axios.post(`${current_api}/set_settings/`, settings.value)
+}
 
-watch(settingsOpen, (newV, oldV) => {
-  settingsOpened()
-})
+function setFilters() {
+  axios.post(`${current_api}/set_filters/`, filters.value)
+      .then(response => {
+        if (response.status === 200) {
+          update_movies()
+        }
+      })
+}
+
+let fetchingMoreMovies = ref(false)
+
+function fetchMoreMovies() {
+  axios.post(`${current_api}/load_more/`)
+      .then(response => {
+        console.log(response.status)
+        if (response.status === 200) {
+          fetchingMoreMovies.value = false
+          update_movies()
+        }
+        if (response.status === 201) {
+          console.log('max movies reached')
+          update_movies()
+        }
+      })
+}
 
 function update_movies() {
   // console.log('updating movies')
-  axios.post(`${current_api}/get_media/`, filters.value)
+  axios.get(`${current_api}/get_media/`)
       .then(response => {
         console.log("response", response)
         movies.value = response.data
@@ -100,18 +109,14 @@ function update_movies() {
       })
 }
 
-function get_recent_ratings() {
-  axios.post(`${current_api}/get_recent_movie_ratings/`, {'window': window.innerWidth})
-      .then(response => {
-        // console.log("response recent", response)
-        recentRatings.value = response.data
-      })
-}
-
 function editMovie(input) {
   settingsOpen.value = true
   currentSelectedMovie.value = input
 }
+
+// Page helpers
+let settingsOpen = ref(false)
+let scrollPosition = 0
 
 function settingsOpened() {
 
@@ -126,12 +131,36 @@ function settingsOpened() {
   }
 }
 
+function handleScroll() {
+  const scrollTop = document.documentElement.scrollTop
+  const scrollHeight = document.documentElement.scrollHeight
+  const clientHeight = document.documentElement.clientHeight
+
+  if (scrollTop + clientHeight >= (scrollHeight - (scrollHeight / 3)) && fetchingMoreMovies.value === false) {
+    fetchingMoreMovies.value = true
+    setTimeout(function () {
+      fetchMoreMovies()
+    }, 300)
+  }
+}
+
+watch(settingsOpen, (newV, oldV) => {
+  settingsOpened()
+})
+
+onMounted(() => {
+  setSettings()
+  // get_recent_ratings()
+  update_movies()
+  window.addEventListener('scroll', handleScroll)
+})
 </script>
+
 <template>
   <db-helper v-if="devMode" :data="currentSelectedMovie" :open="settingsOpen"
              @closed="settingsOpen = !settingsOpen"></db-helper>
 
-  <FilterMenu :props="filters" @filtersChange="update_movies"></FilterMenu>
+  <FilterMenu :props="filters" @filtersChange="setFilters"></FilterMenu>
 
   <div v-if="devMode">
     <button @click="settingsOpen = true">Add movie</button>
@@ -139,12 +168,12 @@ function settingsOpened() {
 
   <div class="feed" v-if="servStatus===200">
 
-<!--    <div class="movie_grid">-->
-<!--      <rating-header :rating="'Recent ratings'"></rating-header>-->
-<!--      <div class="movie_container_wrapper" v-for="rec in recentRatings" :key="rec.title + '_rec'">-->
-<!--        <MovieContainer :key="rec.id + '_rec'" :data="rec" @MovieEdit="editMovie"></MovieContainer>-->
-<!--      </div>-->
-<!--    </div>-->
+    <!--    <div class="movie_grid">-->
+    <!--      <rating-header :rating="'Recent ratings'"></rating-header>-->
+    <!--      <div class="movie_container_wrapper" v-for="rec in recentRatings" :key="rec.title + '_rec'">-->
+    <!--        <MovieContainer :key="rec.id + '_rec'" :data="rec" @MovieEdit="editMovie"></MovieContainer>-->
+    <!--      </div>-->
+    <!--    </div>-->
 
     <div class="movie_grid" v-for="rating in [9,8,7,6,5,4,3,2,1]" :key="rating">
       <rating-header :rating="rating"></rating-header>
