@@ -1,7 +1,8 @@
 import {createRouter, createWebHistory} from "vue-router";
 
-import HomePage from '@/pages/HomePage'
-import MangaPage from "@/pages/MangaPage";
+import MoviePage from "@/pages/MoviePage"
+import MangaPage from "@/pages/MangaPage"
+import SeriesPage from "@/pages/SeriesPage"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -9,7 +10,17 @@ const router = createRouter({
         {
             path: "/",
             name: "home",
-            component: HomePage
+            redirect: '/movies'
+        },
+        {
+            path: "/movies",
+            name: "movies",
+            component: MoviePage
+        },
+        {
+            path: "/series",
+            name: "series",
+            component: SeriesPage
         },
         {
             path: "/manga",

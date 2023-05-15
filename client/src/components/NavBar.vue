@@ -5,7 +5,8 @@ import {RouterLink} from "vue-router";
 <template>
   <nav>
     <ul>
-      <li><RouterLink active-class="active" class="link" to="/">Movies</RouterLink></li>
+      <li><RouterLink active-class="active" class="link" to="/movies">Movies</RouterLink></li>
+      <li><RouterLink active-class="active" class="link" to="/series">Series</RouterLink></li>
       <li><RouterLink active-class="active" class="link" to="/manga">Manga</RouterLink></li>
     </ul>
   </nav>
