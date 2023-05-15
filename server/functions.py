@@ -16,7 +16,8 @@ def sort_by_date_rated(f_arr):
 
 
 def sort_randomize(f_arr, f_seed):
-    return random.Random(f_seed).shuffle(f_arr)
+    random.Random(f_seed).shuffle(f_arr)
+    return f_arr
 
 
 # rank

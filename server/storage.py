@@ -1,6 +1,7 @@
 import os
 from tinydb import TinyDB, Query, where, operations
 import re
+from flask import Response
 
 import functions
 
@@ -12,121 +13,141 @@ class Media:
         self.media_type = media_type
 
         self.base_path = os.path.dirname(__file__)
-        self.db_path = os.path.join(self.base_path, f'database/{media_type}_db.json')
+        self.db_path = os.path.join(self.base_path, f'database/{self.media_type}_db.json')
 
         self.db = TinyDB(self.db_path)
 
         self.filters = {}
-        self.settings = {}
+        self.max_page_items = 50
+
+        self.settings = {'session_seed': 0, }
         self.rank_range = (1, 10)
 
     # setters
     def set_settings(self, query):
-        print(query)
+        print('set_settings', query)
+        self.settings = query
+        self.max_page_items = 50
+
+    def set_filters(self, query):
+        print('set_filters', query)
         self.filters = query
-        self.settings = query['extra_settings']
+
+    # post requests
+    def load_more(self):
+        self.max_page_items += 50
+
+        if self.max_page_items >= len(self.db.all()):
+            return Response(status=201)
+        else:
+            return Response(status=200)
 
     # getters
+
     def get_all_media(self):
         filtered_arr = self.filter(self.db)
-        sorted_arr = self.sort(filtered_arr)
-        culled_arr = self.cull(sorted_arr)
+        sorted_arr = self.sorting(filtered_arr)
+        culled_arr = self.culling(sorted_arr)
         ranked_arr = functions.place_in_rank_category(culled_arr, self.rank_range)
         return ranked_arr
 
     # helpers
     def filter(self, f_arr):
+
+        if self.filters == {}:
+            return f_arr.all()
+
         rating_filters = self.filters['rating']['filter']
         length_filters = self.filters['length']['filter']
         genre_filters = self.filters['genre']['filter']
         region_filters = self.filters['region']['filter']
         format_filters = self.filters['format']['filter']
-        type_filters = self.filters['type']['filter']
         searchbar_filters = self.filters['search_bar']
 
-        queries = []
-
-        # filter type
-        for type_filter in type_filters:
-            match type_filter:
-                case "Movie":
-                    queries.append(Query().media_type == "movie")
-
-                case "Tv-series":
-                    queries.append(Query().media_type == "tv")
-
-                case "Documentary":
-                    queries.append(Query().genres.any("Documentary"))
+        format_query = region_query = genre_query = rating_query = length_query = searchbar_query = \
+            Query().title.matches('[aZ]*')
 
         # filter format
         for format_filter in format_filters:
             match format_filter:
                 case "Live-action":
-                    queries.append(~Query().genres.any("Animation"))
+                    format_query = (~Query().genres.any("Animation"))
 
                 case "Animated":
-                    queries.append(Query().genres.any("Animation"))
+                    format_query = (Query().genres.any("Animation"))
 
         # filter region
         for region_filter in region_filters:
             match region_filter:
                 case "western":
-                    queries.append(~Query().region.any("asian"))
+                    region_query = (~Query().region.any("asian"))
 
                 case "asian":
-                    queries.append(Query().region.any("western"))
+                    region_query = (Query().region.any("western"))
 
         # filter genre
         if len(genre_filters) > 0:
-            queries.append(Query().genres.all(genre_filters))
+            genre_query = (Query().genres.all(genre_filters))
 
         #  filter rating
         if len(rating_filters) > 0:
-            queries.append(Query().my_rating.any(rating_filters))
+            rating_query = (Query().my_rating.any(rating_filters))
 
         # filter length
         for length_filter in length_filters:
-            # ignore tv
-            queries.append(Query().media_type != "tv")
-
             match length_filter:
                 case "0":
-                    queries.append(Query().runtime <= 60)
+                    length_query = (Query().runtime <= 60)
                 case "1":
-                    queries.append(Query().runtime <= 120)
+                    length_query = (Query().runtime <= 120)
                 case "2":
-                    queries.append(120 < Query().runtime < 180)
+                    length_query = (120 < Query().runtime < 180)
                 case "3":
-                    queries.append(Query().runtime >= 180)
+                    length_query = (Query().runtime >= 180)
 
         # filter searchbar
         if len(searchbar_filters) > 0:
-            queries.append(Query().title.test(lambda val: re.search(searchbar_filters, val, re.IGNORECASE)))
+            searchbar_query = (Query().title.test(lambda val: re.search(searchbar_filters, val, re.IGNORECASE)))
 
         # return if empty
-        if len(queries) < 1:
-            return f_arr.all()
+        # if len(queries) < 1:
+        #     return f_arr.all()
 
         #  apply queries
-        return f_arr.search(queries)
+        return f_arr.search(
+            format_query &
+            region_query &
+            genre_query &
+            rating_query &
+            length_query &
+            searchbar_query
+        )
 
-    def sort(self, f_arr):
+    def sorting(self, f_arr):
         # sort_arr = functions.sort_by_avg_rating(f_arr)
         # sort_arr = functions.sort_by_date_rated(f_arr)
-        # sort_arr = functions.sort_randomize(f_arr, self.settings['session_seed'])
-        # sort_arr = functions.sort_by_my_rating(sort_arr)
-        return f_arr
+        sort_arr = functions.sort_randomize(f_arr, self.settings['session_seed'])
+        sort_arr = functions.sort_by_my_rating(sort_arr)
+        return sort_arr
 
-    def cull(self, f_arr):
-        return f_arr
+    def culling(self, f_arr):
+        return f_arr[:self.max_page_items]
 
     # others
     def transfer_old(self):
         old_db = TinyDB(os.path.join(self.base_path, f'database/sorted_db.json'))
+        self.db.insert_multiple(old_db.table('movies').search(where('media_type') == self.media_type))
 
-        if self.media_type == 'movie':
-            self.db.insert_multiple(old_db.table('movies').search(where('media_type') == 'movie'))
+    def test_media(self):
+        print(self.media_type)
+        print(self.db_path)
 
+
+class Movies(Media):
+    def __init__(self):
+        super().__init__(media_type='movie')
+
+    # others
     def cleanup(self):
         for mov in self.db.all():
 
@@ -142,6 +163,51 @@ class Media:
 
             del mov['images']
             # print(mov['title'])
+
+            try:
+                self.db.table('_default').remove(Query().title == str(mov['title']))
+                self.db.table('_default').insert(mov)
+            except:
+                print('keyError', mov['title'])
+
+
+class Series(Media):
+    def __init__(self):
+        super().__init__(media_type='tv')
+
+    def cleanup(self):
+        for mov in self.db.all():
+            print(mov['title'])
+
+            if 'images' not in mov:
+                return
+            if 'posters' not in mov['images']:
+                return
+
+            mov['posters'] = []
+
+            for file in mov['images']['posters']:
+                mov['posters'].append(file['file_path'])
+
+            del mov['images']
+            del mov['credits']
+            del mov['backdrop_path']
+            del mov['created_by']
+            del mov['episode_run_time']
+            del mov['first_air_date']
+            del mov['homepage']
+            del mov['languages']
+            del mov['last_air_date']
+            del mov['last_episode_to_air']
+            del mov['next_episode_to_air']
+            del mov['networks']
+            del mov['origin_country']
+            del mov['production_companies']
+            del mov['production_countries']
+            del mov['spoken_languages']
+            del mov['status']
+            del mov['tagline']
+            del mov['type']
 
             try:
                 self.db.table('_default').remove(Query().title == str(mov['title']))
@@ -198,4 +264,6 @@ class Media:
 #
 #     return state
 
-movie_store = Media('movie')
+movies = Movies()
+series = Series()
+# mangas = Mangas()

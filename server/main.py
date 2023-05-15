@@ -8,10 +8,26 @@ CORS(app)
 
 
 # routes
-@app.route('/get_media/', methods=["GET", "POST"])
+@app.route('/get_media/', methods=["GET"])
 def get_media():
-    storage.movie_store.set_settings(request.json)
-    return storage.movie_store.get_all_media()
+    return storage.movies.get_all_media()
+
+
+@app.route('/set_settings/', methods=["POST"])
+def set_settings():
+    storage.movies.set_settings(request.json)
+    return Response(status=200)
+
+
+@app.route('/set_filters/', methods=["POST"])
+def set_filters():
+    storage.movies.set_filters(request.json)
+    return Response(status=200)
+
+
+@app.route('/load_more/', methods=["POST"])
+def load_more():
+    return storage.movies.load_more()
 
 
 # @app.route('/get_recent_movie_ratings/', methods=["GET", "POST"])
