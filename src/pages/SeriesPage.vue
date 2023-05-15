@@ -15,7 +15,7 @@ const current_api = inject('curr_api')
 const devMode = inject('devMode')
 const sessionSeed = inject('sessionSeed')
 
-const movies = ref([])
+const series = ref([])
 let filters = ref({
   'format': {
     'name': 'Format',
@@ -63,18 +63,35 @@ let filters = ref({
 let settings = ref({
   'session_seed': sessionSeed,
 })
+let ratingDesc = {
+  10: 'Perfect',
+  9: 'Near perfect masterpiece',
+  8: 'Extremely good',
+  7: 'Quite good',
+  6: 'Good with flaws',
+  5: "Meh",
+  4: 'Bad',
+  3: 'Fucking bad',
+  2: 'Holy shit bad',
+  1: 'Affront to god',
+}
 const currentSelectedMovie = ref({})
-let recentRatings = ref({})
 
 const servStatus = ref(0)
 
 // API
+function setMediaType(type) {
+  axios.post(`${current_api}/set_media_type`, {'media_type': type})
+      .then(() => setSettings())
+}
+
 function setSettings() {
-  axios.post(`${current_api}/set_settings/`, settings.value)
+  axios.post(`${current_api}/set_settings`, settings.value)
+      .then(() => update_movies())
 }
 
 function setFilters() {
-  axios.post(`${current_api}/set_filters/`, filters.value)
+  axios.post(`${current_api}/set_filters`, filters.value)
       .then(response => {
         if (response.status === 200) {
           update_movies()
@@ -85,7 +102,7 @@ function setFilters() {
 let fetchingMoreMovies = ref(false)
 
 function fetchMoreMovies() {
-  axios.post(`${current_api}/load_more/`)
+  axios.post(`${current_api}/load_more`)
       .then(response => {
         console.log(response.status)
         if (response.status === 200) {
@@ -101,10 +118,10 @@ function fetchMoreMovies() {
 
 function update_movies() {
   // console.log('updating movies')
-  axios.get(`${current_api}/get_media/`)
+  axios.get(`${current_api}/get_media`)
       .then(response => {
         console.log("response", response)
-        movies.value = response.data
+        series.value = response.data
         servStatus.value = response.status
       })
 }
@@ -149,9 +166,9 @@ watch(settingsOpen, (newV, oldV) => {
 })
 
 onMounted(() => {
-  setSettings()
-  // get_recent_ratings()
-  update_movies()
+  console.log('mounted TV')
+  // servStatus.value = 0
+  setMediaType('tv')
   window.addEventListener('scroll', handleScroll)
 })
 </script>
@@ -176,8 +193,8 @@ onMounted(() => {
     <!--    </div>-->
 
     <div class="movie_grid" v-for="rating in [9,8,7,6,5,4,3,2,1]" :key="rating">
-      <rating-header :rating="rating"></rating-header>
-      <div class="movie_container_wrapper" v-for="mov in movies[rating]" :key="mov.title">
+      <rating-header :rating="rating" :rating_desc="ratingDesc"></rating-header>
+      <div class="movie_container_wrapper" v-for="mov in series[rating]" :key="mov.title">
         <MovieContainer :key="mov.id" :data="mov" @MovieEdit="editMovie"></MovieContainer>
       </div>
     </div>

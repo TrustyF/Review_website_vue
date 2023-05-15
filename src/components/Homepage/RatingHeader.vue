@@ -1,27 +1,15 @@
 <script setup>
 import {defineProps, defineEmits, ref, watch} from 'vue'
 
-const props = defineProps(['rating'])
+const props = defineProps(['rating','rating_desc'])
 
-function getRankDetails(rank) {
-  if (rank === 10) return 'Perfect'
-  if (rank === 9) return 'Near perfect masterpiece'
-  if (rank === 8) return 'Extremely good'
-  if (rank === 7) return 'Quite good'
-  if (rank === 6) return 'Good with flaws'
-  if (rank === 5) return "Meh"
-  if (rank === 4) return 'Bad'
-  if (rank === 3) return 'Fucking bad'
-  if (rank === 2) return 'Holy shit bad'
-  if (rank === 1) return 'Affront to god'
-}
 </script>
 
 <template>
   <div class="rating_container">
     <div class="rating_content">
       <h1 class="rating_title">{{ rating }}</h1>
-      <h1 class="rating_desc"> {{ getRankDetails(rating) }}</h1>
+      <h1 class="rating_desc"> {{ rating_desc[rating] }}</h1>
     </div>
   </div>
 </template>
