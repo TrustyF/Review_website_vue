@@ -122,6 +122,9 @@ class Media:
         return f_arr[:self.max_page_items]
 
     def check_dupe(self, data):
+        if data == {}:
+            return
+
         print('checking dupe ', data['title'])
         title_query = Query().title.matches(str(data['title']))
         entries = self.db.search(title_query)
