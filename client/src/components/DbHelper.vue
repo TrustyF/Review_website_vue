@@ -33,10 +33,13 @@ let maxSearchPage = ref(0)
 let currentPoster = ref(0)
 let presentInDb = ref(false)
 
-loadPresets()
+onMounted(()=>{
+  loadPresets()
+})
 
 watch(props, (newV, oldV) => {
   MovChanges.value = newV.data
+  checkInDb()
 })
 
 const availableRegions = ["none", "western", "asian"]
@@ -121,7 +124,7 @@ async function searchMovie() {
 
       if (searchResult !== undefined) MovChanges.value = searchResult
 
-      presentInDb.value = await checkInDb()
+      await checkInDb()
 
     }, 300)
   }
@@ -130,7 +133,7 @@ async function searchMovie() {
 
     setTimeout(async function () {
           // console.log('searching manga')
-          let searchResult = await axios.get(`https://api.mangadex.org/manga?title=${search_text}&order%5Brelevance%5D=desc&includes[]=cover_art&limit=30`)
+          let searchResult = await axios.get(`https://api.mangadex.org/manga?title=${search_text}&order%5Brelevance%5D=desc&includes[]=cover_art&limit=20`)
               .then(response => {
 
                 // console.log('all found', response.data.data)
@@ -197,7 +200,7 @@ async function searchMovie() {
                 MovChanges.value['vote_average'] = response.data['statistics'][MovChanges.value['manga_id']]['rating']['average']
               })
 
-          presentInDb.value = await checkInDb()
+          await checkInDb()
         },
         300
     )
@@ -208,8 +211,12 @@ function checkInDb() {
   return axios.post(`${current_api}/check_dupe/`, MovChanges.value)
       .then(response => {
         console.log('dupe check', response.statusText)
-        if (response.statusText === 'True') return true
-        if (response.statusText === 'False') return false
+        if (response.statusText === 'True') {
+          presentInDb.value = true
+        }
+        if (response.statusText === 'False') {
+          presentInDb.value = false
+        }
       })
 }
 

@@ -56,7 +56,7 @@ calcTagAmount()
       <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
 
       <div v-if="devMode" class="settings">
-        <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
+        <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie" style="transform: translate(30px,-20px); padding: 0;height: 5px;width: 5px"></button>
       </div>
 
       <img v-if="data['poster_path']" v-lazy="`https://uploads.mangadex.org/covers/${data['poster_path']}.256.jpg`"
