@@ -14,7 +14,7 @@ import axios from 'axios'
 import MangaPage from "@/pages/MangaPage";
 
 const props = defineProps(['data', 'open', 'mediaType'])
-const emits = defineEmits(['opened', 'closed'])
+const emits = defineEmits(['opened', 'closed', 'updated'])
 
 let MovChanges = ref({'title': 'test', 'my_rating': '0'})
 let iconData = ref({
@@ -29,6 +29,7 @@ let tagPresets = ref({})
 let currentSearchMovie = ref("")
 let currentSearchType = ref(props['mediaType'])
 let currentSearchPage = ref(0)
+let maxSearchPage = ref(0)
 let currentPoster = ref(0)
 let presentInDb = ref(false)
 
@@ -59,9 +60,9 @@ function updateMedia(button) {
       .then(response => {
         // console.log("edit status", response.status)
         button.target.disabled = false
+        closeHelper()
         // button.target.lastChild.data = " ✓"
       })
-  emits('closed', true)
 }
 
 async function searchMovie() {
@@ -77,7 +78,7 @@ async function searchMovie() {
 
   if (currentSearchType.value === 'movie' || currentSearchType.value === 'tv') {
     setTimeout(async function () {
-      MovChanges.value = await axios.get(`https://api.themoviedb.org/3/search/${currentSearchType.value}?api_key=${apiKey}&language=en-US&query=${search_text}`)
+      let searchResult = await axios.get(`https://api.themoviedb.org/3/search/${currentSearchType.value}?api_key=${apiKey}&language=en-US&query=${search_text}`)
           .then(response => {
 
             if (response.data['results'].length < 1) {
@@ -118,6 +119,8 @@ async function searchMovie() {
                 })
           })
 
+      if (searchResult !== undefined) MovChanges.value = searchResult
+
       presentInDb.value = await checkInDb()
 
     }, 300)
@@ -127,13 +130,22 @@ async function searchMovie() {
 
     setTimeout(async function () {
           // console.log('searching manga')
-          MovChanges.value = await axios.get(`https://api.mangadex.org/manga?title=${search_text}&includes[]=cover_art&includes[]=statistics`)
+          let searchResult = await axios.get(`https://api.mangadex.org/manga?title=${search_text}&order%5Brelevance%5D=desc&includes[]=cover_art&limit=30`)
               .then(response => {
+
+                // console.log('all found', response.data.data)
 
                 if (response.data.data.length < 1) {
                   throttle_search = false
                   return
                 }
+
+                if (response.data.data[currentSearchPage.value] === undefined) {
+                  throttle_search = false
+                  return
+                }
+
+                maxSearchPage.value = response.data.data.length - 1
 
                 let simple_data = response.data.data[currentSearchPage.value]['attributes']
                 let all_data = response.data.data[currentSearchPage.value]
@@ -164,12 +176,18 @@ async function searchMovie() {
                 return formatted_data
               })
 
-          await axios.get(`https://api.mangadex.org/cover?limit=50&manga%5B%5D=${MovChanges.value['manga_id']}`)
+          if (searchResult !== undefined) MovChanges.value = searchResult
+
+          await axios.get(`https://api.mangadex.org/cover?limit=100&manga%5B%5D=${MovChanges.value['manga_id']}`)
               .then(response => {
                 console.log('covers', response.data.data)
                 MovChanges.value['images']['posters'] = response.data.data.map((elem) => {
-                  return {'file_path': `${MovChanges.value['manga_id']}/${elem['attributes']['fileName']}`}
+                  return {
+                    'file_path': `${MovChanges.value['manga_id']}/${elem['attributes']['fileName']}`,
+                    'volume': elem['attributes']['volume']
+                  }
                 })
+                MovChanges.value['images']['posters'].sort((a, b) => a.volume - b.volume)
                 MovChanges.value['poster_path'] = MovChanges.value['images']['posters'][0]['file_path']
               })
 
@@ -201,6 +219,7 @@ function addMovie(button) {
       .then(response => {
         // console.log("added movie")
         button.target.disabled = false
+        closeHelper()
       })
 }
 
@@ -261,22 +280,29 @@ function delTagPresets() {
       })
 }
 
+function closeHelper() {
+  emits('closed', true)
+  emits('updated', true)
+}
+
 </script>
 <template>
   <div v-if="open">
     <div class="background_blackout">...</div>
     <div class="main_win">
 
-      <div class="poster_preview box_wrapper" v-if="MovChanges['images']"
-           style="overflow: scroll; height:90vh; width: 10vw">
-        <div class="poster_box" style="width: 9vw"
-             v-for="(poster,index) in MovChanges['images']['posters']"
-             :key="index">
-          <img v-if="currentSearchType === 'movies'" v-lazy="`https://image.tmdb.org/t/p/w500${poster['file_path']}`"
-               @click="changePoster(index)" style="width: 100%;">
-          <img v-if="currentSearchType === 'manga'"
-               v-lazy="`https://uploads.mangadex.org/covers/${poster['file_path']}.256.jpg`"
-               @click="changePoster(index)" style="width: 100%;">
+      <div v-if="MovChanges">
+        <div class="poster_preview box_wrapper" v-if="MovChanges['images']"
+             style="overflow: scroll; height:90vh; width: 10vw">
+          <div class="poster_box" style="width: 9vw"
+               v-for="(poster,index) in MovChanges['images']['posters']"
+               :key="index">
+            <img v-if="currentSearchType === 'movies'" v-lazy="`https://image.tmdb.org/t/p/w500${poster['file_path']}`"
+                 @click="changePoster(index)" style="width: 100%;">
+            <img v-if="currentSearchType === 'manga'"
+                 v-lazy="`https://uploads.mangadex.org/covers/${poster['file_path']}.256.jpg`"
+                 @click="changePoster(index)" style="width: 100%;">
+          </div>
         </div>
       </div>
 
@@ -286,7 +312,7 @@ function delTagPresets() {
         <MangaContainer class="preview_movie" v-if="currentSearchType==='manga'" :data="MovChanges"></MangaContainer>
 
 
-        <div class="movie_adder box_wrapper">
+        <div class="movie_adder box_wrapper input_tag_description">
 
           <label for="search_m_input">Search</label>
           <input type="search" @input="currentSearchMovie = $event.target.value" @change="searchMovie"
@@ -295,10 +321,11 @@ function delTagPresets() {
           <label for="search_list_input">Search scroll</label>
           <input type="number" @change="currentSearchPage = Number($event.target.value)" @input="searchMovie" value="0"
                  id="search_list_input">
+          <p>max pages: {{ maxSearchPage }}</p>
 
         </div>
 
-        <div class="metadata box_wrapper">
+        <div class="metadata box_wrapper input_tag_description">
           <!--      Rating-->
           <label for="rating_input">Rating</label>
           <input type="number" id="rating_input"
@@ -383,9 +410,9 @@ function delTagPresets() {
 
       </div>
 
-      <div class="upload box_wrapper">
+      <div class="upload box_wrapper" v-if="MovChanges">
         <button @click="updateMedia($event)" v-if="MovChanges['my_rating']" style="width: 100%">upload changes</button>
-        <button @click="emits('closed',true)" style="width: 100%">Close</button>
+        <button @click="closeHelper" style="width: 100%">Close</button>
       </div>
 
     </div>
