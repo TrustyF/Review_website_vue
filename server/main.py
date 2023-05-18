@@ -41,22 +41,24 @@ def load_more():
 #     return functions.get_recent_movie_ratings(request.json)
 #
 #
-# @app.route('/edit_movie/', methods=["POST"])
-# def edit_movie():
-#     functions.edit_movie(request.json)
-#     return Response(status=200)
-#
-#
-# @app.route('/add_movie/', methods=["POST"])
-# def add_movie():
-#     functions.add_movie(request.json)
-#     return Response(status=200)
-#
-#
-# @app.route('/del_movie/', methods=["POST"])
-# def del_movie():
-#     functions.del_movie(request.json)
-#     return Response(status=200)
+@app.route('/add_media/', methods=["POST"])
+def add_media():
+    store.get_curr_media().add_media(request.json)
+    return Response(status=200)
+
+
+@app.route('/update_media/', methods=["POST"])
+def update_media():
+    store.get_curr_media().update_media(request.json)
+    return Response(status=200)
+
+
+@app.route('/del_media/', methods=["POST"])
+def del_media():
+    store.get_curr_media().del_media(request.json)
+    return Response(status=200)
+
+
 #
 #
 # @app.route('/get_presets/', methods=["GET"])

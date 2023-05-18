@@ -50,6 +50,21 @@ class Media:
         print('set_filters', query)
         self.filters = query
 
+    # operations
+    def add_media(self, data):
+        self.db.insert(data)
+
+    def update_media(self, data):
+        new_data = data['newData']
+        old_data = data['oldData']
+
+        title_query = Query().title == str(new_data['title'])
+        self.db.update(new_data, title_query)
+
+    def del_media(self, data):
+        title_query = Query().title == str(data['title'])
+        self.db.remove(title_query)
+
     # post requests
     def load_more(self):
         self.max_page_items += 50
@@ -60,7 +75,6 @@ class Media:
             return Response(status=200)
 
     # getters
-
     def get_all_media(self):
         filtered_arr = self.filter(self.db)
         sorted_arr = self.sorting(filtered_arr)
@@ -155,10 +169,6 @@ class Media:
         old_db = TinyDB(os.path.join(self.base_path, f'database/sorted_db.json'))
         self.db.insert_multiple(old_db.table('movies').search(where('media_type') == self.media_type))
 
-    def test_media(self):
-        print(self.media_type)
-        print(self.db_path)
-
 
 class Movies(Media):
     def __init__(self):
@@ -233,6 +243,13 @@ class Series(Media):
                 print('keyError', mov['title'])
 
 
+class Manga(Media):
+    def __init__(self):
+        super().__init__(media_type='manga')
+        self.rank_range = (0, 6)
+
+
+
 # def edit_movie(query):
 #     # print('query', query)
 #     old_data = query['oldData']
@@ -283,3 +300,4 @@ class Series(Media):
 store = StorageManager()
 store.add_store('movie', Movies())
 store.add_store('tv', Series())
+store.add_store('manga', Manga())
