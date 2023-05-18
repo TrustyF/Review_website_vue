@@ -57,10 +57,9 @@ function calc() {
       <div class="hover_box">
         <div class="description">
           <h1 class="tag_name">Better than they say</h1>
-          <h1 class="tag_description">My rating is {{ rating_diff }} points higher than the scaled average imdb
-            rating</h1>
+          <h1 class="tag_description">My rating is {{ rating_diff }} points higher than the scaled average rating</h1>
           <h1 class="tag_description" style="font-size: 0.6em;margin-top: 5px;  color: rgba(0, 0, 0, 0.4);">
-            {{ "The unscaled imdb rating is: " + round_user_rating }}</h1>
+            {{ "The unscaled average rating is: " + round_user_rating }}</h1>
         </div>
       </div>
     </div>
@@ -70,10 +69,9 @@ function calc() {
       <div class="hover_box">
         <div class="description">
           <h1 class="tag_name">Underrated</h1>
-          <h1 class="tag_description">My rating is {{ rating_diff }} points higher than the scaled average imdb
-            rating</h1>
+          <h1 class="tag_description">My rating is {{ rating_diff }} points higher than the scaled average rating</h1>
           <h1 class="tag_description" style="font-size: 0.6em;margin-top: 5px;  color: rgba(0, 0, 0, 0.4);">
-            {{ "The unscaled imdb rating is: " + round_user_rating }}</h1>
+            {{ "The unscaled average rating is: " + round_user_rating }}</h1>
         </div>
       </div>
     </div>
@@ -83,10 +81,9 @@ function calc() {
       <div class="hover_box">
         <div class="description">
           <h1 class="tag_name">Not that good</h1>
-          <h1 class="tag_description">My rating is {{ rating_diff }} points lower than the scaled average imdb
-            rating</h1>
+          <h1 class="tag_description">My rating is {{ rating_diff }} points lower than the scaled average rating</h1>
           <h1 class="tag_description" style="font-size: 0.6em;margin-top: 5px;  color: rgba(0, 0, 0, 0.4);">
-            {{ "The unscaled imdb rating is: " + round_user_rating }}</h1>
+            {{ "The unscaled average rating is: " + round_user_rating }}</h1>
         </div>
       </div>
     </div>
@@ -96,10 +93,9 @@ function calc() {
       <div class="hover_box">
         <div class="description">
           <h1 class="tag_name">Overrated</h1>
-          <h1 class="tag_description">My rating is {{ rating_diff }} points lower than the scaled average imdb
-            rating</h1>
+          <h1 class="tag_description">My rating is {{ rating_diff }} points lower than the scaled average rating</h1>
           <h1 class="tag_description" style="font-size: 0.6em;margin-top: 5px;  color: rgba(0, 0, 0, 0.4);">
-            {{ "The unscaled imdb rating is: " + round_user_rating }}</h1>
+            {{ "The unscaled average rating is: " + round_user_rating }}</h1>
         </div>
       </div>
     </div>
@@ -110,7 +106,7 @@ function calc() {
         <div class="description">
           <h1 class="tag_name">Watch listed</h1>
           <h1 class="tag_description">I'm not too sure about the current rating, will probably be adjusted <strong> down </strong> after
-            re-watching</h1>
+            re-reading</h1>
         </div>
       </div>
     </div>
@@ -121,7 +117,7 @@ function calc() {
         <div class="description">
           <h1 class="tag_name">Watch listed</h1>
           <h1 class="tag_description">I'm not too sure about the current rating, will probably be adjusted <strong> up</strong> after
-            re-watching</h1>
+            re-reading</h1>
         </div>
       </div>
     </div>
@@ -131,7 +127,7 @@ function calc() {
 
 <script>
 export default {
-  name: "RatingBumperV2"
+  name: "RatingBumperManga"
 }
 </script>
 <style scoped>

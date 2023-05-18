@@ -81,25 +81,12 @@ calcTagAmount()
           <p class="rank" v-if="data['genres']" style="margin-bottom:5px;">
             {{ data['genres'].map(elem => elem).join(', ') }}
           </p>
-          <p class="rank" style="margin-bottom:5px;" v-if="data['runtime'] && data['media_type']==='movie'">
-            {{ "Duration: " + timeConvert(data['runtime']) }}
-          </p>
-          <a :href="data['imdb_url']" target="_blank" rel="noopener noreferrer">
-            <button type="button"
-                    style="background-color: #F5C518;border-radius: 3px;padding: 3px;outline: 1px black solid;border-style: none;cursor:pointer ">
-              Imdb
-            </button>
-          </a>
+
         </div>
       </div>
     </div>
   </div>
 </template>
-<script>
-export default {
-  name: "MovieContainer"
-}
-</script>
 <style scoped>
 .movie_container {
   /*outline: 1px solid green;*/
@@ -234,5 +221,12 @@ export default {
 .editor_button {
   position: absolute;
   transform: translate(174px, 2px);
+}
+
+.details_wrapper {
+  padding: 5px;
+  overflow-y: scroll;
+  overflow-wrap: break-word;
+  height: 250px;
 }
 </style>
