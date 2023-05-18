@@ -13,7 +13,7 @@ function map_range(value, low1, high1, low2, high2) {
   return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 }
 
-const scaled_user_rating = ref(Math.round(map_range(props.data['vote_average'], 4, 9.5, 0, 5) * 10) / 10)
+const scaled_user_rating = ref(Math.round(map_range(props.data['vote_average'], 4, 9.5, 1, 9) * 10) / 10)
 const round_user_rating = ref(Math.round(props.data['vote_average'] * 10) / 10)
 
 const rating_diff = Math.abs(props.data['my_rating'] - scaled_user_rating.value).toFixed(0)

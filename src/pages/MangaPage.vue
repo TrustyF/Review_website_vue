@@ -12,8 +12,8 @@ let filters = ref({
   },
   'rating': {
     'name': 'Rating',
-    'available': ["5", "4", "3", "2", "1","0"],
-    'display': ["5★", "4★", "3★", "2★", "1★","dropped"],
+    'available': ["9", "8", "7", "6", "5", "4", "3", "2", "1", "0"],
+    'display': ["9★", "8★", "7★", "6★", "5★", "4★", "3★", "2★", "1★", "Dropped"],
     'filter': [],
     'checkbox': true
   },
@@ -26,12 +26,16 @@ let filters = ref({
   'search_bar': "",
 })
 let ratingDesc = {
-  5: "Masterpiece",
-  4: 'Good',
-  3: 'Decent',
-  2: 'Bad',
-  1: 'Terrible',
-  0: 'Dropped',
+  9: 'Near perfect masterpiece',
+  8: 'Extremely good',
+  7: 'Quite good',
+  6: 'Good with flaws',
+  5: "Meh",
+  4: 'Bad',
+  3: 'Fucking bad',
+  2: 'Holy shit bad',
+  1: 'Affront to god',
+  0: 'Dropped'
 }
 const mediaType = "manga"
 </script>

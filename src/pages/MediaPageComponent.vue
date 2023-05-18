@@ -128,7 +128,7 @@ onMounted(() => {
 
 <template>
   <db-helper v-if="devMode" :data="currentSelectedMovie" :open="settingsOpen" :mediaType="mediaType"
-             @closed="settingsOpen = !settingsOpen"></db-helper>
+             @closed="settingsOpen = !settingsOpen" @updated="update_movies"></db-helper>
 
   <div v-if="devMode">
     <button @click="settingsOpen = true" style="margin: 13px 0 0 20px; position: fixed">Add {{mediaType}}</button>
