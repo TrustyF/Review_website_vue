@@ -32,7 +32,7 @@ let currentSearchPage = ref(0)
 let currentPoster = ref(0)
 let presentInDb = ref(false)
 
-// loadPresets()
+loadPresets()
 
 watch(props, (newV, oldV) => {
   MovChanges.value = newV.data
@@ -187,12 +187,12 @@ async function searchMovie() {
 }
 
 function checkInDb() {
-  return false
-  // return axios.post(`${current_api}/check_dupe/`, MovChanges.value)
-  //     .then(response => {
-  //       if (response.statusText === 'True') return true
-  //       if (response.statusText === 'False') return false
-  //     })
+  return axios.post(`${current_api}/check_dupe/`, MovChanges.value)
+      .then(response => {
+        console.log('dupe check', response.statusText)
+        if (response.statusText === 'True') return true
+        if (response.statusText === 'False') return false
+      })
 }
 
 function addMovie(button) {

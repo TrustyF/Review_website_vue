@@ -32,16 +32,19 @@ const servStatus = ref(0)
 
 // API
 function setMediaType(type) {
+  console.log('set media')
   axios.post(`${current_api}/set_media_type`, {'media_type': type})
       .then(() => setSettings())
 }
 
 function setSettings() {
+  console.log('set settings')
   axios.post(`${current_api}/set_settings`, settings.value)
-      .then(() => update_movies())
+      .then(() => setFilters())
 }
 
 function setFilters() {
+  console.log('set filters')
   axios.post(`${current_api}/set_filters`, filters.value)
       .then(response => {
         if (response.status === 200) {
@@ -117,8 +120,8 @@ watch(settingsOpen, (newV, oldV) => {
 })
 
 onMounted(() => {
-  console.log('mounted',mediaType)
-  setMediaType(input_props['mediaType'].value)
+  console.log('mounted',mediaType.value)
+  setMediaType(mediaType.value)
   window.addEventListener('scroll', handleScroll)
 })
 </script>
@@ -127,11 +130,11 @@ onMounted(() => {
   <db-helper v-if="devMode" :data="currentSelectedMovie" :open="settingsOpen" :mediaType="mediaType"
              @closed="settingsOpen = !settingsOpen"></db-helper>
 
-  <FilterMenu :props="filters" @filtersChange="setFilters"></FilterMenu>
-
   <div v-if="devMode">
-    <button @click="settingsOpen = true">Add {{mediaType}}</button>
+    <button @click="settingsOpen = true" style="margin: 13px 0 0 20px; position: fixed">Add {{mediaType}}</button>
   </div>
+
+  <FilterMenu :props="filters" @filtersChange="setFilters"></FilterMenu>
 
   <div class="feed" v-if="servStatus===200">
 
@@ -146,6 +149,7 @@ onMounted(() => {
       <rating-header :rating="rating" :rating_desc="ratingDesc"></rating-header>
       <div class="movie_container_wrapper" v-for="mov in movies[rating]" :key="mov.title">
         <MovieContainer v-if="mediaType==='movie'" :key="mov.id" :data="mov" @MovieEdit="editMovie"></MovieContainer>
+        <MovieContainer v-if="mediaType==='tv'" :key="mov.id" :data="mov" @MovieEdit="editMovie"></MovieContainer>
         <MangaContainer v-if="mediaType==='manga'" :key="mov.id" :data="mov" @MovieEdit="editMovie"></MangaContainer>
       </div>
     </div>

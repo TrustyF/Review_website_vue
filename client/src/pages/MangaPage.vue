@@ -12,8 +12,8 @@ let filters = ref({
   },
   'rating': {
     'name': 'Rating',
-    'available': ["9", "8", "7", "6", "5", "4", "3", "2", "1"],
-    'display': ["9★", "8★", "7★", "6★", "5★", "4★", "3★", "2★", "1★"],
+    'available': ["5", "4", "3", "2", "1","0"],
+    'display': ["5★", "4★", "3★", "2★", "1★","dropped"],
     'filter': [],
     'checkbox': true
   },
