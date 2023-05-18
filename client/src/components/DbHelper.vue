@@ -1,9 +1,9 @@
 <script setup>
 import {defineProps, defineEmits, ref, watch, onMounted, onUnmounted, computed, inject} from 'vue'
-import TagContainer from "@/components/MovieContainer/components/TagContainer";
+import TagContainer from "@/components/MediaContainer/Movies/components/TagContainer";
 import asset_paths from '../../public/assets/tags/assets.json'
-import MovieContainer from "@/components/MovieContainer/MovieContainer";
-import MangaContainer from "@/components/MovieContainer/MangaContainer";
+import MovieContainer from "@/components/MediaContainer/Movies/MovieContainer";
+import MangaContainer from "@/components/MediaContainer/Manga/MangaContainer";
 
 const apiKey = '063ccf740a391dee9759aaa3564661c2'
 const current_api = inject('curr_api')
@@ -52,10 +52,10 @@ async function loadPresets() {
       })
 }
 
-function pushChange(button) {
+function updateMedia(button) {
   button.target.disabled = true
   // button.target.lastChild.data = " ❌"
-  axios.post(`${current_api}/edit_movie/`, {'newData': MovChanges.value, 'oldData': props.data})
+  axios.post(`${current_api}/update_media/`, {'newData': MovChanges.value, 'oldData': props.data})
       .then(response => {
         // console.log("edit status", response.status)
         button.target.disabled = false
@@ -118,14 +118,8 @@ async function searchMovie() {
                 })
           })
 
-      presentInDb.value = await axios.post(`${current_api}/check_dupe/`, {
-        'text': MovChanges.value['title'],
-        'media_type': 'movies'
-      })
-          .then(response => {
-            if (response.statusText === 'True') return true
-            if (response.statusText === 'False') return false
-          })
+      presentInDb.value = await checkInDb()
+
     }, 300)
   }
 
@@ -133,7 +127,7 @@ async function searchMovie() {
 
     setTimeout(async function () {
           // console.log('searching manga')
-          MovChanges.value = await axios.get(`https://api.mangadex.org/manga?title=${search_text}&includes[]=cover_art`)
+          MovChanges.value = await axios.get(`https://api.mangadex.org/manga?title=${search_text}&includes[]=cover_art&includes[]=statistics`)
               .then(response => {
 
                 if (response.data.data.length < 1) {
@@ -147,7 +141,9 @@ async function searchMovie() {
                 console.log(simple_data)
                 console.log(all_data)
 
-                formatted_data['title'] = simple_data['title']['en']
+                if (simple_data['title']['en'] !== undefined) formatted_data['title'] = simple_data['title']['en']
+                if (simple_data['title']['en'] === undefined) formatted_data['title'] = simple_data['title']['ja']
+
                 formatted_data['manga_id'] = all_data['id']
                 formatted_data['release_date'] = simple_data['createdAt'].split("T")[0]
                 formatted_data['overview'] = simple_data['description']['en']
@@ -177,21 +173,31 @@ async function searchMovie() {
                 MovChanges.value['poster_path'] = MovChanges.value['images']['posters'][0]['file_path']
               })
 
-          presentInDb.value = await axios.post(`${current_api}/check_dupe/`, MovChanges.value)
+          await axios.get(`https://api.mangadex.org/statistics/manga/${MovChanges.value['manga_id']}`)
               .then(response => {
-                if (response.statusText === 'True') return true
-                if (response.statusText === 'False') return false
+                console.log('stats', response.data['statistics'][MovChanges.value['manga_id']])
+                MovChanges.value['vote_average'] = response.data['statistics'][MovChanges.value['manga_id']]['rating']['average']
               })
+
+          presentInDb.value = await checkInDb()
         },
         300
     )
   }
+}
 
+function checkInDb() {
+  return false
+  // return axios.post(`${current_api}/check_dupe/`, MovChanges.value)
+  //     .then(response => {
+  //       if (response.statusText === 'True') return true
+  //       if (response.statusText === 'False') return false
+  //     })
 }
 
 function addMovie(button) {
   button.target.disabled = true
-  axios.post(`${current_api}/add_movie/`, MovChanges.value)
+  axios.post(`${current_api}/add_media/`, MovChanges.value)
       .then(response => {
         // console.log("added movie")
         button.target.disabled = false
@@ -200,7 +206,7 @@ function addMovie(button) {
 
 function delMovie(button) {
   button.target.disabled = true
-  axios.post(`${current_api}/del_movie/`, MovChanges.value)
+  axios.post(`${current_api}/del_media/`, MovChanges.value)
       .then(response => {
         // console.log("removed movie")
         button.target.disabled = false
@@ -285,16 +291,6 @@ function delTagPresets() {
           <label for="search_m_input">Search</label>
           <input type="search" @input="currentSearchMovie = $event.target.value" @change="searchMovie"
                  id="search_m_input">
-
-          <label for="type">Type</label>
-          <form id="type" @change="currentSearchType = String($event.target.value)">
-            <select>
-              <option v-for="elem in ['none','movie','manga']" :key="elem" :selected="props['mediaType']">{{
-                  elem
-                }}
-              </option>
-            </select>
-          </form>
 
           <label for="search_list_input">Search scroll</label>
           <input type="number" @change="currentSearchPage = Number($event.target.value)" @input="searchMovie" value="0"
@@ -388,7 +384,7 @@ function delTagPresets() {
       </div>
 
       <div class="upload box_wrapper">
-        <button @click="pushChange($event)" v-if="MovChanges['my_rating']" style="width: 100%">upload changes</button>
+        <button @click="updateMedia($event)" v-if="MovChanges['my_rating']" style="width: 100%">upload changes</button>
         <button @click="emits('closed',true)" style="width: 100%">Close</button>
       </div>
 

@@ -10,11 +10,8 @@ const emits = defineEmits(['filtersChange'])
 let filters = toRefs(props)
 
 let state = ref(false)
-
+const searchBarRef = ref()
 let throttle_search = false
-const excludeMode = ref(false)
-
-
 
 function swap_filter(filter, target, checkbox, button) {
 
