@@ -1,7 +1,7 @@
 from flask import Flask, Request, request, Response
 from flask_cors import CORS
 
-from storage import store
+from storage import store, tag_presets
 
 app = Flask(__name__)
 CORS(app)
@@ -36,11 +36,6 @@ def load_more():
     return store.get_curr_media().load_more()
 
 
-# @app.route('/get_recent_movie_ratings/', methods=["GET", "POST"])
-# def get_recent_movie_ratings():
-#     return functions.get_recent_movie_ratings(request.json)
-#
-#
 @app.route('/add_media/', methods=["POST"])
 def add_media():
     store.get_curr_media().add_media(request.json)
@@ -59,29 +54,27 @@ def del_media():
     return Response(status=200)
 
 
-#
-#
-# @app.route('/get_presets/', methods=["GET"])
-# def get_presets():
-#     return functions.get_all_presets()
-#
-#
-# @app.route('/add_preset/', methods=["POST"])
-# def add_preset():
-#     functions.add_preset(request.json)
-#     return Response(status=200)
-#
-#
-# @app.route('/del_preset/', methods=["POST"])
-# def del_preset():
-#     functions.del_preset(request.json)
-#     return Response(status=200)
-#
-#
-# @app.route('/check_dupe/', methods=["POST"])
-# def check_dupe():
-#     state = functions.check_dupe(request.json)
-#     return Response(status=200), state
+@app.route('/check_dupe/', methods=["POST"])
+def check_dupe():
+    state = store.get_curr_media().check_dupe(request.json)
+    return Response(status=200), state
+
+
+@app.route('/get_presets/', methods=["GET"])
+def get_presets():
+    return tag_presets.get_all_presets()
+
+
+@app.route('/add_preset/', methods=["POST"])
+def add_preset():
+    tag_presets.add_preset(request.json)
+    return Response(status=200)
+
+
+@app.route('/del_preset/', methods=["POST"])
+def del_preset():
+    tag_presets.del_preset(request.json)
+    return Response(status=200)
 
 
 if __name__ == '__main__':

@@ -3,7 +3,25 @@ from tinydb import TinyDB, Query, where, operations
 import re
 from flask import Response
 
-import functions
+import sort_funcs
+import filter_funcs
+
+
+class Presets:
+    def __init__(self):
+        self.base_path = os.path.dirname(__file__)
+        self.db_path = os.path.join(self.base_path, f'database/presets_db.json')
+
+        self.db = TinyDB(self.db_path)
+
+    def get_all_presets(self):
+        return sorted(self.db.all(), key=lambda d: d['tier'])
+
+    def add_preset(self, data):
+        self.db.insert(data)
+
+    def del_preset(self, data):
+        self.db.remove(Query().name == str(data['name']))
 
 
 class StorageManager:
@@ -42,12 +60,12 @@ class Media:
 
     # setters
     def set_settings(self, query):
-        print('set_settings', query)
+        print('set_settings')
         self.settings = query
         self.max_page_items = 50
 
     def set_filters(self, query):
-        print('set_filters', query)
+        print('set_filters')
         self.filters = query
 
     # operations
@@ -79,90 +97,41 @@ class Media:
         filtered_arr = self.filter(self.db)
         sorted_arr = self.sorting(filtered_arr)
         culled_arr = self.culling(sorted_arr)
-        ranked_arr = functions.place_in_rank_category(culled_arr, self.rank_range)
+        ranked_arr = sort_funcs.place_in_rank_category(culled_arr, self.rank_range)
         return ranked_arr
 
     # helpers
     def filter(self, f_arr):
-
-        if self.filters == {}:
-            return f_arr.all()
-
-        rating_filters = self.filters['rating']['filter']
-        length_filters = self.filters['length']['filter']
-        genre_filters = self.filters['genre']['filter']
-        region_filters = self.filters['region']['filter']
-        format_filters = self.filters['format']['filter']
-        searchbar_filters = self.filters['search_bar']
-
-        format_query = region_query = genre_query = rating_query = length_query = searchbar_query = \
-            Query().title.matches('[aZ]*')
-
-        # filter format
-        for format_filter in format_filters:
-            match format_filter:
-                case "Live-action":
-                    format_query = (~Query().genres.any("Animation"))
-
-                case "Animated":
-                    format_query = (Query().genres.any("Animation"))
-
-        # filter region
-        for region_filter in region_filters:
-            match region_filter:
-                case "western":
-                    region_query = (~Query().region.any("asian"))
-
-                case "asian":
-                    region_query = (Query().region.any("western"))
-
-        # filter genre
-        if len(genre_filters) > 0:
-            genre_query = (Query().genres.all(genre_filters))
-
-        #  filter rating
-        if len(rating_filters) > 0:
-            rating_query = (Query().my_rating.any(rating_filters))
-
-        # filter length
-        for length_filter in length_filters:
-            match length_filter:
-                case "0":
-                    length_query = (Query().runtime <= 60)
-                case "1":
-                    length_query = (Query().runtime <= 120)
-                case "2":
-                    length_query = (120 < Query().runtime < 180)
-                case "3":
-                    length_query = (Query().runtime >= 180)
-
-        # filter searchbar
-        if len(searchbar_filters) > 0:
-            searchbar_query = (Query().title.test(lambda val: re.search(searchbar_filters, val, re.IGNORECASE)))
-
-        # return if empty
-        # if len(queries) < 1:
-        #     return f_arr.all()
-
-        #  apply queries
         return f_arr.search(
-            format_query &
-            region_query &
-            genre_query &
-            rating_query &
-            length_query &
-            searchbar_query
+            filter_funcs.rating_filter(self.filters) &
+            filter_funcs.length_filter(self.filters) &
+            filter_funcs.genre_filter(self.filters) &
+            filter_funcs.region_filter(self.filters) &
+            filter_funcs.format_filter(self.filters) &
+            filter_funcs.searchbar_filter(self.filters)
         )
 
     def sorting(self, f_arr):
-        # sort_arr = functions.sort_by_avg_rating(f_arr)
-        # sort_arr = functions.sort_by_date_rated(f_arr)
-        sort_arr = functions.sort_randomize(f_arr, self.settings['session_seed'])
-        sort_arr = functions.sort_by_my_rating(sort_arr)
+        # sort_arr = sort_funcs.sort_by_avg_rating(f_arr)
+        # sort_arr = sort_funcs.sort_by_date_rated(f_arr)
+        sort_arr = sort_funcs.sort_randomize(f_arr, self.settings['session_seed'])
+        sort_arr = sort_funcs.sort_by_my_rating(sort_arr)
         return sort_arr
 
     def culling(self, f_arr):
         return f_arr[:self.max_page_items]
+
+    def check_dupe(self, data):
+        print('checking dupe ', data['title'])
+        title_query = Query().title.matches(str(data['title']))
+        entries = self.db.search(title_query)
+
+        if len(entries) > 0:
+            state = True
+        else:
+            state = False
+
+        return state
 
     # others
     def transfer_old(self):
@@ -248,55 +217,17 @@ class Manga(Media):
         super().__init__(media_type='manga')
         self.rank_range = (0, 6)
 
+    # helpers
+    def filter(self, f_arr):
+        return f_arr.search(
+            filter_funcs.rating_filter(self.filters) &
+            filter_funcs.genre_filter(self.filters) &
+            filter_funcs.searchbar_filter(self.filters)
+        )
 
 
-# def edit_movie(query):
-#     # print('query', query)
-#     old_data = query['oldData']
-#     new_data = query['newData']
-#
-#     title_query = Query().id == int(old_data['id'])
-#     sorted_database.table(query['extra_settings']['media_type']).update(new_data, title_query)
-#
-#
-# def add_movie(data):
-#     print('adding movie', data)
-#     if check_dupe(data):
-#         print('adding ', data['title'])
-#         sorted_database.table(data['media_type']).insert(data)
-#     else:
-#         print('movie already found! not added')
-#
-#
-# def del_movie(data):
-#     sorted_database.table(data['extra_settings']['media_type']).remove(Query().id == int(data['id']))
-#
-#
-# def get_all_presets():
-#     presets = (sorted_database.table('tag_presets').all())
-#     sorted_presets = sorted(presets, key=lambda d: d['tier'])
-#     return sorted_presets
-#
-#
-# def add_preset(data):
-#     sorted_database.table('tag_presets').insert(data)
-#
-#
-# def del_preset(data):
-#     sorted_database.table('tag_presets').remove(Query().name == str(data['name']))
-#
-#
-# def check_dupe(data):
-#     print('checking dupe ', data['title'])
-#     title_query = Query().title.matches(str(data['title']))
-#     entries = sorted_database.table(data['media_type']).search(title_query)
-#
-#     if len(entries) > 0:
-#         state = True
-#     else:
-#         state = False
-#
-#     return state
+tag_presets = Presets()
+
 store = StorageManager()
 store.add_store('movie', Movies())
 store.add_store('tv', Series())
