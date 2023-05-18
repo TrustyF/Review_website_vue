@@ -215,7 +215,7 @@ class Series(Media):
 class Manga(Media):
     def __init__(self):
         super().__init__(media_type='manga')
-        self.rank_range = (0, 6)
+        self.rank_range = (0, 10)
 
     # helpers
     def filter(self, f_arr):
