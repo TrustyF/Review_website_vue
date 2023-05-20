@@ -57,7 +57,7 @@ function getRatingRanges() {
   axios.get(`${current_api}/get_media_rating_range`)
       .then(response => {
         if (response.status === 200) {
-          console.log('ranges',response.data)
+          // console.log('ranges',response.data)
           mediaRatingRanges.value = response.data
           update_movies()
         }
