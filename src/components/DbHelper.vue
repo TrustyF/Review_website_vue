@@ -3,7 +3,6 @@ import {defineProps, defineEmits, ref, watch, onMounted, onUnmounted, computed, 
 import TagContainer from "@/components/MediaContainer/Movies/components/TagContainer";
 import asset_paths from '../../public/assets/tags/assets.json'
 import MovieContainer from "@/components/MediaContainer/Movies/MovieContainer";
-import MangaContainer from "@/components/MediaContainer/Manga/MangaContainer";
 
 const apiKey = '063ccf740a391dee9759aaa3564661c2'
 const current_api = inject('curr_api')
@@ -313,9 +312,7 @@ function closeHelper() {
 
       <div class="metadata_wrapper box_wrapper">
 
-        <MovieContainer class="preview_movie" v-if="currentSearchType==='movies'" :data="MovChanges"></MovieContainer>
-        <MangaContainer class="preview_movie" v-if="currentSearchType==='manga'" :data="MovChanges"></MangaContainer>
-
+        <MovieContainer class="preview_movie" :data="MovChanges"></MovieContainer>
 
         <div class="movie_adder box_wrapper input_tag_description">
 
