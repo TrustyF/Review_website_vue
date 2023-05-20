@@ -1,18 +1,17 @@
 <script setup>
 import '../styles/globals.css'
 import MovieContainer from "@/components/MediaContainer/Movies/MovieContainer";
-import MangaContainer from "@/components/MediaContainer/Manga/MangaContainer";
 import DbHelper from "@/components/DbHelper";
 import FilterMenu from "@/components/Homepage/FilterMenu";
 import RatingHeader from "@/components/Homepage/RatingHeader";
 import {inject, watch, defineProps} from 'vue'
 
 import axios from 'axios'
-import {ref, onMounted,toRefs} from 'vue'
+import {ref, onMounted, toRefs} from 'vue'
 
 // to do
 // add fresh review
-const props = defineProps(['filters','ratingDesc','mediaType'])
+const props = defineProps(['filters', 'ratingDesc', 'mediaType'])
 const input_props = toRefs(props)
 
 const current_api = inject('curr_api')
@@ -120,7 +119,7 @@ watch(settingsOpen, (newV, oldV) => {
 })
 
 onMounted(() => {
-  console.log('mounted',mediaType.value)
+  console.log('mounted', mediaType.value)
   setMediaType(mediaType.value)
   window.addEventListener('scroll', handleScroll)
 })
@@ -131,7 +130,7 @@ onMounted(() => {
              @closed="settingsOpen = !settingsOpen" @updated="update_movies"></db-helper>
 
   <div v-if="devMode">
-    <button @click="settingsOpen = true" style="margin: 13px 0 0 20px; position: fixed">Add {{mediaType}}</button>
+    <button @click="settingsOpen = true" style="margin: 13px 0 0 20px; position: fixed">Add {{ mediaType }}</button>
   </div>
 
   <FilterMenu :props="filters" @filtersChange="setFilters"></FilterMenu>
@@ -148,9 +147,7 @@ onMounted(() => {
     <div class="movie_grid" v-for="rating in Object.keys(ratingDesc).reverse()" :key="rating">
       <rating-header :rating="rating" :rating_desc="ratingDesc"></rating-header>
       <div class="movie_container_wrapper" v-for="mov in movies[rating]" :key="mov.title">
-        <MovieContainer v-if="mediaType==='movie'" :key="mov.id" :data="mov" @MovieEdit="editMovie"></MovieContainer>
-        <MovieContainer v-if="mediaType==='tv'" :key="mov.id" :data="mov" @MovieEdit="editMovie"></MovieContainer>
-        <MangaContainer v-if="mediaType==='manga'" :key="mov.id" :data="mov" @MovieEdit="editMovie"></MangaContainer>
+        <MovieContainer :key="mov.id" :data="mov" @MovieEdit="editMovie"></MovieContainer>
       </div>
     </div>
 
@@ -165,10 +162,7 @@ onMounted(() => {
 <style scoped>
 .feed {
   /*outline: 1px solid blue;*/
-  position: relative;
-
-  margin: 25px 15px 0 25px;
-
+  margin:  15px 25px 0 25px;
   display: flex;
   flex-direction: column;
 }
@@ -178,12 +172,12 @@ onMounted(() => {
   display: flex;
   text-align: center;
   align-items: center;
-  filter: brightness(0%);
 }
 
 .movie_grid {
   /*outline: 3px solid blue;*/
   width: 100%;
+  gap: 10px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

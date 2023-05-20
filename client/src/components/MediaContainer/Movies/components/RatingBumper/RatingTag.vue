@@ -42,9 +42,10 @@ export default {
 <style scoped>
 .box {
   background-color: rgba(255, 255, 255, 1);
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+  filter: drop-shadow(0 0 2px rgba(0,0,0,0.8));
   padding: 3px;
   border-radius: 5px;
+  /*border: solid darkgrey 1px;*/
   display: flex;
   flex-flow: row;
   /*outline: 1px green solid;*/
@@ -110,7 +111,6 @@ export default {
   position: relative;
   text-align: left;
   /*outline: 1px solid red;*/
-  padding: 2px;
 }
 
 

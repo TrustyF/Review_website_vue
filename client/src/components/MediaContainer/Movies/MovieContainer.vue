@@ -34,13 +34,12 @@ function emitSelectedMovie(input) {
 
 </script>
 <template>
-  <div class="movie_container" :class="[isOpen ? 'open' : 'closed']" v-click-out-side="clickOutside" @click="isOpen = !isOpen">
+  <div class="movie_container" :class="[isOpen ? 'open' : 'closed']" v-click-out-side="clickOutside"
+       @click="isOpen = !isOpen">
 
     <div class="main_block">
 
-<!--      <div class="gradient_fill"></div>-->
-
-      <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"></RatingBumper>
+      <div class="gradient_fill"></div>
 
       <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
 
@@ -48,10 +47,21 @@ function emitSelectedMovie(input) {
         <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
       </div>
 
-      <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
-           class="poster" alt="poster" draggable="false">
+      <!--      Posters-->
+      <div v-if="data['media_type']==='movie' || data['media_type']==='tv'">
+        <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
+             class="poster" alt="poster"
+             v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
+      </div>
+      <div v-if="data['media_type']==='manga'">
+        <img v-if="data['poster_path']" v-lazy="`https://uploads.mangadex.org/covers/${data['poster_path']}.256.jpg`"
+             class="poster" alt="poster"
+             v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
+      </div>
 
-      <ContentBox :data="data"></ContentBox>
+      <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"></RatingBumper>
+
+      <ContentBox class="content_box" :data="data"></ContentBox>
 
     </div>
 
@@ -94,7 +104,6 @@ function emitSelectedMovie(input) {
   /*max-width: 400px;*/
   /*min-width: 200px;*/
 
-  margin: 15px;
   border-radius: 8px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
 
@@ -102,7 +111,6 @@ function emitSelectedMovie(input) {
   transition: 0.2s ease;
 
   display: flex;
-
 }
 
 .settings {
@@ -124,9 +132,17 @@ function emitSelectedMovie(input) {
   position: absolute;
 }
 
+.content_box {
+  /*outline: 1px solid red;*/
+  padding: 5px 5px 5px 10px;
+  /*padding: 5px;*/
+}
+
 .rating_bumper {
   position: absolute;
-  transform: translate(3px, 277px);
+  transform: translate(-2px, -29px);
+  /*outline: 1px solid red;*/
+  padding: 0 5px 5px 5px;
 }
 
 .main_block {
@@ -180,7 +196,7 @@ function emitSelectedMovie(input) {
   width: 200px;
   position: absolute;
   height: 300px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 85%, rgba(0, 0, 0, 0.5) 100%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 90%, rgba(0, 0, 0, 0.3) 100%);
   /*border-radius: 8px;*/
   pointer-events: none;
 }
@@ -188,7 +204,6 @@ function emitSelectedMovie(input) {
 .gold_glow {
   box-shadow: 0 0 8px rgb(0, 0, 0), 0 0 16px rgb(255, 204, 109);
 }
-
 
 .open .tags_list_poster {
   opacity: 0;
@@ -198,5 +213,12 @@ function emitSelectedMovie(input) {
 .editor_button {
   position: absolute;
   transform: translate(174px, 2px);
+}
+
+.details_wrapper {
+  padding: 5px;
+  overflow-y: scroll;
+  overflow-wrap: break-word;
+  height: 250px;
 }
 </style>
