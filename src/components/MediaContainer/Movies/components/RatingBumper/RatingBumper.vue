@@ -20,7 +20,7 @@ const stop = './assets/ui/stop.png'
 const avg_range = input['avg_range'].value
 const my_range = input['my_range'].value
 
-console.log(avg_range[0],avg_range[1],my_range[0],my_range[1])
+// console.log(avg_range[0],avg_range[1],my_range[0],my_range[1])
 
 function map_range(value, low1, high1, low2, high2) {
   let out = low2 + (high2 - low2) * (value - low1) / (high1 - low1);
