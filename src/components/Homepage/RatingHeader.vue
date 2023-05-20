@@ -25,7 +25,7 @@ export default {
   user-select: none;
   position: sticky;
   top: 20px;
-  margin: 5px;
+  /*margin: 5px;*/
   z-index: 10;
   /*outline: 1px red solid;*/
 }

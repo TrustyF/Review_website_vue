@@ -351,6 +351,9 @@ function closeHelper() {
           <div v-if="mediaType==='manga'">
             <label for="re_read">Re-read</label>
             <input id="re_read" type="number" @input="MovChanges['re_read'] = String($event.target.value)">
+
+            <label for="dropped">Dropped</label>
+            <input id="dropped" type="checkbox" @input="MovChanges['dropped'] = String($event.target.value)">
           </div>
           <!--          Date rated-->
           <label for="date_rated_input">Date rated</label>
