@@ -35,7 +35,6 @@ let ratingDesc = {
   3: 'Fucking bad',
   2: 'Holy shit bad',
   1: 'Affront to god',
-  0: 'Dropped'
 }
 const mediaType = "manga"
 </script>

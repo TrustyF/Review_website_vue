@@ -26,6 +26,7 @@ let settings = ref({
   'session_seed': sessionSeed,
 })
 const currentSelectedMovie = ref({})
+const mediaRatingRanges = ref({})
 
 const servStatus = ref(0)
 
@@ -47,6 +48,17 @@ function setFilters() {
   axios.post(`${current_api}/set_filters`, filters.value)
       .then(response => {
         if (response.status === 200) {
+          getRatingRanges()
+        }
+      })
+}
+
+function getRatingRanges() {
+  axios.get(`${current_api}/get_media_rating_range`)
+      .then(response => {
+        if (response.status === 200) {
+          console.log('ranges',response.data)
+          mediaRatingRanges.value = response.data
           update_movies()
         }
       })
@@ -144,10 +156,11 @@ onMounted(() => {
     <!--      </div>-->
     <!--    </div>-->
 
+
     <div class="movie_grid" v-for="rating in Object.keys(ratingDesc).reverse()" :key="rating">
-      <rating-header :rating="rating" :rating_desc="ratingDesc"></rating-header>
+      <rating-header class="rating_header" :rating="rating" :rating_desc="ratingDesc"></rating-header>
       <div class="movie_container_wrapper" v-for="mov in movies[rating]" :key="mov.title">
-        <MovieContainer :key="mov.id" :data="mov" @MovieEdit="editMovie"></MovieContainer>
+        <MovieContainer class="movie_container" :key="mov.id" :data="mov" :ratingRange="mediaRatingRanges" @MovieEdit="editMovie"></MovieContainer>
       </div>
     </div>
 
@@ -162,7 +175,6 @@ onMounted(() => {
 <style scoped>
 .feed {
   /*outline: 1px solid blue;*/
-  margin:  15px 25px 0 25px;
   display: flex;
   flex-direction: column;
 }
@@ -176,12 +188,12 @@ onMounted(() => {
 
 .movie_grid {
   /*outline: 3px solid blue;*/
-  width: 100%;
-  gap: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  flex-flow: row wrap;
-  margin: auto auto 20px;
+  padding: 30px;
+  gap: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  /*flex-flow: row wrap;*/
+  /*justify-content: space-between;*/
+  /*flex-basis: 300px;*/
 }
 </style>

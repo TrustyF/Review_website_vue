@@ -1,9 +1,11 @@
 <script setup>
-import {defineProps, defineEmits, watch, ref, onMounted} from 'vue'
+import {defineProps, defineEmits, watch, ref, toRefs, onMounted} from 'vue'
 
 import RatingTag from "@/components/MediaContainer/Movies/components/RatingBumper/RatingTag";
 
-const props = defineProps(['data'])
+const props = defineProps(['data', 'range'])
+const input = toRefs(props.range)
+
 const blue_star = './assets/ui/blue_star.png'
 const gold_star = './assets/ui/gold_star.png'
 const arrow_up_single = './assets/ui/arrow_up_single.png'
@@ -13,12 +15,20 @@ const arrow_down_double = './assets/ui/arrow_down_double.png'
 const re_watch_down = './assets/ui/rewind_down.png'
 const re_watch_up = './assets/ui/rewind_up.png'
 const re_read = './assets/ui/reading.png'
+const stop = './assets/ui/stop.png'
+
+const avg_range = input['avg_range'].value
+const my_range = input['my_range'].value
+
+console.log(avg_range[0],avg_range[1],my_range[0],my_range[1])
 
 function map_range(value, low1, high1, low2, high2) {
-  return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+  let out = low2 + (high2 - low2) * (value - low1) / (high1 - low1);
+  if (out > high2) out = high2
+  return out
 }
 
-const scaled_user_rating = ref(Math.round(map_range(props.data['vote_average'], 4, 9.5, 1, 9) * 10) / 10)
+const scaled_user_rating = ref(Math.round(map_range(props.data['vote_average'], avg_range[0], avg_range[1], Number(my_range[0]), Number(my_range[1])) * 10) / 10)
 const round_user_rating = ref(Math.round(props.data['vote_average'] * 10) / 10)
 
 const rating_diff = Math.abs(props.data['my_rating'] - scaled_user_rating.value).toFixed(0)
@@ -28,6 +38,9 @@ const arrow_state = ref(0)
 calc()
 
 function calc() {
+
+  if (props.data['dropped'] === 'on') return
+
   if (props.data['my_rating'] > scaled_user_rating.value + 1.5) {
     arrow_state.value = 1
     if (props.data['my_rating'] > scaled_user_rating.value + 2.5) {
@@ -90,6 +103,12 @@ function calc() {
                name="Underrated"
                :desc="`My rating is ${rating_diff} points lower than the scaled average rating`"
                :sub_desc="`The unscaled average rating is ${round_user_rating}`"
+    ></RatingTag>
+
+    <RatingTag v-if="data['dropped']==='on'"
+               :image="stop"
+               name="Unfinished"
+               desc="Did not get around to finishing it or outright dropped it"
     ></RatingTag>
 
     <RatingTag v-if="data['re_watch']==='down'"

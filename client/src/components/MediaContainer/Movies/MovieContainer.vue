@@ -5,7 +5,7 @@ import RatingBumper from "@/components/MediaContainer/Movies/components/RatingBu
 import {defineProps, defineEmits, ref, onMounted, onUnmounted, watch, inject} from 'vue'
 import ContentBox from "@/components/MediaContainer/Movies/components/ContentBox";
 
-const props = defineProps(['data'])
+const props = defineProps(['data', 'ratingRange'])
 const emits = defineEmits(['MovieEdit'])
 
 const devMode = inject('devMode')
@@ -59,7 +59,7 @@ function emitSelectedMovie(input) {
              v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
       </div>
 
-      <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"></RatingBumper>
+      <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data" :range="ratingRange"></RatingBumper>
 
       <ContentBox class="content_box" :data="data"></ContentBox>
 
