@@ -60,6 +60,11 @@ def check_dupe():
     return Response(status=200), state
 
 
+@app.route('/get_media_rating_range/', methods=["GET"])
+def get_media_rating_range():
+    return store.get_curr_media().get_media_rating_range()
+
+
 @app.route('/get_presets/', methods=["GET"])
 def get_presets():
     return tag_presets.get_all_presets()

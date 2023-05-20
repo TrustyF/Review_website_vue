@@ -58,6 +58,11 @@ class Media:
         self.settings = {'session_seed': 0, }
         self.rank_range = (1, 10)
 
+        self.rank_avg_range = None
+        self.my_rating_range = None
+
+        self.calc_rating_range()
+
     # setters
     def set_settings(self, query):
         print('set_settings')
@@ -100,6 +105,12 @@ class Media:
         ranked_arr = sort_funcs.place_in_rank_category(culled_arr, self.rank_range)
         return ranked_arr
 
+    def get_media_rating_range(self):
+        return {
+            'avg_range': self.rank_avg_range,
+            'my_range': self.my_rating_range
+        }
+
     # helpers
     def filter(self, f_arr):
         return f_arr.search(
@@ -135,6 +146,16 @@ class Media:
             state = False
 
         return state
+
+    # calculators
+    def calc_rating_range(self):
+        avg_ratings = [mov['vote_average'] for mov in self.db]
+        my_ratings = [mov['my_rating'] for mov in self.db]
+
+        self.rank_avg_range = (min(avg_ratings), max(avg_ratings))
+        self.my_rating_range = (min(my_ratings), max(my_ratings))
+
+        # print(self.media_type, self.rank_avg_range, self.my_rating_range)
 
     # others
     def transfer_old(self):
@@ -218,7 +239,6 @@ class Series(Media):
 class Manga(Media):
     def __init__(self):
         super().__init__(media_type='manga')
-        self.rank_range = (0, 10)
 
     # helpers
     def filter(self, f_arr):
