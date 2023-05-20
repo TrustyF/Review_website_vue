@@ -38,25 +38,28 @@ function swap_filter(filter, target, checkbox, button) {
 }
 
 function search_bar(event) {
-  let timeOutId = 0
+  filters['search_bar'] = event
+  emits('filtersChange', filters)
 
-  if (throttle_search === false) {
-    throttle_search = true
-
-    timeOutId = setTimeout(function () {
-      filters['search_bar'] = event
-      emits('filtersChange', filters)
-      throttle_search = false
-    }, 500)
-
-  }
-
-  if (event === "") {
-    clearTimeout(timeOutId)
-    filters['search_bar'] = event
-    emits('filtersChange', filters)
-    throttle_search = false
-  }
+  // let timeOutId = 0
+  //
+  // if (throttle_search === false) {
+  //   throttle_search = true
+  //
+  //   timeOutId = setTimeout(function () {
+  //     filters['search_bar'] = event
+  //     emits('filtersChange', filters)
+  //     throttle_search = false
+  //   }, 10)
+  //
+  // }
+  //
+  // if (event === "") {
+  //   clearTimeout(timeOutId)
+  //   filters['search_bar'] = event
+  //   emits('filtersChange', filters)
+  //   throttle_search = false
+  // }
 }
 
 

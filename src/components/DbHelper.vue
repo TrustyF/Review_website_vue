@@ -29,11 +29,10 @@ let tagPresets = ref({})
 let currentSearchMovie = ref("")
 let currentSearchType = ref(props['mediaType'])
 let currentSearchPage = ref(0)
-let maxSearchPage = ref(0)
 let currentPoster = ref(0)
 let presentInDb = ref(false)
 
-onMounted(()=>{
+onMounted(() => {
   loadPresets()
 })
 
@@ -70,6 +69,7 @@ function updateMedia(button) {
 
 async function searchMovie() {
   let search_text = currentSearchMovie.value
+  currentSearchPage.value = 0
 
   console.log(search_text, currentSearchType.value, currentSearchPage.value)
 
@@ -148,18 +148,17 @@ async function searchMovie() {
                   return
                 }
 
-                maxSearchPage.value = response.data.data.length - 1
-
                 let simple_data = response.data.data[currentSearchPage.value]['attributes']
                 let all_data = response.data.data[currentSearchPage.value]
                 let formatted_data = {}
-                console.log(simple_data)
-                console.log(all_data)
+                console.log('simple_data', simple_data)
+                // console.log('all_data', all_data)
 
                 if (simple_data['title']['en'] !== undefined) formatted_data['title'] = simple_data['title']['en']
                 if (simple_data['title']['en'] === undefined) formatted_data['title'] = simple_data['title']['ja']
 
                 formatted_data['manga_id'] = all_data['id']
+                formatted_data['contentRating'] = simple_data['contentRating']
                 formatted_data['release_date'] = simple_data['createdAt'].split("T")[0]
                 formatted_data['overview'] = simple_data['description']['en']
                 formatted_data['links'] = simple_data['links']
@@ -173,7 +172,6 @@ async function searchMovie() {
 
                 formatted_data['images'] = {'posters': []}
 
-
                 console.log('returned formatted', formatted_data)
                 throttle_search = false
                 return formatted_data
@@ -183,7 +181,7 @@ async function searchMovie() {
 
           await axios.get(`https://api.mangadex.org/cover?limit=100&manga%5B%5D=${MovChanges.value['manga_id']}`)
               .then(response => {
-                console.log('covers', response.data.data)
+                // console.log('covers', response.data.data)
                 MovChanges.value['images']['posters'] = response.data.data.map((elem) => {
                   return {
                     'file_path': `${MovChanges.value['manga_id']}/${elem['attributes']['fileName']}`,
@@ -196,7 +194,7 @@ async function searchMovie() {
 
           await axios.get(`https://api.mangadex.org/statistics/manga/${MovChanges.value['manga_id']}`)
               .then(response => {
-                console.log('stats', response.data['statistics'][MovChanges.value['manga_id']])
+                // console.log('stats', response.data['statistics'][MovChanges.value['manga_id']])
                 MovChanges.value['vote_average'] = response.data['statistics'][MovChanges.value['manga_id']]['rating']['average']
               })
 
@@ -328,7 +326,6 @@ function closeHelper() {
           <label for="search_list_input">Search scroll</label>
           <input type="number" @change="currentSearchPage = Number($event.target.value)" @input="searchMovie" value="0"
                  id="search_list_input">
-          <p>max pages: {{ maxSearchPage }}</p>
 
         </div>
 
@@ -346,12 +343,18 @@ function closeHelper() {
             </select>
           </form>
           <!--      Re-watch-->
-          <label for="region">Re-watch</label>
-          <form id="region" @input="MovChanges['re_watch'] = String($event.target.value)">
-            <select>
-              <option v-for="elem in availableReWatch" :key="elem">{{ elem }}</option>
-            </select>
-          </form>
+          <div v-if="mediaType==='movie' || mediaType==='tv'">
+            <label for="re_watch">Re-watch</label>
+            <form id="re_watch" @input="MovChanges['re_watch'] = String($event.target.value)">
+              <select>
+                <option v-for="elem in availableReWatch" :key="elem">{{ elem }}</option>
+              </select>
+            </form>
+          </div>
+          <div v-if="mediaType==='manga'">
+            <label for="re_read">Re-read</label>
+            <input id="re_read" type="number" @input="MovChanges['re_read'] = String($event.target.value)">
+          </div>
           <!--          Date rated-->
           <label for="date_rated_input">Date rated</label>
           <input type="date" id="date_rated_input" :value="data['date_rated']"

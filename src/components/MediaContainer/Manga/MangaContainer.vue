@@ -15,8 +15,6 @@ const isSeen = ref(false)
 const outOfFocus = ref(false)
 const settingsOpen = ref(false)
 
-let tagAmount = ref(0)
-
 function timeConvert(n) {
   const hours = (n / 60);
   const rhours = Math.floor(hours);
@@ -33,37 +31,29 @@ function emitSelectedMovie(input) {
   emits('MovieEdit', props['data'])
 }
 
-function calcTagAmount(){
-  if (props.data['tags'] !== undefined) {
-    tagAmount.value = props.data['tags'].length
-  }
-}
-
-calcTagAmount()
 
 </script>
 <template>
-  <div class="movie_container" :class="[isOpen ? 'open' : 'closed']">
+  <div class="movie_container" :class="[isOpen ? 'open' : 'closed']" v-click-out-side="clickOutside" @click="isOpen = !isOpen">
     <div class="main_block">
 
-      <div class="gradient_fill"></div>
-      <div class="tag_gradient_wrapper">
-        <div :class="'tag_gradient_background' + [tagAmount===1 ? ' one_tag' : ''] + [tagAmount===2 ? ' two_tag' : ''] + [tagAmount===3 ? ' three_tag' : '']"></div>
-      </div>
+<!--      <div class="gradient_fill"></div>-->
 
-      <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"></RatingBumper>
 
       <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
 
       <div v-if="devMode" class="settings">
-        <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie" style="transform: translate(30px,-20px); padding: 0;height: 5px;width: 5px"></button>
+        <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
       </div>
 
       <img v-if="data['poster_path']" v-lazy="`https://uploads.mangadex.org/covers/${data['poster_path']}.256.jpg`"
            class="poster" alt="poster"
            v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
 
-      <ContentBox :data="data"></ContentBox>
+
+      <ContentBox class="content_box" :data="data"></ContentBox>
+
+      <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"></RatingBumper>
 
     </div>
 
@@ -106,12 +96,21 @@ calcTagAmount()
   transition: 0.2s ease;
 
   display: flex;
-
 }
 
 .settings {
   position: absolute;
   transform: translate(173px, 3px);
+
+  visibility: hidden;
+  opacity: 0;
+
+  transition: 300ms ease-out;
+}
+
+.main_block:hover .settings {
+  visibility: visible;
+  opacity: 100%;
 }
 
 .tag_container {
@@ -119,8 +118,11 @@ calcTagAmount()
 }
 
 .rating_bumper {
-  position: absolute;
-  transform: translate(3px, 277px);
+  padding: 5px;
+}
+
+.content_box {
+  padding: 5px 10px 0 10px;
 }
 
 .main_block {
@@ -179,39 +181,9 @@ calcTagAmount()
   pointer-events: none;
 }
 
-.tag_gradient_wrapper {
-  position: absolute;
-  width: 200px;
-  height: 300px;
-  overflow: hidden;
-  border-radius: 8px 0 0 0;
-  pointer-events: none;
-  /*outline: green solid 1px;*/
-}
-
-.tag_gradient_background {
-  /*outline: green solid 1px;*/
-  overflow: hidden;
-  width: 100px;
-  position: absolute;
-  transform: translate(-70%, -15%);
-  background-color: rgba(0, 0, 0, 0.9);
-  filter: blur(20px);
-}
-.one_tag {
-  height: 50px;
-  }
-.two_tag {
-  height: 130px;
-}
-.three_tag {
-  height: 190px;
-}
-
 .gold_glow {
   box-shadow: 0 0 8px rgb(0, 0, 0), 0 0 16px rgb(255, 204, 109);
 }
-
 
 .open .tags_list_poster {
   opacity: 0;
