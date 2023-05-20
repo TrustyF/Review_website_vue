@@ -51,8 +51,6 @@ export default {
   justify-content: space-between;
   flex-direction: column;
   overflow: hidden;
-
-  margin: 5px 10px 10px 10px;
 }
 
 .title {
