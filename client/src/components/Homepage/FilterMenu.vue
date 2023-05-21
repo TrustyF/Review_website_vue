@@ -86,14 +86,16 @@ onMounted(() => {
   </div>
 
   <Collapse :when="state" class="collapse">
-    <div class="filter_wrapper">
+    <div class="filter_wrapper" v-if="filters">
       <div class="filters">
         <div class="filter_types" v-for="elem in filters" :key="elem['name']">
           <p>{{ props.value }}</p>
+          <p>{{ elem['filter'] }}</p>
           <h1 class="filter_heading">{{ elem['name'] }}</h1>
           <div v-for="(filter,index) in elem['available']" :key="filter" class="filter_content_list">
             <label class="filter_label">
               <input :type="elem['checkbox'] ? 'checkbox' : 'radio'" :name="elem['name']" style="cursor: pointer"
+                     :checked="elem['filter'][index]===elem['name']"
                      @click="swap_filter(filter,elem['filter'],elem['checkbox'],$event)">
               {{ elem['display'][index] }}
             </label>

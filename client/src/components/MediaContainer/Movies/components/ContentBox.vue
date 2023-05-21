@@ -9,13 +9,14 @@ let overflowTitleSpeed = ref()
 const titleRef = ref()
 
 function calcTitleOverflow() {
-  if(props.data['title'] === undefined) return
+  if (props.data['title'] === undefined) return
 
-  const text_len = props.data['title'].length
-  const text_size = titleRef.value.clientWidth/text_len
-  if (text_len > 30) {
-    overflowTitleLength.value = `-${(text_len - 30) * text_size}px`
-    overflowTitleSpeed.value = `${ ((text_len - 30) * text_size) / 80}s`
+  let text_len = props.data['title'].length
+  text_len += props.data['title'].split(" ").length
+  const text_size = titleRef.value.clientWidth / text_len
+  if (text_len > 36) {
+    overflowTitleLength.value = `-${(text_len - 30) * (text_size * 1.2)}px`
+    overflowTitleSpeed.value = `${((text_len - 30) * (text_size * 1.2)) / 50}s`
   }
 }
 
@@ -28,11 +29,11 @@ onMounted(() => {
 <template>
   <div class="content">
     <p class="title" ref="titleRef" v-if="data['title']">{{ data['title'] }}</p>
-    <p class="date" v-if="data['release_date']">{{ data['release_date'].split("-")[0] }}</p>
+    <p class="date" v-if="data['release_date']">{{ data['release_date'].split("-")[0] + " | "+ data['date_rated'] }}</p>
     <div v-if="devMode">
-      <!--      <span> -&#45;&#45; </span>-->
-      <!--      <p class="date" v-if="data['images']">{{ data['images']['posters'].length }}</p>-->
-      <!--      <p class="date" v-if="data['date_rated']">{{ data['date_rated'] }}</p>-->
+      <!--            <span> -&#45;&#45; </span>-->
+      <!--            <p class="date">{{ overflowTitleLength }}</p>-->
+            <p class="date" v-if="data['contentRating']">{{ data['contentRating'] }}</p>
     </div>
   </div>
 
@@ -50,6 +51,7 @@ export default {
   display: grid;
   justify-content: space-between;
   flex-direction: column;
+  margin: 5px 10px 5px 10px;
   overflow: hidden;
 }
 
