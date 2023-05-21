@@ -50,16 +50,15 @@ function emitSelectedMovie(input) {
       <!--      Posters-->
       <div v-if="data['media_type']==='movie' || data['media_type']==='tv'">
         <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
-             class="poster" alt="poster"
-             v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
+             class="poster" alt="poster" draggable="false">
       </div>
       <div v-if="data['media_type']==='manga'">
         <img v-if="data['poster_path']" v-lazy="`https://uploads.mangadex.org/covers/${data['poster_path']}.256.jpg`"
-             class="poster" alt="poster"
-             v-click-out-side="clickOutside" @click="isOpen = !isOpen" draggable="false">
+             class="poster" alt="poster" draggable="false">
       </div>
 
-      <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data" :range="ratingRange"></RatingBumper>
+      <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"
+                    :range="ratingRange"></RatingBumper>
 
       <ContentBox class="content_box" :data="data"></ContentBox>
 
@@ -78,15 +77,19 @@ function emitSelectedMovie(input) {
           <p class="rank" v-if="data['genres']" style="margin-bottom:5px;">
             {{ data['genres'].map(elem => elem).join(', ') }}
           </p>
-          <p class="rank" style="margin-bottom:5px;" v-if="data['runtime'] && data['media_type']==='movie'">
-            {{ "Duration: " + timeConvert(data['runtime']) }}
-          </p>
-          <a :href="data['imdb_url']" target="_blank" rel="noopener noreferrer">
-            <button type="button"
-                    style="background-color: #F5C518;border-radius: 3px;padding: 3px;outline: 1px black solid;border-style: none;cursor:pointer ">
-              Imdb
-            </button>
-          </a>
+
+          <div v-if="data['media_type']==='movie' || data['media_type']==='tv'">
+            <p class="rank" style="margin-bottom:5px;" v-if="data['runtime'] && data['media_type']==='movie'">
+              {{ "Duration: " + timeConvert(data['runtime']) }}
+            </p>
+            <a :href="data['imdb_url']" target="_blank" rel="noopener noreferrer">
+              <button type="button"
+                      style="background-color: #F5C518;border-radius: 3px;padding: 3px;outline: 1px black solid;border-style: none;cursor:pointer ">
+                Imdb
+              </button>
+            </a>
+          </div>
+
         </div>
       </div>
     </div>
@@ -120,7 +123,7 @@ function emitSelectedMovie(input) {
   visibility: hidden;
   opacity: 0;
 
-  transition: 300ms ease-out;
+  transition: 30ms ease-out;
 }
 
 .main_block:hover .settings {
@@ -134,7 +137,6 @@ function emitSelectedMovie(input) {
 
 .content_box {
   /*outline: 1px solid red;*/
-  padding: 5px 5px 5px 10px;
   /*padding: 5px;*/
 }
 

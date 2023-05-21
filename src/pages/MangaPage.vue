@@ -12,9 +12,16 @@ let filters = ref({
   },
   'rating': {
     'name': 'Rating',
-    'available': ["9", "8", "7", "6", "5", "4", "3", "2", "1", "0"],
-    'display': ["9★", "8★", "7★", "6★", "5★", "4★", "3★", "2★", "1★", "Dropped"],
+    'available': ["9", "8", "7", "6", "5", "4", "3", "2", "1"],
+    'display': ["9★", "8★", "7★", "6★", "5★", "4★", "3★", "2★", "1★"],
     'filter': [],
+    'checkbox': true
+  },
+  'content': {
+    'name': 'Content',
+    'available': ["0", "1", "2", "3"],
+    'display': ["Safe", "Suggestive", "Erotic", "Pornographic"],
+    'filter': ["Safe", "Suggestive"],
     'checkbox': true
   },
   'sort': {

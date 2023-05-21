@@ -17,18 +17,23 @@ const re_watch_up = './assets/ui/rewind_up.png'
 const re_read = './assets/ui/reading.png'
 const stop = './assets/ui/stop.png'
 
-const avg_range = input['avg_range'].value
-const my_range = input['my_range'].value
+let avg_range = [0, 0]
+let my_range = [0, 0]
 
-// console.log(avg_range[0],avg_range[1],my_range[0],my_range[1])
+if (input !== undefined) {
+  avg_range = input['avg_range'].value
+  my_range = input['my_range'].value
+}
+
+// console.log(avg_range[0], avg_range[1], my_range[0], my_range[1])
 
 function map_range(value, low1, high1, low2, high2) {
   let out = low2 + (high2 - low2) * (value - low1) / (high1 - low1);
-  if (out > high2) out = high2
+  // if (out > high2) out = high2
   return out
 }
 
-const scaled_user_rating = ref(Math.round(map_range(props.data['vote_average'], avg_range[0], avg_range[1], Number(my_range[0]), Number(my_range[1])) * 10) / 10)
+const scaled_user_rating = ref(Math.round(map_range(props.data['vote_average'], avg_range[0], avg_range[1], Number(my_range[0]), 10) * 10) / 10)
 const round_user_rating = ref(Math.round(props.data['vote_average'] * 10) / 10)
 
 const rating_diff = Math.abs(props.data['my_rating'] - scaled_user_rating.value).toFixed(0)
@@ -132,10 +137,22 @@ function calc() {
                :number="data['re_read']"
     ></RatingTag>
 
-    <RatingTag v-if="data['contentRating']"
+    <RatingTag v-if="data['contentRating']==='suggestive'"
                rating="+13"
-               :name="data['contentRating']"
-               :desc="`Careful`"
+               name="Suggestive"
+               desc="Sexual topics and/or realistic violence are on the menu"
+    ></RatingTag>
+
+    <RatingTag v-if="data['contentRating']==='erotica'"
+               rating="+18"
+               name="Erotic"
+               desc="Sexy bits will be shown here"
+    ></RatingTag>
+
+    <RatingTag v-if="data['contentRating']==='pornographic'"
+               rating="+18"
+               name="Pornographic"
+               desc="Porn, its porn..."
     ></RatingTag>
 
 

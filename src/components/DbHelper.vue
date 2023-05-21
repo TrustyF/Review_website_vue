@@ -22,6 +22,10 @@ let iconData = ref({
   'tier': "gold",
   'image': ""
 })
+const tempRange = ref({
+  'avg_range': [0, 0],
+  'my_range': [0, 1],
+})
 
 let tagPresets = ref({})
 
@@ -217,6 +221,17 @@ function checkInDb() {
       })
 }
 
+async function refreshData() {
+  if (currentSearchType.value === 'manga') {
+    let searchResult = await axios.get(`https://api.mangadex.org/manga?title=${MovChanges.value['title']}&order%5Brelevance%5D=desc&includes[]=cover_art&limit=20`)
+        .then(response => {
+          let simple_data = response.data.data[currentSearchPage.value]['attributes']
+          MovChanges.value['contentRating'] = simple_data['contentRating']
+        })
+    // closeHelper()
+  }
+}
+
 function addMovie(button) {
   button.target.disabled = true
   axios.post(`${current_api}/add_media/`, MovChanges.value)
@@ -312,7 +327,7 @@ function closeHelper() {
 
       <div class="metadata_wrapper box_wrapper">
 
-        <MovieContainer class="preview_movie" :data="MovChanges"></MovieContainer>
+        <MovieContainer class="preview_movie" :data="MovChanges" :ratingRange="tempRange"></MovieContainer>
 
         <div class="movie_adder box_wrapper input_tag_description">
 
@@ -339,8 +354,18 @@ function closeHelper() {
               <option v-for="elem in availableRegions" :key="elem" :selected="data['region']">{{ elem }}</option>
             </select>
           </form>
+          <!--      Content rating-->
+          <label for="content_rating">Content rating</label>
+          <form id="content_rating" @click="MovChanges['contentRating'] = String($event.target.value)">
+            <select>
+              <option>safe</option>
+              <option>suggestive</option>
+              <option>erotica</option>
+              <option>pornographic</option>
+            </select>
+          </form>
           <!--      Re-watch-->
-          <div v-if="mediaType==='movie' || mediaType==='tv'">
+          <div>
             <label for="re_watch">Re-watch</label>
             <form id="re_watch" @input="MovChanges['re_watch'] = String($event.target.value)">
               <select>
@@ -363,6 +388,7 @@ function closeHelper() {
         </div>
 
         <div class="box_wrapper">
+          <button @click="refreshData">Refresh data</button>
           <p v-if="presentInDb">!! Movie already added !!</p>
           <button @click="addMovie" v-if="!presentInDb">add movie</button>
           <button @click="delMovie">remove movie</button>
@@ -374,7 +400,7 @@ function closeHelper() {
 
           <div class="icon_settings box_wrapper">
             <div class="icon_metadata box_wrapper">
-              <TagContainer :tag_input="[iconData]" :tooltip_override="false" style="min-height: 55px"></TagContainer>
+              <TagContainer :tag_input="[iconData]" :preview="true"></TagContainer>
             </div>
 
             <textarea @input="iconData['name'] = $event.target.value" :value="iconData['name']"
@@ -393,7 +419,7 @@ function closeHelper() {
           <div class="icon_selector box_wrapper" style="overflow-x: hidden">
             <div class="icon_selectable preset_icons" v-for="preset in tagPresets" :key="preset['name']"
                  @click="iconData={...preset}">
-              <TagContainer :tag_input="[preset]"></TagContainer>
+              <TagContainer :tag_input="[preset]" :preview="true"></TagContainer>
             </div>
           </div>
 

@@ -159,8 +159,11 @@ onMounted(() => {
 
     <div class="movie_grid" v-for="rating in Object.keys(ratingDesc).reverse()" :key="rating">
       <rating-header class="rating_header" :rating="rating" :rating_desc="ratingDesc"></rating-header>
-      <div class="movie_container_wrapper" v-for="mov in movies[rating]" :key="mov.title">
-        <MovieContainer class="movie_container" :key="mov.id" :data="mov" :ratingRange="mediaRatingRanges" @MovieEdit="editMovie"></MovieContainer>
+      <div class="movie_container_wrapper">
+        <div v-for="mov in movies[rating]" :key="mov.title">
+          <MovieContainer class="movie_container" :key="mov.id" :data="mov" :ratingRange="mediaRatingRanges"
+                          @MovieEdit="editMovie"></MovieContainer>
+        </div>
       </div>
     </div>
 
@@ -188,12 +191,19 @@ onMounted(() => {
 
 .movie_grid {
   /*outline: 3px solid blue;*/
-  padding: 30px;
+  margin: 30px;
+  gap: 30px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  /*flex-basis: 300px;*/
+}
+
+.movie_container_wrapper {
+  /*outline: 1px solid red;*/
+  width: 100%;
   gap: 30px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  /*flex-flow: row wrap;*/
-  /*justify-content: space-between;*/
-  /*flex-basis: 300px;*/
 }
 </style>

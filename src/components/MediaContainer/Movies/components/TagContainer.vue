@@ -2,7 +2,7 @@
 import {defineProps, defineEmits, ref, watch, onMounted, onUnmounted} from 'vue'
 import FloatingVue from 'floating-vue'
 
-const props = defineProps(['tag_input'])
+const props = defineProps(['tag_input', 'preview'])
 const tag_path = "./assets/tags/icons/"
 
 const screenRect = ref(null)
@@ -36,23 +36,39 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="screenRect" class="tag_wrapper">
+  <div>
+    <div ref="screenRect" class="tag_wrapper" v-if="preview===undefined">
 
-    <!--    <div class="tag_gradient_wrapper">-->
-    <!--      <div-->
-    <!--          :class="'tag_gradient_background' + [tagAmount===1 ? ' one_tag' : ''] + [tagAmount===2 ? ' two_tag' : ''] + [tagAmount===3 ? ' three_tag' : '']"></div>-->
-    <!--    </div>-->
+      <div class="tag_gradient_wrapper">
+        <div
+            :class="'tag_gradient_background' + [tagAmount===1 ? ' one_tag' : ''] + [tagAmount===2 ? ' two_tag' : ''] + [tagAmount===3 ? ' three_tag' : '']"></div>
+      </div>
 
-    <div class="tooltip" v-for="tag in tag_input" :key="tag['name']">
-      <img :class="`${tag['tier']}_glow` + ' tag_icon'" :src="`${tag_path}${tag['tier']}/${tag['image']}`"
-           :alt="tag['image']">
-      <div :class="screenSide ? 'hover_box_left' : 'hover_box'">
-        <div class="description">
-          <p class=tag_name>{{ tag['name'] }}</p>
-          <p class="tag_description">{{ tag['description'] }}</p>
+      <div class="tooltip" v-for="tag in tag_input" :key="tag['name']">
+        <img :class="`${tag['tier']}_glow` + ' tag_icon'" :src="`${tag_path}${tag['tier']}/${tag['image']}`"
+             :alt="tag['image']">
+        <div :class="screenSide ? 'hover_box_left' : 'hover_box'">
+          <div class="description">
+            <p class=tag_name>{{ tag['name'] }}</p>
+            <p class="tag_description">{{ tag['description'] }}</p>
+          </div>
         </div>
       </div>
     </div>
+
+    <div ref="screenRect" class="tag_preview" v-if="preview===true">
+      <div class="tooltip" v-for="tag in tag_input" :key="tag['name']">
+        <img :class="`${tag['tier']}_glow` + ' tag_icon'" :src="`${tag_path}${tag['tier']}/${tag['image']}`"
+             :alt="tag['image']">
+        <div class="hover_box">
+          <div class="description">
+            <p class=tag_name>{{ tag['name'] }}</p>
+            <p class="tag_description">{{ tag['description'] }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -68,7 +84,16 @@ export default {
   flex-flow: column;
   /*outline: red 1px solid;*/
   width: 200px;
+  user-select: none;
+  cursor: help;
   height: 300px;
+}
+
+.tag_preview {
+  display: flex;
+  flex-flow: column;
+  /*outline: red 1px solid;*/
+  /*width: 200px;*/
 }
 
 .hover_box {
@@ -86,6 +111,7 @@ export default {
   transition: 100ms ease-in-out;
 
   filter: drop-shadow(0px 0 2px rgba(0, 0, 0, 1));
+  -webkit-filter: drop-shadow(0px 0 2px rgba(0, 0, 0, 1));
   z-index: 400000;
 }
 
@@ -145,10 +171,15 @@ export default {
   opacity: 0;
 
   transition: ease-in-out 1000ms;
-  transition-delay: 3000ms;
+  transition-delay: 100ms;
 }
 
 .tag_wrapper:hover .tooltip {
+  visibility: visible;
+  opacity: 100%;
+  transition: ease-in-out 50ms;
+}
+.tag_preview .tooltip {
   visibility: visible;
   opacity: 100%;
   transition: ease-in-out 50ms;
@@ -227,12 +258,14 @@ export default {
   visibility: hidden;
   opacity: 0;
 
-  transition: 200ms ease-out;
+  transition: ease-in-out 1000ms;
+  transition-delay: 100ms;
 }
 
 .tag_wrapper:hover .tag_gradient_wrapper {
   visibility: visible;
   opacity: 100%;
+  transition: ease-in-out 50ms;
 }
 
 .tag_gradient_background {
