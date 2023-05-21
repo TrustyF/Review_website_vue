@@ -170,14 +170,12 @@ export default {
   visibility: hidden;
   opacity: 0;
 
-  transition: ease-in-out 1000ms;
-  transition-delay: 100ms;
+  transition: ease-in-out 100ms;
 }
 
 .tag_wrapper:hover .tooltip {
   visibility: visible;
   opacity: 100%;
-  transition: ease-in-out 50ms;
 }
 .tag_preview .tooltip {
   visibility: visible;
@@ -258,14 +256,12 @@ export default {
   visibility: hidden;
   opacity: 0;
 
-  transition: ease-in-out 1000ms;
-  transition-delay: 100ms;
+  transition: ease-in-out 100ms;
 }
 
 .tag_wrapper:hover .tag_gradient_wrapper {
   visibility: visible;
   opacity: 100%;
-  transition: ease-in-out 50ms;
 }
 
 .tag_gradient_background {
