@@ -14,6 +14,10 @@ def sort_by_date_rated(f_arr):
     return sorted(f_arr, key=lambda k: datetime.strptime(k['date_rated'], '%Y-%m-%d'), reverse=True)
 
 
+def sort_by_date_released(f_arr):
+    return sorted(f_arr, key=lambda k: datetime.strptime(k['release_date'], '%Y-%m-%d'), reverse=True)
+
+
 def sort_randomize(f_arr, f_seed):
     random.Random(f_seed).shuffle(f_arr)
     return f_arr

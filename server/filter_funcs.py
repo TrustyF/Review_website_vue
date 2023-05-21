@@ -34,13 +34,13 @@ def length_filter(f_filters):
     # filter length
     for length in length_filters:
         match length:
-            case "0":
+            case "1_hour":
                 length_query = (Query().runtime <= 60)
-            case "1":
+            case "1_2_hour":
                 length_query = (Query().runtime <= 120)
-            case "2":
+            case "2_3_hour":
                 length_query = (120 < Query().runtime < 180)
-            case "3":
+            case "3_hour":
                 length_query = (Query().runtime >= 180)
 
     return length_query
@@ -53,8 +53,9 @@ def genre_filter(f_filters):
         return match_everything
 
     genre_filters = f_filters['genre']['filter']
+    print(genre_filters)
 
-    if genre_filters == '':
+    if not genre_filters:
         return match_everything
 
     genre_query = (Query().genres.all(genre_filters))
@@ -120,22 +121,17 @@ def content_filter(f_filters):
 
     content_filters = f_filters['content']['filter']
 
-    if content_filters == '':
+    if not content_filters:
         return match_everything
 
-    content_query = Query().title.matches('[aZ]*')
+    content_filters += ['none'] * (len(f_filters['content']['available']) - len(content_filters))
 
-    # filter length
-    for content in content_filters:
-        match content:
-            case "0":
-                content_query = Query().contentRating == 'safe'
-            case "1":
-                content_query = Query().contentRating == 'suggestive'
-            case "2":
-                content_query = Query().contentRating == 'erotica'
-            case "3":
-                content_query = Query().contentRating == 'pornographic'
+    content_query = (
+            (Query().contentRating == content_filters[0]) |
+            (Query().contentRating == content_filters[1]) |
+            (Query().contentRating == content_filters[2]) |
+            (Query().contentRating == content_filters[3])
+    )
 
     return content_query
 

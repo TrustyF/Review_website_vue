@@ -124,10 +124,12 @@ class Media:
 
     def sorting(self, f_arr):
         match self.filters['sort']['filter'][0]:
-            case '0':
+            case 'popular_vote':
                 sort_arr = sort_funcs.sort_by_avg_rating(f_arr)
-            case '1':
+            case 'date_rated':
                 sort_arr = sort_funcs.sort_by_date_rated(f_arr)
+            case 'release_date':
+                sort_arr = sort_funcs.sort_by_date_released(f_arr)
             case _:
                 sort_arr = sort_funcs.sort_randomize(f_arr, self.settings['session_seed'])
 
