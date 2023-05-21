@@ -29,12 +29,13 @@ onMounted(() => {
 <template>
   <div class="content">
     <p class="title" ref="titleRef" v-if="data['title']">{{ data['title'] }}</p>
-    <p class="date" v-if="data['release_date']">{{ data['release_date'].split("-")[0] + " | "+ data['date_rated'] }}</p>
-    <div v-if="devMode">
-      <!--            <span> -&#45;&#45; </span>-->
-      <!--            <p class="date">{{ overflowTitleLength }}</p>-->
-            <p class="date" v-if="data['contentRating']">{{ data['contentRating'] }}</p>
-    </div>
+    <p class="date" v-if="data['release_date']">{{ data['release_date'].split("-")[0] }}</p>
+
+    <!--    <div v-if="devMode">-->
+    <!--      <p class="date" v-if="data['contentRating']">{{ data['contentRating'] }}</p>-->
+    <!--      <p class="date" v-if="data['date_rated']">{{ data['date_rated'] }}</p>-->
+    <!--    </div>-->
+
   </div>
 
 </template>

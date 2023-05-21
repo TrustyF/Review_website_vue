@@ -58,13 +58,13 @@ async function loadPresets() {
       })
 }
 
-function updateMedia(button) {
-  button.target.disabled = true
+function updateMedia() {
+  // button.target.disabled = true
   // button.target.lastChild.data = " ❌"
   axios.post(`${current_api}/update_media/`, {'newData': MovChanges.value, 'oldData': props.data})
       .then(response => {
         // console.log("edit status", response.status)
-        button.target.disabled = false
+        // button.target.disabled = false
         closeHelper()
         // button.target.lastChild.data = " ✓"
       })
@@ -162,7 +162,7 @@ async function searchMovie() {
 
                 formatted_data['manga_id'] = all_data['id']
                 formatted_data['contentRating'] = simple_data['contentRating']
-                formatted_data['release_date'] = simple_data['createdAt'].split("T")[0]
+                formatted_data['release_date'] = String(simple_data['year'] + '-01-01')
                 formatted_data['overview'] = simple_data['description']['en']
                 formatted_data['links'] = simple_data['links']
                 formatted_data['media_type'] = 'manga'
@@ -223,12 +223,14 @@ function checkInDb() {
 
 async function refreshData() {
   if (currentSearchType.value === 'manga') {
-    let searchResult = await axios.get(`https://api.mangadex.org/manga?title=${MovChanges.value['title']}&order%5Brelevance%5D=desc&includes[]=cover_art&limit=20`)
+    let searchResult = await axios.get(`https://api.mangadex.org/manga?ids%5B%5D=${MovChanges.value['manga_id']}&order%5Brelevance%5D=desc&includes[]=cover_art&limit=20`)
         .then(response => {
           let simple_data = response.data.data[currentSearchPage.value]['attributes']
+          // console.log(simple_data['contentRating'],simple_data['year'])
           MovChanges.value['contentRating'] = simple_data['contentRating']
+          MovChanges.value['release_date'] = String(simple_data['year'] + '-01-01')
+          updateMedia()
         })
-    // closeHelper()
   }
 }
 
@@ -382,7 +384,7 @@ function closeHelper() {
           </div>
           <!--          Date rated-->
           <label for="date_rated_input">Date rated</label>
-          <input type="date" id="date_rated_input" :value="data['date_rated']"
+          <input type="date" id="date_rated_input" :value="data['date_rated'] ? data['date_rated'] : null"
                  @change="MovChanges['date_rated'] = String($event.target.value)">
 
         </div>

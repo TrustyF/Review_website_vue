@@ -140,13 +140,13 @@ function calc() {
     <RatingTag v-if="data['contentRating']==='suggestive'"
                rating="+13"
                name="Suggestive"
-               desc="Sexual topics and/or realistic violence are on the menu"
+               desc="Sexual themes are present in this story"
     ></RatingTag>
 
     <RatingTag v-if="data['contentRating']==='erotica'"
                rating="+18"
                name="Erotic"
-               desc="Sexy bits will be shown here"
+               desc="Sex plays a major part in the story, and shows up frequently"
     ></RatingTag>
 
     <RatingTag v-if="data['contentRating']==='pornographic'"

@@ -19,15 +19,15 @@ let filters = ref({
   },
   'content': {
     'name': 'Content',
-    'available': ["0", "1", "2", "3"],
+    'available': ["safe", "suggestive", "erotica", "pornographic"],
     'display': ["Safe", "Suggestive", "Erotic", "Pornographic"],
-    'filter': ["Safe", "Suggestive"],
+    'filter': ["safe", "suggestive"],
     'checkbox': true
   },
   'sort': {
     'name': 'Sort',
-    'available': ["0", "1"],
-    'display': ["Popular vote", "Date rated"],
+    'available': ["popular_vote", "release_date"],
+    'display': ["Popular vote", "Release date"],
     'filter': [null],
   },
   'search_bar': "",
