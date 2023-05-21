@@ -33,15 +33,15 @@ let filters = ref({
   },
   'length': {
     'name': 'Length',
-    'available': ["0", "1", "2", "3"],
-    'display': ["-1 hour", "1-2 hours", "2-3 hours", "3+ hours"],
+    'available': ["1_hour", "1_2_hour", "2_3_hour", "3_hour"],
+    'display': ["< 1 hour", "1-2 hours", "2-3 hours", "3+ hours"],
     'filter': [],
     'checkbox': true
   },
   'sort': {
     'name': 'Sort',
-    'available': ["0", "1"],
-    'display': ["Popular vote", "Date rated"],
+    'available': ["popular_vote", "release_date"],
+    'display': ["Popular vote", "Release date"],
     'filter': [null],
   },
   'search_bar': "",
