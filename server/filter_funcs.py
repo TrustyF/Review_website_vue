@@ -112,6 +112,34 @@ def format_filter(f_filters):
     return format_query
 
 
+def content_filter(f_filters):
+    match_everything = Query().title.matches('[aZ]*')
+
+    if 'content' not in f_filters:
+        return match_everything
+
+    content_filters = f_filters['content']['filter']
+
+    if content_filters == '':
+        return match_everything
+
+    content_query = Query().title.matches('[aZ]*')
+
+    # filter length
+    for content in content_filters:
+        match content:
+            case "0":
+                content_query = Query().contentRating == 'safe'
+            case "1":
+                content_query = Query().contentRating == 'suggestive'
+            case "2":
+                content_query = Query().contentRating == 'erotica'
+            case "3":
+                content_query = Query().contentRating == 'pornographic'
+
+    return content_query
+
+
 def searchbar_filter(f_filters):
     match_everything = Query().title.matches('[aZ]*')
 

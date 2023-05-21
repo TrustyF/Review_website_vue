@@ -123,9 +123,14 @@ class Media:
         )
 
     def sorting(self, f_arr):
-        # sort_arr = sort_funcs.sort_by_avg_rating(f_arr)
-        # sort_arr = sort_funcs.sort_by_date_rated(f_arr)
-        sort_arr = sort_funcs.sort_randomize(f_arr, self.settings['session_seed'])
+        match self.filters['sort']['filter'][0]:
+            case '0':
+                sort_arr = sort_funcs.sort_by_avg_rating(f_arr)
+            case '1':
+                sort_arr = sort_funcs.sort_by_date_rated(f_arr)
+            case _:
+                sort_arr = sort_funcs.sort_randomize(f_arr, self.settings['session_seed'])
+
         sort_arr = sort_funcs.sort_by_my_rating(sort_arr)
         return sort_arr
 
@@ -245,6 +250,7 @@ class Manga(Media):
         return f_arr.search(
             filter_funcs.rating_filter(self.filters) &
             filter_funcs.genre_filter(self.filters) &
+            filter_funcs.content_filter(self.filters) &
             filter_funcs.searchbar_filter(self.filters)
         )
 

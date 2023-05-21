@@ -2,7 +2,6 @@ from datetime import datetime
 import random
 
 
-# sorts
 def sort_by_my_rating(f_arr):
     return sorted(f_arr, key=lambda k: k['my_rating'], reverse=True)
 
