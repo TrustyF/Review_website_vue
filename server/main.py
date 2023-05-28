@@ -8,12 +8,12 @@ from flask_caching import Cache
 from storage import store, tag_presets
 
 app = Flask(__name__)
-app.config['CACHE_TYPE'] = "FileSystemCache"
-app.config['CACHE_DIR'] = "cache"
+# app.config['CACHE_TYPE'] = "FileSystemCache"
+# app.config['CACHE_DIR'] = "cache"
 
 CORS(app)
 api = Api(app)
-cache = Cache(app)
+# cache = Cache(app)
 
 
 class Media(Resource):
@@ -101,4 +101,4 @@ api.add_resource(Media, '/media/<route>')
 api.add_resource(Tags, '/tags')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
