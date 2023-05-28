@@ -97,14 +97,13 @@ class Tags(Resource):
         return self.presets.del_preset(req), 200
 
 
+api.add_resource(Media, '/media/<route>')
+api.add_resource(Tags, '/tags')
+
+
 @app.route('/test/', methods=["GET"])
 def get_media():
     return 'running'
 
-
-api.add_resource(Media, '/media/<route>')
-api.add_resource(Tags, '/tags')
-
 if __name__ == '__main__':
-    print('ran proper')
     app.run(debug=False)
