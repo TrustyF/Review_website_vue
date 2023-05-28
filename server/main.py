@@ -10,7 +10,7 @@ from storage import store, tag_presets
 app = Flask(__name__)
 # app.config['CACHE_TYPE'] = "FileSystemCache"
 # app.config['CACHE_DIR'] = "cache"
-api = Api(app)
+# api = Api(app)
 CORS(app)
 
 
@@ -103,8 +103,8 @@ def get_media():
     return 'running'
 
 
-api.add_resource(Media, '/media/<route>')
-api.add_resource(Tags, '/tags')
+# api.add_resource(Media, '/media/<route>')
+# api.add_resource(Tags, '/tags')
 
 if __name__ == '__main__':
     print('ran proper')
