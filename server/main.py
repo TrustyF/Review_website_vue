@@ -16,7 +16,6 @@ CORS(app)
 
 # cache = Cache(app)
 
-
 class Media(Resource):
 
     def __init__(self):
