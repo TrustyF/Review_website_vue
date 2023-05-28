@@ -107,4 +107,5 @@ api.add_resource(Media, '/media/<route>')
 api.add_resource(Tags, '/tags')
 
 if __name__ == '__main__':
+    print('ran proper')
     app.run(debug=False)
