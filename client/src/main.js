@@ -6,14 +6,14 @@ import VueLazyload from "vue-lazyload";
 
 const local_api = "http://localhost:5000"
 const server_api = "https://trustyfox.pythonanywhere.com"
-let devMode = false
+let devMode = true
 let darkMode = ref(true)
 let sessionSeed = Math.random()
 
 
 const app = createApp(App)
 
-app.provide('curr_api', devMode ? local_api : server_api)
+app.provide('curr_api', local_api)
 app.provide('devMode', devMode)
 app.provide('darkMode', darkMode)
 app.provide('sessionSeed', sessionSeed)
