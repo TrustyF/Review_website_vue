@@ -105,5 +105,6 @@ api.add_resource(Tags, '/tags')
 def get_media():
     return 'running'
 
+
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
