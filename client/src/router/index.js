@@ -5,6 +5,7 @@ import MangaPage from "@/pages/MangaPage"
 import SeriesPage from "@/pages/SeriesPage"
 
 const router = createRouter({
+    mode: 'history',
     history: createWebHistory(),
     routes: [
         {

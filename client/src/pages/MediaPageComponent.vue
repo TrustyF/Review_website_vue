@@ -39,14 +39,17 @@ function setSettings() {
     'media_type': mediaType.value,
     'filters': filters.value
   })
-      .then(() => getInfo())
+      .then(response => {
+        console.log('set settings',response.status)
+        getInfo()
+      })
 }
 
 function getInfo() {
   axios.get(`${current_api}/media/info`)
       .then(response => {
         if (response.status === 200) {
-          // console.log('ranges',response.data)
+          console.log('ranges',response.status)
           mediaRatingRanges.value = response.data['rating_range']
           update_movies()
         }
@@ -54,11 +57,11 @@ function getInfo() {
 }
 
 function setFilters() {
-  console.log('set filters')
   axios.post(`${current_api}/media/filters`, {
     'filters': filters.value
   })
       .then(response => {
+        console.log('set filters',response.status)
         if (response.status === 200) {
           update_movies()
         }
@@ -86,7 +89,7 @@ function update_movies() {
   // console.log('updating movies')
   axios.get(`${current_api}/media/all`)
       .then(response => {
-        console.log("response", response)
+        console.log('get movies',response.status)
         movies.value = response.data
         servStatus.value = response.status
       })
@@ -157,8 +160,8 @@ onMounted(() => {
 <!--        </div>-->
 <!--      </div>-->
 
-      <div class="movie_grid" v-for="rating in Object.keys(ratingDesc).reverse()" :key="rating">
-        <rating-header class="rating_header" :rating="rating" :rating_desc="ratingDesc"></rating-header>
+      <div class="movie_grid" v-show="movies[rating].length > 0" v-for="rating in Object.keys(ratingDesc).reverse()" :key="rating">
+        <rating-header  class="rating_header" :rating="rating" :rating_desc="ratingDesc"></rating-header>
         <div class="movie_container_wrapper">
           <div v-for="mov in movies[rating]" :key="mov.title">
             <MovieContainer class="movie_container" :key="mov.id" :data="mov" :ratingRange="mediaRatingRanges"
