@@ -2,6 +2,7 @@ import os
 from tinydb import TinyDB, Query, where, operations
 import re
 from flask import Response
+import requests
 
 import sort_funcs
 import filter_funcs
@@ -173,6 +174,11 @@ class Media:
 class Movies(Media):
     def __init__(self):
         super().__init__(media_type='movie')
+
+    # getters
+    def get_cover(self, media_id):
+        movie = self.db.search(Query().id == int(media_id))[0]
+        return requests.get(f"https://image.tmdb.org/t/p/w500{movie['poster_path']}")
 
     # others
     def cleanup(self):
