@@ -33,7 +33,7 @@ const servStatus = ref(0)
 // API
 
 function setSettings() {
-  console.log('set settings')
+  console.log('set settings',`${current_api}/media/settings`)
   axios.post(`${current_api}/media/settings`, {
     'settings': settings.value,
     'media_type': mediaType.value,
