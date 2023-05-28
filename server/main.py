@@ -10,9 +10,10 @@ from storage import store, tag_presets
 app = Flask(__name__)
 # app.config['CACHE_TYPE'] = "FileSystemCache"
 # app.config['CACHE_DIR'] = "cache"
-
-CORS(app)
 api = Api(app)
+CORS(app)
+
+
 # cache = Cache(app)
 
 
@@ -97,8 +98,17 @@ class Tags(Resource):
         return self.presets.del_preset(req), 200
 
 
+class Test(Resource):
+    def __init__(self):
+        pass
+
+    def get(self):
+        return "running", 200
+
+
 api.add_resource(Media, '/media/<route>')
 api.add_resource(Tags, '/tags')
+api.add_resource(Test, '/test')
 
 if __name__ == '__main__':
     app.run(debug=False)
