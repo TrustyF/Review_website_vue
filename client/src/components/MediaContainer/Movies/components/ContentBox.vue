@@ -2,6 +2,7 @@
 import {defineProps, defineEmits, onMounted, ref, watch, inject} from 'vue'
 
 const devMode = inject('devMode')
+const darkMode = inject('darkMode')
 const props = defineProps(['data'])
 
 let overflowTitleLength = ref()
@@ -59,6 +60,7 @@ export default {
 .title {
   /*outline: 1px solid red;*/
   font-size: 0.8em;
+  font-weight: normal;
   text-align: left;
   margin: 0;
   white-space: nowrap;
@@ -77,8 +79,8 @@ export default {
   font-size: 0.7em;
   text-align: left;
   margin: 0;
-
-  color: rgba(0, 0, 0, 0.6);
+  opacity: 0.6;
+  /*color: rgba(0, 0, 0, 0.6);*/
 
   /*overflow-wrap: normal;*/
 }

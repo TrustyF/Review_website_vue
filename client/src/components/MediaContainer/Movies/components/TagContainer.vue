@@ -1,9 +1,10 @@
 <script setup>
-import {defineProps, defineEmits, ref, watch, onMounted, onUnmounted} from 'vue'
+import {defineProps, defineEmits, ref, watch, onMounted, onUnmounted, inject} from 'vue'
 import FloatingVue from 'floating-vue'
 
 const props = defineProps(['tag_input', 'preview'])
 const tag_path = "./assets/tags/icons/"
+let darkMode = inject('darkMode')
 
 const screenRect = ref(null)
 const screenSide = ref(false)
@@ -39,15 +40,16 @@ onUnmounted(() => {
   <div>
     <div ref="screenRect" class="tag_wrapper" v-if="preview===undefined">
 
-      <div class="tag_gradient_wrapper">
-        <div
-            :class="'tag_gradient_background' + [tagAmount===1 ? ' one_tag' : ''] + [tagAmount===2 ? ' two_tag' : ''] + [tagAmount===3 ? ' three_tag' : '']"></div>
-      </div>
+      <!--      <div class="tag_gradient_wrapper">-->
+      <!--        <div-->
+      <!--            :class="'tag_gradient_background' + [tagAmount===1 ? ' one_tag' : ''] + [tagAmount===2 ? ' two_tag' : ''] + [tagAmount===3 ? ' three_tag' : '']"></div>-->
+      <!--      </div>-->
 
       <div class="tooltip" v-for="tag in tag_input" :key="tag['name']">
         <img :class="`${tag['tier']}_glow` + ' tag_icon'" :src="`${tag_path}${tag['tier']}/${tag['image']}`"
              :alt="tag['image']">
-        <div :class="screenSide ? 'hover_box_left' : 'hover_box'">
+        <div
+            :class="screenSide ? [darkMode ?'hover_box_left white' : 'hover_box_left white'] : [darkMode ?'hover_box white' :'hover_box white'] ">
           <div class="description">
             <p class=tag_name>{{ tag['name'] }}</p>
             <p class="tag_description">{{ tag['description'] }}</p>
@@ -79,6 +81,11 @@ export default {
 </script>
 <style scoped>
 
+.white {
+  background-color: white;
+  color: black;
+}
+
 .tag_wrapper {
   display: flex;
   flex-flow: column;
@@ -87,6 +94,7 @@ export default {
   user-select: none;
   cursor: help;
   height: 300px;
+  font-weight: normal;
 }
 
 .tag_preview {
@@ -101,7 +109,6 @@ export default {
   left: 0;
   top: 0;
   transform: translate(55px, 0);
-  background-color: white;
   padding: 10px;
   border-radius: 5px;
 
@@ -128,12 +135,25 @@ export default {
   border-bottom: 15px solid transparent;
 }
 
+.hover_box.dark_accent:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -5px;
+  margin: 10px auto;
+  /*width: 0;*/
+  /*height: 0;*/
+  border-right: 15px solid #2b2a34;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+}
+
 .hover_box_left {
   position: absolute;
   right: 0;
   top: 0;
   transform: translate(-205px, 0);
-  background-color: white;
+  /*background-color: white;*/
   padding: 10px;
   border-radius: 5px;
 
@@ -159,6 +179,19 @@ export default {
   border-bottom: 15px solid transparent;
 }
 
+.hover_box_left.dark_accent:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -5px;
+  margin: 10px auto;
+  /*width: 0;*/
+  /*height: 0;*/
+  border-left: 15px solid #2b2a34;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+}
+
 .tooltip {
   /*display: inline-block;*/
   /*outline: 1px purple solid;*/
@@ -177,6 +210,7 @@ export default {
   visibility: visible;
   opacity: 100%;
 }
+
 .tag_preview .tooltip {
   visibility: visible;
   opacity: 100%;
@@ -214,7 +248,7 @@ export default {
 
 .tag_description {
   font-size: 1.2em;
-  color: rgba(0, 0, 0, 0.6);
+  opacity: 0.6;
   line-height: 15px;
 }
 

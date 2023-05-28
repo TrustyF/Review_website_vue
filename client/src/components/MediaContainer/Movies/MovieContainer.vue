@@ -9,6 +9,8 @@ const props = defineProps(['data', 'ratingRange'])
 const emits = defineEmits(['MovieEdit'])
 
 const devMode = inject('devMode')
+const darkMode = inject('darkMode')
+const current_api = inject('curr_api')
 
 let isOpen = ref(false)
 const isSeen = ref(false)
@@ -34,73 +36,74 @@ function emitSelectedMovie(input) {
 
 </script>
 <template>
-  <div class="movie_container" :class="[isOpen ? 'open' : 'closed']" v-click-out-side="clickOutside"
-       @click="isOpen = !isOpen">
+  <div :class="darkMode ? 'dark_accent': 'white'">
+    <div class="movie_container" :class="isOpen ? 'open ' : 'closed '"
+         v-click-out-side="clickOutside"
+         @click="isOpen = !isOpen">
 
-    <div class="main_block">
+      <div class="main_block">
 
-      <div class="gradient_fill"></div>
+        <div class="gradient_fill"></div>
 
-      <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
+        <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
 
-      <div v-if="devMode" class="settings">
-        <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
+        <div v-if="devMode" class="settings">
+          <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
+        </div>
+
+        <!--      Posters-->
+        <div v-if="data['media_type']==='movie' || data['media_type']==='tv'">
+          <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
+               class="poster" alt="poster" draggable="false">
+        </div>
+        <div v-if="data['media_type']==='manga'">
+          <img v-if="data['poster_path']" v-lazy="`https://uploads.mangadex.org/covers/${data['poster_path']}.256.jpg`"
+               class="poster" alt="poster" draggable="false">
+        </div>
+
+        <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"
+                      :range="ratingRange"></RatingBumper>
+
+        <ContentBox class="content_box" :data="data"></ContentBox>
+
       </div>
 
-      <!--      Posters-->
-      <div v-if="data['media_type']==='movie' || data['media_type']==='tv'">
-        <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
-             class="poster" alt="poster" draggable="false">
-      </div>
-      <div v-if="data['media_type']==='manga'">
-        <img v-if="data['poster_path']" v-lazy="`https://uploads.mangadex.org/covers/${data['poster_path']}.256.jpg`"
-             class="poster" alt="poster" draggable="false">
-      </div>
+      <div class="expanded">
+        <div class="overview">
 
-      <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"
-                    :range="ratingRange"></RatingBumper>
-
-      <ContentBox class="content_box" :data="data"></ContentBox>
-
-    </div>
-
-    <div class="expanded">
-      <div class="overview">
-
-        <h3 class="heading">Overview</h3>
-        <div class="details_wrapper">
-          <p class="rank" v-if="data['overview']" style="margin-bottom:5px;">
-            {{ data['overview'] }}
-          </p>
-
-          <h3 class="heading">Extras</h3>
-          <p class="rank" v-if="data['genres']" style="margin-bottom:5px;">
-            {{ data['genres'].map(elem => elem).join(', ') }}
-          </p>
-
-          <div v-if="data['media_type']==='movie' || data['media_type']==='tv'">
-            <p class="rank" style="margin-bottom:5px;" v-if="data['runtime'] && data['media_type']==='movie'">
-              {{ "Duration: " + timeConvert(data['runtime']) }}
+          <h3 class="heading">Overview</h3>
+          <div class="details_wrapper">
+            <p class="rank" v-if="data['overview']" style="margin-bottom:5px;">
+              {{ data['overview'] }}
             </p>
-            <a :href="data['imdb_url']" target="_blank" rel="noopener noreferrer">
-              <button type="button"
-                      style="background-color: #F5C518;border-radius: 3px;padding: 3px;outline: 1px black solid;border-style: none;cursor:pointer ">
-                Imdb
-              </button>
-            </a>
-          </div>
 
+            <h3 class="heading">Extras</h3>
+            <p class="rank" v-if="data['genres']" style="margin-bottom:5px;">
+              {{ data['genres'].map(elem => elem).join(', ') }}
+            </p>
+
+            <div v-if="data['media_type']==='movie' || data['media_type']==='tv'">
+              <p class="rank" style="margin-bottom:5px;" v-if="data['runtime'] && data['media_type']==='movie'">
+                {{ "Duration: " + timeConvert(data['runtime']) }}
+              </p>
+              <a :href="data['imdb_url']" target="_blank" rel="noopener noreferrer">
+                <button type="button"
+                        style="background-color: #F5C518;border-radius: 3px;padding: 3px;outline: 1px black solid;border-style: none;cursor:pointer ">
+                  Imdb
+                </button>
+              </a>
+            </div>
+
+          </div>
         </div>
       </div>
-    </div>
 
+    </div>
   </div>
 </template>
 <style scoped>
 .movie_container {
   /*outline: 1px solid green;*/
-
-  background-color: white;
 
   width: 200px;
   min-height: 340px;
@@ -108,12 +111,20 @@ function emitSelectedMovie(input) {
   /*min-width: 200px;*/
 
   border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
 
   /*overflow: hidden;*/
   transition: 0.2s ease;
 
   display: flex;
+}
+
+.white {
+  background-color: white;
+}
+
+.dark_accent .movie_container {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
 }
 
 .settings {
@@ -163,12 +174,17 @@ function emitSelectedMovie(input) {
 
   background-color: rgba(255, 255, 255, 0.9);
 
-  font-size: 0.65em;
+  font-size: 0.8em;
   text-align: left;
 
   visibility: hidden;
   opacity: 0;
   transition: all 0.1s;
+}
+
+.dark .expanded {
+  background-color: rgba(20, 20, 20, 0.9);
+
 }
 
 .open .expanded {
@@ -178,6 +194,8 @@ function emitSelectedMovie(input) {
 
 .overview {
   padding: 10px;
+  width: 190px;
+  overflow: hidden;
 }
 
 .heading {
@@ -218,9 +236,10 @@ function emitSelectedMovie(input) {
 }
 
 .details_wrapper {
-  padding: 5px;
+  width: 100%;
+  height: 250px;
+  padding: 5px 25px 5px 5px;
   overflow-y: scroll;
   overflow-wrap: break-word;
-  height: 250px;
 }
 </style>

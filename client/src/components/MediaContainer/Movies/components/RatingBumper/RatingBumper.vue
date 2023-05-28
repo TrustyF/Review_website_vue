@@ -1,10 +1,11 @@
 <script setup>
-import {defineProps, defineEmits, watch, ref, toRefs, onMounted} from 'vue'
+import {defineProps, defineEmits, watch, ref, toRefs, onMounted, inject} from 'vue'
 
 import RatingTag from "@/components/MediaContainer/Movies/components/RatingBumper/RatingTag";
 
 const props = defineProps(['data', 'range'])
 const input = toRefs(props.range)
+const darkMode = inject('darkMode')
 
 const blue_star = './assets/ui/blue_star.png'
 const gold_star = './assets/ui/gold_star.png'

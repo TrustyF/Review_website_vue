@@ -1,0 +1,16 @@
+.dark {
+    background-color: #1c1b23;
+    color: white;
+}
+
+.dark_accent {
+    background-color: #2b2a34;
+}
+
+.dark_light {
+    background-color: #41404d;
+}
+
+.dark_image {
+    filter: invert(100%);
+}

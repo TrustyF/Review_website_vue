@@ -55,32 +55,12 @@ table {
 
 html {
     font-family: Bahnschrift, sans-serif;
+    font-weight: lighter;
     height: 100%;
     width: 100%;
     scroll-behavior: smooth;
-    /*background-color: rgb(33 33 33);*/
 }
 
 body {
     min-height: 100%;
-}
-
-nav {
-    background-color: rgba(0, 0, 0, 1);
-    display: flex;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 64px;
-    width: 100%;
-    z-index: 100;
-    transition: top 0.2s linear;
-}
-
-nav ul li {
-    list-style: none;
-    display: inline-block;
-    margin-right: 3vh;
-    color: white;
 }
