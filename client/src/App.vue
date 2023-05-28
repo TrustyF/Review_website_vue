@@ -12,15 +12,17 @@ let darkMode = inject("darkMode")
 <template>
   <div :class="darkMode ? 'main dark' : 'main white'">
     <NavBar/>
-    <RouterView/>
+    <div class="app_wrapper">
+      <RouterView/>
+    </div>
   </div>
 </template>
 <style scoped>
-.main {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  margin: 0;
+.app_wrapper {
+  /*outline: 1px solid red;*/
+  display: block;
+  min-height: 100vh;
+  margin: auto;
   transition: 500ms;
 }
 .white {

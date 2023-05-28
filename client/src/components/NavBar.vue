@@ -7,12 +7,14 @@ import logo from '/public/assets/ui/logo.png'
 <template>
   <nav class="dark_accent">
     <div class="wrapper">
-      <img :src="logo" alt="website icon" style="height: 30px">
+      <img :src="logo" alt="website icon" style="height: 40px">
       <RouterLink active-class="active" class="link" to="/movies">Movies</RouterLink>
       <RouterLink active-class="active" class="link" to="/series">Series</RouterLink>
       <RouterLink active-class="active" class="link" to="/manga">Manga</RouterLink>
     </div>
   </nav>
+
+
 </template>
 
 <script>
@@ -23,17 +25,19 @@ export default {
 
 <style scoped>
 nav {
+  /*outline: 1px solid red;*/
   /*background-color: rgba(0, 0, 0, 1);*/
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   position: relative;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 100;
   transition: top 0.2s linear;
-  height: 50px;
-  font-size: 1em;
+  height: 70px;
+  font-size: 1.2em;
 }
 
 nav ul li {
@@ -44,11 +48,12 @@ nav ul li {
 }
 
 .wrapper {
+  /*outline: 1px solid blue;*/
   display: flex;
   flex-flow: row;
-  justify-content: flex-start;
   align-items: center;
-  margin: 10px;
+  width: 80%;
+  margin: auto;
   gap: 20px;
 }
 .link {
@@ -60,5 +65,6 @@ nav ul li {
 }
 .active {
   font-weight: bold;
+  text-decoration: underline;
 }
 </style>

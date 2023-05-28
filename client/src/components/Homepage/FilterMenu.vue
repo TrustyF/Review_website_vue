@@ -71,8 +71,7 @@ onMounted(() => {
 
 </script>
 <template>
-  <div :class="darkMode ? 'dark_light ': ''">
-    <div class="filters_nav_wrapper">
+    <div :class="darkMode ? 'filters_nav_wrapper dark_light ': 'filters_nav_wrapper'">
       <div class="filter_button_wrapper" @click="state = !state">
         <h1>Filters</h1>
         <img :class="darkMode ? 'dark_image ': ''" :src="filterButton" alt="filter button" style="width: 15px">
@@ -95,11 +94,13 @@ onMounted(() => {
 
     </div>
 
+<!--    <div class="filler"></div>-->
+
     <Collapse :when="state" class="collapse">
       <div class="filter_wrapper" v-if="filters">
-        <div class="filters">
-          <div class="filter_types" v-for="elem in filters" :key="elem['name']">
-            <p>{{ props.value }}</p>
+        <div :class="darkMode ? 'filters dark_light' : 'filters'">
+          <div class="filter_types" v-for="elem in filters"  :key="elem['name']">
+<!--            <p>{{ props.value }}</p>-->
             <h1 class="filter_heading">{{ elem['name'] }}</h1>
             <div v-for="(filter,index) in elem['available']" :key="filter" class="filter_content_list">
               <label class="filter_label">
@@ -113,12 +114,14 @@ onMounted(() => {
         </div>
       </div>
     </Collapse>
-  </div>
 
 </template>
 
 <style scoped>
 .filters_nav_wrapper {
+  /*position: absolute;*/
+  /*left: 0;*/
+  width: 100%;
   display: flex;
   flex-flow: row;
   justify-content: center;
@@ -134,19 +137,18 @@ onMounted(() => {
 .dark .filters_nav_wrapper {
   box-shadow: 0 0 8px rgba(0, 0, 0, 1);
 }
-
 .collapse {
   transition: height 300ms ease-in-out;
 }
 
 .filter_wrapper {
-  padding: 25px 25px 5px 25px;
-  /*outline: 2px solid blue;*/
+  /*padding: 10px;*/
+  /*outline: 2px solid green;*/
 }
 
 .filter_button_wrapper {
   /*outline: 1px solid red;*/
-  padding: 12px;
+  padding: 12px 0 12px 0;
   cursor: pointer;
   user-select: none;
   display: flex;
@@ -156,30 +158,32 @@ onMounted(() => {
 }
 
 .filters {
-  /*font-family: Calibri, serif;*/
+  outline: 1px solid green;
+
   user-select: none;
   font-size: 1em;
   font-weight: lighter;
 
-  height: 250px;
-  padding: 20px;
+  /*padding: 30px;*/
+  width: fit-content;
+  margin: auto;
 
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
+  /*gap: 20px;*/
 
   display: flex;
-  justify-content: left;
-  align-items: flex-start;
-  flex-flow: column wrap;
-  align-content: flex-start;
+  flex-flow: row wrap;
+  justify-content: center;
 }
 
 .filter_heading {
+  outline: 1px red solid;
+
   text-decoration: underline;
   font-weight: normal;
-  padding-bottom: 5px;
-  padding-top: 5px;
+  /*padding-bottom: 5px;*/
+  /*padding-top: 5px;*/
 }
 
 .filter_label {
