@@ -13,7 +13,7 @@ let sessionSeed = Math.random()
 
 const app = createApp(App)
 
-app.provide('curr_api', local_api)
+app.provide('curr_api', devMode ? local_api : server_api)
 app.provide('devMode', devMode)
 app.provide('darkMode', darkMode)
 app.provide('sessionSeed', sessionSeed)

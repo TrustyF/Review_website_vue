@@ -1,12 +1,12 @@
 <script setup>
 import MovieContainer from "@/components/MediaContainer/Movies/MovieContainer";
 import DbHelper from "@/components/DbHelper";
-import FilterMenu from "@/components/Homepage/FilterMenu";
 import RatingHeader from "@/components/Homepage/RatingHeader";
 import {inject, watch, defineProps} from 'vue'
 
 import axios from 'axios'
 import {ref, onMounted, toRefs} from 'vue'
+import FilterMenu from "@/components/Homepage/FilterMenu";
 
 // to do
 // add fresh review
@@ -33,7 +33,7 @@ const servStatus = ref(0)
 // API
 
 function setSettings() {
-  console.log('set settings',`${current_api}/media/settings`)
+  console.log('set settings', `${current_api}/media/settings`)
   axios.post(`${current_api}/media/settings`, {
     'settings': settings.value,
     'media_type': mediaType.value,
@@ -142,20 +142,20 @@ onMounted(() => {
   <div class="page">
     <db-helper v-if="devMode" :data="currentSelectedMovie" :open="settingsOpen" :mediaType="mediaType"
                @closed="settingsOpen = !settingsOpen" @updated="update_movies"></db-helper>
-    <div v-if="devMode">
+    <div v-if="devMode" style="visibility: hidden">
       <button @click="settingsOpen = true" style="margin: 13px 0 0 20px; position: fixed">Add {{ mediaType }}</button>
     </div>
 
-    <FilterMenu class="filters_menu" :props="filters" @filtersChange="setFilters"></FilterMenu>
+    <FilterMenu :props="filters" @filtersChange="setFilters"></FilterMenu>
 
     <div class="feed" v-if="servStatus===200">
 
-      <!--    <div class="movie_grid">-->
-      <!--      <rating-header :rating="'Recent ratings'"></rating-header>-->
-      <!--      <div class="movie_container_wrapper" v-for="rec in recentRatings" :key="rec.title + '_rec'">-->
-      <!--        <MediaContainer :key="rec.id + '_rec'" :data="rec" @MovieEdit="editMovie"></MediaContainer>-->
-      <!--      </div>-->
-      <!--    </div>-->
+<!--      <div class="movie_grid">-->
+<!--        <rating-header :rating="'Recent ratings'"></rating-header>-->
+<!--        <div class="movie_container_wrapper" v-for="rec in recentRatings" :key="rec.title + '_rec'">-->
+<!--          <MediaContainer :key="rec.id + '_rec'" :data="rec" @MovieEdit="editMovie"></MediaContainer>-->
+<!--        </div>-->
+<!--      </div>-->
 
       <div class="movie_grid" v-for="rating in Object.keys(ratingDesc).reverse()" :key="rating">
         <rating-header class="rating_header" :rating="rating" :rating_desc="ratingDesc"></rating-header>
@@ -171,7 +171,8 @@ onMounted(() => {
 
     <div class="feed loader" v-else>
       Loading...
-      <img :class="darkMode ? '': 'dark_image'" src="../../public/assets/ui/Loading_icon.gif" alt="loading icon" style="width: 25px; margin: 10px">
+      <img :class="darkMode ? '': 'dark_image'" src="../../public/assets/ui/Loading_icon.gif" alt="loading icon"
+           style="width: 25px; margin: 10px">
     </div>
   </div>
 </template>
@@ -186,10 +187,8 @@ onMounted(() => {
   /*outline: 1px solid blue;*/
   display: flex;
   flex-direction: column;
-}
-
-.filters_menu {
-  z-index: 20;
+  width: 100%;
+  margin: auto;
 }
 
 .loader {
@@ -212,9 +211,14 @@ onMounted(() => {
 
 .movie_container_wrapper {
   /*outline: 1px solid red;*/
-  width: 100%;
+  width: 80%;
+  margin: auto;
   gap: 30px;
+
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+
+  /*display: flex;*/
+  /*flex-flow: row wrap;*/
 }
 </style>

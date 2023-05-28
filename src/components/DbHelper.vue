@@ -467,6 +467,7 @@ export default {
 .main_win {
   /*outline: 1px solid red;*/
   position: fixed;
+  color: black;
 
   inset: 0;
   margin: auto;

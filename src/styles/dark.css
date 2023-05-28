@@ -5,10 +5,12 @@
 
 .dark_accent {
     background-color: #2b2a34;
+    color: white;
 }
 
 .dark_light {
     background-color: #41404d;
+    color: white;
 }
 
 .dark_image {
