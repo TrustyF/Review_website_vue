@@ -99,7 +99,7 @@ onMounted(() => {
     <Collapse :when="state" class="collapse">
       <div class="filter_wrapper" v-if="filters">
         <div :class="darkMode ? 'filters dark_light' : 'filters'">
-          <div class="filter_types" v-for="elem in filters"  :key="elem['name']">
+          <div class="filter_types" v-for="elem in filters"  :key="elem['name']" v-show="elem['display']!==undefined">
 <!--            <p>{{ props.value }}</p>-->
             <h1 class="filter_heading">{{ elem['name'] }}</h1>
             <div v-for="(filter,index) in elem['available']" :key="filter" class="filter_content_list">
@@ -142,7 +142,7 @@ onMounted(() => {
 }
 
 .filter_wrapper {
-  /*padding: 10px;*/
+  padding: 10px;
   /*outline: 2px solid green;*/
 }
 
@@ -158,31 +158,30 @@ onMounted(() => {
 }
 
 .filters {
-  outline: 1px solid green;
+  /*outline: 1px solid green;*/
 
   user-select: none;
   font-size: 1em;
   font-weight: lighter;
 
-  /*padding: 30px;*/
+  padding: 30px;
   width: fit-content;
   margin: auto;
 
   border-radius: 10px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-  /*gap: 20px;*/
+  gap: 20px;
 
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
 }
 
 .filter_heading {
-  outline: 1px red solid;
+  /*outline: 1px red solid;*/
 
   text-decoration: underline;
   font-weight: normal;
-  /*padding-bottom: 5px;*/
+  padding-bottom: 5px;
   /*padding-top: 5px;*/
 }
 
@@ -192,9 +191,6 @@ onMounted(() => {
 }
 
 .filter_types {
-  min-width: 60px;
-  /*outline: 1px solid red;*/
-  margin-right: 10px;
 }
 
 .search_bar_wrapper {
