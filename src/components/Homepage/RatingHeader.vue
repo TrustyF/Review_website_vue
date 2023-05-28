@@ -1,13 +1,14 @@
 <script setup>
-import {defineProps, defineEmits, ref, watch} from 'vue'
+import {defineProps, defineEmits, ref, watch, inject} from 'vue'
 
 const props = defineProps(['rating','rating_desc'])
+const darkMode = inject('darkMode')
 
 </script>
 
 <template>
   <div class="rating_container">
-    <div class="rating_content">
+    <div :class="darkMode ? 'rating_content dark_accent' : 'rating_content'">
       <h1 class="rating_title">{{ rating }}</h1>
       <h1 class="rating_desc"> {{ rating_desc[rating] }}</h1>
     </div>
@@ -31,7 +32,6 @@ export default {
 }
 
 .rating_content {
-  background-color: white;
   /*outline: 1px blue solid;*/
 
   width: fit-content;
@@ -47,6 +47,10 @@ export default {
   padding: 10px;
   border-radius: 8px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.dark_accent {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 1);
 }
 
 .rating_title {

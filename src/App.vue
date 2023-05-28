@@ -1,22 +1,25 @@
 <script setup>
+import {inject} from 'vue'
 import {RouterView, RouterLink} from 'vue-router'
 import NavBar from "@/components/NavBar";
+import './styles/globals.css'
+import './styles/dark.css'
+
+let darkMode = inject("darkMode")
 
 </script>
 
 <template>
-  <NavBar/>
-  <div class="main">
+  <div :class="darkMode ? 'main dark' : 'main white'">
+    <NavBar/>
     <RouterView/>
   </div>
-
 </template>
-
-<style>
+<style scoped>
 .main {
-  /*outline: 3px solid purple;*/
-  position: relative;
-  /*margin-top: 10px;*/
-  width: 100%;
+  transition: 500ms;
+}
+.white {
+  background-color: white;
 }
 </style>

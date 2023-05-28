@@ -1,5 +1,4 @@
 <script setup>
-import '../styles/globals.css'
 import MovieContainer from "@/components/MediaContainer/Movies/MovieContainer";
 import DbHelper from "@/components/DbHelper";
 import FilterMenu from "@/components/Homepage/FilterMenu";
@@ -15,7 +14,8 @@ const props = defineProps(['filters', 'ratingDesc', 'mediaType'])
 const input_props = toRefs(props)
 
 const current_api = inject('curr_api')
-const devMode = inject('devMode')
+let devMode = inject('devMode')
+let darkMode = inject('darkMode')
 const sessionSeed = inject('sessionSeed')
 
 const movies = ref([])
@@ -31,34 +31,35 @@ const mediaRatingRanges = ref({})
 const servStatus = ref(0)
 
 // API
-function setMediaType(type) {
-  console.log('set media')
-  axios.post(`${current_api}/set_media_type`, {'media_type': type})
-      .then(() => setSettings())
-}
 
 function setSettings() {
   console.log('set settings')
-  axios.post(`${current_api}/set_settings`, settings.value)
-      .then(() => setFilters())
+  axios.post(`${current_api}/media/settings`, {
+    'settings': settings.value,
+    'media_type': mediaType.value,
+    'filters': filters.value
+  })
+      .then(() => getInfo())
 }
 
-function setFilters() {
-  console.log('set filters')
-  axios.post(`${current_api}/set_filters`, filters.value)
+function getInfo() {
+  axios.get(`${current_api}/media/info`)
       .then(response => {
         if (response.status === 200) {
-          getRatingRanges()
+          // console.log('ranges',response.data)
+          mediaRatingRanges.value = response.data['rating_range']
+          update_movies()
         }
       })
 }
 
-function getRatingRanges() {
-  axios.get(`${current_api}/get_media_rating_range`)
+function setFilters() {
+  console.log('set filters')
+  axios.post(`${current_api}/media/filters`, {
+    'filters': filters.value
+  })
       .then(response => {
         if (response.status === 200) {
-          // console.log('ranges',response.data)
-          mediaRatingRanges.value = response.data
           update_movies()
         }
       })
@@ -67,7 +68,7 @@ function getRatingRanges() {
 let fetchingMoreMovies = ref(false)
 
 function fetchMoreMovies() {
-  axios.post(`${current_api}/load_more`)
+  axios.get(`${current_api}/media/load_more`)
       .then(response => {
         console.log(response.status)
         if (response.status === 200) {
@@ -83,7 +84,7 @@ function fetchMoreMovies() {
 
 function update_movies() {
   // console.log('updating movies')
-  axios.get(`${current_api}/get_media`)
+  axios.get(`${current_api}/media/all`)
       .then(response => {
         console.log("response", response)
         movies.value = response.data
@@ -132,54 +133,63 @@ watch(settingsOpen, (newV, oldV) => {
 
 onMounted(() => {
   console.log('mounted', mediaType.value)
-  setMediaType(mediaType.value)
+  setSettings()
   window.addEventListener('scroll', handleScroll)
 })
 </script>
 
 <template>
-  <db-helper v-if="devMode" :data="currentSelectedMovie" :open="settingsOpen" :mediaType="mediaType"
-             @closed="settingsOpen = !settingsOpen" @updated="update_movies"></db-helper>
-
-  <div v-if="devMode">
-    <button @click="settingsOpen = true" style="margin: 13px 0 0 20px; position: fixed">Add {{ mediaType }}</button>
-  </div>
-
-  <FilterMenu :props="filters" @filtersChange="setFilters"></FilterMenu>
-
-  <div class="feed" v-if="servStatus===200">
-
-    <!--    <div class="movie_grid">-->
-    <!--      <rating-header :rating="'Recent ratings'"></rating-header>-->
-    <!--      <div class="movie_container_wrapper" v-for="rec in recentRatings" :key="rec.title + '_rec'">-->
-    <!--        <MediaContainer :key="rec.id + '_rec'" :data="rec" @MovieEdit="editMovie"></MediaContainer>-->
-    <!--      </div>-->
-    <!--    </div>-->
-
-
-    <div class="movie_grid" v-for="rating in Object.keys(ratingDesc).reverse()" :key="rating">
-      <rating-header class="rating_header" :rating="rating" :rating_desc="ratingDesc"></rating-header>
-      <div class="movie_container_wrapper">
-        <div v-for="mov in movies[rating]" :key="mov.title">
-          <MovieContainer class="movie_container" :key="mov.id" :data="mov" :ratingRange="mediaRatingRanges"
-                          @MovieEdit="editMovie"></MovieContainer>
-        </div>
-      </div>
+  <div class="page">
+    <db-helper v-if="devMode" :data="currentSelectedMovie" :open="settingsOpen" :mediaType="mediaType"
+               @closed="settingsOpen = !settingsOpen" @updated="update_movies"></db-helper>
+    <div v-if="devMode">
+      <button @click="settingsOpen = true" style="margin: 13px 0 0 20px; position: fixed">Add {{ mediaType }}</button>
     </div>
 
-  </div>
+    <FilterMenu class="filters_menu" :props="filters" @filtersChange="setFilters"></FilterMenu>
 
-  <div class="feed loader" v-else>
-    Loading...
-    <img src="../../public/assets/ui/Loading_icon.gif" alt="loading icon" style="width: 25px; margin: 10px">
+    <div class="feed" v-if="servStatus===200">
+
+      <!--    <div class="movie_grid">-->
+      <!--      <rating-header :rating="'Recent ratings'"></rating-header>-->
+      <!--      <div class="movie_container_wrapper" v-for="rec in recentRatings" :key="rec.title + '_rec'">-->
+      <!--        <MediaContainer :key="rec.id + '_rec'" :data="rec" @MovieEdit="editMovie"></MediaContainer>-->
+      <!--      </div>-->
+      <!--    </div>-->
+
+      <div class="movie_grid" v-for="rating in Object.keys(ratingDesc).reverse()" :key="rating">
+        <rating-header class="rating_header" :rating="rating" :rating_desc="ratingDesc"></rating-header>
+        <div class="movie_container_wrapper">
+          <div v-for="mov in movies[rating]" :key="mov.title">
+            <MovieContainer class="movie_container" :key="mov.id" :data="mov" :ratingRange="mediaRatingRanges"
+                            @MovieEdit="editMovie"></MovieContainer>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="feed loader" v-else>
+      Loading...
+      <img src="../../public/assets/ui/Loading_icon.gif" alt="loading icon" style="width: 25px; margin: 10px">
+    </div>
   </div>
 </template>
 
 <style scoped>
+
+.page {
+  transition: background-color 500ms;
+}
+
 .feed {
   /*outline: 1px solid blue;*/
   display: flex;
   flex-direction: column;
+}
+
+.filters_menu {
+  z-index: 20;
 }
 
 .loader {

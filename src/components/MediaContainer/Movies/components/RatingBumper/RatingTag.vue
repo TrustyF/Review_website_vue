@@ -2,22 +2,24 @@
 import {defineProps, defineEmits, ref, watch, onMounted, onUnmounted, computed, inject} from 'vue'
 
 const props = defineProps(['image', 'name', 'desc', 'sub_desc', 'number', 'rating'])
+const darkMode = inject('darkMode')
+
 </script>
 
 <template>
   <div class="tooltip">
 
-    <div class="box" v-if="rating">
+    <div :class="darkMode ? 'box dark_accent' : 'box white'" v-if="rating">
       <h1 class="rating">{{ rating }}</h1>
       <img class="rating icon" v-if="image" v-lazy="image">
     </div>
 
-    <div class="box" v-if="!rating && !number">
+    <div :class="darkMode ? 'box dark_accent' : 'box white'" v-if="!rating && !number">
       <h1 class="rating">{{ rating }}</h1>
       <img class="rating icon" v-if="image" v-lazy="image">
     </div>
 
-    <div class="box" v-if="number">
+    <div :class="darkMode ? 'box dark_accent' : 'box white'" v-if="number">
       <h1 class="rating"> {{ number }}</h1>
       <img class="rating icon" style="padding-left: 2px" v-lazy="image">
     </div>
@@ -41,8 +43,7 @@ export default {
 </script>
 <style scoped>
 .box {
-  background-color: rgba(255, 255, 255, 1);
-  filter: drop-shadow(0 0 2px rgba(0,0,0,0.8));
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));
   padding: 3px;
   border-radius: 5px;
   /*border: solid darkgrey 1px;*/
@@ -54,6 +55,10 @@ export default {
   justify-items: center;
   align-items: center;
   align-content: center;
+}
+
+.white {
+  background-color: white;
 }
 
 .rating {
@@ -76,6 +81,8 @@ export default {
   top: -50%;
   transform: translate(-50%, -100%);
 
+  font-weight: normal;
+  color: black;
   background-color: white;
   padding: 10px;
   border-radius: 5px;

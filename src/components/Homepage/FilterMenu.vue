@@ -3,11 +3,13 @@ import {defineProps, defineEmits, ref, watchEffect, onMounted, watch, toRefs, in
 import {Collapse} from 'vue-collapsed'
 import filterButton from '/public/assets/ui/filter_button.png'
 import crossButton from '/public/assets/ui/cross_button.png'
+import darkModeButton from '/public/assets/ui/dark_mode.png'
 
 let props = defineProps(['props'])
 const emits = defineEmits(['filtersChange'])
 
 let filters = toRefs(props)
+let darkMode = inject('darkMode')
 
 let state = ref(false)
 const searchBarRef = ref()
@@ -69,55 +71,68 @@ onMounted(() => {
 
 </script>
 <template>
-  <div class="filters_nav_wrapper">
-    <div class="filter_button_wrapper" @click="state = !state">
-      <h1>Filters</h1>
-      <img :src="filterButton" alt="filter button" style="width: 15px">
+  <div :class="darkMode ? 'dark_light ': ''">
+    <div class="filters_nav_wrapper">
+      <div class="filter_button_wrapper" @click="state = !state">
+        <h1>Filters</h1>
+        <img :class="darkMode ? 'dark_image ': ''" :src="filterButton" alt="filter button" style="width: 15px">
+      </div>
+
+      <div class="search_bar_wrapper">
+        <label for="search_bar">Search</label>
+        <input ref="searchBarRef" :class="darkMode ? 'search_bar dark_accent' : 'search_bar'" type="search"
+               id="search_bar"
+               @input="search_bar($event.target.value)">
+        <img :class="darkMode ? 'dark_image ': ''" :src="crossButton" alt="cross button"
+             @click="searchBarRef.value='';search_bar('')"
+             style="margin-left: -27px; width: 12px; padding: 5px">
+      </div>
+
+      <div class="dark_mode_wrapper" @click="darkMode = !darkMode">
+        <h1>Dark mode</h1>
+        <img :class="darkMode ? 'dark_image ': ''" :src="darkModeButton" alt="dark mode button" style="width: 15px">
+      </div>
+
     </div>
 
-    <div class="search_bar_wrapper">
-      <label for="search_bar">Search</label>
-      <input ref="searchBarRef" class="search_bar" type="search" id="search_bar"
-             @input="search_bar($event.target.value)">
-      <img :src="crossButton" alt="cross button" @click="searchBarRef.value='';search_bar('')"
-           style="margin-left: -30px; width: 15px; padding: 5px; margin-bottom: 1px">
-    </div>
-
-  </div>
-
-  <Collapse :when="state" class="collapse">
-    <div class="filter_wrapper" v-if="filters">
-      <div class="filters">
-        <div class="filter_types" v-for="elem in filters" :key="elem['name']">
-          <p>{{ props.value }}</p>
-          <h1 class="filter_heading">{{ elem['name'] }}</h1>
-          <div v-for="(filter,index) in elem['available']" :key="filter" class="filter_content_list">
-            <label class="filter_label">
-              <input :type="elem['checkbox'] ? 'checkbox' : 'radio'" :name="elem['name']" style="cursor: pointer"
-                     :checked="elem['filter'].includes(filter)"
-                     @click="swap_filter(filter,elem['filter'],elem['checkbox'],$event)">
-              {{ elem['display'][index] }}
-            </label>
+    <Collapse :when="state" class="collapse">
+      <div class="filter_wrapper" v-if="filters">
+        <div class="filters">
+          <div class="filter_types" v-for="elem in filters" :key="elem['name']">
+            <p>{{ props.value }}</p>
+            <h1 class="filter_heading">{{ elem['name'] }}</h1>
+            <div v-for="(filter,index) in elem['available']" :key="filter" class="filter_content_list">
+              <label class="filter_label">
+                <input :type="elem['checkbox'] ? 'checkbox' : 'radio'" :name="elem['name']" style="cursor: pointer"
+                       :checked="elem['filter'].includes(filter)"
+                       @click="swap_filter(filter,elem['filter'],elem['checkbox'],$event)">
+                {{ elem['display'][index] }}
+              </label>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </Collapse>
+    </Collapse>
+  </div>
 
 </template>
 
 <style scoped>
 .filters_nav_wrapper {
-  /*outline: 1px solid red;*/
   display: flex;
   flex-flow: row;
-  align-items: center;
   justify-content: center;
-  justify-items: center;
+  align-items: center;
   padding: 5px;
+  height: 30px;
+  font-size: 0.9em;
 
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
   gap: 20px;
+}
+
+.dark .filters_nav_wrapper {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 1);
 }
 
 .collapse {
@@ -136,6 +151,7 @@ onMounted(() => {
   user-select: none;
   display: flex;
   flex-flow: row wrap;
+  align-items: center;
   gap: 5px;
 }
 
@@ -179,8 +195,8 @@ onMounted(() => {
 
 .search_bar_wrapper {
   /*outline: 1px solid red;*/
-
-  padding: 5px;
+  border-width: 0;
+  padding: 8px;
   cursor: pointer;
   user-select: none;
   display: flex;
@@ -189,9 +205,21 @@ onMounted(() => {
 }
 
 .search_bar {
+  height: 20px;
   border-radius: 5px;
   border-width: 2px;
   outline: none;
   padding: 2px;
+}
+
+.dark_mode_wrapper {
+  /*outline: 1px solid red;*/
+  align-items: center;
+  padding: 12px;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 5px;
 }
 </style>

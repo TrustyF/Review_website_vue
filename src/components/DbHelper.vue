@@ -36,7 +36,7 @@ let currentPoster = ref(0)
 let presentInDb = ref(false)
 
 onMounted(() => {
-  loadPresets()
+  // loadPresets()
 })
 
 watch(props, (newV, oldV) => {
