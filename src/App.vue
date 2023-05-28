@@ -17,6 +17,10 @@ let darkMode = inject("darkMode")
 </template>
 <style scoped>
 .main {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  margin: 0;
   transition: 500ms;
 }
 .white {

@@ -171,7 +171,7 @@ onMounted(() => {
 
     <div class="feed loader" v-else>
       Loading...
-      <img src="../../public/assets/ui/Loading_icon.gif" alt="loading icon" style="width: 25px; margin: 10px">
+      <img :class="darkMode ? '': 'dark_image'" src="../../public/assets/ui/Loading_icon.gif" alt="loading icon" style="width: 25px; margin: 10px">
     </div>
   </div>
 </template>
@@ -194,6 +194,7 @@ onMounted(() => {
 
 .loader {
   /*outline: 1px solid red;*/
+  padding: 20px;
   display: flex;
   text-align: center;
   align-items: center;
