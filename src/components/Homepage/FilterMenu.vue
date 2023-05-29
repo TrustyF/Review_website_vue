@@ -119,9 +119,6 @@ onMounted(() => {
 
 <style scoped>
 .filters_nav_wrapper {
-  /*position: absolute;*/
-  /*left: 0;*/
-  width: 100%;
   display: flex;
   flex-flow: row;
   justify-content: center;

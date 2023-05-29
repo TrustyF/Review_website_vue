@@ -1,5 +1,5 @@
 <script setup>
-import MediaPageComponent from "./MediaPageComponent"
+import MediaPageComponent from "./components/MediaPageComponent"
 import {ref, onMounted,inject} from 'vue'
 
 let filters = ref({
@@ -64,10 +64,3 @@ const mediaType = "movie"
 <template>
   <MediaPageComponent :filters="filters" :rating-desc="ratingDesc" :mediaType="mediaType"></MediaPageComponent>
 </template>
-
-<script>
-
-export default {
-  name: "MoviePage"
-}
-</script>

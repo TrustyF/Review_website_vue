@@ -161,7 +161,7 @@ onMounted(() => {
 <!--      </div>-->
 
       <div class="movie_grid" v-show="movies[rating].length > 0" v-for="rating in Object.keys(ratingDesc).reverse()" :key="rating">
-        <rating-header  class="rating_header" :rating="rating" :rating_desc="ratingDesc"></rating-header>
+        <rating-header  :rating="rating" :rating_desc="ratingDesc"></rating-header>
         <div class="movie_container_wrapper">
           <div v-for="mov in movies[rating]" :key="mov.title">
             <MovieContainer class="movie_container" :key="mov.id" :data="mov" :ratingRange="mediaRatingRanges"
@@ -174,7 +174,7 @@ onMounted(() => {
 
     <div class="feed loader" v-else>
       Loading...
-      <img :class="darkMode ? '': 'dark_image'" src="../../public/assets/ui/Loading_icon.gif" alt="loading icon"
+      <img :class="darkMode ? '': 'dark_image'" src="../../../public/assets/ui/Loading_icon.gif" alt="loading icon"
            style="width: 25px; margin: 10px">
     </div>
   </div>
@@ -190,7 +190,6 @@ onMounted(() => {
   /*outline: 1px solid blue;*/
   display: flex;
   flex-direction: column;
-  width: 100%;
   margin: auto;
 }
 
@@ -209,7 +208,6 @@ onMounted(() => {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  /*flex-basis: 300px;*/
 }
 
 .movie_container_wrapper {
@@ -220,8 +218,5 @@ onMounted(() => {
 
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-
-  /*display: flex;*/
-  /*flex-flow: row wrap;*/
 }
 </style>

@@ -24,7 +24,6 @@ let darkMode = inject("darkMode")
   min-height: 100vh;
   margin: auto;
   transition: 500ms;
-  overflow: hidden;
 }
 .white {
   background-color: white;

@@ -25,24 +25,23 @@ export default {
 <style scoped>
 
 .rating_container {
+  /*outline: 1px blue solid;*/
+  position: sticky;
+  top: 0;
+
   width: 100%;
   user-select: none;
-  position: sticky;
-  top: 20px;
+  /*top: 20px;*/
   /*margin: 5px;*/
-  z-index: 10;
+  /*z-index: 10;*/
 }
 
 .rating_content {
   /*outline: 1px blue solid;*/
-
   width: fit-content;
 
   display: flex;
-  justify-content: flex-start;
   align-items: center;
-  flex-flow: row wrap;
-  align-content: flex-start;
 
   gap: 15px;
 
@@ -63,6 +62,7 @@ export default {
 .rating_title::after {
   /*display: block;*/
   content: "★";
+  color: #1e8efd;
 }
 
 .rating_desc {
