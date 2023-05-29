@@ -25,6 +25,10 @@ let mediaType = input_props['mediaType']
 let settings = ref({
   'session_seed': sessionSeed,
 })
+
+let maxMedia = ref(50)
+let fetchingMoreMovies = ref(false)
+
 const currentSelectedMovie = ref({})
 const mediaRatingRanges = ref({})
 
@@ -32,27 +36,31 @@ const servStatus = ref(0)
 
 // API
 
-function setSettings() {
-  console.log('set settings', `${current_api}/media/settings`)
-  axios.post(`${current_api}/media/settings`, {
-    'settings': settings.value,
-    'media_type': mediaType.value,
-    'filters': filters.value
+function getInfo() {
+  axios.post(`${current_api}/media/get_rating_range`, {
+    'media_type': mediaType.value
   })
       .then(response => {
-        console.log('set settings',response.status)
-        getInfo()
-      })
-}
-
-function getInfo() {
-  axios.get(`${current_api}/media/info`)
-      .then(response => {
         if (response.status === 200) {
-          console.log('ranges',response.status)
+          console.log('ranges', response.status)
           mediaRatingRanges.value = response.data['rating_range']
           update_movies()
         }
+      })
+}
+
+function update_movies() {
+  // console.log('updating movies')
+  axios.post(`${current_api}/media/get_all`, {
+    'settings': settings.value,
+    'media_type': mediaType.value,
+    'filters': filters.value,
+    'max_media': maxMedia.value
+  })
+      .then(response => {
+        console.log('get movies', response.status)
+        movies.value = response.data
+        servStatus.value = response.status
       })
 }
 
@@ -61,37 +69,10 @@ function setFilters() {
     'filters': filters.value
   })
       .then(response => {
-        console.log('set filters',response.status)
+        console.log('set filters', response.status)
         if (response.status === 200) {
           update_movies()
         }
-      })
-}
-
-let fetchingMoreMovies = ref(false)
-
-function fetchMoreMovies() {
-  axios.get(`${current_api}/media/load_more`)
-      .then(response => {
-        console.log(response.status)
-        if (response.status === 200) {
-          fetchingMoreMovies.value = false
-          update_movies()
-        }
-        if (response.status === 201) {
-          console.log('max movies reached')
-          update_movies()
-        }
-      })
-}
-
-function update_movies() {
-  // console.log('updating movies')
-  axios.get(`${current_api}/media/all`)
-      .then(response => {
-        console.log('get movies',response.status)
-        movies.value = response.data
-        servStatus.value = response.status
       })
 }
 
@@ -125,7 +106,7 @@ function handleScroll() {
   if (scrollTop + clientHeight >= (scrollHeight - (scrollHeight / 3)) && fetchingMoreMovies.value === false) {
     fetchingMoreMovies.value = true
     setTimeout(function () {
-      fetchMoreMovies()
+      maxMovies.value += 50
     }, 300)
   }
 }
@@ -135,8 +116,7 @@ watch(settingsOpen, (newV, oldV) => {
 })
 
 onMounted(() => {
-  console.log('mounted', mediaType.value)
-  setSettings()
+  getInfo()
   window.addEventListener('scroll', handleScroll)
 })
 </script>
@@ -153,15 +133,16 @@ onMounted(() => {
 
     <div class="feed" v-if="servStatus===200">
 
-<!--      <div class="movie_grid">-->
-<!--        <rating-header :rating="'Recent ratings'"></rating-header>-->
-<!--        <div class="movie_container_wrapper" v-for="rec in recentRatings" :key="rec.title + '_rec'">-->
-<!--          <MediaContainer :key="rec.id + '_rec'" :data="rec" @MovieEdit="editMovie"></MediaContainer>-->
-<!--        </div>-->
-<!--      </div>-->
+      <!--      <div class="movie_grid">-->
+      <!--        <rating-header :rating="'Recent ratings'"></rating-header>-->
+      <!--        <div class="movie_container_wrapper" v-for="rec in recentRatings" :key="rec.title + '_rec'">-->
+      <!--          <MediaContainer :key="rec.id + '_rec'" :data="rec" @MovieEdit="editMovie"></MediaContainer>-->
+      <!--        </div>-->
+      <!--      </div>-->
 
-      <div class="movie_grid" v-show="movies[rating].length > 0" v-for="rating in Object.keys(ratingDesc).reverse()" :key="rating">
-        <rating-header  :rating="rating" :rating_desc="ratingDesc"></rating-header>
+      <div class="movie_grid" v-show="movies[rating].length > 0" v-for="rating in Object.keys(ratingDesc).reverse()"
+           :key="rating">
+        <rating-header :rating="rating" :rating_desc="ratingDesc"></rating-header>
         <div class="movie_container_wrapper">
           <div v-for="mov in movies[rating]" :key="mov.title">
             <MovieContainer class="movie_container" :key="mov.id" :data="mov" :ratingRange="mediaRatingRanges"
