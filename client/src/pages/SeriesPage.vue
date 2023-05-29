@@ -1,5 +1,5 @@
 <script setup>
-import MediaPageComponent from "./MediaPageComponent"
+import MediaPageComponent from "./components/MediaPageComponent"
 import {ref, onMounted} from 'vue'
 
 let filters = ref({

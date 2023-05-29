@@ -1,4 +1,9 @@
 .dark {
+    background-color: #131215;
+    color: white;
+}
+
+.dark_accent_dark {
     background-color: #1c1b23;
     color: white;
 }

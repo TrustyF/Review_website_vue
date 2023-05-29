@@ -3,6 +3,7 @@ import {createRouter, createWebHistory} from "vue-router";
 import MoviePage from "@/pages/MoviePage"
 import MangaPage from "@/pages/MangaPage"
 import SeriesPage from "@/pages/SeriesPage"
+import MoviePickerPage from "@/pages/MoviePickerPage";
 
 const router = createRouter({
     mode: 'history',
@@ -11,7 +12,12 @@ const router = createRouter({
         {
             path: "/",
             name: "home",
-            redirect: '/movies'
+            redirect: '/movie_picker'
+        },
+        {
+            path: "/movie_picker",
+            name: "movie picker",
+            component: MoviePickerPage
         },
         {
             path: "/movies",
