@@ -33,14 +33,6 @@ class StorageManager:
     def add_store(self, name, media):
         self.stores[name] = media
 
-    def set_current_media(self, media_type):
-        print('set current', media_type)
-        self.curr_media = media_type
-
-    def get_curr_media(self):
-        print('returning', self.curr_media, self.stores[self.curr_media])
-        return self.stores[self.curr_media]
-
 
 class Media:
 
