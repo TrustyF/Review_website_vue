@@ -1,7 +1,7 @@
 <script setup>
 import {inject} from 'vue'
 import {RouterView, RouterLink} from 'vue-router'
-import NavBar from "@/components/NavBar";
+import NavBar from "@/components/General/NavBar";
 import './styles/globals.css'
 import './styles/dark.css'
 

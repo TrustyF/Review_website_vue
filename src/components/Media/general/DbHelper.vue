@@ -1,8 +1,8 @@
 <script setup>
 import {defineProps, defineEmits, ref, watch, onMounted, onUnmounted, computed, inject} from 'vue'
-import TagContainer from "@/components/MediaContainer/Movies/components/TagContainer";
-import asset_paths from '../../public/assets/tags/assets.json'
-import MovieContainer from "@/components/MediaContainer/Movies/MovieContainer";
+import TagContainer from "@/components/Media/components/TagContainer";
+import asset_paths from '../../../../public/assets/tags/assets.json'
+import MovieContainer from "@/components/Media/MediaContainer";
 
 const apiKey = '063ccf740a391dee9759aaa3564661c2'
 const current_api = inject('curr_api')

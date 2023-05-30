@@ -1,9 +1,9 @@
 <script setup>
-import TagContainer from "@/components/MediaContainer/Movies/components/TagContainer";
+import TagContainer from "@/components/Media/components/TagContainer";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
-import RatingBumper from "@/components/MediaContainer/Movies/components/RatingBumper/RatingBumper";
+import RatingBumper from "@/components/Media/components/RatingBumper/RatingBumper";
 import {defineProps, defineEmits, ref, onMounted, onUnmounted, watch, inject} from 'vue'
-import ContentBox from "@/components/MediaContainer/Movies/components/ContentBox";
+import ContentBox from "@/components/Media/components/ContentBox";
 
 const props = defineProps(['data', 'ratingRange'])
 const emits = defineEmits(['MovieEdit'])
