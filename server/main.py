@@ -15,10 +15,11 @@ CORS(app)
 media_store = store.stores
 
 
+#  REST
 # @cache.cached(timeout=3000)
 @app.route('/media/get_all', methods=["POST"])
 def get_all():
-    print('get all')
+    # print('get all')
     return media_store[request.json['media_type']].get_all_media(request.json), 200
 
 
@@ -40,9 +41,10 @@ def delete():
     return 200
 
 
+# Extras
 @app.route('/media/get_rating_range', methods=["POST"])
 def get_rating_range():
-    print('get_rating_range')
+    # print('get_rating_range')
     return media_store[request.json['media_type']].get_media_rating_range(), 200
 
 
@@ -50,6 +52,13 @@ def get_rating_range():
 def check_dupe():
     print('check_dupe')
     return media_store[request.json['media_type']].check_dupe(request.json), 200
+
+
+# Selective picks
+@app.route('/media/get_rand_genre', methods=["POST"])
+def get_rand_genre():
+    print('rand genre', request.json)
+    return media_store[request.json['media_type']].get_rand_genre(), 200
 
 
 # class Tags:

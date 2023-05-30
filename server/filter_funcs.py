@@ -9,7 +9,6 @@ def rating_filter(f_filters):
         return match_everything
 
     rating_filters = f_filters['rating']['filter']
-    print(rating_filters)
 
     if not rating_filters:
         return match_everything

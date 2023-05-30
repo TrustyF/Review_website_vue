@@ -57,13 +57,13 @@ class Media:
         self.calc_rating_range()
 
     # setters
-    def set_settings(self, query):
-        print('set_settings')
-        self.settings = query
-        self.max_page_items = 50
+    def set_settings(self, f_settings=None, f_max_media=10):
+        # print('set_settings')
+        self.settings = f_settings
+        self.max_page_items = f_max_media
 
     def set_filters(self, query):
-        print('set_filters')
+        # print('set_filters')
         self.filters = query
 
     # operations
@@ -91,10 +91,12 @@ class Media:
             return Response(status=200)
 
     # getters
-    def get_all_media(self):
+    def get_all_media(self, data):
+        self.set_settings(data['settings'], data['max_media'])
+        self.set_filters(data['filters'])
         filtered_arr = self.filter(self.db)
         sorted_arr = self.sorting(filtered_arr)
-        culled_arr = self.culling(sorted_arr)
+        culled_arr = self.culling(sorted_arr, self.max_page_items)
         ranked_arr = sort_funcs.place_in_rank_category(culled_arr, self.rank_range)
         return ranked_arr
 
@@ -103,6 +105,14 @@ class Media:
             'avg_range': self.rank_avg_range,
             'my_range': self.my_rating_range
         }
+
+    # selective pickers
+    def get_rand_genre(self):
+        filtered_arr = self.db.search(filter_funcs.rating_filter({'rating': {'filter': ['7', '8', '9']}}))
+        sort_arr = sort_funcs.sort_randomize(filtered_arr, self.settings['session_seed'])
+        culled_arr = self.culling(sort_arr, 5)
+        # ranked_arr = sort_funcs.place_in_rank_category(filtered_arr, self.rank_range)
+        return culled_arr
 
     # helpers
     def filter(self, f_arr):
@@ -129,8 +139,8 @@ class Media:
         sort_arr = sort_funcs.sort_by_my_rating(sort_arr)
         return sort_arr
 
-    def culling(self, f_arr):
-        return f_arr[:self.max_page_items]
+    def culling(self, f_arr, max_items):
+        return f_arr[:max_items]
 
     def check_dupe(self, data):
         if data == {}:
