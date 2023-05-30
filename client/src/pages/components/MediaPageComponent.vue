@@ -1,12 +1,12 @@
 <script setup>
-import MovieContainer from "@/components/MediaContainer/Movies/MovieContainer";
-import DbHelper from "@/components/DbHelper";
-import RatingHeader from "@/components/Homepage/RatingHeader";
+import MovieContainer from "@/components/Media/MediaContainer";
+import DbHelper from "@/components/Media/general/DbHelper";
+import RatingHeader from "@/components/Media/general/RatingHeader";
 import {inject, watch, defineProps} from 'vue'
 
 import axios from 'axios'
 import {ref, onMounted, toRefs} from 'vue'
-import FilterMenu from "@/components/Homepage/FilterMenu";
+import FilterMenu from "@/components/Media/general/FilterMenu";
 
 // to do
 // add fresh review
@@ -36,14 +36,14 @@ const servStatus = ref(0)
 
 // API
 
-function getInfo() {
+function get_rating_range() {
   axios.post(`${current_api}/media/get_rating_range`, {
     'media_type': mediaType.value
   })
       .then(response => {
         if (response.status === 200) {
-          console.log('ranges', response.status)
-          mediaRatingRanges.value = response.data['rating_range']
+          console.log('ranges', response.status, response.data)
+          mediaRatingRanges.value = response.data
           update_movies()
         }
       })
@@ -64,17 +64,17 @@ function update_movies() {
       })
 }
 
-function setFilters() {
-  axios.post(`${current_api}/media/filters`, {
-    'filters': filters.value
-  })
-      .then(response => {
-        console.log('set filters', response.status)
-        if (response.status === 200) {
-          update_movies()
-        }
-      })
-}
+// function setFilters() {
+//   axios.post(`${current_api}/media/filters`, {
+//     'filters': filters.value
+//   })
+//       .then(response => {
+//         console.log('set filters', response.status)
+//         if (response.status === 200) {
+//           update_movies()
+//         }
+//       })
+// }
 
 function editMovie(input) {
   settingsOpen.value = true
@@ -106,7 +106,7 @@ function handleScroll() {
   if (scrollTop + clientHeight >= (scrollHeight - (scrollHeight / 3)) && fetchingMoreMovies.value === false) {
     fetchingMoreMovies.value = true
     setTimeout(function () {
-      maxMovies.value += 50
+      maxMedia.value += 50
     }, 300)
   }
 }
@@ -116,7 +116,7 @@ watch(settingsOpen, (newV, oldV) => {
 })
 
 onMounted(() => {
-  getInfo()
+  get_rating_range()
   window.addEventListener('scroll', handleScroll)
 })
 </script>
@@ -129,14 +129,14 @@ onMounted(() => {
       <button @click="settingsOpen = true" style="margin: 13px 0 0 20px; position: fixed">Add {{ mediaType }}</button>
     </div>
 
-    <FilterMenu :props="filters" @filtersChange="setFilters"></FilterMenu>
+    <FilterMenu :props="filters" @filtersChange="update_movies"></FilterMenu>
 
     <div class="feed" v-if="servStatus===200">
 
       <!--      <div class="movie_grid">-->
       <!--        <rating-header :rating="'Recent ratings'"></rating-header>-->
       <!--        <div class="movie_container_wrapper" v-for="rec in recentRatings" :key="rec.title + '_rec'">-->
-      <!--          <MediaContainer :key="rec.id + '_rec'" :data="rec" @MovieEdit="editMovie"></MediaContainer>-->
+      <!--          <Media :key="rec.id + '_rec'" :data="rec" @MovieEdit="editMovie"></Media>-->
       <!--        </div>-->
       <!--      </div>-->
 

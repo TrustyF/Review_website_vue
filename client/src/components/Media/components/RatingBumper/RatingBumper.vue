@@ -1,7 +1,7 @@
 <script setup>
 import {defineProps, defineEmits, watch, ref, toRefs, onMounted, inject} from 'vue'
 
-import RatingTag from "@/components/MediaContainer/Movies/components/RatingBumper/RatingTag";
+import RatingTag from "@/components/Media/components/RatingBumper/RatingTag";
 
 const props = defineProps(['data', 'range'])
 const input = toRefs(props.range)
@@ -81,6 +81,7 @@ function calc() {
                :rating="scaled_user_rating"
                name="Average user rating"
                :desc="`The unscaled average rating is ${round_user_rating}`"
+               :sub_desc="`The average rating is mapped from between ${avg_range[0]} and ${avg_range[1]}, to ${my_range[0]} and 10`"
     ></RatingTag>
 
     <RatingTag v-if="arrow_state===1"
@@ -119,16 +120,14 @@ function calc() {
 
     <RatingTag v-if="data['re_watch']==='down'"
                :image="re_watch_down"
-               name="Underrated"
-               :desc="`My rating is ${rating_diff} points lower than the scaled average rating`"
-               :sub_desc="`The unscaled average rating is ${round_user_rating}`"
+               name="Watch-listed"
+               desc="Unsure about this rating, will probably be adjusted down after a re-watch."
     ></RatingTag>
 
     <RatingTag v-if="data['re_watch']==='up'"
                :image="re_watch_up"
-               name="Underrated"
-               :desc="`My rating is ${rating_diff} points lower than the scaled average rating`"
-               :sub_desc="`The unscaled average rating is ${round_user_rating}`"
+               name="Watch-listed"
+               desc="Unsure about this rating, will probably be adjusted down after a re-watch."
     ></RatingTag>
 
     <RatingTag v-if="data['re_read']"
