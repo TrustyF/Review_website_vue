@@ -5,7 +5,7 @@ import RatingBumper from "@/components/Media/components/RatingBumper/RatingBumpe
 import {defineProps, defineEmits, ref, onMounted, onUnmounted, watch, inject} from 'vue'
 import ContentBox from "@/components/Media/components/ContentBox";
 
-const props = defineProps(['data', 'ratingRange'])
+const props = defineProps(['data', 'ratingRange','rating_desc'])
 const emits = defineEmits(['MovieEdit'])
 
 const devMode = inject('devMode')
@@ -61,7 +61,7 @@ function emitSelectedMovie(input) {
         </div>
 
         <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"
-                      :range="ratingRange"></RatingBumper>
+                      :range="ratingRange" :rating_desc="rating_desc"></RatingBumper>
 
         <ContentBox class="content_box" :data="data"></ContentBox>
 
@@ -142,11 +142,14 @@ function emitSelectedMovie(input) {
   visibility: hidden;
   opacity: 0;
   transition: 50ms ease-in-out;
+  transition-delay: 50ms;
+
 }
 .main_block:hover .tag_container {
   transform: translate(0, 0);
   visibility: visible;
   opacity: 100%;
+  transition-delay: 0ms;
 }
 
 
@@ -165,11 +168,13 @@ function emitSelectedMovie(input) {
   opacity: 0;
 
   transition: 50ms ease-in-out;
+  transition-delay: 50ms;
 }
 .main_block:hover .rating_bumper {
   transform: translate(-2px, -29px);
   opacity: 100%;
   visibility: visible;
+  transition-delay: 0ms;
 }
 
 .main_block {

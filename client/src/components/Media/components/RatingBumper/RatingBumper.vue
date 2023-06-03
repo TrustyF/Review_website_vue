@@ -17,6 +17,18 @@ const re_watch_up = './assets/ui/rewind_up.png'
 const re_read = './assets/ui/reading.png'
 const stop = './assets/ui/stop.png'
 
+let ratingDesc = {
+  9: 'Near perfect masterpiece',
+  8: 'Extremely good',
+  7: 'Quite good',
+  6: 'Good with flaws',
+  5: "Meh",
+  4: 'Bad',
+  3: 'Fucking bad',
+  2: 'Holy shit bad',
+  1: 'Affront to god',
+}
+
 let avg_range = [0, 0]
 let my_range = [0, 0]
 
@@ -70,8 +82,9 @@ function calc() {
 
     <RatingTag :image="blue_star"
                :rating="data['my_rating']"
-               name="My rating"
-               :desc="`The only measure that counts ;p`"
+               :desc="data['my_rating'] + ': ' + ratingDesc[data['my_rating']]"
+               sub_desc="The most important metric"
+               name="My personal rating"
     ></RatingTag>
 
     <RatingTag :image="gold_star"
