@@ -97,14 +97,14 @@ function calc() {
 
     <RatingTag v-if="arrow_state===3"
                :image="arrow_down_single"
-               name="Underrated"
+               name="Not that good"
                :desc="`My rating is ${rating_diff} points lower than the scaled average rating`"
                :sub_desc="`The unscaled average rating is ${round_user_rating}`"
     ></RatingTag>
 
     <RatingTag v-if="arrow_state===4"
                :image="arrow_down_double"
-               name="Underrated"
+               name="Overrated"
                :desc="`My rating is ${rating_diff} points lower than the scaled average rating`"
                :sub_desc="`The unscaled average rating is ${round_user_rating}`"
     ></RatingTag>

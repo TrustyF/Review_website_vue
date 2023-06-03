@@ -28,7 +28,7 @@ function get_rating_range() {
 
 function get_movies() {
   console.log('updating banner')
-  axios.post(`${current_api}/media/get_rand_genre`, {
+  axios.post(`${current_api}/media/get_recent_release`, {
     'media_type': props['mediaType'],
     'max_media': props['max_media']
   })
@@ -38,20 +38,9 @@ function get_movies() {
       })
 }
 
-function format_header(movie) {
-  let genres = movie['genres']
-
-  if (genres.length > 1) {
-    return genres[0] + ' / ' + genres[1]
-  } else {
-    return genres[0]
-  }
-}
-
 onMounted(() => {
   get_rating_range()
 })
-
 watch(input['max_media'], (newV, oldV) => {
   console.log('props updated')
   get_movies()
@@ -59,18 +48,14 @@ watch(input['max_media'], (newV, oldV) => {
 </script>
 <template>
   <div class="bg_wrapper">
-    <div class="genre_wrapper">
+    <div class="wrapper">
       <div v-for="mov in bannerMedia" :key="mov.title">
-        <h1 class="genre_title hover_box dark_accent">{{ format_header(mov) }}</h1>
+        <!--      <h1 class="genre_title hover_box dark_accent">{{ mov['genres'][0] }}</h1>-->
         <MediaContainer class="movie_container" :key="mov.id" :data="mov"
                         :ratingRange="mediaRatingRanges"></MediaContainer>
       </div>
     </div>
-    <div class="button_wrapper" @click="get_movies">
-      <img :src="rewind" alt="refresh_selection" class="refresh_button">
-    </div>
   </div>
-
 </template>
 <style scoped>
 .bg_wrapper {
@@ -84,44 +69,22 @@ watch(input['max_media'], (newV, oldV) => {
   gap: 20px;
 }
 
-.genre_wrapper {
+.wrapper {
   /*outline: 1px red solid;*/
-  width: 80%;
-  margin: auto;
   display: flex;
   justify-content: space-between;
   gap: 25px;
-  z-index: 10;
-}
-
-.button_wrapper {
-  position: absolute;
-  transform: translate(-400%, 0);
-  right: 0;
-  width: 20px;
-  height: 20px;
-  background-color: #2b2a34;
-  padding: 10px;
-  border-radius: 100%;
-  transition: 50ms ease-in-out;
-}
-
-.button_wrapper:hover {
-  background-color: #41404d;
-}
-
-.refresh_button {
-  width: 100%;
-  height: 100%;
+  width: 80%;
+  margin: auto;
 }
 
 .genre_title {
-  font-size: 0.8em;
-  font-weight: lighter;
+  font-size: 0.9em;
+  font-weight: normal;
 }
 
 .hover_box {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   font-weight: normal;
   /*color: black;*/
   /*background-color: white;*/
@@ -136,12 +99,12 @@ watch(input['max_media'], (newV, oldV) => {
   content: '';
   position: absolute;
   display: inline-block;
-  transform: translate(0, 190%);
+  transform: translate(0, 15px);
   left: 0;
   right: 0;
+  margin: 10px auto;
   width: 0;
   height: 0;
-  margin: 10px auto;
   border-top: 7px solid #2b2a34;
   border-left: 7px solid transparent;
   border-right: 7px solid transparent;
