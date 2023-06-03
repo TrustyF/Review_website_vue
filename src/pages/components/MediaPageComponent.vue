@@ -58,7 +58,7 @@ function update_movies() {
     'max_media': maxMedia.value
   })
       .then(response => {
-        console.log('get movies', response.status)
+        console.log('get movies', response.status,response.data)
         movies.value = response.data
         servStatus.value = response.status
       })

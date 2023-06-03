@@ -5,12 +5,10 @@ import NavBar from "@/components/General/NavBar";
 import './styles/globals.css'
 import './styles/dark.css'
 
-let darkMode = inject("darkMode")
-
 </script>
 
 <template>
-  <div :class="darkMode ? 'main dark' : 'main white'">
+  <div class="main dark">
     <NavBar/>
     <div class="app_wrapper">
       <RouterView/>
@@ -24,8 +22,5 @@ let darkMode = inject("darkMode")
   min-height: 100vh;
   margin: auto;
   transition: 500ms;
-}
-.white {
-  background-color: white;
 }
 </style>

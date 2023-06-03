@@ -4,7 +4,6 @@ import FloatingVue from 'floating-vue'
 
 const props = defineProps(['tag_input', 'preview'])
 const tag_path = "./assets/tags/icons/"
-let darkMode = inject('darkMode')
 
 const screenRect = ref(null)
 const screenSide = ref(false)
@@ -40,21 +39,18 @@ onUnmounted(() => {
   <div>
     <div ref="screenRect" class="tag_wrapper" v-if="preview===undefined">
 
-      <!--      <div class="tag_gradient_wrapper">-->
-      <!--        <div-->
-      <!--            :class="'tag_gradient_background' + [tagAmount===1 ? ' one_tag' : ''] + [tagAmount===2 ? ' two_tag' : ''] + [tagAmount===3 ? ' three_tag' : '']"></div>-->
-      <!--      </div>-->
-
       <div class="tooltip" v-for="tag in tag_input" :key="tag['name']">
-        <img :class="`${tag['tier']}_glow` + ' tag_icon'" :src="`${tag_path}${tag['tier']}/${tag['image']}`"
+
+        <img class="tag_icon" :src="`${tag_path}${tag['tier']}/${tag['image']}`"
              :alt="tag['image']">
-        <div
-            :class="screenSide ? [darkMode ?'hover_box_left white' : 'hover_box_left white'] : [darkMode ?'hover_box white' :'hover_box white'] ">
+
+        <div :class="screenSide ?'hover_box_left' : 'hover_box' ">
           <div class="description">
             <p class=tag_name>{{ tag['name'] }}</p>
             <p class="tag_description">{{ tag['description'] }}</p>
           </div>
         </div>
+
       </div>
     </div>
 
@@ -73,18 +69,7 @@ onUnmounted(() => {
 
   </div>
 </template>
-
-<script>
-export default {
-  name: "TagContainer"
-}
-</script>
 <style scoped>
-
-.white {
-  background-color: white;
-  color: black;
-}
 
 .tag_wrapper {
   display: flex;
@@ -115,6 +100,8 @@ export default {
   visibility: hidden;
   opacity: 0;
 
+  color: black;
+  background-color: white;
   transition: 100ms ease-in-out;
 
   filter: drop-shadow(0px 0 2px rgba(0, 0, 0, 1));
@@ -135,25 +122,13 @@ export default {
   border-bottom: 15px solid transparent;
 }
 
-.hover_box.dark_accent:after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -5px;
-  margin: 10px auto;
-  /*width: 0;*/
-  /*height: 0;*/
-  border-right: 15px solid #2b2a34;
-  border-top: 15px solid transparent;
-  border-bottom: 15px solid transparent;
-}
-
 .hover_box_left {
   position: absolute;
   right: 0;
   top: 0;
   transform: translate(-205px, 0);
-  /*background-color: white;*/
+  color: black;
+  background-color: white;
   padding: 10px;
   border-radius: 5px;
 
@@ -179,19 +154,6 @@ export default {
   border-bottom: 15px solid transparent;
 }
 
-.hover_box_left.dark_accent:after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: -5px;
-  margin: 10px auto;
-  /*width: 0;*/
-  /*height: 0;*/
-  border-left: 15px solid #2b2a34;
-  border-top: 15px solid transparent;
-  border-bottom: 15px solid transparent;
-}
-
 .tooltip {
   /*display: inline-block;*/
   /*outline: 1px purple solid;*/
@@ -200,21 +162,10 @@ export default {
   font-size: 0.7em;
   width: 200px;
 
-  visibility: hidden;
-  opacity: 0;
+  /*visibility: hidden;*/
+  /*opacity: 0;*/
 
   transition: ease-in-out 100ms;
-}
-
-.tag_wrapper:hover .tooltip {
-  visibility: visible;
-  opacity: 100%;
-}
-
-.tag_preview .tooltip {
-  visibility: visible;
-  opacity: 100%;
-  transition: ease-in-out 50ms;
 }
 
 .tag_icon:hover + .hover_box {
@@ -226,6 +177,12 @@ export default {
   visibility: visible;
   opacity: 100%;
 }
+
+/*.tag_preview .tooltip {*/
+/*  visibility: visible;*/
+/*  opacity: 100%;*/
+/*  transition: ease-in-out 50ms;*/
+/*}*/
 
 .visible_override {
   visibility: visible;
@@ -256,26 +213,6 @@ export default {
   padding: 5px;
   width: 40px;
   overflow: hidden;
-}
-
-.gold_glow {
-  filter: drop-shadow(0px 0 4px #f6df86)
-}
-
-.green_glow {
-  filter: drop-shadow(0px 0 4px #aace9f)
-}
-
-.purple_glow {
-  filter: drop-shadow(0px 0 4px #C58CC0FF)
-}
-
-.red_glow {
-  filter: drop-shadow(0px 0 4px #ff74a1)
-}
-
-.silver_glow {
-  filter: drop-shadow(0px 0 4px #a6caf8)
 }
 
 .tag_gradient_wrapper {

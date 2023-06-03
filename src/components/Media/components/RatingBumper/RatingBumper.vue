@@ -5,7 +5,6 @@ import RatingTag from "@/components/Media/components/RatingBumper/RatingTag";
 
 const props = defineProps(['data', 'range'])
 const input = toRefs(props.range)
-const darkMode = inject('darkMode')
 
 const blue_star = './assets/ui/blue_star.png'
 const gold_star = './assets/ui/gold_star.png'
@@ -29,9 +28,7 @@ if (input !== undefined) {
 // console.log(avg_range[0], avg_range[1], my_range[0], my_range[1])
 
 function map_range(value, low1, high1, low2, high2) {
-  let out = low2 + (high2 - low2) * (value - low1) / (high1 - low1);
-  // if (out > high2) out = high2
-  return out
+  return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 }
 
 const scaled_user_rating = ref(Math.round(map_range(props.data['vote_average'], avg_range[0], avg_range[1], Number(my_range[0]), 10) * 10) / 10)
