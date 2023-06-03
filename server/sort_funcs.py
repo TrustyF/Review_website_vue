@@ -18,9 +18,13 @@ def sort_by_date_released(f_arr):
     return sorted(f_arr, key=lambda k: datetime.strptime(k['release_date'], '%Y-%m-%d'), reverse=True)
 
 
-def sort_randomize(f_arr, f_seed):
-    random.Random(f_seed).shuffle(f_arr)
-    return f_arr
+def sort_randomize(f_arr, f_seed=0):
+    if f_seed == 0:
+        random.shuffle(f_arr)
+        return f_arr
+    else:
+        random.Random(f_seed).shuffle(f_arr)
+        return f_arr
 
 
 # rank

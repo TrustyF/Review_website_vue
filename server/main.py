@@ -57,8 +57,12 @@ def check_dupe():
 # Selective picks
 @app.route('/media/get_rand_genre', methods=["POST"])
 def get_rand_genre():
-    print('rand genre', request.json)
-    return media_store[request.json['media_type']].get_rand_genre(), 200
+    return media_store[request.json['media_type']].get_rand_genre(request.json), 200
+
+
+@app.route('/media/get_recent_release', methods=["POST"])
+def get_recent_release():
+    return media_store[request.json['media_type']].get_recent_release(request.json), 200
 
 
 # class Tags:

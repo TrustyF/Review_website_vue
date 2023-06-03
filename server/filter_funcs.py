@@ -150,3 +150,16 @@ def searchbar_filter(f_filters):
     searchbar_query = Query().title.test(lambda val: re.search(searchbar_filters, val, re.IGNORECASE))
 
     return searchbar_query
+
+
+def pick_one_each_genre(f_array):
+    genres = []
+    selected_movies = []
+
+    for movie in f_array:
+        if movie['genres'][0] not in genres:
+            selected_movies.append(movie)
+            genres.append(movie['genres'][0])
+
+    # print(genres)
+    return selected_movies

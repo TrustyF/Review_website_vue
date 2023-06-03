@@ -45,16 +45,7 @@ class Media:
 
         self.db = TinyDB(self.db_path)
 
-        self.filters = {}
-        self.max_page_items = 50
-
-        self.settings = {'session_seed': 0, }
         self.rank_range = (1, 10)
-
-        self.rank_avg_range = None
-        self.my_rating_range = None
-
-        self.calc_rating_range()
 
     # setters
     def set_settings(self, f_settings=None, f_max_media=10):
@@ -101,17 +92,37 @@ class Media:
         return ranked_arr
 
     def get_media_rating_range(self):
+        avg_ratings = []
+        my_ratings = []
+
+        for mov in self.db:
+            avg_ratings.append(float(mov['vote_average']))
+            my_ratings.append(float(mov['my_rating']))
+
+        tuple_avg = (min(avg_ratings), max(avg_ratings))
+        tuple_rating = (min(my_ratings), max(my_ratings))
+
         return {
-            'avg_range': self.rank_avg_range,
-            'my_range': self.my_rating_range
+            'avg_range': tuple_avg,
+            'my_range': tuple_rating
         }
 
+    def get_media_genres(self):
+        pass
+
     # selective pickers
-    def get_rand_genre(self):
-        filtered_arr = self.db.search(filter_funcs.rating_filter({'rating': {'filter': ['7', '8', '9']}}))
-        sort_arr = sort_funcs.sort_randomize(filtered_arr, self.settings['session_seed'])
-        culled_arr = self.culling(sort_arr, 5)
+    def get_rand_genre(self, data):
+        print(data['max_media'])
+        filtered_arr = self.db.search(filter_funcs.rating_filter({'rating': {'filter': ['6', '7', '8', '9']}}))
+        sort_arr = sort_funcs.sort_randomize(filtered_arr)
+        picked_arr = filter_funcs.pick_one_each_genre(sort_arr)
+        culled_arr = self.culling(picked_arr, data['max_media'])
         # ranked_arr = sort_funcs.place_in_rank_category(filtered_arr, self.rank_range)
+        return culled_arr
+
+    def get_recent_release(self, data):
+        sort_arr = sort_funcs.sort_by_date_released(self.db)
+        culled_arr = self.culling(sort_arr, data['max_media'])
         return culled_arr
 
     # helpers
@@ -156,16 +167,6 @@ class Media:
             state = False
 
         return state
-
-    # calculators
-    def calc_rating_range(self):
-        avg_ratings = [mov['vote_average'] for mov in self.db]
-        my_ratings = [mov['my_rating'] for mov in self.db]
-
-        self.rank_avg_range = (min(avg_ratings), max(avg_ratings))
-        self.my_rating_range = (min(my_ratings), max(my_ratings))
-
-        # print(self.media_type, self.rank_avg_range, self.my_rating_range)
 
     # others
     def transfer_old(self):
@@ -263,6 +264,26 @@ class Manga(Media):
             filter_funcs.content_filter(self.filters) &
             filter_funcs.searchbar_filter(self.filters)
         )
+
+    # selective pickers
+    def get_rand_genre(self, data):
+        print(data['max_media'])
+        filtered_arr = self.db.search(
+            filter_funcs.rating_filter({
+                'rating': {'filter': ['6', '7', '8', '9']},
+            }) &
+            filter_funcs.content_filter({
+                'content': {
+                    'filter': ["safe", "suggestive"],
+                    'available': ["safe", "suggestive", "erotica", "pornographic"]
+                }
+            })
+        )
+        sort_arr = sort_funcs.sort_randomize(filtered_arr)
+        picked_arr = filter_funcs.pick_one_each_genre(sort_arr)
+        culled_arr = self.culling(picked_arr, data['max_media'])
+        # ranked_arr = sort_funcs.place_in_rank_category(filtered_arr, self.rank_range)
+        return culled_arr
 
 
 tag_presets = Presets()
