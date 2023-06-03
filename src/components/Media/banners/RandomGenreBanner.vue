@@ -96,8 +96,8 @@ watch(input['max_media'], (newV, oldV) => {
 
 .button_wrapper {
   position: absolute;
-  transform: translate(-400%, 0);
-  right: 0;
+  /*transform: translate(-400%, 0);*/
+  right: 8%;
   width: 20px;
   height: 20px;
   background-color: #2b2a34;
