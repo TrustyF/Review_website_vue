@@ -2,7 +2,6 @@
 import {defineProps, defineEmits, onMounted, ref, watch, inject} from 'vue'
 
 const devMode = inject('devMode')
-const darkMode = inject('darkMode')
 const props = defineProps(['data'])
 
 let overflowTitleLength = ref()

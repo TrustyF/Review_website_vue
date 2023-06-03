@@ -2,24 +2,23 @@
 import {defineProps, defineEmits, ref, watch, onMounted, onUnmounted, computed, inject} from 'vue'
 
 const props = defineProps(['image', 'name', 'desc', 'sub_desc', 'number', 'rating'])
-const darkMode = inject('darkMode')
 
 </script>
 
 <template>
   <div class="tooltip">
 
-    <div :class="darkMode ? 'box dark_accent' : 'box white'" v-if="rating">
+    <div class="box dark_accent" v-if="rating">
       <h1 class="rating">{{ rating }}</h1>
       <img class="rating icon" v-if="image" v-lazy="image">
     </div>
 
-    <div :class="darkMode ? 'box dark_accent' : 'box white'" v-if="!rating && !number">
+    <div class="box dark_accent" v-if="!rating && !number">
       <h1 class="rating">{{ rating }}</h1>
       <img class="rating icon" v-if="image" v-lazy="image">
     </div>
 
-    <div :class="darkMode ? 'box dark_accent' : 'box white'" v-if="number">
+    <div class="box dark_accent" v-if="number">
       <h1 class="rating"> {{ number }}</h1>
       <img class="rating icon" style="padding-left: 2px" v-lazy="image">
     </div>

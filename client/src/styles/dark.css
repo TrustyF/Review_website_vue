@@ -3,15 +3,16 @@
     color: white;
 }
 
+.dark_accent {
+    background-color: #2b2a34;
+    color: white;
+}
+
 .dark_accent_dark {
     background-color: #1c1b23;
     color: white;
 }
 
-.dark_accent {
-    background-color: #2b2a34;
-    color: white;
-}
 
 .dark_light {
     background-color: #41404d;

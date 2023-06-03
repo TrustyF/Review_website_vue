@@ -9,7 +9,6 @@ const props = defineProps(['data', 'ratingRange'])
 const emits = defineEmits(['MovieEdit'])
 
 const devMode = inject('devMode')
-const darkMode = inject('darkMode')
 const current_api = inject('curr_api')
 
 let isOpen = ref(false)
@@ -36,7 +35,7 @@ function emitSelectedMovie(input) {
 
 </script>
 <template>
-  <div :class="darkMode ? 'dark_accent': 'white'">
+  <div class="dark_accent">
     <div class="movie_container" :class="isOpen ? 'open ' : 'closed '"
          v-click-out-side="clickOutside"
          @click="isOpen = !isOpen">
@@ -111,7 +110,7 @@ function emitSelectedMovie(input) {
   /*min-width: 200px;*/
 
   border-radius: 8px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
 
   /*overflow: hidden;*/
   transition: 0.2s ease;
@@ -119,32 +118,37 @@ function emitSelectedMovie(input) {
   display: flex;
 }
 
-.white {
-  background-color: white;
-}
-
-.dark_accent .movie_container {
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-}
-
 .settings {
   position: absolute;
-  transform: translate(173px, 3px);
+  transform: translate(180px, 3px);
 
   visibility: hidden;
   opacity: 0;
 
-  transition: 30ms ease-out;
+  transition: 50ms ease-in-out;
 }
 
 .main_block:hover .settings {
+  transform: translate(173px, 3px);
   visibility: visible;
   opacity: 100%;
 }
 
 .tag_container {
   position: absolute;
+  transform: translate(-7px, 0);
+
+  /*outline: 1px solid blue;*/
+  visibility: hidden;
+  opacity: 0;
+  transition: 50ms ease-in-out;
 }
+.main_block:hover .tag_container {
+  transform: translate(0, 0);
+  visibility: visible;
+  opacity: 100%;
+}
+
 
 .content_box {
   /*outline: 1px solid red;*/
@@ -153,13 +157,22 @@ function emitSelectedMovie(input) {
 
 .rating_bumper {
   position: absolute;
-  transform: translate(-2px, -29px);
+  transform: translate(-2px, -15px);
   /*outline: 1px solid red;*/
   padding: 0 5px 5px 5px;
+
+  visibility: hidden;
+  opacity: 0;
+
+  transition: 50ms ease-in-out;
+}
+.main_block:hover .rating_bumper {
+  transform: translate(-2px, -29px);
+  opacity: 100%;
+  visibility: visible;
 }
 
 .main_block {
-  /*outline: 2px solid purple;*/
   width: 200px;
   display: block;
 }

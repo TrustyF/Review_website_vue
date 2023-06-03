@@ -3,13 +3,11 @@ import {defineProps, defineEmits, ref, watchEffect, onMounted, watch, toRefs, in
 import {Collapse} from 'vue-collapsed'
 import filterButton from '/public/assets/ui/filter_button.png'
 import crossButton from '/public/assets/ui/cross_button.png'
-import darkModeButton from '/public/assets/ui/dark_mode.png'
 
 let props = defineProps(['props'])
 const emits = defineEmits(['filtersChange'])
 
 let filters = toRefs(props)
-let darkMode = inject('darkMode')
 
 let state = ref(false)
 const searchBarRef = ref()
@@ -71,25 +69,20 @@ onMounted(() => {
 
 </script>
 <template>
-    <div :class="darkMode ? 'filters_nav_wrapper dark_light ': 'filters_nav_wrapper'">
+    <div class="filters_nav_wrapper dark_light">
       <div class="filter_button_wrapper" @click="state = !state">
         <h1>Filters</h1>
-        <img :class="darkMode ? 'dark_image ': ''" :src="filterButton" alt="filter button" style="width: 15px">
+        <img class="dark_image" :src="filterButton" alt="filter button" style="width: 15px">
       </div>
 
       <div class="search_bar_wrapper">
         <label for="search_bar">Search</label>
-        <input ref="searchBarRef" :class="darkMode ? 'search_bar dark_accent' : 'search_bar'" type="search"
+        <input ref="searchBarRef" class="search_bar dark_accent" type="search"
                id="search_bar"
                @input="search_bar($event.target.value)">
-        <img :class="darkMode ? 'dark_image ': ''" :src="crossButton" alt="cross button"
+        <img class="dark_image" :src="crossButton" alt="cross button"
              @click="searchBarRef.value='';search_bar('')"
              style="margin-left: -27px; width: 12px; padding: 5px">
-      </div>
-
-      <div class="dark_mode_wrapper" @click="darkMode = !darkMode">
-        <h1>Dark mode</h1>
-        <img :class="darkMode ? 'dark_image ': ''" :src="darkModeButton" alt="dark mode button" style="width: 15px">
       </div>
 
     </div>
@@ -98,7 +91,7 @@ onMounted(() => {
 
     <Collapse :when="state" class="collapse">
       <div class="filter_wrapper" v-if="filters">
-        <div :class="darkMode ? 'filters dark_light' : 'filters'">
+        <div class="filters dark_light">
           <div class="filter_types" v-for="elem in filters"  :key="elem['name']" v-show="elem['display']!==undefined">
 <!--            <p>{{ props.value }}</p>-->
             <h1 class="filter_heading">{{ elem['name'] }}</h1>
