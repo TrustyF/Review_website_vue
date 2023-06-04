@@ -28,9 +28,14 @@ let ratingDesc = {
   2: 'Holy shit bad',
   1: 'Affront to god',
 }
+let avg_range = [1, 10]
+let my_range = [1, 10]
 
-let avg_range = input['avg_range'].value
-let my_range = input['my_range'].value
+if (input !== undefined) {
+  avg_range = input['avg_range'].value
+  my_range = input['my_range'].value
+}
+
 
 function map_range(value, low1, high1, low2, high2) {
   return low2 + (high2 - low2) * (value - low1) / (high1 - low1);

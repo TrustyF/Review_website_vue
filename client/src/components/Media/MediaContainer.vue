@@ -2,10 +2,11 @@
 import TagContainer from "@/components/Media/components/TagContainer";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 import RatingBumper from "@/components/Media/components/RatingBumper/RatingBumper";
-import {defineProps, defineEmits, ref, onMounted, onUnmounted, watch, inject} from 'vue'
+import {defineProps, defineEmits, ref, toRefs, onMounted, onUnmounted, watch, inject} from 'vue'
 import ContentBox from "@/components/Media/components/ContentBox";
 
-const props = defineProps(['data', 'ratingRange','rating_desc'])
+const props = defineProps(['data', 'ratingRange', 'rating_desc', 'mediaType'])
+const input = toRefs(props)
 const emits = defineEmits(['MovieEdit'])
 
 const devMode = inject('devMode')
@@ -34,71 +35,76 @@ function emitSelectedMovie(input) {
   emits('MovieEdit', props['data'])
 }
 
+function build_cover_request(info) {
+  let data = input.data.value
+  let media_type = input.mediaType.value
+
+  if (media_type === 'manga') {
+    data['id'] = data['manga_id']
+    delete data['manga_id']
+  }
+
+  return `${current_api}/media/cover?id=${encodeURIComponent(data['id'])}&type=${media_type}&title=${encodeURIComponent(data['title'])}`
+}
 
 </script>
 <template>
-    <div class="movie_container" :class="isOpen ? 'open ' : 'closed '"
-         v-click-out-side="clickOutside"
-         @click="isOpen = !isOpen">
+  <div class="movie_container" :class="isOpen ? 'open ' : 'closed '"
+       v-click-out-side="clickOutside"
+       @click="isOpen = !isOpen">
 
-      <div class="main_block" @mouseover="main_block_hover = true" @mouseleave="main_block_hover = false">
+    <div class="main_block" @mouseover="main_block_hover = true" @mouseleave="main_block_hover = false">
 
-        <div class="gradient_fill"></div>
+      <div class="gradient_fill"></div>
 
-        <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
+      <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
 
-        <div v-if="devMode" class="settings">
-          <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
-        </div>
-
-        <!--      Posters-->
-        <div v-if="data['media_type']==='movie' || data['media_type']==='tv'">
-          <img v-if="data['poster_path']!==undefined" v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
-               class="poster" alt="poster" draggable="false">
-        </div>
-        <div v-if="data['media_type']==='manga'">
-          <img v-if="data['poster_path']" v-lazy="`https://uploads.mangadex.org/covers/${data['poster_path']}.256.jpg`"
-               class="poster" alt="poster" draggable="false">
-        </div>
-
-        <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"
-                      :range="ratingRange" :rating_desc="rating_desc" :hover="main_block_hover"></RatingBumper>
-
-        <ContentBox class="content_box" :data="data"></ContentBox>
-
+      <div v-if="devMode" class="settings">
+        <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
       </div>
 
-      <div class="expanded">
-        <div class="overview">
+      <img v-if="data['poster_path']!==undefined"
+           v-lazy="build_cover_request()"
+           class="poster" alt="poster" draggable="false">
 
-          <h3 class="heading">Overview</h3>
-          <div class="details_wrapper">
-            <p class="rank" v-if="data['overview']" style="margin-bottom:5px;">
-              {{ data['overview'] }}
-            </p>
+      <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"
+                    :range="ratingRange" :rating_desc="rating_desc" :hover="main_block_hover"></RatingBumper>
 
-            <h3 class="heading">Extras</h3>
-            <p class="rank" v-if="data['genres']" style="margin-bottom:5px;">
-              {{ data['genres'].map(elem => elem).join(', ') }}
-            </p>
-
-            <div v-if="data['media_type']==='movie' || data['media_type']==='tv'">
-              <p class="rank" style="margin-bottom:5px;" v-if="data['runtime'] && data['media_type']==='movie'">
-                {{ "Duration: " + timeConvert(data['runtime']) }}
-              </p>
-              <a :href="data['imdb_url']" target="_blank" rel="noopener noreferrer">
-                <button type="button"
-                        style="background-color: #F5C518;border-radius: 3px;padding: 3px;outline: 1px black solid;border-style: none;cursor:pointer ">
-                  Imdb
-                </button>
-              </a>
-            </div>
-
-          </div>
-        </div>
-      </div>
+      <ContentBox class="content_box" :data="data"></ContentBox>
 
     </div>
+
+    <div class="expanded">
+      <div class="overview">
+
+        <h3 class="heading">Overview</h3>
+        <div class="details_wrapper">
+          <p class="rank" v-if="data['overview']" style="margin-bottom:5px;">
+            {{ data['overview'] }}
+          </p>
+
+          <h3 class="heading">Extras</h3>
+          <p class="rank" v-if="data['genres']" style="margin-bottom:5px;">
+            {{ data['genres'].map(elem => elem).join(', ') }}
+          </p>
+
+          <div v-if="data['media_type']==='movie' || data['media_type']==='tv'">
+            <p class="rank" style="margin-bottom:5px;" v-if="data['runtime'] && data['media_type']==='movie'">
+              {{ "Duration: " + timeConvert(data['runtime']) }}
+            </p>
+            <a :href="data['imdb_url']" target="_blank" rel="noopener noreferrer">
+              <button type="button"
+                      style="background-color: #F5C518;border-radius: 3px;padding: 3px;outline: 1px black solid;border-style: none;cursor:pointer ">
+                Imdb
+              </button>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
 </template>
 <style scoped>
 .movie_container {
@@ -147,6 +153,7 @@ function emitSelectedMovie(input) {
   transition-delay: 50ms;
 
 }
+
 .main_block:hover .tag_container {
   transform: translate(0, 0);
   visibility: visible;
