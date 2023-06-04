@@ -112,9 +112,9 @@ class Media:
 
     # selective pickers
     def get_rand_genre(self, data):
-        print(data['max_media'])
+        # print(data['max_media'])
         filtered_arr = self.db.search(filter_funcs.rating_filter({'rating': {'filter': ['6', '7', '8', '9']}}))
-        sort_arr = sort_funcs.sort_randomize(filtered_arr)
+        sort_arr = sort_funcs.sort_randomize(filtered_arr, data['session_seed'])
         picked_arr = filter_funcs.pick_one_each_genre(sort_arr)
         culled_arr = self.culling(picked_arr, data['max_media'])
         # ranked_arr = sort_funcs.place_in_rank_category(filtered_arr, self.rank_range)
