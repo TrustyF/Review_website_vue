@@ -2,8 +2,24 @@
 import {inject} from 'vue'
 import {RouterView, RouterLink} from 'vue-router'
 import NavBar from "@/components/General/NavBar";
+import axios from 'axios'
 import './styles/globals.css'
 import './styles/dark.css'
+
+const current_api = inject('curr_api')
+let mediaRanges = inject('mediaRanges')
+
+function get_media_ranges() {
+  axios.get(`${current_api}/media/get_rating_ranges`)
+      .then(response => {
+        if (response.status === 200) {
+          mediaRanges.value = response.data
+          console.log('get all ranges', mediaRanges)
+        }
+      })
+}
+
+get_media_ranges()
 
 </script>
 
@@ -15,6 +31,7 @@ import './styles/dark.css'
     </div>
   </div>
 </template>
+
 <style scoped>
 .app_wrapper {
   /*outline: 1px solid red;*/

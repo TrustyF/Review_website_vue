@@ -6,6 +6,7 @@ import {ref, onMounted, onUnmounted, toRefs} from 'vue'
 import {eventThrottle} from "@/utils";
 
 let sessionSeed = inject('sessionSeed')
+let mediaRanges = inject('mediaRanges')
 
 const rewind = './assets/ui/rewind.png'
 
@@ -14,19 +15,7 @@ const input = toRefs(props)
 const current_api = inject('curr_api')
 
 let bannerMedia = ref({})
-const mediaRatingRanges = ref({})
 let num_media_fit = ref(0)
-
-function get_media_ranges() {
-  axios.post(`${current_api}/media/get_rating_range`, {
-    'media_type': input['mediaType'].value
-  })
-      .then(response => {
-        if (response.status === 200) {
-          mediaRatingRanges.value = response.data
-        }
-      })
-}
 
 function get_recent_releases() {
   axios.post(`${current_api}/media/get_recent_release`, {
@@ -91,8 +80,6 @@ function refresh() {
   update_media()
 }
 
-get_media_ranges()
-
 onMounted(() => {
   calc_screen_fit()
   addEventListener('resize', eventThrottle(calc_screen_fit, 100))
@@ -106,14 +93,14 @@ onUnmounted(() => {
   <div class="bg_wrapper">
     <div class="genre_wrapper" id="genre_box">
 
-      <div v-for="mov in bannerMedia" :key="mov.title">
-        <div class="banner_media_wrapper">
+      <div v-for="mov in bannerMedia" :key="mov.title" class="banner_wrapper">
 
-          <h1 class="genre_title hover_box dark_accent">{{ format_header(mov) }}</h1>
-
-          <MediaContainer id="media_container" :key="mov.id" :data="mov"
-                          :ratingRange="mediaRatingRanges"></MediaContainer>
+        <div class="hover_box dark_accent">
+          <h1 class="genre_title">{{ format_header(mov) }}</h1>
         </div>
+
+        <MediaContainer id="media_container" :key="mov.id" :data="mov"
+                        :ratingRange="mediaRanges[mediaType]"></MediaContainer>
       </div>
 
     </div>
@@ -124,35 +111,28 @@ onUnmounted(() => {
 
 </template>
 <style scoped>
+
 .bg_wrapper {
-  outline: 1px red solid;
+  /*outline: 1px red solid;*/
   display: flex;
   position: relative;
   background-color: #1c1b23;
   padding: 40px;
-  /*border-radius: 15px;*/
   flex-flow: column;
   gap: 20px;
 }
 
 .genre_wrapper {
-  outline: 1px red solid;
+  /*outline: 1px red solid;*/
   width: 80%;
   margin: auto;
   display: flex;
   justify-content: space-between;
   gap: 20px;
-  z-index: 10;
-}
-
-.banner_media_wrapper {
-  outline: 2px blue;
-
 }
 
 #media_container {
-  outline: 1px red solid;
-
+  /*outline: 1px red solid;*/
 }
 
 .button_wrapper {
@@ -176,21 +156,28 @@ onUnmounted(() => {
   height: 100%;
 }
 
+.banner_wrapper {
+  /*outline: 1px solid blue;*/
+  width: 200px;
+}
+
 .genre_title {
+  /*width: 200px;*/
+  /*outline: 1px solid red;*/
   font-size: 0.8em;
   font-weight: lighter;
-  /*width: 200px;*/
+  text-align: center;
+  white-space: nowrap;
+  text-overflow: "-";
+  overflow: hidden;
 }
 
 .hover_box {
+  /*width: 200px;*/
   margin-bottom: 20px;
-  font-weight: normal;
-  /*color: black;*/
-  /*background-color: white;*/
-  /*padding: 10px;*/
   border-radius: 5px;
   filter: drop-shadow(0px 0 2px rgba(0, 0, 0, 0.5));
-  text-align: center;
+  padding: 10px;
   /*outline: 2px red solid;*/
 }
 
@@ -198,9 +185,12 @@ onUnmounted(() => {
   content: '';
   position: absolute;
   display: inline-block;
-  transform: translate(0, 200%);
-  /*margin: 10px auto;*/
-  border-top: 7px solid red;
+  left: 50%;
+  top: 100%;
+  transform: translate(-50%, 0);
+
+  border-top: 7px solid #2b2a34;
+  /*border-top: 7px solid red;*/
   border-left: 7px solid transparent;
   border-right: 7px solid transparent;
 }

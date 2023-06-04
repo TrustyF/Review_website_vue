@@ -8,11 +8,13 @@ const local_api = "http://localhost:5000"
 const server_api = "https://trustyfox.pythonanywhere.com"
 let devMode = true
 let sessionSeed = Math.random()
+let mediaRanges = ref({})
 
 const app = createApp(App)
 
 app.provide('curr_api', devMode ? local_api : server_api)
 app.provide('devMode', devMode)
+app.provide('mediaRanges', mediaRanges)
 app.provide('sessionSeed', sessionSeed)
 
 app.use(VueLazyload, {
