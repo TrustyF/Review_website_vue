@@ -37,14 +37,9 @@ function emitSelectedMovie(input) {
 
 function build_cover_request(info) {
   let data = input.data.value
-  let media_type = input.mediaType.value
+  let media_type = input['mediaType'].value
 
-  if (media_type === 'manga') {
-    data['id'] = data['manga_id']
-    delete data['manga_id']
-  }
-
-  return `${current_api}/media/cover?id=${encodeURIComponent(data['id'])}&type=${media_type}&title=${encodeURIComponent(data['title'])}`
+  return `${current_api}/media/cover?id=${encodeURIComponent(data['id'] ? data['id'] : data['manga_id'])}&type=${media_type}&title=${encodeURIComponent(data['title'])}`
 }
 
 </script>
