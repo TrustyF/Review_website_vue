@@ -1,8 +1,10 @@
 import os
+import time
+
 from tinydb import TinyDB, Query, where, operations
 import re
 from flask import Response
-# import requests
+from requests import get
 
 import sort_funcs
 import filter_funcs
@@ -51,6 +53,7 @@ class Media:
         self.db_path = os.path.join(self.base_path, f'database/{self.media_type}_db.json')
 
         self.db = TinyDB(self.db_path)
+        self.list_db = self.db.all()
 
         self.rank_range = (1, 10)
 
@@ -116,6 +119,21 @@ class Media:
 
     def get_media_genres(self):
         pass
+
+    def get_cover(self, media_id, media_title):
+        # print('get cover', media_id, media_title)
+        result = None
+
+        for mov in self.list_db:
+            if mov['id'] == media_id:
+                result = mov
+            elif mov['title'] == media_title:
+                result = mov
+
+        request = f'https://image.tmdb.org/t/p/w500{result["poster_path"]}'
+        response = get(request)
+
+        return response.content
 
     # selective pickers
     def get_rand_genre(self, data):
@@ -274,7 +292,7 @@ class Manga(Media):
 
     # selective pickers
     def get_rand_genre(self, data):
-        print(data['max_media'])
+        # print(data['max_media'])
         filtered_arr = self.db.search(
             filter_funcs.rating_filter({
                 'rating': {'filter': ['7', '8', '9']},
@@ -291,6 +309,21 @@ class Manga(Media):
         culled_arr = self.culling(picked_arr, data['max_media'])
         # ranked_arr = sort_funcs.place_in_rank_category(filtered_arr, self.rank_range)
         return culled_arr
+
+    # getters
+    def get_cover(self, media_id, media_title):
+        # print('get cover', media_id, media_title)
+        result = None
+
+        for mov in self.list_db:
+            if mov['manga_id'] == media_id:
+                result = mov
+            elif mov['title'] == media_title:
+                result = mov
+
+        request = f'https://uploads.mangadex.org/covers/{result["poster_path"]}.256.jpg'
+        response = get(request)
+        return response.content
 
 
 class Anime(Media):

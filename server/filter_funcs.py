@@ -53,7 +53,6 @@ def genre_filter(f_filters):
         return match_everything
 
     genre_filters = f_filters['genre']['filter']
-    print(genre_filters)
 
     if not genre_filters:
         return match_everything

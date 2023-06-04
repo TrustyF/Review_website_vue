@@ -2,24 +2,23 @@ import random
 
 from flask import Flask, Request, request, Response
 from flask_cors import CORS
-# from flask_caching import Cache
+from flask_caching import Cache
 
 from storage import store, tag_presets
 
 app = Flask(__name__)
-# app.config['CACHE_TYPE'] = "FileSystemCache"
-# app.config['CACHE_DIR'] = "cache"
+app.config['CACHE_TYPE'] = "FileSystemCache"
+app.config['CACHE_DIR'] = "cache"
 CORS(app)
 
-# cache = Cache(app)
+cache = Cache(app)
 media_store = store.stores
 
 
 #  Media
-# @cache.cached(timeout=3000)
 @app.route('/media/get_all', methods=["POST"])
 def get_all():
-    # print(request.json['media_type'])
+    # print('get all')
     return media_store[request.json['media_type']].get_all_media(request.json), 200
 
 
@@ -41,10 +40,21 @@ def delete():
     return 200
 
 
+# Get covers
+@app.route('/media/cover', methods=["GET"])
+# @cache.cached(timeout=3000)
+def get_cover():
+    media_id = request.args.get('id')
+    media_type = request.args.get('type')
+    media_title = request.args.get('title')
+    return media_store[media_type].get_cover(media_id, media_title)
+
+
 # Extras
 @app.route('/media/get_rating_ranges', methods=["GET"])
+@cache.cached(timeout=3000)
 def get_rating_range():
-    # print('get_rating_range')
+    # print(request.args.get('test'), request.args.get('good'))
     return store.gather_rating_ranges()
 
 
@@ -61,6 +71,7 @@ def get_rand_genre():
 
 
 @app.route('/media/get_recent_release', methods=["POST"])
+@cache.cached(timeout=3000)
 def get_recent_release():
     return media_store[request.json['media_type']].get_recent_release(request.json), 200
 
