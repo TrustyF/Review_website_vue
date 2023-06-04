@@ -15,37 +15,37 @@ CORS(app)
 media_store = store.stores
 
 
-#  REST
+#  Media
 # @cache.cached(timeout=3000)
 @app.route('/media/get_all', methods=["POST"])
 def get_all():
-    # print('get all')
+    # print(request.json['media_type'])
     return media_store[request.json['media_type']].get_all_media(request.json), 200
 
 
-@app.route('/media', methods=["POST"])
+@app.route('/media/add', methods=["POST"])
 def add():
     media_store[request.json['media_type']].add_media(request.json)
     return 200
 
 
-@app.route('/media', methods=["PUT"])
+@app.route('/media/update', methods=["PUT"])
 def update():
     media_store[request.json['media_type']].update_media(request.json)
     return 200
 
 
-@app.route('/media', methods=["DELETE"])
+@app.route('/media/delete', methods=["DELETE"])
 def delete():
     media_store[request.json['media_type']].del_media(request.json)
     return 200
 
 
 # Extras
-@app.route('/media/get_rating_range', methods=["POST"])
+@app.route('/media/get_rating_ranges', methods=["GET"])
 def get_rating_range():
     # print('get_rating_range')
-    return media_store[request.json['media_type']].get_media_rating_range(), 200
+    return store.gather_rating_ranges()
 
 
 @app.route('/media/check_dupe', methods=["POST"])

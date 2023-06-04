@@ -33,6 +33,13 @@ class StorageManager:
     def add_store(self, name, media):
         self.stores[name] = media
 
+    def gather_rating_ranges(self):
+        out = {}
+        for media in self.stores:
+            out[self.stores[media].media_type] = self.stores[media].get_media_rating_range()
+
+        return out
+
 
 class Media:
 
@@ -270,7 +277,7 @@ class Manga(Media):
         print(data['max_media'])
         filtered_arr = self.db.search(
             filter_funcs.rating_filter({
-                'rating': {'filter': ['6', '7', '8', '9']},
+                'rating': {'filter': ['7', '8', '9']},
             }) &
             filter_funcs.content_filter({
                 'content': {
@@ -286,9 +293,15 @@ class Manga(Media):
         return culled_arr
 
 
+class Anime(Media):
+    def __init__(self):
+        super().__init__(media_type='anime')
+
+
 tag_presets = Presets()
 
 store = StorageManager()
 store.add_store('movie', Movies())
 store.add_store('tv', Series())
 store.add_store('manga', Manga())
+store.add_store('anime', Anime())
