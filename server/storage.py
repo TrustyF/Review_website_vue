@@ -121,7 +121,7 @@ class Media:
         pass
 
     def get_cover(self, media_id, media_title):
-        print('get cover', media_id, media_title)
+        # print('get cover', media_id, media_title)
         result = None
 
         for mov in self.list_db:
@@ -312,7 +312,7 @@ class Manga(Media):
 
     # getters
     def get_cover(self, media_id, media_title):
-        print('get cover', media_id, media_title)
+        # print('get cover', media_id, media_title)
         result = None
 
         for mov in self.list_db:

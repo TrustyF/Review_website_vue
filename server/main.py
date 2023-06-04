@@ -92,4 +92,4 @@ def get_recent_release():
 #         return self.presets.del_preset(req), 200
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(host='0.0.0.0')
