@@ -2,16 +2,16 @@ import random
 
 from flask import Flask, Request, request, Response
 from flask_cors import CORS
-# from flask_caching import Cache
+from flask_caching import Cache
 
 from storage import store, tag_presets
 
 app = Flask(__name__)
-# app.config['CACHE_TYPE'] = "FileSystemCache"
-# app.config['CACHE_DIR'] = "cache"
+app.config['CACHE_TYPE'] = "FileSystemCache"
+app.config['CACHE_DIR'] = "cache"
 CORS(app)
 
-# cache = Cache(app)
+cache = Cache(app)
 media_store = store.stores
 
 

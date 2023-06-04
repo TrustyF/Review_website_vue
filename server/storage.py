@@ -3,8 +3,8 @@ import time
 
 from tinydb import TinyDB, Query, where, operations
 import re
-from flask import Response
-from requests import get
+from flask import Response, Request
+import requests
 
 import sort_funcs
 import filter_funcs
@@ -131,7 +131,7 @@ class Media:
                 result = mov
 
         request = f'https://image.tmdb.org/t/p/w500{result["poster_path"]}'
-        response = get(request)
+        response = requests.get(request)
 
         return response.content
 
@@ -322,7 +322,7 @@ class Manga(Media):
                 result = mov
 
         request = f'https://uploads.mangadex.org/covers/{result["poster_path"]}.256.jpg'
-        response = get(request)
+        response = requests.get(request)
         return response.content
 
 
