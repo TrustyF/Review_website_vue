@@ -5,8 +5,7 @@ import axios from 'axios'
 import {ref, onMounted, onUnmounted, toRefs} from 'vue'
 import {eventThrottle} from "@/utils";
 
-// let sessionSeed = inject('sessionSeed')
-let sessionSeed = 0
+let sessionSeed = inject('sessionSeed')
 let mediaRanges = inject('mediaRanges')
 
 const rewind = './assets/ui/rewind.png'

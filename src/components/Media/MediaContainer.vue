@@ -58,7 +58,11 @@ function build_cover_request(info) {
         <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
       </div>
 
-      <img v-if="data['poster_path']!==undefined"
+      <img v-if="mediaType!=='manga'"
+           v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
+           class="poster" alt="poster" draggable="false">
+
+      <img v-if="mediaType==='manga'"
            v-lazy="build_cover_request()"
            class="poster" alt="poster" draggable="false">
 
