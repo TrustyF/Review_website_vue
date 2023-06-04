@@ -15,6 +15,7 @@ const input_props = toRefs(props)
 
 const current_api = inject('curr_api')
 let devMode = inject('devMode')
+const mediaRanges = inject('mediaRanges')
 const sessionSeed = inject('sessionSeed')
 
 const movies = ref([])
@@ -34,20 +35,6 @@ const mediaRatingRanges = ref({})
 const servStatus = ref(0)
 
 // API
-
-function get_rating_range() {
-  axios.post(`${current_api}/media/get_rating_range`, {
-    'media_type': mediaType.value
-  })
-      .then(response => {
-        if (response.status === 200) {
-          console.log('ranges', response.status, response.data)
-          mediaRatingRanges.value = response.data
-          update_movies()
-        }
-      })
-}
-
 function update_movies() {
   // console.log('updating movies')
   axios.post(`${current_api}/media/get_all`, {
@@ -62,18 +49,6 @@ function update_movies() {
         servStatus.value = response.status
       })
 }
-
-// function setFilters() {
-//   axios.post(`${current_api}/media/filters`, {
-//     'filters': filters.value
-//   })
-//       .then(response => {
-//         console.log('set filters', response.status)
-//         if (response.status === 200) {
-//           update_movies()
-//         }
-//       })
-// }
 
 function editMovie(input) {
   settingsOpen.value = true
@@ -115,7 +90,6 @@ watch(settingsOpen, (newV, oldV) => {
 })
 
 onMounted(() => {
-  get_rating_range()
   window.addEventListener('scroll', handleScroll)
 })
 </script>
@@ -132,19 +106,12 @@ onMounted(() => {
 
     <div class="feed" v-if="servStatus===200">
 
-      <!--      <div class="movie_grid">-->
-      <!--        <rating-header :rating="'Recent ratings'"></rating-header>-->
-      <!--        <div class="movie_container_wrapper" v-for="rec in recentRatings" :key="rec.title + '_rec'">-->
-      <!--          <Media :key="rec.id + '_rec'" :data="rec" @MovieEdit="editMovie"></Media>-->
-      <!--        </div>-->
-      <!--      </div>-->
-
       <div class="movie_grid" v-show="movies[rating].length > 0" v-for="rating in Object.keys(ratingDesc).reverse()"
            :key="rating">
         <rating-header :rating="rating" :rating_desc="ratingDesc"></rating-header>
         <div class="movie_container_wrapper">
           <div v-for="mov in movies[rating]" :key="mov.title">
-            <MovieContainer class="movie_container" :key="mov.id" :data="mov" :ratingRange="mediaRatingRanges"
+            <MovieContainer class="movie_container" :key="mov.id" :data="mov" :ratingRange="mediaRanges[mediaType]"
                             @MovieEdit="editMovie"></MovieContainer>
           </div>
         </div>

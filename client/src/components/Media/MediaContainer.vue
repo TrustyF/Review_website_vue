@@ -16,6 +16,8 @@ const isSeen = ref(false)
 const outOfFocus = ref(false)
 const settingsOpen = ref(false)
 
+let main_block_hover = ref(false)
+
 function timeConvert(n) {
   const hours = (n / 60);
   const rhours = Math.floor(hours);
@@ -35,12 +37,11 @@ function emitSelectedMovie(input) {
 
 </script>
 <template>
-  <div class="dark_accent">
     <div class="movie_container" :class="isOpen ? 'open ' : 'closed '"
          v-click-out-side="clickOutside"
          @click="isOpen = !isOpen">
 
-      <div class="main_block">
+      <div class="main_block" @mouseover="main_block_hover = true" @mouseleave="main_block_hover = false">
 
         <div class="gradient_fill"></div>
 
@@ -61,7 +62,7 @@ function emitSelectedMovie(input) {
         </div>
 
         <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"
-                      :range="ratingRange" :rating_desc="rating_desc"></RatingBumper>
+                      :range="ratingRange" :rating_desc="rating_desc" :hover="main_block_hover"></RatingBumper>
 
         <ContentBox class="content_box" :data="data"></ContentBox>
 
@@ -98,7 +99,6 @@ function emitSelectedMovie(input) {
       </div>
 
     </div>
-  </div>
 </template>
 <style scoped>
 .movie_container {
@@ -111,6 +111,8 @@ function emitSelectedMovie(input) {
 
   border-radius: 8px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+
+  background-color: #2b2a34;
 
   /*overflow: hidden;*/
   transition: 0.2s ease;
@@ -160,21 +162,17 @@ function emitSelectedMovie(input) {
 
 .rating_bumper {
   position: absolute;
-  transform: translate(-2px, -15px);
+  transform: translate(-2px, -35px);
+  padding: 5px;
+  /*transform: translate(-2px, -15px);*/
   /*outline: 1px solid red;*/
-  padding: 0 5px 5px 5px;
+  /*padding: 0 5px 5px 5px;*/
 
-  visibility: hidden;
-  opacity: 0;
+  /*visibility: hidden;*/
+  /*opacity: 0;*/
 
-  transition: 50ms ease-in-out;
-  transition-delay: 50ms;
-}
-.main_block:hover .rating_bumper {
-  transform: translate(-2px, -29px);
-  opacity: 100%;
-  visibility: visible;
-  transition-delay: 0ms;
+  /*transition: 50ms ease-in-out;*/
+  /*transition-delay: 50ms;*/
 }
 
 .main_block {
