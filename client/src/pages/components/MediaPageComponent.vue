@@ -15,7 +15,6 @@ const input_props = toRefs(props)
 
 const current_api = inject('curr_api')
 let devMode = inject('devMode')
-let darkMode = inject('darkMode')
 const sessionSeed = inject('sessionSeed')
 
 const movies = ref([])
