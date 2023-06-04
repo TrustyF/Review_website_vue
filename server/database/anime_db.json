@@ -1,0 +1,394 @@
+{
+  "_default": {
+    "598": {
+      "poster_path": "/gH8W7855SNXTXgMOGhTHj9omXfc.jpg", "media_type": "tv", "vote_average": 8.204, "seasons": 1,
+      "episodes": 27, "release_date": "2007-04-01", "title": "Gurren Lagann", "runtime": 24, "my_rating": "9",
+      "imdb_url": "https://www.imdb.com/title/tt0948103/",
+      "genres": ["Animation", "Action & Adventure", "Sci-Fi & Fantasy"], "region": "asian", "adult": false, "id": 21729,
+      "in_production": false, "name": "Gurren Lagann", "number_of_episodes": 27, "number_of_seasons": 1,
+      "original_language": "ja", "original_name": "\u5929\u5143\u7a81\u7834\u30b0\u30ec\u30f3\u30e9\u30ac\u30f3",
+      "overview": "In the distant future, mankind has lived quietly and restlessly underground for hundreds of years, subject to earthquakes and cave-ins. Living in one such village are 2 young men: one named Simon who is shy and na\u00efve, and the other named Kamina who believes in the existence of a \u201csurface\u201d world above their heads.",
+      "popularity": 43.859, "vote_count": 383, "tags": [
+        {
+          "description": "A soul-crushing, tear-jerking, gut-wrenching experience", "image": "504002-GOLD.png",
+          "name": "Emotional", "tier": "gold"
+        }, {
+          "description": "Worth seeing for the animation alone", "image": "510011-PLATINUM.png", "name": "Artful",
+          "tier": "green"
+        }, {
+          "description": "Required watch for any movie-goer worth their salt", "image": "402402-PLATINUM.png",
+          "name": "Rite of passage", "tier": "green"
+        }
+      ], "date_rated": "2017-06-13", "posters": [
+        "/xL6HsYsk5N9PKwk6jFwMNQq3K3M.jpg", "/gH8W7855SNXTXgMOGhTHj9omXfc.jpg", "/76BhFiG4kBzJ8oOiqxqZu6LaoTh.jpg",
+        "/1KNHEhMTzQoQnCco0lTOEsTYRtT.jpg", "/3dBcYNtiS5HTACQvMP0w8rhXa8a.jpg", "/dXlXlScl0yioXndbwhQhVq72usY.jpg",
+        "/jLSe0OgbpXsHl5gUMF2iU3H4Rrq.jpg", "/nNUdPK4Oig6p3S4ElI8wUQ3jRPP.jpg", "/HdjP4PDgRhNYMsJQceZ2gFKK7M.jpg",
+        "/cUsWdxItOELAMF1usfwcT4uxRc9.jpg"
+      ]
+    }, "581": {
+      "poster_path": "/sozeYsXCGJToQMfghNHEvj6Iix2.jpg", "media_type": "tv", "vote_average": 8.315, "seasons": 1,
+      "episodes": 24, "release_date": "2013-10-04", "title": "KILL la KILL", "runtime": 24, "my_rating": "9",
+      "imdb_url": "https://www.imdb.com/title/tt3114390/",
+      "genres": ["Action & Adventure", "Animation", "Comedy", "Sci-Fi & Fantasy"], "region": "asian", "adult": false,
+      "id": 60728, "in_production": false, "name": "KILL la KILL", "number_of_episodes": 24, "number_of_seasons": 1,
+      "original_language": "ja", "original_name": "\u30ad\u30eb\u30e9\u30ad\u30eb",
+      "overview": "Honnouji Academy is forcefully ruled by the iron-fisted control of its student council and its president, Satsuki Kiryuuin. Transfer student, Ryuuko Matoi, arrives on campus carrying a giant sword, that is actually half of a scissor. She is looking for the woman who holds the other half of her sword who killed her father. It is said that Satsuki Kiryuuin knows the identity of the killer but when Ryuuko confronts her she is beaten by the student council and their powerful \"goku uniforms\" whom she cannot match in strength. However, once Ryuuko receives her own \"Kamui\" by the name of Senketsu , the odds are lifted in her favor.",
+      "popularity": 39.537, "vote_count": 368, "tags": [
+        {
+          "description": "Expertly crafted visual experience polished to a razor's edge", "image": "510011-GOLD.png",
+          "name": "Masterpiece", "tier": "gold"
+        }, {
+          "description": "Constantly has something going on", "image": "203407-PLATINUM.png",
+          "name": "Very Entertaining", "tier": "green"
+        }, {
+          "description": "Masterfully choreographed action will leave you on the edge of your seat",
+          "image": "203103-PLATINUM.png", "name": "Exciting", "tier": "green"
+        }
+      ], "date_rated": "2017-06-13", "posters": [
+        "/4F1WtP3dFIwLPOfa3u29VEVnNkf.jpg", "/ir0gXYoVpgfbT6p48vBgkm36Bgx.jpg", "/fTpc8Y8BWCrv4257LRVhpe2Xi6v.jpg",
+        "/8ujMI7QoKfoXAk5wlU2b1zMEX71.jpg", "/sozeYsXCGJToQMfghNHEvj6Iix2.jpg", "/dZjMdbPWJfL72DnkZ9cUMJH370K.jpg"
+      ]
+    }, "587": {
+      "poster_path": "/qeD9wDenN7CPA99FScSErJCvcWb.jpg", "media_type": "tv", "vote_average": 8.159, "seasons": 1,
+      "episodes": 12, "release_date": "2015-01-10", "title": "Death Parade", "runtime": 23, "my_rating": "9",
+      "imdb_url": "https://www.imdb.com/title/tt4279012/", "genres": ["Animation", "Drama", "Mystery"],
+      "date_rated": "2017-10-13", "region": "asian", "adult": false, "id": 61901, "in_production": false,
+      "name": "Death Parade", "number_of_episodes": 12, "number_of_seasons": 1, "original_language": "ja",
+      "original_name": "\u30c7\u30b9\u30fb\u30d1\u30ec\u30fc\u30c9",
+      "overview": "There is a place after death that\u2019s neither heaven nor hell. A bar that serves you one chance to win. You cannot leave until the game is over, and when it is, your life may be too. From Studio Madhouse (Death Note, Black Lagoon) comes a thrilling new series where the stakes are high and the rules are simple: your life is on the line.",
+      "popularity": 22.726, "vote_count": 378, "tags": [
+        {
+          "description": "A soul-crushing, tear-jerking, gut-wrenching experience", "image": "504002-GOLD.png",
+          "name": "Emotional", "tier": "gold"
+        }, {
+          "description": "Explores heavy concepts", "image": "402202-PLATINUM.png", "name": "Existential",
+          "tier": "green"
+        }, {
+          "description": "Worth seeing for the visuals alone", "image": "510011-PLATINUM.png", "name": "Artful",
+          "tier": "green"
+        }
+      ], "posters": [
+        "/qeD9wDenN7CPA99FScSErJCvcWb.jpg", "/rBoJhqTxJUINuFAa2rL9E8Aj7eB.jpg", "/efpaB0N7d3gS51YAWPSvDbWdqUl.jpg",
+        "/u1theH9plmD6BkmNwTEXXts2inb.jpg", "/eorLsGi5yF3c6UZZzRMsI8RU8kv.jpg", "/yIfcufEM2nIt1SFH0uIe78c4BzU.jpg",
+        "/msuL3PXuqHPKpDPS1gIC028EqMN.jpg", "/gs7GN7c5LXsByfX7R1Km1DlrzLc.jpg", "/88KTUdg5n15eekkgXuqRPlKOFap.jpg"
+      ]
+    }, "588": {
+      "poster_path": "/iE3s0lG5QVdEHOEZnoAxjmMtvne.jpg", "media_type": "tv", "vote_average": 8.376, "seasons": 3,
+      "episodes": 24, "release_date": "2015-10-05", "title": "One-Punch Man", "runtime": 24, "my_rating": "8",
+      "imdb_url": "https://www.imdb.com/title/tt4508902/", "genres": ["Action & Adventure", "Animation", "Comedy"],
+      "region": "asian", "adult": false, "id": 63926, "in_production": true, "name": "One-Punch Man",
+      "number_of_episodes": 24, "number_of_seasons": 3, "original_language": "ja",
+      "original_name": "\u30ef\u30f3\u30d1\u30f3\u30de\u30f3",
+      "overview": "Saitama is a hero who only became a hero for fun. After three years of \u201cspecial\u201d training, though, he\u2019s become so strong that he\u2019s practically invincible. In fact, he\u2019s too strong \u2014 even his mightiest opponents are taken out with a single punch, and it turns out that being devastatingly powerful is actually kind of a bore. With his passion for being a hero lost along with his hair, yet still faced with new enemies every day, how much longer can he keep it going?",
+      "popularity": 88.766, "vote_count": 3038, "date_rated": "2017-06-13", "posters": [
+        "/iE3s0lG5QVdEHOEZnoAxjmMtvne.jpg", "/wCk0ipZn18slcurxrW8uVldP6V1.jpg", "/bS6GeCRInMRl6oQN6czCqPFdcHN.jpg",
+        "/uT8TZ9U9jsj5druZiHsm3zgVWtW.jpg", "/8yWUcg4KNmXCkrZIx2CA9O9LCuf.jpg", "/sSuFetSIfKFEVm2nZIbZ9nwGh8v.jpg",
+        "/dT10AxJIXVvRwFAew4tt2RhzJrD.jpg", "/3yvPziuLr2lT6DGP3M0jO7yjBVt.jpg", "/9vo4DnhsAvOCRa2Xk0isavDp8eu.jpg",
+        "/8CmeBJNUzOFk29diWfJf8de332i.jpg", "/cpVnAqdp9GdeSdupwAcklDxWUaS.jpg", "/7DaorLyWn7ch5C6AWcnUdOg3K0x.jpg",
+        "/9uLQ8FPiytn5XDRi3cgpjKVZYx0.jpg", "/9gw8qENoERTHS88BnqIZpjYRc9s.jpg", "/nJplwm0ZoRS1x0TUaUWrNPooaC1.jpg",
+        "/jiYAZkeh6M7Slsil6nPtMKNlGlu.jpg", "/5TeOZU1NMrUlzib0ubm0ekhd9Gk.jpg", "/vwOOQfurdLzIdvXVzxX3DPTJWUG.jpg",
+        "/sCYBBcI1PQFUsPWYVtW1dR1dhY7.jpg", "/oJB3QgMxb6ABdVI3iVMZSyAyDx7.jpg", "/2L6UK4Ek8SLS34yOUXQa0moiLbc.jpg",
+        "/i8g8XSBgvUeqEKPNVia6j3Fm0A.jpg"
+      ]
+    }, "567": {
+      "poster_path": "/zCEjjb1NH3LLsWeZx47wOeqkezf.jpg", "media_type": "tv", "vote_average": 8.168, "seasons": 4,
+      "episodes": 58, "release_date": "2009-07-03", "title": "Monogatari", "runtime": 25, "my_rating": "8",
+      "imdb_url": "https://www.imdb.com/title/tt1480925/", "genres": ["Animation", "Comedy", "Drama", "Mystery"],
+      "region": "asian", "adult": false, "id": 46195, "in_production": false, "name": "Monogatari",
+      "number_of_episodes": 58, "number_of_seasons": 4, "original_language": "ja",
+      "original_name": "\u5316\u7269\u8a9e",
+      "overview": "Although there are still traces of the brief period he became a vampire, third-year high school student Koyomi Araragi is human again. He happens upon others with their own supernatural problems and finds that he can empathize. Koyomi becomes involved in their lives, seeking to help them and occasionally asking for advice from Meme Oshino, the homeless man who helped him become human again.",
+      "popularity": 84.401, "vote_count": 398, "date_rated": "2017-10-16",
+      "posters": ["/zCEjjb1NH3LLsWeZx47wOeqkezf.jpg", "/gUraB6perKNTXBHV4fRhnYUW6cJ.jpg"]
+    }, "572": {
+      "poster_path": "/6iysgZr6Upm5RlAlVFo5f4D9euu.jpg", "media_type": "tv", "vote_average": 8.486, "seasons": 1,
+      "episodes": 24, "release_date": "2011-04-06", "title": "Steins;Gate", "runtime": 24, "my_rating": "8",
+      "imdb_url": "https://www.imdb.com/title/tt1910272/",
+      "genres": ["Sci-Fi & Fantasy", "Action & Adventure", "Animation", "Mystery", "Comedy", "Drama"],
+      "date_rated": "2017-06-13", "region": "asian", "adult": false, "id": 42509, "in_production": false,
+      "name": "Steins;Gate", "number_of_episodes": 24, "number_of_seasons": 1, "original_language": "ja",
+      "original_name": "Steins;Gate",
+      "overview": "A group of friends have customized their microwave so that it can send text messages to the past. As they perform different experiments, an organization named SERN who has been doing their own research on time travel tracks them down and now the characters have to find a way to avoid being captured by them.",
+      "popularity": 33.838, "vote_count": 574,
+      "posters": ["/6iysgZr6Upm5RlAlVFo5f4D9euu.jpg", "/5DZix6ggRiFEbsGqUeTAI1z2wtX.jpg"]
+    }, "563": {
+      "poster_path": "/lXBjqzo6c4NyLuJtqOiH39kswji.jpg", "media_type": "tv", "vote_average": 7.5, "seasons": 1,
+      "episodes": 26, "release_date": "1997-03-15", "title": "Neon Genesis Evangelion: Death and Rebirth",
+      "runtime": 101, "my_rating": "8", "imdb_url": "https://www.imdb.com/title/tt0112159/",
+      "genres": ["Drama", "Science Fiction", "Animation"], "region": "asian", "adult": false,
+      "backdrop_path": "/74wyAwiWTGLpJGQIPMKjYjvSyl4.jpg", "created_by": [], "episode_run_time": [25],
+      "first_air_date": "1995-10-04", "homepage": "http://evangelion.co.jp", "id": 21832, "in_production": false,
+      "languages": ["ja"], "last_air_date": "1996-03-27", "last_episode_to_air": {
+        "air_date": "1996-03-27", "episode_number": 26, "id": 949406, "name": "Take Care of Yourself.",
+        "overview": "Instrumentality continues. The focus is primarily on Shinji now, as he learns to accept the individual\u2019s ability to shape their world, and how the self cannot exist without others to define it.",
+        "production_code": "", "runtime": 25, "season_number": 1, "show_id": 890,
+        "still_path": "/q8lJLKT9xBriPOAMMpZEEdDr09l.jpg", "vote_average": 6.3, "vote_count": 12
+      }, "name": "Neon Genesis Evangelion", "next_episode_to_air": null, "networks": [
+        {"id": 98, "logo_path": "/1oTje9uOhRcuLSAc8ERn0cnG51i.png", "name": "TV Tokyo", "origin_country": "JP"}
+      ], "number_of_episodes": 26, "number_of_seasons": 1, "origin_country": ["JP"], "original_language": "ja",
+      "original_name": "\u65b0\u4e16\u7d00\u30a8\u30f4\u30a1\u30f3\u30b2\u30ea\u30aa\u30f3",
+      "overview": "Originally a collection of clips from the Neon Genesis Evangelion TV series, Death was created as a precursor to the re-worked ending of the series. Rebirth was intended as that re-worked ending, but after production overruns Rebirth became only the first half of the first part of The End of Evangelion, with some minor differences.",
+      "popularity": 16.665, "production_companies": [
+        {"id": 3041, "logo_path": "/j9VqEdiNqIkMJKku1UTGMAvmuRr.png", "name": "GAINAX", "origin_country": "JP"}
+      ], "production_countries": [{"iso_3166_1": "JP", "name": "Japan"}],
+      "spoken_languages": [{"english_name": "Japanese", "iso_639_1": "ja", "name": "\u65e5\u672c\u8a9e"}],
+      "status": "Ended", "tagline": "", "type": "Scripted", "vote_count": 350, "credits": {
+      }, "date_rated": "2021-10-27",
+      "original_title": "\u65b0\u4e16\u7d00\u30a8\u30f4\u30a1\u30f3\u30b2\u30ea\u30aa\u30f3 \u5287\u5834\u7248 DEATH & REBIRTH \u30b7\u30c8\u65b0\u751f",
+      "video": false, "re_watch": "up", "posters": [
+        "/lXBjqzo6c4NyLuJtqOiH39kswji.jpg", "/hFAuP14o9oeYDXA8C6zlqyenBus.jpg", "/hI7QbxpYDUOZCnVZtq5nLzs3CeT.jpg",
+        "/1AO4QSAm4tgTkgGuMjR9xm4Q70u.jpg", "/hGHTdYjH9qbr5PNmMuTlqWtTVd6.jpg", "/fGwjh2t9yUadrV3lBxKDzJa7dgp.jpg"
+      ]
+    }, "579": {
+      "poster_path": "/sHim6U0ANsbzxcmNRYuIubBVQaz.jpg", "media_type": "tv", "vote_average": 8.649, "seasons": 4,
+      "episodes": 87, "release_date": "2013-04-07", "title": "Attack on Titan", "runtime": 25, "my_rating": "8",
+      "imdb_url": "https://www.imdb.com/title/tt2560140/",
+      "genres": ["Sci-Fi & Fantasy", "Animation", "Action & Adventure"], "region": "asian", "adult": false, "id": 1429,
+      "in_production": true, "name": "Attack on Titan", "number_of_episodes": 87, "number_of_seasons": 4,
+      "original_language": "ja", "original_name": "\u9032\u6483\u306e\u5de8\u4eba",
+      "overview": "Several hundred years ago, humans were nearly exterminated by Titans. Titans are typically several stories tall, seem to have no intelligence, devour human beings and, worst of all, seem to do it for the pleasure rather than as a food source. A small percentage of humanity survived by walling themselves in a city protected by extremely high walls, even taller than the biggest Titans. Flash forward to the present and the city has not seen a Titan in over 100 years. Teenage boy Eren and his foster sister Mikasa witness something horrific as the city walls are destroyed by a Colossal Titan that appears out of thin air. As the smaller Titans flood the city, the two kids watch in horror as their mother is eaten alive. Eren vows that he will murder every single Titan and take revenge for all of mankind.",
+      "popularity": 79.905, "vote_count": 5158, "date_rated": "2017-06-13", "tags": [
+        {
+          "description": "Groundbreaking visuals with never seen before artistic techniques",
+          "image": "510011-GOLD.png", "name": "Masterpiece", "tier": "gold"
+        }, {
+          "description": "Expert use of animation to enhance the experience", "image": "402104-PLATINUM.png",
+          "name": "Animated", "tier": "green"
+        }, {
+          "description": "A symphony of love, hate and death", "image": "504002-PLATINUM.png", "name": "Tragic",
+          "tier": "green"
+        }
+      ], "posters": [
+        "/sHim6U0ANsbzxcmNRYuIubBVQaz.jpg", "/4SkCTm6Gt0JuqpCq8YT87wXocCd.jpg", "/aiy35Evcofzl7hASZZvsFgltHTX.jpg",
+        "/g41DylUpQo3y5Dk7zZ6Fp29xrX6.jpg", "/qGz9wg7zOJPBq99PxeZ44iWnmXQ.jpg", "/sWzEexmK2hwuhahDTdOdxL3BsOv.jpg",
+        "/sLdo3xnPHymuPiQAaohKzWqDWaz.jpg", "/uAlgu4talmCw772hYT5vlnO6Asu.jpg", "/kvseBZ16WYiCC8kCjrlGDwoLSqb.jpg",
+        "/1MaoMVXA4SiwtNpPVFKEd6deuVR.jpg", "/acjMVbIyJelBPUSZ6uyAyE1Jps.jpg", "/w9tnTljEgflBNo1BbVgZQdiIZdJ.jpg",
+        "/pWFlyeunOIo51wYQOCx8kJDLm2y.jpg", "/69oQxhCmXW6mDFEsbpBdBHAaNJo.jpg", "/mJi8kVT0RpL4AO3ST15fyHI4sNT.jpg",
+        "/8C5gYahMFmzHKGNID8QrG5t25WU.jpg", "/7412WwwGl4AFzEzuuEVVpcalcq9.jpg", "/xLdtaWCyxNrQ1wNN0YuOEhHN4QE.jpg",
+        "/fT6Dcd0Yp1nf1bAUJP3vAm8O1Rg.jpg", "/hqRb1wyIVsaMukZElPBUXoJPqrR.jpg", "/4TD6p3Gbd6XSnix87oJKzgIB7fl.jpg",
+        "/i0Q217st3eNMnv8Xk6y0LwCKAHq.jpg", "/8pjuMPApQR6rQc9QgAjBAzqC4Mg.jpg", "/2vW1uxVJ4G4c4B9nY8dlgKgr0JY.jpg",
+        "/aLq3wEuEgzyFBCQQHfzvDSeTzKj.jpg", "/5PZyiqpe6IDVMgfWd7kuf0yWOwY.jpg", "/wOfagET47PY1IapvXxpzRm4Fp21.jpg",
+        "/78RXgMRuZ62lwtccmEqpgg8PeKk.jpg", "/reRiGNLEhiiTHdAq5si67CmcFQL.jpg", "/ZX7sfBg6vtBuoDvL2jjE087SYN.jpg",
+        "/gKjYy3tTFaddc58MnfDJDhAddiV.jpg", "/5bAOlYRsrW4gn39Naf0aXw51qhU.jpg", "/ciNxflunj2ujlVmdJZfpEamERFn.jpg",
+        "/t9rRXmo660B4tCQ2GxeFrhNZ8ZN.jpg", "/9ZBxozbsdaeyYoKGa4h1fVwHR5y.jpg", "/sj5epauDgwx15MhjYYl7HnFz7Nt.jpg",
+        "/4znGJDEntGtRQ83mcvbBnXyCxw6.jpg", "/4wRCQ7JZqeMUO1gAZNf28c1sq0b.jpg", "/fxY1qUL9b6wNYIfqUIn7uFJYEuD.jpg",
+        "/acjYgX28lZSrjNfa1LSDyZ7UxTT.jpg", "/jMlLh2WUENez8bJI7WUOyMAbBPm.jpg", "/ycMOlWsy6EpC8LnpaMBJTfrMIt6.jpg",
+        "/oiObBfvHXNbVUIfRSfKTiMX6K3z.jpg"
+      ]
+    }, "593": {
+      "poster_path": "/gJ737LXVzdHyDA46MeKXh3iorMV.jpg", "media_type": "tv", "vote_average": 7.264, "seasons": 5,
+      "episodes": 50, "release_date": "2018-04-20", "title": "Aggretsuko", "runtime": 15, "my_rating": "8",
+      "imdb_url": "https://www.imdb.com/title/tt8019444/", "genres": ["Animation", "Comedy"],
+      "date_rated": "2021-10-05", "region": "asian", "adult": false, "id": 78941, "in_production": false,
+      "name": "Aggretsuko", "number_of_episodes": 50, "number_of_seasons": 5, "original_language": "ja",
+      "original_name": "\u30a2\u30b0\u30ec\u30c3\u30b7\u30d6\u70c8\u5b50",
+      "overview": "Frustrated with her thankless office job, Retsuko the Red Panda copes with her daily struggles by belting out death metal karaoke after work.",
+      "popularity": 17.397, "vote_count": 107, "tags": [
+        {
+          "description": "Fun, distracting and has a good story", "image": "103205-PLATINUM.png",
+          "name": "Entertaining", "tier": "green"
+        }, {
+          "description": "Seems to come from a place of experience", "image": "303301-PLATINUM.png",
+          "name": "Relatable", "tier": "green"
+        }
+      ], "posters": [
+        "/gJ737LXVzdHyDA46MeKXh3iorMV.jpg", "/PAAskjDFxJRdgAlvI1AspfNCHe.jpg", "/85Vmla08sftNlSiKr83txObHF4c.jpg",
+        "/dTUE9KboSPXLoJ0K8VbOKt3O9ec.jpg", "/5Htj8wlj53HUCWXFrbgB0wpRkXJ.jpg", "/9KKni2MTDvm790JynzLG8RasKjK.jpg"
+      ]
+    }, "584": {
+      "poster_path": "/kN4BhRDbP3b1nuxpYC443jVLEh5.jpg", "media_type": "tv", "vote_average": 8.366, "seasons": 1,
+      "episodes": 12, "release_date": "2014-04-09", "title": "No Game No Life", "runtime": 23, "my_rating": "7",
+      "imdb_url": "https://www.imdb.com/title/tt3431758/",
+      "genres": ["Animation", "Sci-Fi & Fantasy", "Action & Adventure", "Comedy"], "region": "asian", "adult": false,
+      "id": 60808, "in_production": false, "name": "No Game No Life", "number_of_episodes": 12, "number_of_seasons": 1,
+      "original_language": "ja", "original_name": "\u30ce\u30fc\u30b2\u30fc\u30e0\uff65\u30ce\u30fc\u30e9\u30a4\u30d5",
+      "overview": "This is a surreal comedy that follows Sora and Shiro, shut-in NEET siblings and the online gamer duo behind the legendary username \"Kuuhaku.\" They view the real world as just another lousy game; however, a strange e-mail challenging them to a chess match changes everything\u2014the brother and sister are plunged into an otherworldly realm where they meet Tet, the God of Games.\n\nThe mysterious god welcomes the two to Disboard, a world where all forms of conflict are settled through high-stake games. This system works thanks to a fundamental rule wherein each party must wager something they deem to be of equal value to the other party's wager. In this strange land where the very idea of humanity is reduced to child\u2019s play, the indifferent genius gamer duo of Sora and Shiro have finally found a real reason to keep playing games: to unite the sixteen races of Disboard, defeat Tet, and become the gods of this new, gaming-is-everything world.",
+      "popularity": 32.604, "vote_count": 544, "date_rated": "2017-08-24",
+      "posters": ["/kN4BhRDbP3b1nuxpYC443jVLEh5.jpg", "/5rWXV217xIxUjIWPrzl1bbY1VNJ.jpg"]
+    }, "586": {
+      "poster_path": "/lYpHeSm7BcUxAbBx1ucuEH7oGAe.jpg", "media_type": "tv", "vote_average": 8.336, "seasons": 1,
+      "episodes": 26, "release_date": "2004-05-20", "title": "Samurai Champloo", "runtime": 24, "my_rating": "7",
+      "imdb_url": "https://www.imdb.com/title/tt0423731/",
+      "genres": ["Action & Adventure", "Animation", "Comedy", "Drama"], "region": "asian", "adult": false, "id": 1063,
+      "in_production": false, "name": "Samurai Champloo", "number_of_episodes": 26, "number_of_seasons": 1,
+      "original_language": "ja", "original_name": "\u30b5\u30e0\u30e9\u30a4\u30c1\u30e3\u30f3\u30d7\u30eb\u30fc",
+      "overview": "Break-dancing but fierce warrior Mugen has to deal with the cold-blooded and conceited Jin, a samurai who believes he is above all. These sworn enemies are brought together by Fuu for a special task.",
+      "popularity": 25.85, "vote_count": 533, "date_rated": "2017-11-16", "posters": [
+        "/lYpHeSm7BcUxAbBx1ucuEH7oGAe.jpg", "/txgi3IxsllKDARWGY9bXmxR5uhj.jpg", "/h0zilO8iBymLWRyllMwOkwptgRc.jpg",
+        "/iNqolo4g2T0Hq4Egl12YaVkfJJE.jpg", "/ddA0HvrEGaZDR2t9OLZa0h81Ynr.jpg", "/gyJREtLmF6nIZ7QQRwCJjNBgti5.jpg",
+        "/nXc6w0aot1PbbnftyNudMvKVEei.jpg", "/bOkIiOJ22cl6qQGmJiRWZpkn5HT.jpg"
+      ]
+    }, "600": {
+      "poster_path": "/8p3HXHOQXjMpU9gAkZVAqozhDzQ.jpg", "media_type": "tv", "vote_average": 8.5, "seasons": 2,
+      "episodes": 50, "release_date": "2006-10-05", "title": "Code Geass: Lelouch of the Rebellion", "runtime": 25,
+      "my_rating": "7", "imdb_url": "https://www.imdb.com/title/tt0994314/",
+      "genres": ["Action & Adventure", "Animation", "Drama", "Sci-Fi & Fantasy"], "region": "asian", "adult": false,
+      "id": 31724, "in_production": false, "name": "Code Geass: Lelouch of the Rebellion", "number_of_episodes": 50,
+      "number_of_seasons": 2, "original_language": "ja",
+      "original_name": "\u30b3\u30fc\u30c9\u30ae\u30a2\u30b9 \u53cd\u9006\u306e\u30eb\u30eb\u30fc\u30b7\u30e5",
+      "overview": "Japan has been invaded and conquered by the Britannian Empire. Japan is now known as Area 11 and its citizens known as Elevens. The Britannian Empire takes away Japan's autonomous power and imposes its rule through the use of Knightmares. The Empire's rule has never faltered, but cracks have begun to show...",
+      "popularity": 53.249, "vote_count": 590, "date_rated": "2017-08-24", "posters": [
+        "/8p3HXHOQXjMpU9gAkZVAqozhDzQ.jpg", "/gVZgJQwwgH6pSdkx7zDLGBSnxg8.jpg", "/3mGPTXdavSQzikuLG4m9Bp6Ucye.jpg",
+        "/nF0qzl8jfQYxynra99WrC1zFq4C.jpg"
+      ]
+    }, "582": {
+      "poster_path": "/cXBfjZSdJelu2r0wKD7qCxS71kb.jpg", "media_type": "tv", "vote_average": 8.432, "seasons": 1,
+      "episodes": 24, "release_date": "2014-10-09", "title": "Parasyte -the maxim-", "runtime": 23, "my_rating": "7",
+      "imdb_url": "https://www.imdb.com/title/tt3358020/",
+      "genres": ["Animation", "Drama", "Sci-Fi & Fantasy", "Action & Adventure"], "region": "asian", "adult": false,
+      "id": 61459, "in_production": false, "name": "Parasyte -the maxim-", "number_of_episodes": 24,
+      "number_of_seasons": 1, "original_language": "ja",
+      "original_name": "\u5bc4\u751f\u7363 \u30bb\u30a4\u306e\u683c\u7387",
+      "overview": "A species of parasitic aliens descends on Earth and quickly infiltrates humanity by entering the brains of vulnerable targets; insatiable beings that gain total control of their host and are capable of transforming themselves to feed on unsuspecting prey. High school student Shinichi Izumi falls victim to one of these parasites, but the creature fails to take over his brain and ends up in his right hand.",
+      "popularity": 41.363, "vote_count": 983, "date_rated": "2017-08-24", "posters": [
+        "/cXBfjZSdJelu2r0wKD7qCxS71kb.jpg", "/2ngHwPQhHGPpLkLQd2MTAI3iXPq.jpg", "/nZTO7xKYM2fF44kqdXOk4unPqOx.jpg"
+      ]
+    }, "569": {
+      "poster_path": "/3Ngmk2kNh6JTdqPwMdiZvDSdlGH.jpg", "media_type": "tv", "vote_average": 8.557, "seasons": 1,
+      "episodes": 11, "release_date": "2010-04-23", "title": "The Tatami Galaxy", "runtime": 25, "my_rating": "7",
+      "imdb_url": "https://www.imdb.com/title/tt1847445/",
+      "genres": ["Animation", "Comedy", "Drama", "Sci-Fi & Fantasy"], "region": "asian", "adult": false, "id": 36243,
+      "in_production": false, "name": "The Tatami Galaxy", "number_of_episodes": 11, "number_of_seasons": 1,
+      "original_language": "ja", "original_name": "\u56db\u7573\u534a\u795e\u8a71\u5927\u7cfb",
+      "overview": "When a college dropout stops for a late night bite at a mysterious ramen stand, he crosses paths with a self-proclaimed deity of matrimony. This bizarre meeting sends the young man hurtling through a horrifying flashback to his not-so-glorious college days when the influence of a cruel new friend turned him from a hopeless romantic into a mischievous \u201cblack cupid.\u201d",
+      "popularity": 9.161, "vote_count": 83, "date_rated": "2017-11-07",
+      "posters": ["/3Ngmk2kNh6JTdqPwMdiZvDSdlGH.jpg", "/jGlGZaLg3mEtTQtmIT0ztNLA3r2.jpg"]
+    }, "577": {
+      "poster_path": "/ogAWwbh3frWtiTyyXrZaVFtqCgp.jpg", "media_type": "tv", "vote_average": 8.652, "seasons": 6,
+      "episodes": 190, "release_date": "2012-10-06", "title": "JoJo's Bizarre Adventure", "runtime": 24,
+      "my_rating": "6", "imdb_url": "https://www.imdb.com/title/tt2359704/",
+      "genres": ["Animation", "Action & Adventure", "Sci-Fi & Fantasy"], "region": "asian", "adult": false, "id": 45790,
+      "in_production": true, "name": "JoJo's Bizarre Adventure", "number_of_episodes": 190, "number_of_seasons": 5,
+      "original_language": "ja", "original_name": "\u30b8\u30e7\u30b8\u30e7\u306e\u5947\u5999\u306a\u5192\u967a",
+      "overview": "Follow the intergenerational feud between the Joestar Family and various forces of evil, the most prominent of which is Dio Brando and his followers.",
+      "popularity": 85.577, "vote_count": 1185, "date_rated": "2017-08-24", "posters": [
+        "/ogAWwbh3frWtiTyyXrZaVFtqCgp.jpg", "/7r7rzGdD0r6KmHJ8q283tzRH2C4.jpg", "/nkXBvtYR9eXCZCIWW1aeR1ISYXr.jpg",
+        "/wGiz5W6cdmHgS0gqZUcQ2yLsnyx.jpg", "/7wq94UKxeJPoEtbKAGCO7zSzAre.jpg", "/iP17LLR2okmDSVfuOHiq7CuH3om.jpg",
+        "/cpAA9VD65L98z1VgVCSHxNRzCha.jpg", "/nRfhgnDmmoJrTuUZBeDAo5OKUYU.jpg", "/9RhoCNjWutc3s2fe4725nNHdKx0.jpg",
+        "/dLS0fKWWc0pGwf68DPxu7hY7tMR.jpg", "/cg2x9hQMiCJdWLBQfeNmpbrsLrb.jpg", "/3l1KlMNkk2YDLivkyjB2tgRSeVr.jpg",
+        "/dZzxdiNTtAZ9g3BIFIeq64FCsCp.jpg", "/b5d4OdB7klK5PvzTLpNwuwTz5ZF.jpg", "/rDwOLdnusdOnSdbXSvAmqNSyL9y.jpg",
+        "/hkkVAf0SOgqUkwxpkWDuUrbu72M.jpg", "/vlC7Ej6CnYuOmFvw51kTOdFab6J.jpg", "/qYtz0qbZ9ULnsP8EpwMwfOWFflX.jpg",
+        "/xWUAHVQsYzIM8B8oqSnijwTtfF4.jpg", "/kQHnZA1bskqiEQQ0uuXOQUftnUV.jpg", "/2NlRBnAe2DAVle8Sbvvliw2zEA2.jpg",
+        "/eVDJNvNhUHgYnXVKknaOZcE6IcI.jpg", "/wha5GNPWSEjsaclsIqZyUVeAO8M.jpg", "/5Zm8P78rDUxhfz7XTOLHef7OQi3.jpg",
+        "/tCOux7THm6F2MFDqj1YSgGL7edW.jpg", "/fH4RQpvEaDEl3NncoDhEp3238ue.jpg", "/hPkyVpD8kI4SSTqbD5k4NB0Y6Gd.jpg",
+        "/4TclnJZI7bba90pVYXd4Yz2KpUL.jpg", "/6l9kULP2b4jU7NBtyzhzrqsOnet.jpg", "/aeKqiATc9eM7iJtiMZpidinw1FC.jpg",
+        "/dxt6vr2griB2Yo2j0fsYdhXfCwM.jpg", "/fHe2I7OzqCDBX5U5fMyXlxuNhsp.jpg", "/zf6EyCzUICujlVsfNZvb9ri67Zl.jpg",
+        "/TWdH5rZIsGpecC7nbiNHMNDfG1.jpg", "/scY09hV5OQnGz7lZF6C4mhpYC2v.jpg", "/o2y6dUFrSnalz2ls4CM7rSvAKGx.jpg",
+        "/fdw8j0jvfmMc2RhsUQaV52RjHmc.jpg", "/9rt8PwZBoIuiVI50BBSxiv8Paa8.jpg", "/568cHsvwHLYQ0tdy4Mx6fWqUw5y.jpg",
+        "/tUIZIShXDcm1u5vOKrByecWRhrj.jpg", "/iEGixIPerprC6VdnXAaKihTEyE6.jpg", "/jL0kg1plHrqtDpgoxxgNWzU5y01.jpg",
+        "/iyCkBeaanXyHTVelVlepA4JC0a4.jpg", "/h5dnJGWrOOhhAgDKNiFVgi4XNpH.jpg"
+      ]
+    }, "574": {
+      "poster_path": "/g05iRzPzWwY2liQ60bvW51lLZHQ.jpg", "media_type": "tv", "vote_average": 8.52, "seasons": 1,
+      "episodes": 26, "release_date": "1998-04-03", "title": "Cowboy Bebop", "runtime": 25, "my_rating": "6",
+      "imdb_url": "https://www.imdb.com/title/tt0213338/",
+      "genres": ["Animation", "Action & Adventure", "Sci-Fi & Fantasy", "Western"], "region": "asian", "adult": false,
+      "id": 30991, "in_production": false, "name": "Cowboy Bebop", "number_of_episodes": 26, "number_of_seasons": 1,
+      "original_language": "ja", "original_name": "\u30ab\u30a6\u30dc\u30fc\u30a4\u30d3\u30d0\u30c3\u30d7",
+      "overview": "In 2071, roughly fifty years after an accident with a hyperspace gateway made the Earth almost uninhabitable, humanity has colonized most of the rocky planets and moons of the Solar System. Amid a rising crime rate, the Inter Solar System Police (ISSP) set up a legalized contract system, in which registered bounty hunters, also referred to as \"Cowboys\", chase criminals and bring them in alive in return for a reward.",
+      "popularity": 50.124, "vote_count": 1298, "date_rated": "2019-08-17", "posters": [
+        "/g05iRzPzWwY2liQ60bvW51lLZHQ.jpg", "/lcwlIyc83vLv25ZFa0IJCa857PE.jpg", "/xDiXDfZwC6XYC6fxHI1jl3A3Ill.jpg",
+        "/oD7X1vYb0O8DegvkEHWD08bml27.jpg", "/kGGDTXPqndpaNvHHtpemM3WkgsL.jpg", "/1rflp9oWEnhhWYee3CJFJc5rnu5.jpg",
+        "/ccGdB7qLttA1OGFwfz5CY4FQj09.jpg", "/wVdSGqJYmHZPsCrCpCBpsci46cw.jpg", "/9EmQ4jQJ4XcPf0ueSNzoPLKXHp8.jpg",
+        "/ovTg2x1uNU6cQUp5A1I5fe8jr2f.jpg", "/7zcIgfFGtHGyvS9tQhCFmjoMu14.jpg", "/7YcGo6yRnWmaGyJxFQG5C61pnXC.jpg",
+        "/582rEdgJeLOz3TZQavTDVX2ry2n.jpg", "/sireCEZSUv2qebrFCgxIHSTXoWR.jpg", "/lw7lab5DRfGxPAJIbdwACcnF6zC.jpg",
+        "/dX0xFBU304IQPWMaa7YXEC0XOKH.jpg", "/cRDWBMG1a1KmVStlH9SRCGToz5R.jpg", "/d32ikIpRQ4XwnW72Hu7LWDt3F5h.jpg",
+        "/b5Km87eOUvvjIpQrFzgu5YRx3Ig.jpg", "/yrMknBcuO7MpXjlM1EptRs8cE54.jpg", "/jEkbz4opeiem75dtHixwpg44Pv4.jpg",
+        "/pKByetuhJRStaLVaAgnOcV79ojx.jpg", "/uCbRd35LGZxnzp7DrTBcQncv7ms.jpg", "/ntOEiaJJygJiFbplr0GyXe8clq7.jpg",
+        "/5Uiujr4qaGFfOhH3ZSf4Bq0sR0p.jpg", "/rPjQ4UbHZ2nXClGKnLMKKkZatVa.jpg"
+      ]
+    }, "585": {
+      "poster_path": "/3c5BIEfAhTCWrIi4C8WMuwOl6bX.jpg", "media_type": "tv", "vote_average": 8.487, "seasons": 1,
+      "episodes": 24, "release_date": "2014-07-07", "title": "Akame ga Kill!", "runtime": 24, "my_rating": "6",
+      "imdb_url": "https://www.imdb.com/title/tt3742982/", "genres": ["Animation", "Drama", "Action & Adventure"],
+      "date_rated": "2017-08-24", "region": "asian", "adult": false, "id": 61223, "in_production": false,
+      "name": "Akame ga Kill!", "number_of_episodes": 24, "number_of_seasons": 1, "original_language": "ja",
+      "original_name": "\u30a2\u30ab\u30e1\u304c\u65ac\u308b\uff01",
+      "overview": "Young Tatsumi travels to the capital of the Empire in order to earn money for his starving people and encounters a world of unimaginable depravity, dominated by the ruthless Prime Minister who controls the child Emperor. Tatsumi is recruited by Night Raid, a group of assassins dedicated to eliminating corruption by mercilessly killing officials and privileged nobles.",
+      "popularity": 65.351, "vote_count": 832, "posters": [
+        "/3c5BIEfAhTCWrIi4C8WMuwOl6bX.jpg", "/kcVHrlsTc8ZxKg1V7jWfKYAL3NC.jpg", "/rFWU4Y6chcRglyhe0tnF5hGLMS2.jpg",
+        "/4zPtA0NGIIpLauwuSN1KBBxSVka.jpg", "/rMpvMbSlPbm5QYfFem9fx2Jnttq.jpg", "/sQVkODdKbaZQCFFP5QCSpQY23jT.jpg",
+        "/chzrLmVJos19TN1o4sLyxBJExxz.jpg", "/6M1de0fTvpnG7cAoJNawOCE5Coz.jpg", "/rv9rlgtM3WC9ER0GiALd5euUfGc.jpg",
+        "/6QIMF8ori81D68iDKJoknMYeBoB.jpg", "/rQm18dONot4mlZvyQ6bvYTMm8Yf.jpg"
+      ]
+    }, "576": {
+      "poster_path": "/mK9zGGk90VmHLOnK79sqlGFjZjW.jpg", "media_type": "tv", "vote_average": 8.245, "seasons": 4,
+      "episodes": 96, "release_date": "2012-07-08", "title": "Sword Art Online", "runtime": 24, "my_rating": "6",
+      "imdb_url": "https://www.imdb.com/title/tt2250192/",
+      "genres": ["Animation", "Sci-Fi & Fantasy", "Action & Adventure"], "date_rated": "2017-08-24", "region": "asian",
+      "adult": false, "id": 45782, "in_production": false, "name": "Sword Art Online", "number_of_episodes": 96,
+      "number_of_seasons": 4, "original_language": "ja",
+      "original_name": "\u30bd\u30fc\u30c9\u30a2\u30fc\u30c8\u30fb\u30aa\u30f3\u30e9\u30a4\u30f3",
+      "overview": "In the near future, a Virtual Reality Massive Multiplayer Online Role-Playing Game (VRMMORPG) called Sword Art Online has been released where players control their avatars with their bodies using a piece of technology called Nerve Gear. One day, players discover they cannot log out, as the game creator is holding them captive unless they reach the 100th floor of the game's tower and defeat the final boss. However, if they die in the game, they die in real life. Their struggle for survival starts now...",
+      "popularity": 59.747, "vote_count": 1479, "posters": [
+        "/mK9zGGk90VmHLOnK79sqlGFjZjW.jpg", "/zzlKrvQQOAwThRras4q9H8QlbtP.jpg", "/g3XV7k5a6HLwa7bCCFt2p3IrsXA.jpg",
+        "/mpJhsU1whSvAE1Ed0bR7ZA52aZq.jpg", "/zLdXxodgz0UN0RCca8uxBq3EGTg.jpg", "/9m8bFIXPg26taNrFSXGwEORVACD.jpg",
+        "/zUs5RElWlyynjQL55hIb3EQCla5.jpg", "/mJQNtaARBzWOGwiK0lZIj5fWIln.jpg", "/26zSFLdryMKp7Ub2byBszGXwAOZ.jpg",
+        "/5xLiU2DPhKQVvnlu6f1J3tqw8i.jpg", "/iisJzNoGH8lLPuvgt2PjPdbhGmC.jpg", "/hHY1lCMnNBjxvpQiyHlNqysDRMW.jpg",
+        "/jP8i6GXt7IkWObZryNe55PEMLSb.jpg", "/gxupmAL9uPjbiENlkNEC60ngqul.jpg", "/t9HQK4V6BacvnIuqX4XtnczkCIN.jpg",
+        "/nc33LuqbsT0g2NYcVTVaMLsvbXu.jpg", "/nIyYtur27y1ndxZWa19S9IiuPzF.jpg", "/vEeTQpAJkf8ztwL56z5ACe3qd7E.jpg",
+        "/aazj8dXl7GT44irnC6x0pGCff9N.jpg", "/q6mbwNgxJdUw9ZEgaeWCIjfpgqy.jpg"
+      ]
+    }, "573": {
+      "poster_path": "/eQBO8pyuch83TonVJc2NMFv7W8U.jpg", "media_type": "tv", "vote_average": 7.772, "seasons": 1,
+      "episodes": 26, "release_date": "2011-10-09", "title": "The Future Diary", "runtime": 24, "my_rating": "6",
+      "imdb_url": "https://www.imdb.com/title/tt2069441/",
+      "genres": ["Action & Adventure", "Animation", "Drama", "Mystery"], "region": "asian", "adult": false, "id": 46671,
+      "in_production": false, "name": "The Future Diary", "number_of_episodes": 26, "number_of_seasons": 1,
+      "original_language": "ja", "original_name": "\u672a\u6765\u65e5\u8a18",
+      "overview": "Reality quickly unravels when antisocial Yukiteru is called into a death match against 11 other mentally scarred individuals. Each player has a prophetic device tuned to their personality, giving them control over their future\u2014and the fate of their foes.",
+      "popularity": 31.749, "vote_count": 320, "date_rated": "2017-08-24",
+      "posters": ["/eQBO8pyuch83TonVJc2NMFv7W8U.jpg", "/lQ466CW06VQ30SbHupdLLfxF234.jpg"]
+    }, "571": {
+      "poster_path": "/m12JbXsDdB35RGAC1g3ImNQT4h5.jpg", "media_type": "tv", "vote_average": 7.754, "seasons": 1,
+      "episodes": 12, "release_date": "2011-04-17", "title": "Deadman Wonderland", "runtime": 24, "my_rating": "6",
+      "imdb_url": "https://www.imdb.com/title/tt1909447/",
+      "genres": ["Action & Adventure", "Animation", "Sci-Fi & Fantasy"], "date_rated": "2019-08-17", "region": "asian",
+      "adult": false, "id": 42503, "in_production": false, "name": "Deadman Wonderland", "number_of_episodes": 12,
+      "number_of_seasons": 1, "original_language": "ja",
+      "original_name": "\u30c7\u30c3\u30c9\u30de\u30f3\u30fb\u30ef\u30f3\u30c0\u30fc\u30e9\u30f3\u30c9",
+      "overview": "Ganta is the only survivor after a mysterious man in red slaughters a classroom full of teenagers. He's framed for the carnage, sentenced to die, and locked away in the most twisted prison ever built: Deadman Wonderland. And then it gets worse.",
+      "popularity": 16.646, "vote_count": 354, "posters": [
+        "/m12JbXsDdB35RGAC1g3ImNQT4h5.jpg", "/xHgs3UJx5nKi7deizomDrumPxrw.jpg", "/9OFFXhyj6sHhHZtvKF6yAddQp9u.jpg",
+        "/qTNaWm6AfA601cw9wxtjzgInyhx.jpg"
+      ]
+    }, "565": {
+      "poster_path": "/qOxUTQAOTrMKTHuC9HQZiVsTK0F.jpg", "media_type": "tv", "vote_average": 7.992, "seasons": 1,
+      "episodes": 13, "release_date": "2007-07-27", "title": "Baccano!", "runtime": 25, "my_rating": "5",
+      "imdb_url": "https://www.imdb.com/title/tt1334722/",
+      "genres": ["Comedy", "Action & Adventure", "Animation", "Crime", "Mystery"], "date_rated": "2017-08-24",
+      "region": "asian", "adult": false, "id": 34121, "in_production": false, "name": "Baccano!",
+      "number_of_episodes": 13, "number_of_seasons": 1, "original_language": "ja",
+      "original_name": "\u30d0\u30c3\u30ab\u30fc\u30ce\uff01",
+      "overview": "During the early 1930s in Chicago, the transcontinental train, Flying Pussyfoot, is starting its legendary journey that will leave a trail of blood all over the country. At the same time in New York, the ambitious scientist Szilard and his unwilling aide Ennis are looking for missing bottles of the immortality elixir. In addition, a war between the mafia groups is getting worse. On board the Advena Avis, in 1711, alchemists are about to learn the price of immortality. Takes place in the same universe as Durarara (2010).",
+      "popularity": 15.312, "vote_count": 133, "posters": []
+    }, "578": {
+      "poster_path": "/c48oUhxNb01uAnKhAbgM0dovLJg.jpg", "media_type": "tv", "vote_average": 7.852, "seasons": 3,
+      "episodes": 41, "release_date": "2012-10-12", "title": "Psycho-Pass", "runtime": 28, "my_rating": "5",
+      "imdb_url": "https://www.imdb.com/title/tt2379308/",
+      "genres": ["Animation", "Crime", "Sci-Fi & Fantasy", "Action & Adventure"], "date_rated": "2017-08-24",
+      "region": "asian", "adult": false, "id": 43865, "in_production": false, "name": "Psycho-Pass",
+      "number_of_episodes": 41, "number_of_seasons": 3, "original_language": "ja",
+      "original_name": "\u30b5\u30a4\u30b3\u30d1\u30b9",
+      "overview": "Psycho-Pass is set in a futuristic era in Japan where the Sibyl System, a powerful network of psychometric scanners, actively measures the biometrics of its citizens' minds. The resulting assessment is called a Psycho-Pass. When the calculated likelihood of an individual committing a crime, measured by the Crime Coefficient index, exceeds an accepted threshold, he or she is pursued, apprehended, and either arrested or decomposed by the field officers of the Crime Investigation Department of the Public Safety Bureau.",
+      "popularity": 30.886, "vote_count": 313, "posters": [
+        "/5yxlKG4SBr7g9UdnDywIkrHUMW5.jpg", "/3w5UG3B4guv8MO6d1vkmoPzl7IR.jpg", "/l54pjHUdPTpiYobLGa41P0zxzG8.jpg",
+        "/ugmogvg7QS6ynL8woZTW6sdMd2h.jpg", "/fNPjSfXGTvEguzYvrBXDPlqS5iH.jpg", "/3ihs7FNXTxb6APLaOBsHlnE4gn7.jpg"
+      ]
+    }, "568": {
+      "poster_path": "/wz1PuXrg5ERQvyXKex3cGDie2hj.jpg", "media_type": "tv", "vote_average": 7.949, "seasons": 1,
+      "episodes": 13, "release_date": "2010-04-03", "title": "Angel Beats!", "runtime": 24, "my_rating": "3",
+      "imdb_url": "https://www.imdb.com/title/tt1639109/",
+      "genres": ["Animation", "Comedy", "Drama", "Sci-Fi & Fantasy", "Action & Adventure"], "date_rated": "2017-08-24",
+      "region": "asian", "adult": false, "id": 42942, "in_production": false, "name": "Angel Beats!",
+      "number_of_episodes": 13, "number_of_seasons": 1, "original_language": "ja",
+      "original_name": "\u30a8\u30f3\u30b8\u30a7\u30eb\u30d3\u30fc\u30c4!",
+      "overview": "Angel Beats takes place in the afterlife and focuses on Otonashi, a boy who lost his memories of his life after dying. He is enrolled into the afterlife school and meets a girl named Yuri who invites him to join the Afterlife Battlefront \u2014 an organization she leads which fights against God. The Battlefront fight against the student council president Angel, a girl with supernatural powers.",
+      "popularity": 25.91, "vote_count": 311, "posters": [
+        "/wz1PuXrg5ERQvyXKex3cGDie2hj.jpg", "/1sbjeguePtmI1YnqGpPS1hlYmS9.jpg", "/ld5fQq1PltjjLbWVww6KBV79DLt.jpg",
+        "/d7j2KtAh88wEcQCIVQ7SKz2T5So.jpg", "/sAaThEu679SapdVlMeMgEA2Zy9Y.jpg", "/49S4JqbWecBtw1q09KdPjEaxpQP.jpg",
+        "/chNK2TIFz7ghf7Nswv0RkcjsQ1D.jpg", "/fkvGukXrmx8UxFewXwZz6A8NWzC.jpg"
+      ]
+    }
+  }
+}
