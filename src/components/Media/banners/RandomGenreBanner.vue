@@ -5,7 +5,8 @@ import axios from 'axios'
 import {ref, onMounted, onUnmounted, toRefs} from 'vue'
 import {eventThrottle} from "@/utils";
 
-let sessionSeed = inject('sessionSeed')
+// let sessionSeed = inject('sessionSeed')
+let sessionSeed = 0
 let mediaRanges = inject('mediaRanges')
 
 const rewind = './assets/ui/rewind.png'
@@ -100,7 +101,9 @@ onUnmounted(() => {
         </div>
 
         <MediaContainer id="media_container" :key="mov.id" :data="mov"
-                        :ratingRange="mediaRanges[mediaType]"></MediaContainer>
+                        :ratingRange="mediaRanges[mediaType]"
+                        :media-type="mediaType"
+        ></MediaContainer>
       </div>
 
     </div>

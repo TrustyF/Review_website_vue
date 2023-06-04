@@ -10,7 +10,7 @@ const current_api = inject('curr_api')
 let mediaRanges = inject('mediaRanges')
 
 function get_media_ranges() {
-  axios.get(`${current_api}/media/get_rating_ranges`)
+  axios.get(`${current_api}/media/get_rating_ranges`, {params: {'test': 1, 'good': true}})
       .then(response => {
         if (response.status === 200) {
           mediaRanges.value = response.data

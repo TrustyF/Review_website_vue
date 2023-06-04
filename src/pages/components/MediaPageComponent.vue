@@ -7,6 +7,7 @@ import {inject, watch, defineProps} from 'vue'
 import axios from 'axios'
 import {ref, onMounted, toRefs} from 'vue'
 import FilterMenu from "@/components/Media/general/FilterMenu";
+import {eventThrottle} from "@/utils";
 
 // to do
 // add fresh review
@@ -27,7 +28,6 @@ let settings = ref({
 })
 
 let maxMedia = ref(50)
-let fetchingMoreMovies = ref(false)
 
 const currentSelectedMovie = ref({})
 const mediaRatingRanges = ref({})
@@ -44,7 +44,7 @@ function update_movies() {
     'max_media': maxMedia.value
   })
       .then(response => {
-        console.log('get movies', response.status,response.data)
+        console.log('get movies', response.status, response.data)
         movies.value = response.data
         servStatus.value = response.status
       })
@@ -77,11 +77,9 @@ function handleScroll() {
   const scrollHeight = document.documentElement.scrollHeight
   const clientHeight = document.documentElement.clientHeight
 
-  if (scrollTop + clientHeight >= (scrollHeight - (scrollHeight / 3)) && fetchingMoreMovies.value === false) {
-    fetchingMoreMovies.value = true
-    setTimeout(function () {
-      maxMedia.value += 50
-    }, 300)
+  if (scrollTop + clientHeight >= (scrollHeight - (scrollHeight / 3))) {
+    maxMedia.value += 50
+    update_movies()
   }
 }
 
@@ -91,7 +89,7 @@ watch(settingsOpen, (newV, oldV) => {
 
 onMounted(() => {
   update_movies()
-  window.addEventListener('scroll', handleScroll)
+  window.addEventListener('scroll', eventThrottle(handleScroll,300))
 })
 </script>
 
@@ -112,7 +110,11 @@ onMounted(() => {
         <rating-header :rating="rating" :rating_desc="ratingDesc"></rating-header>
         <div class="movie_container_wrapper">
           <div v-for="mov in movies[rating]" :key="mov.title">
-            <MovieContainer class="movie_container" :key="mov.id" :data="mov" :ratingRange="mediaRanges[mediaType]"
+            <MovieContainer class="movie_container"
+                            :key="mov.id"
+                            :data="mov"
+                            :ratingRange="mediaRanges[mediaType]"
+                            :media-type="mediaType"
                             @MovieEdit="editMovie"></MovieContainer>
           </div>
         </div>
