@@ -120,20 +120,20 @@ class Media:
     def get_media_genres(self):
         pass
 
-    def get_cover(self, media_id, media_title):
-        # print('get cover', media_id, media_title)
-        result = None
-
-        for mov in self.list_db:
-            if mov['id'] == media_id:
-                result = mov
-            elif mov['title'] == media_title:
-                result = mov
-
-        request = f'https://image.tmdb.org/t/p/w500{result["poster_path"]}'
-        response = requests.get(request)
-
-        return response.content
+    # def get_cover(self, media_id, media_title):
+    #     # print('get cover', media_id, media_title)
+    #     result = None
+    #
+    #     for mov in self.list_db:
+    #         if mov['id'] == media_id:
+    #             result = mov
+    #         elif mov['title'] == media_title:
+    #             result = mov
+    #
+    #     request = f'https://image.tmdb.org/t/p/w500{result["poster_path"]}'
+    #     response = requests.get(request)
+    #
+    #     return response.content
 
     # selective pickers
     def get_rand_genre(self, data):
