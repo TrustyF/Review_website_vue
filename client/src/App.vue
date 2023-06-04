@@ -5,6 +5,7 @@ import NavBar from "@/components/General/NavBar";
 import axios from 'axios'
 import './styles/globals.css'
 import './styles/dark.css'
+import CreditsFooter from "@/components/General/CreditsFooter";
 
 const current_api = inject('curr_api')
 let mediaRanges = inject('mediaRanges')
@@ -24,19 +25,20 @@ get_media_ranges()
 </script>
 
 <template>
-  <div class="main dark">
+  <div class="main">
     <NavBar/>
     <div class="app_wrapper">
       <RouterView/>
     </div>
+    <CreditsFooter/>
   </div>
 </template>
 
 <style scoped>
+
 .app_wrapper {
   /*outline: 1px solid red;*/
   display: block;
-  min-height: 100vh;
   margin: auto;
   transition: 500ms;
 }
