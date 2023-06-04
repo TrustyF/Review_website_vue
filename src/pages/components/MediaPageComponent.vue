@@ -90,6 +90,7 @@ watch(settingsOpen, (newV, oldV) => {
 })
 
 onMounted(() => {
+  update_movies()
   window.addEventListener('scroll', handleScroll)
 })
 </script>
@@ -121,7 +122,7 @@ onMounted(() => {
 
     <div class="feed loader" v-else>
       Loading...
-      <img :class="darkMode ? '': 'dark_image'" src="../../../public/assets/ui/Loading_icon.gif" alt="loading icon"
+      <img src="../../../public/assets/ui/Loading_icon.gif" alt="loading icon"
            style="width: 25px; margin: 10px">
     </div>
   </div>
