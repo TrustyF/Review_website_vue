@@ -3,6 +3,7 @@ import {createRouter, createWebHistory} from "vue-router";
 import MoviePage from "@/pages/MoviePage"
 import MangaPage from "@/pages/MangaPage"
 import SeriesPage from "@/pages/SeriesPage"
+import AnimePage from "@/pages/AnimePage"
 import MoviePickerPage from "@/pages/MoviePickerPage";
 
 const router = createRouter({
@@ -28,6 +29,11 @@ const router = createRouter({
             path: "/series",
             name: "series",
             component: SeriesPage
+        },
+        {
+            path: "/anime",
+            name: "anime",
+            component: AnimePage
         },
         {
             path: "/manga",

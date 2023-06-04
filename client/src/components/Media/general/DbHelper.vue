@@ -209,7 +209,7 @@ async function searchMovie() {
 }
 
 function checkInDb() {
-  return axios.post(`${current_api}/check_dupe/`, MovChanges.value)
+  return axios.post(`${current_api}/media/check_dupe/`, MovChanges.value)
       .then(response => {
         console.log('dupe check', response.statusText)
         if (response.statusText === 'True') {
