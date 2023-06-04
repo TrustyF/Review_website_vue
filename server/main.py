@@ -52,7 +52,7 @@ def get_cover():
 
 # Extras
 @app.route('/media/get_rating_ranges', methods=["GET"])
-@cache.cached(timeout=3000)
+# @cache.cached(timeout=3000)
 def get_rating_range():
     # print(request.args.get('test'), request.args.get('good'))
     return store.gather_rating_ranges()
@@ -92,4 +92,4 @@ def get_recent_release():
 #         return self.presets.del_preset(req), 200
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
