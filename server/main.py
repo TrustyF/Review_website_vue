@@ -2,16 +2,16 @@ import random
 
 from flask import Flask, Request, request, Response
 from flask_cors import CORS
-from flask_caching import Cache
+# from flask_caching import Cache
 
 from storage import store, tag_presets
 
 app = Flask(__name__)
-app.config['CACHE_TYPE'] = "FileSystemCache"
-app.config['CACHE_DIR'] = "cache"
+# app.config['CACHE_TYPE'] = "FileSystemCache"
+# app.config['CACHE_DIR'] = "cache"
 CORS(app)
 
-cache = Cache(app)
+# cache = Cache(app)
 media_store = store.stores
 
 
@@ -71,7 +71,7 @@ def get_rand_genre():
 
 
 @app.route('/media/get_recent_release', methods=["POST"])
-@cache.cached(timeout=3000)
+# @cache.cached(timeout=3000)
 def get_recent_release():
     return media_store[request.json['media_type']].get_recent_release(request.json), 200
 
