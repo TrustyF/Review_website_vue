@@ -6,7 +6,7 @@ import VueLazyload from "vue-lazyload";
 
 const local_api = "http://localhost:5000"
 const server_api = "https://trustyfox.pythonanywhere.com"
-let devMode = false
+let devMode = true
 let sessionSeed = Math.random()
 let mediaRanges = ref({})
 

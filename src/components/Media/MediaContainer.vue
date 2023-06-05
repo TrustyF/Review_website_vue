@@ -39,7 +39,7 @@ function build_cover_request(info) {
   let data = input.data.value
   let media_type = input['mediaType'].value
 
-  return `${current_api}/media/cover?id=${encodeURIComponent(data['id'] ? data['id'] : data['manga_id'])}&type=${media_type}&title=${encodeURIComponent(data['title'])}`
+  return `${current_api}/media/cover?poster_path=${encodeURIComponent(data['poster_path'])}&type=${media_type}`
 }
 
 </script>
