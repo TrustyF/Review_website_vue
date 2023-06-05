@@ -44,10 +44,9 @@ def delete():
 @app.route('/media/cover', methods=["GET"])
 # @cache.cached(timeout=3000)
 def get_cover():
-    media_id = request.args.get('id')
+    poster_path = request.args.get('poster_path')
     media_type = request.args.get('type')
-    media_title = request.args.get('title')
-    return media_store[media_type].get_cover(media_id, media_title)
+    return media_store[media_type].get_cover(poster_path)
 
 
 # Extras

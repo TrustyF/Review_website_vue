@@ -311,19 +311,10 @@ class Manga(Media):
         return culled_arr
 
     # getters
-    def get_cover(self, media_id, media_title):
-        # print('get cover', media_id, media_title)
-        result = None
-
-        for mov in self.list_db:
-            if mov['manga_id'] == media_id:
-                result = mov
-            elif mov['title'] == media_title:
-                result = mov
-
-        request = f'https://uploads.mangadex.org/covers/{result["poster_path"]}.256.jpg'
-        response = requests.get(request)
-        return response.content
+    def get_cover(self, poster_path):
+        print('get cover', poster_path)
+        request = f'https://uploads.mangadex.org/covers/{poster_path}.256.jpg'
+        return requests.get(request).content
 
 
 class Anime(Media):
