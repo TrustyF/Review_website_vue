@@ -6,10 +6,10 @@ import MovieContainer from "@/components/Media/MediaContainer";
 
 const apiKey = '063ccf740a391dee9759aaa3564661c2'
 const current_api = inject('curr_api')
+const devMode = inject('devMode')
 
 const tag_path = "./assets/tags/icons/"
 
-import axios from 'axios'
 import MangaPage from "@/pages/MangaPage";
 
 const props = defineProps(['data', 'open', 'mediaType'])
@@ -41,7 +41,7 @@ onMounted(() => {
 
 watch(props, (newV, oldV) => {
   MovChanges.value = newV.data
-  checkInDb()
+  // checkInDb()
 })
 
 const availableRegions = ["none", "western", "asian"]
@@ -51,207 +51,248 @@ const availableReWatch = ["none", "up", "down"]
 let throttle_search = false
 
 async function loadPresets() {
-  tagPresets.value = await axios.get(`${current_api}/get_presets/`)
+
+  const url = new URL(`${current_api}/get_presets/`)
+  url.searchParams.set('none', 'none')
+
+  fetch(url)
+
+      // Handle http error
       .then(response => {
-        // console.log(response.data)
-        return response.data
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+        return response.json()
       })
+
+      // Process the returned JSON data
+      .then(data => {
+        tagPresets.value = data
+        if (devMode) console.log(data);
+      })
+
+      // Handle any errors that occurred during the fetch
+      .catch(error => {
+        console.error('Error:', error);
+      });
 }
 
 function updateMedia() {
-  // button.target.disabled = true
-  // button.target.lastChild.data = " ❌"
-  axios.post(`${current_api}/update_media/`, {'newData': MovChanges.value, 'oldData': props.data})
-      .then(response => {
-        // console.log("edit status", response.status)
-        // button.target.disabled = false
-        closeHelper()
-        // button.target.lastChild.data = " ✓"
-      })
-}
 
-async function searchMovie() {
-  let search_text = currentSearchMovie.value
-  currentSearchPage.value = 0
-
-  console.log(search_text, currentSearchType.value, currentSearchPage.value)
-
-  if (throttle_search === true) return
-  if (search_text.length < 1) return
-
-  throttle_search = true
-  // console.log('searching', search_text)
-
-  if (currentSearchType.value === 'movie' || currentSearchType.value === 'tv') {
-    setTimeout(async function () {
-      let searchResult = await axios.get(`https://api.themoviedb.org/3/search/${currentSearchType.value}?api_key=${apiKey}&language=en-US&query=${search_text}`)
-          .then(response => {
-
-            if (response.data['results'].length < 1) {
-              throttle_search = false
-              return
-            }
-
-            let simple_data = response.data['results'][currentSearchPage.value]
-
-            return axios.get(`https://api.themoviedb.org/3/${currentSearchType.value}/${simple_data['id']}?api_key=${apiKey}&language=en-US&append_to_response=credits,images&include_image_language=en,null`)
-                .then(response => {
-                  const full_data = response.data
-                  // console.log('full_data', full_data)
-
-                  //replace genres
-                  simple_data['genres'] = full_data['genres'].map(a => a.name)
-                  delete simple_data['genre_ids']
-
-                  // add others
-                  simple_data['media_type'] = currentSearchType.value
-                  // simple_data['date_rated'] = new Date().toISOString().slice(0, 10)
-                  simple_data['images'] = full_data['images']
-                  simple_data['runtime'] = full_data['runtime']
-
-                  // tv exceptions
-                  if (currentSearchType.value === 'tv') {
-
-                    simple_data['title'] = full_data['name']
-                    delete simple_data['name']
-
-                    simple_data['release_date'] = full_data['first_air_date']
-                    delete simple_data['first_air_date']
-                  }
-
-                  // console.log(simple_data)
-                  throttle_search = false
-                  return simple_data
-                })
-          })
-
-      if (searchResult !== undefined) MovChanges.value = searchResult
-
-      await checkInDb()
-
-    }, 300)
+  const url = new URL(`${current_api}/update_media/`)
+  const params = {
+    'newData': MovChanges.value,
+    'oldData': props.data
   }
 
-  if (currentSearchType.value === 'manga') {
+  fetch(url, {
+    method: 'POST',
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(params)
+  })
 
-    setTimeout(async function () {
-          // console.log('searching manga')
-          let searchResult = await axios.get(`https://api.mangadex.org/manga?title=${search_text}&order%5Brelevance%5D=desc&includes[]=cover_art&limit=20`)
-              .then(response => {
-
-                // console.log('all found', response.data.data)
-
-                if (response.data.data.length < 1) {
-                  throttle_search = false
-                  return
-                }
-
-                if (response.data.data[currentSearchPage.value] === undefined) {
-                  throttle_search = false
-                  return
-                }
-
-                let simple_data = response.data.data[currentSearchPage.value]['attributes']
-                let all_data = response.data.data[currentSearchPage.value]
-                let formatted_data = {}
-                console.log('simple_data', simple_data)
-                // console.log('all_data', all_data)
-
-                if (simple_data['title']['en'] !== undefined) formatted_data['title'] = simple_data['title']['en']
-                if (simple_data['title']['en'] === undefined) formatted_data['title'] = simple_data['title']['ja']
-
-                formatted_data['manga_id'] = all_data['id']
-                formatted_data['contentRating'] = simple_data['contentRating']
-                formatted_data['release_date'] = String(simple_data['year'] + '-01-01')
-                formatted_data['overview'] = simple_data['description']['en']
-                formatted_data['links'] = simple_data['links']
-                formatted_data['media_type'] = 'manga'
-                formatted_data['genres'] = []
-                formatted_data['genres'] = simple_data['tags'].map((elem) => {
-                  if (elem['attributes']['group'] === 'genre') {
-                    return elem['attributes']['name']['en']
-                  }
-                }).filter(Boolean)
-
-                formatted_data['images'] = {'posters': []}
-
-                console.log('returned formatted', formatted_data)
-                throttle_search = false
-                return formatted_data
-              })
-
-          if (searchResult !== undefined) MovChanges.value = searchResult
-
-          await axios.get(`https://api.mangadex.org/cover?limit=100&manga%5B%5D=${MovChanges.value['manga_id']}`)
-              .then(response => {
-                // console.log('covers', response.data.data)
-                MovChanges.value['images']['posters'] = response.data.data.map((elem) => {
-                  return {
-                    'file_path': `${MovChanges.value['manga_id']}/${elem['attributes']['fileName']}`,
-                    'volume': elem['attributes']['volume']
-                  }
-                })
-                MovChanges.value['images']['posters'].sort((a, b) => a.volume - b.volume)
-                MovChanges.value['poster_path'] = MovChanges.value['images']['posters'][0]['file_path']
-              })
-
-          await axios.get(`https://api.mangadex.org/statistics/manga/${MovChanges.value['manga_id']}`)
-              .then(response => {
-                // console.log('stats', response.data['statistics'][MovChanges.value['manga_id']])
-                MovChanges.value['vote_average'] = response.data['statistics'][MovChanges.value['manga_id']]['rating']['average']
-              })
-
-          await checkInDb()
-        },
-        300
-    )
-  }
-}
-
-function checkInDb() {
-  return axios.post(`${current_api}/media/check_dupe/`, MovChanges.value)
+      // Handle http error
       .then(response => {
-        console.log('dupe check', response.statusText)
-        if (response.statusText === 'True') {
-          presentInDb.value = true
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
         }
-        if (response.statusText === 'False') {
-          presentInDb.value = false
-        }
+        return response.json()
       })
-}
 
-async function refreshData() {
-  if (currentSearchType.value === 'manga') {
-    let searchResult = await axios.get(`https://api.mangadex.org/manga?ids%5B%5D=${MovChanges.value['manga_id']}&order%5Brelevance%5D=desc&includes[]=cover_art&limit=20`)
-        .then(response => {
-          let simple_data = response.data.data[currentSearchPage.value]['attributes']
-          // console.log(simple_data['contentRating'],simple_data['year'])
-          MovChanges.value['contentRating'] = simple_data['contentRating']
-          MovChanges.value['release_date'] = String(simple_data['year'] + '-01-01')
-          updateMedia()
-        })
-  }
-}
-
-function addMovie(button) {
-  button.target.disabled = true
-  axios.post(`${current_api}/add_media/`, MovChanges.value)
-      .then(response => {
-        // console.log("added movie")
-        button.target.disabled = false
+      // Process the returned JSON data
+      .then(data => {
         closeHelper()
+        if (devMode) console.log(data);
       })
+
+      // Handle any errors that occurred during the fetch
+      .catch(error => {
+        console.error('Error:', error);
+      });
 }
 
-function delMovie(button) {
-  button.target.disabled = true
-  axios.post(`${current_api}/del_media/`, MovChanges.value)
-      .then(response => {
-        // console.log("removed movie")
-        button.target.disabled = false
-      })
-}
+// async function searchMovie() {
+//   let search_text = currentSearchMovie.value
+//   currentSearchPage.value = 0
+//
+//   console.log(search_text, currentSearchType.value, currentSearchPage.value)
+//
+//   if (throttle_search === true) return
+//   if (search_text.length < 1) return
+//
+//   throttle_search = true
+//   // console.log('searching', search_text)
+//
+//   if (currentSearchType.value === 'movie' || currentSearchType.value === 'tv') {
+//     setTimeout(async function () {
+//       let searchResult = await axios.get(`https://api.themoviedb.org/3/search/${currentSearchType.value}?api_key=${apiKey}&language=en-US&query=${search_text}`)
+//           .then(response => {
+//
+//             if (response.data['results'].length < 1) {
+//               throttle_search = false
+//               return
+//             }
+//
+//             let simple_data = response.data['results'][currentSearchPage.value]
+//
+//             return axios.get(`https://api.themoviedb.org/3/${currentSearchType.value}/${simple_data['id']}?api_key=${apiKey}&language=en-US&append_to_response=credits,images&include_image_language=en,null`)
+//                 .then(response => {
+//                   const full_data = response.data
+//                   // console.log('full_data', full_data)
+//
+//                   //replace genres
+//                   simple_data['genres'] = full_data['genres'].map(a => a.name)
+//                   delete simple_data['genre_ids']
+//
+//                   // add others
+//                   simple_data['media_type'] = currentSearchType.value
+//                   // simple_data['date_rated'] = new Date().toISOString().slice(0, 10)
+//                   simple_data['images'] = full_data['images']
+//                   simple_data['runtime'] = full_data['runtime']
+//
+//                   // tv exceptions
+//                   if (currentSearchType.value === 'tv') {
+//
+//                     simple_data['title'] = full_data['name']
+//                     delete simple_data['name']
+//
+//                     simple_data['release_date'] = full_data['first_air_date']
+//                     delete simple_data['first_air_date']
+//                   }
+//
+/*                  // console.log(simple_data)*/
+/*                  throttle_search = false*/
+/*                  return simple_data*/
+//                 })
+//           })
+//
+//       if (searchResult !== undefined) MovChanges.value = searchResult
+//
+//       await checkInDb()
+//
+//     }, 300)
+//   }
+//
+//   if (currentSearchType.value === 'manga') {
+//
+//     setTimeout(async function () {
+//           // console.log('searching manga')
+//           let searchResult = await axios.get(`https://api.mangadex.org/manga?title=${search_text}&order%5Brelevance%5D=desc&includes[]=cover_art&limit=20`)
+//               .then(response => {
+//
+/*                // console.log('all found', response.data.data)*/
+
+/*                if (response.data.data.length < 1) {*/
+/*                  throttle_search = false*/
+/*                  return*/
+/*                }*/
+
+/*                if (response.data.data[currentSearchPage.value] === undefined) {*/
+/*                  throttle_search = false*/
+/*                  return*/
+/*                }*/
+
+/*                let simple_data = response.data.data[currentSearchPage.value]['attributes']*/
+//                 let all_data = response.data.data[currentSearchPage.value]
+//                 let formatted_data = {}
+//                 console.log('simple_data', simple_data)
+//                 // console.log('all_data', all_data)
+//
+//                 if (simple_data['title']['en'] !== undefined) formatted_data['title'] = simple_data['title']['en']
+//                 if (simple_data['title']['en'] === undefined) formatted_data['title'] = simple_data['title']['ja']
+//
+//                 formatted_data['manga_id'] = all_data['id']
+//                 formatted_data['contentRating'] = simple_data['contentRating']
+//                 formatted_data['release_date'] = String(simple_data['year'] + '-01-01')
+//                 formatted_data['overview'] = simple_data['description']['en']
+//                 formatted_data['links'] = simple_data['links']
+//                 formatted_data['media_type'] = 'manga'
+//                 formatted_data['genres'] = []
+//                 formatted_data['genres'] = simple_data['tags'].map((elem) => {
+//                   if (elem['attributes']['group'] === 'genre') {
+//                     return elem['attributes']['name']['en']
+//                   }
+//                 }).filter(Boolean)
+//
+//                 formatted_data['images'] = {'posters': []}
+//
+//                 console.log('returned formatted', formatted_data)
+//                 throttle_search = false
+//                 return formatted_data
+//               })
+//
+//           if (searchResult !== undefined) MovChanges.value = searchResult
+//
+//           await axios.get(`https://api.mangadex.org/cover?limit=100&manga%5B%5D=${MovChanges.value['manga_id']}`)
+//               .then(response => {
+//                 // console.log('covers', response.data.data)
+//                 MovChanges.value['images']['posters'] = response.data.data.map((elem) => {
+//                   return {
+//                     'file_path': `${MovChanges.value['manga_id']}/${elem['attributes']['fileName']}`,
+//                     'volume': elem['attributes']['volume']
+//                   }
+//                 })
+//                 MovChanges.value['images']['posters'].sort((a, b) => a.volume - b.volume)
+//                 MovChanges.value['poster_path'] = MovChanges.value['images']['posters'][0]['file_path']
+//               })
+//
+//           await axios.get(`https://api.mangadex.org/statistics/manga/${MovChanges.value['manga_id']}`)
+//               .then(response => {
+//                 // console.log('stats', response.data['statistics'][MovChanges.value['manga_id']])
+//                 MovChanges.value['vote_average'] = response.data['statistics'][MovChanges.value['manga_id']]['rating']['average']
+//               })
+//
+//           await checkInDb()
+//         },
+//         300
+//     )
+//   }
+// }
+
+// function checkInDb() {
+//   return axios.post(`${current_api}/media/check_dupe/`, MovChanges.value)
+//       .then(response => {
+//         console.log('dupe check', response.statusText)
+//         if (response.statusText === 'True') {
+//           presentInDb.value = true
+//         }
+//         if (response.statusText === 'False') {
+//           presentInDb.value = false
+//         }
+//       })
+// }
+
+// async function refreshData() {
+//   if (currentSearchType.value === 'manga') {
+//     let searchResult = await axios.get(`https://api.mangadex.org/manga?ids%5B%5D=${MovChanges.value['manga_id']}&order%5Brelevance%5D=desc&includes[]=cover_art&limit=20`)
+//         .then(response => {
+//           let simple_data = response.data.data[currentSearchPage.value]['attributes']
+//           // console.log(simple_data['contentRating'],simple_data['year'])
+//           MovChanges.value['contentRating'] = simple_data['contentRating']
+//           MovChanges.value['release_date'] = String(simple_data['year'] + '-01-01')
+//           updateMedia()
+//         })
+//   }
+// }
+
+// function addMovie(button) {
+//   button.target.disabled = true
+//   axios.post(`${current_api}/add_media/`, MovChanges.value)
+//       .then(response => {
+//         // console.log("added movie")
+//         button.target.disabled = false
+//         closeHelper()
+//       })
+// }
+
+// function delMovie(button) {
+//   button.target.disabled = true
+//   axios.post(`${current_api}/del_media/`, MovChanges.value)
+//       .then(response => {
+//         // console.log("removed movie")
+//         button.target.disabled = false
+//       })
+// }
 
 function changePoster(input) {
   if (MovChanges.value['images'] === undefined) return
@@ -285,21 +326,21 @@ function delAllTagMovie() {
   MovChanges.value['tags'] = []
 }
 
-function addTagPresets() {
-  axios.post(`${current_api}/add_preset/`, iconData.value)
-      .then(response => {
-        // console.log("added preset")
-        loadPresets()
-      })
-}
+// function addTagPresets() {
+//   axios.post(`${current_api}/add_preset/`, iconData.value)
+//       .then(response => {
+//         // console.log("added preset")
+//         loadPresets()
+//       })
+// }
 
-function delTagPresets() {
-  axios.post(`${current_api}/del_preset/`, iconData.value)
-      .then(response => {
-        // console.log("removed preset")
-        loadPresets()
-      })
-}
+// function delTagPresets() {
+//   axios.post(`${current_api}/del_preset/`, iconData.value)
+//       .then(response => {
+//         // console.log("removed preset")
+//         loadPresets()
+//       })
+// }
 
 function closeHelper() {
   emits('closed', true)

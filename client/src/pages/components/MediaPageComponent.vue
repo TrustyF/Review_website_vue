@@ -4,7 +4,6 @@ import DbHelper from "@/components/Media/general/DbHelper";
 import RatingHeader from "@/components/Media/general/RatingHeader";
 import {inject, watch, defineProps} from 'vue'
 
-import axios from 'axios'
 import {ref, onMounted, toRefs} from 'vue'
 import FilterMenu from "@/components/Media/general/FilterMenu";
 import {eventThrottle} from "@/utils";
@@ -20,6 +19,7 @@ const mediaRanges = inject('mediaRanges')
 const sessionSeed = inject('sessionSeed')
 
 const movies = ref([])
+const moviesFetched = ref(false)
 let filters = input_props['filters']
 let ratingDesc = input_props['ratingDesc']
 let mediaType = input_props['mediaType']
@@ -32,22 +32,42 @@ let maxMedia = ref(50)
 const currentSelectedMovie = ref({})
 const mediaRatingRanges = ref({})
 
-const servStatus = ref(0)
-
 // API
 function update_movies() {
-  // console.log('updating movies')
-  axios.post(`${current_api}/media/get_all`, {
+
+  const url = new URL(`${current_api}/media/get_all`)
+  const params = {
     'settings': settings.value,
     'media_type': mediaType.value,
     'filters': filters.value,
-    'max_media': maxMedia.value
+    'max_media': maxMedia.value,
+  }
+
+  fetch(url, {
+    method: 'POST',
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(params)
   })
+
+      // Handle http error
       .then(response => {
-        console.log('get movies', response.status, response.data)
-        movies.value = response.data
-        servStatus.value = response.status
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+        return response.json()
       })
+
+      // Process the returned JSON data
+      .then(data => {
+        movies.value = data
+        moviesFetched.value = true
+        if (devMode) console.log('get movies', data);
+      })
+
+      // Handle any errors that occurred during the fetch
+      .catch(error => {
+        console.error('Error:', error);
+      });
 }
 
 function editMovie(input) {
@@ -89,7 +109,7 @@ watch(settingsOpen, (newV, oldV) => {
 
 onMounted(() => {
   update_movies()
-  window.addEventListener('scroll', eventThrottle(handleScroll,300))
+  window.addEventListener('scroll', eventThrottle(handleScroll, 300))
 })
 </script>
 
@@ -103,7 +123,7 @@ onMounted(() => {
 
     <FilterMenu :props="filters" @filtersChange="update_movies"></FilterMenu>
 
-    <div class="feed" v-if="servStatus===200">
+    <div class="feed" v-if="moviesFetched">
 
       <div class="movie_grid" v-show="movies[rating].length > 0" v-for="rating in Object.keys(ratingDesc).reverse()"
            :key="rating">

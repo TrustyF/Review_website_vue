@@ -2,22 +2,39 @@
 import {inject} from 'vue'
 import {RouterView, RouterLink} from 'vue-router'
 import NavBar from "@/components/General/NavBar";
-import axios from 'axios'
 import './styles/globals.css'
 import './styles/dark.css'
 import CreditsFooter from "@/components/General/CreditsFooter";
+
+let devMode = inject('devMode')
 
 const current_api = inject('curr_api')
 let mediaRanges = inject('mediaRanges')
 
 function get_media_ranges() {
-  axios.get(`${current_api}/media/get_rating_ranges`, {params: {'test': 1, 'good': true}})
+
+  const url = new URL(`${current_api}/media/get_rating_ranges`)
+  url.searchParams.set('test', '1')
+
+  fetch(url)
+
       .then(response => {
-        if (response.status === 200) {
-          mediaRanges.value = response.data
-          console.log('get all ranges', mediaRanges)
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
         }
+        return response.json()
       })
+
+      // Process the returned JSON data
+      .then(data => {
+        mediaRanges.value = data
+        if (devMode) console.log('get all ranges', data);
+      })
+
+      // Handle any errors that occurred during the fetch
+      .catch(error => {
+        console.error('Error:', error);
+      });
 }
 
 get_media_ranges()

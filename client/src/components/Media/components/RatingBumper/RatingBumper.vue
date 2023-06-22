@@ -31,7 +31,7 @@ let ratingDesc = {
 let avg_range = [1, 10]
 let my_range = [1, 10]
 
-if (input !== undefined) {
+if (input['avg_range'] !== undefined) {
   avg_range = input['avg_range'].value
   my_range = input['my_range'].value
 }
