@@ -50,7 +50,7 @@ function build_cover_request(info) {
 
     <div class="main_block" @mouseover="main_block_hover = true" @mouseleave="main_block_hover = false">
 
-      <div class="gradient_fill"></div>
+<!--      <div class="gradient_fill"></div>-->
 
       <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
 
@@ -194,9 +194,9 @@ function build_cover_request(info) {
   width: 200px;
   height: 300px;
 
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(0, 0, 0, 0.9);
 
-  font-size: 0.8em;
+  font-size: 0.7em;
   text-align: left;
 
   visibility: hidden;

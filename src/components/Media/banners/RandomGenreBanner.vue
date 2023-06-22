@@ -1,10 +1,10 @@
 <script setup>
 import MediaContainer from '@/components/Media/MediaContainer'
 import {inject, watch, defineProps} from 'vue'
-import axios from 'axios'
 import {ref, onMounted, onUnmounted, toRefs} from 'vue'
 import {eventThrottle} from "@/utils";
 
+let devMode = inject('devMode')
 let sessionSeed = inject('sessionSeed')
 let mediaRanges = inject('mediaRanges')
 
@@ -18,27 +18,73 @@ let bannerMedia = ref({})
 let num_media_fit = ref(0)
 
 function get_recent_releases() {
-  axios.post(`${current_api}/media/get_recent_release`, {
+
+  const url = new URL(`${current_api}/media/get_recent_release`)
+  const params = {
     'media_type': props['mediaType'],
     'max_media': num_media_fit.value,
     'session_seed': sessionSeed
+  }
+
+  fetch(url, {
+    method: 'POST',
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(params)
   })
+
+      // Handle http error
       .then(response => {
-        bannerMedia.value = response.data
-        // console.log(bannerMedia)
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+        return response.json()
       })
+
+      // Process the returned JSON data
+      .then(data => {
+        bannerMedia.value = data
+        if (devMode) console.log('recent release banner', data);
+      })
+
+      // Handle any errors that occurred during the fetch
+      .catch(error => {
+        console.error('Error:', error);
+      });
 }
 
 function get_random_genre() {
-  axios.post(`${current_api}/media/get_rand_genre`, {
+
+  const url = new URL(`${current_api}/media/get_rand_genre`)
+  const params = {
     'media_type': props['mediaType'],
     'max_media': num_media_fit.value,
     'session_seed': sessionSeed
+  }
+
+  fetch(url, {
+    method: 'POST',
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(params)
   })
+
+      // Handle http error
       .then(response => {
-        bannerMedia.value = response.data
-        // console.log(bannerMedia)
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+        return response.json()
       })
+
+      // Process the returned JSON data
+      .then(data => {
+        bannerMedia.value = data
+        if (devMode) console.log('recent release banner', data);
+      })
+
+      // Handle any errors that occurred during the fetch
+      .catch(error => {
+        console.error('Error:', error);
+      });
 }
 
 function update_media() {
