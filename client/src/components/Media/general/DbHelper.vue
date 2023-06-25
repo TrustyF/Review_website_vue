@@ -4,13 +4,11 @@ import TagContainer from "@/components/Media/components/TagContainer";
 import asset_paths from '../../../../public/assets/tags/assets.json'
 import MovieContainer from "@/components/Media/MediaContainer";
 
-const apiKey = '063ccf740a391dee9759aaa3564661c2'
 const current_api = inject('curr_api')
 const devMode = inject('devMode')
 
 const tag_path = "./assets/tags/icons/"
 
-import MangaPage from "@/pages/MangaPage";
 
 const props = defineProps(['data', 'open', 'mediaType'])
 const emits = defineEmits(['opened', 'closed', 'updated'])
@@ -41,14 +39,12 @@ onMounted(() => {
 
 watch(props, (newV, oldV) => {
   MovChanges.value = newV.data
-  // checkInDb()
+  checkInDb()
 })
 
 const availableRegions = ["none", "western", "asian"]
 const availableTiers = ["cyan", "gold", "green", "purple", "red", "silver"]
 const availableReWatch = ["none", "up", "down"]
-
-let throttle_search = false
 
 async function loadPresets() {
 
@@ -77,19 +73,14 @@ async function loadPresets() {
       });
 }
 
-function updateMedia() {
 
-  const url = new URL(`${current_api}/update_media/`)
-  const params = {
-    'newData': MovChanges.value,
-    'oldData': props.data
-  }
+function searchMovie() {
+  const url = new URL(`${current_api}/media/search`)
+  url.searchParams.set('type', currentSearchType.value)
+  url.searchParams.set('title', currentSearchMovie.value)
+  url.searchParams.set('page', String(currentSearchPage.value))
 
-  fetch(url, {
-    method: 'POST',
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(params)
-  })
+  fetch(url)
 
       // Handle http error
       .then(response => {
@@ -101,14 +92,20 @@ function updateMedia() {
 
       // Process the returned JSON data
       .then(data => {
-        closeHelper()
-        if (devMode) console.log(data);
+        MovChanges.value = data
+        checkInDb()
+        if (devMode) console.log('searchMovie', data);
       })
 
       // Handle any errors that occurred during the fetch
       .catch(error => {
         console.error('Error:', error);
       });
+}
+
+function scrollPage(event) {
+  currentSearchPage.value = Number(event.target.value)
+  searchMovie()
 }
 
 // async function searchMovie() {
@@ -160,9 +157,9 @@ function updateMedia() {
 //                     delete simple_data['first_air_date']
 //                   }
 //
-/*                  // console.log(simple_data)*/
-/*                  throttle_search = false*/
-/*                  return simple_data*/
+// /*                  // console.log(simple_data)*/
+// /*                  throttle_search = false*/
+// /*                  return simple_data*/
 //                 })
 //           })
 //
@@ -172,7 +169,6 @@ function updateMedia() {
 //
 //     }, 300)
 //   }
-//
 //   if (currentSearchType.value === 'manga') {
 //
 //     setTimeout(async function () {
@@ -180,19 +176,19 @@ function updateMedia() {
 //           let searchResult = await axios.get(`https://api.mangadex.org/manga?title=${search_text}&order%5Brelevance%5D=desc&includes[]=cover_art&limit=20`)
 //               .then(response => {
 //
-/*                // console.log('all found', response.data.data)*/
-
-/*                if (response.data.data.length < 1) {*/
-/*                  throttle_search = false*/
-/*                  return*/
-/*                }*/
-
-/*                if (response.data.data[currentSearchPage.value] === undefined) {*/
-/*                  throttle_search = false*/
-/*                  return*/
-/*                }*/
-
-/*                let simple_data = response.data.data[currentSearchPage.value]['attributes']*/
+// /*                // console.log('all found', response.data.data)*/
+//
+// /*                if (response.data.data.length < 1) {*/
+// /*                  throttle_search = false*/
+// /*                  return*/
+// /*                }*/
+//
+// /*                if (response.data.data[currentSearchPage.value] === undefined) {*/
+// /*                  throttle_search = false*/
+// /*                  return*/
+// /*                }*/
+//
+// /*                let simple_data = response.data.data[currentSearchPage.value]['attributes']*/
 //                 let all_data = response.data.data[currentSearchPage.value]
 //                 let formatted_data = {}
 //                 console.log('simple_data', simple_data)
@@ -248,7 +244,6 @@ function updateMedia() {
 //     )
 //   }
 // }
-
 // function checkInDb() {
 //   return axios.post(`${current_api}/media/check_dupe/`, MovChanges.value)
 //       .then(response => {
@@ -275,24 +270,123 @@ function updateMedia() {
 //   }
 // }
 
-// function addMovie(button) {
-//   button.target.disabled = true
-//   axios.post(`${current_api}/add_media/`, MovChanges.value)
-//       .then(response => {
-//         // console.log("added movie")
-//         button.target.disabled = false
-//         closeHelper()
-//       })
-// }
+function addMovie(button) {
+  button.target.disabled = true
 
-// function delMovie(button) {
-//   button.target.disabled = true
-//   axios.post(`${current_api}/del_media/`, MovChanges.value)
-//       .then(response => {
-//         // console.log("removed movie")
-//         button.target.disabled = false
-//       })
-// }
+  const url = new URL(`${current_api}/media/add`)
+  const params = {
+    'data': MovChanges.value,
+    'media_type': currentSearchType.value
+  }
+
+  fetch(url, {
+    method: 'POST',
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(params)
+  })
+
+      // Handle http error
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+        return response.json()
+      })
+
+      // Process the returned JSON data
+      .then(data => {
+        button.target.disabled = false
+        closeHelper()
+        if (devMode) console.log(data);
+      })
+
+      // Handle any errors that occurred during the fetch
+      .catch(error => {
+        console.error('Error:', error);
+      });
+}
+
+function delMovie(button) {
+  button.target.disabled = true
+
+  const url = new URL(`${current_api}/media/delete`)
+  const params = {
+    'data': MovChanges.value,
+    'media_type': currentSearchType.value
+  }
+
+  fetch(url, {
+    method: 'POST',
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(params)
+  })
+
+      // Handle http error
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+
+        button.target.disabled = false
+        closeHelper()
+        if (devMode) console.log('media deleted');
+      })
+
+      // Handle any errors that occurred during the fetch
+      .catch(error => {
+        console.error('Error:', error);
+      });
+}
+
+function updateMedia() {
+
+  const url = new URL(`${current_api}/media/update`)
+  const params = {
+    'data': MovChanges.value,
+    'media_type': currentSearchType.value
+  }
+
+  fetch(url, {
+    method: 'POST',
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(params)
+  })
+
+      // Handle http error
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+
+        closeHelper()
+        if (devMode) console.log('media updated');
+      })
+
+      // Handle any errors that occurred during the fetch
+      .catch(error => {
+        console.error('Error:', error);
+      });
+}
+
+function checkInDb() {
+  console.log('checking in db', MovChanges.value['title'])
+  const url = new URL(`${current_api}/media/check_dupe`)
+  url.searchParams.set('media_type', currentSearchType.value)
+  url.searchParams.set('media_id', MovChanges.value['id'])
+
+  fetch(url)
+
+      // Handle http error
+      .then(response => {
+        // presentInDb.value = response.json();
+        console.log(response)
+      })
+
+      // Handle any errors that occurred during the fetch
+      .catch(error => {
+        console.error('Error:', error);
+      });
+}
 
 function changePoster(input) {
   if (MovChanges.value['images'] === undefined) return
@@ -370,16 +464,17 @@ function closeHelper() {
 
       <div class="metadata_wrapper box_wrapper">
 
-        <MovieContainer class="preview_movie" :data="MovChanges" :ratingRange="tempRange"></MovieContainer>
+        <MovieContainer :data="MovChanges" :ratingRange="tempRange"
+                        :media-type="currentSearchType"></MovieContainer>
 
         <div class="movie_adder box_wrapper input_tag_description">
 
           <label for="search_m_input">Search</label>
-          <input type="search" @input="currentSearchMovie = $event.target.value" @change="searchMovie"
+          <input type="search" @input="currentSearchMovie = $event.target.value" @keyup.enter="searchMovie"
                  id="search_m_input">
 
           <label for="search_list_input">Search scroll</label>
-          <input type="number" @change="currentSearchPage = Number($event.target.value)" @input="searchMovie" value="0"
+          <input type="number" @change="scrollPage" value="0"
                  id="search_list_input">
 
         </div>
@@ -431,7 +526,7 @@ function closeHelper() {
         </div>
 
         <div class="box_wrapper">
-          <button @click="refreshData">Refresh data</button>
+          <!--          <button @click="refreshData">Refresh data</button>-->
           <p v-if="presentInDb">!! Movie already added !!</p>
           <button @click="addMovie" v-if="!presentInDb">add movie</button>
           <button @click="delMovie">remove movie</button>
