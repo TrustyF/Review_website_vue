@@ -1,5 +1,6 @@
 from datetime import datetime
 import random
+import re
 
 
 def sort_by_my_rating(f_arr):

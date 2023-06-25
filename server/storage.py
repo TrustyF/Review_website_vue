@@ -1,11 +1,12 @@
 import datetime
 import json
 import os
+import pprint
 import time
 
 from tinydb import TinyDB, Query, where, operations
 import re
-from flask import Response, Request, make_response
+from flask import Response, Request
 import requests
 
 import sort_funcs
@@ -82,16 +83,15 @@ class Media:
         query = Query().id == str(data['id'])
         self.db.remove(query)
 
-    def check_dupe(self, data):
-        print('checking', data['data']['id'])
-        query = Query().id == (str(data['data']['id']))
+    def check_dupe(self, media_id):
+        print('checking', self.media_type, media_id)
+        query = Query().id == str(media_id)
         entries = self.db.search(query)
-        print(entries)
+        print(len(entries))
         if len(entries) > 0:
-
-            return json.dumps(True)
+            return {'result': True}
         else:
-            return json.dumps(False)
+            return {'result': False}
 
     # post requests
     def load_more(self):
@@ -174,7 +174,6 @@ class Media:
         sort_arr = sort_funcs.sort_by_my_rating(sort_arr)
         return sort_arr
 
-
     def culling(self, f_arr, max_items):
         return f_arr[:max_items]
 
@@ -208,21 +207,26 @@ class Movies(Media):
         full_data = requests.get(extra_request).json()
 
         # format data
-        simple_data['genres'] = [x['name'] for x in full_data['genres']]
-        del simple_data['genre_ids']
+        formatted_data = {
+            'title': simple_data['name'],
+            'date_rated': str(datetime.date.today()),
+            'genres': [x['name'] for x in full_data['genres']],
+            'id': simple_data['id'],
+            'media_type': 'movie',
+            'my_rating': None,
+            'overview': simple_data['overview'],
+            'poster_path': simple_data['poster_path'],
+            'posters': full_data['images']['posters'],
+            'release_date': simple_data['release_date'],
+            'tags': None,
+            'vote_average': simple_data['vote_average'],
 
-        # add extra info
-        simple_data['media_type'] = 'movie'
-        simple_data['date_rated'] = datetime.date.today()
-        simple_data['images'] = full_data['images']
-        simple_data['runtime'] = full_data['runtime']
+            'runtime': simple_data['runtime'],
+            'imdb_id': simple_data['imdb_id'],
+            'imdb_url': simple_data['imdb_url'],
+        }
 
-        return simple_data
-
-    # getters
-    # def get_cover(self, media_id):
-    #     movie = self.db.search(Query().id == int(media_id))[0]
-    #     return requests.get(f"https://image.tmdb.org/t/p/w500{movie['poster_path']}")
+        return formatted_data
 
     # others
     def cleanup(self):
@@ -272,23 +276,25 @@ class Series(Media):
         full_data = requests.get(extra_request).json()
 
         # format data
-        simple_data['genres'] = [x['name'] for x in full_data['genres']]
-        del simple_data['genre_ids']
+        formatted_data = {
+            'title': simple_data['name'],
+            'date_rated': str(datetime.date.today()),
+            'genres': [x['name'] for x in full_data['genres']],
+            'id': simple_data['id'],
+            'media_type': 'tv',
+            'my_rating': None,
+            'overview': simple_data['overview'],
+            'poster_path': simple_data['poster_path'],
+            'posters': full_data['images']['posters'],
+            'release_date': simple_data['first_air_date'],
+            'tags': None,
+            'vote_average': simple_data['vote_average'],
 
-        # add extra info
-        simple_data['media_type'] = 'movie'
-        simple_data['date_rated'] = datetime.date.today()
-        simple_data['images'] = full_data['images']
-        simple_data['runtime'] = full_data['runtime']
+            'imdb_id': simple_data['imdb_id'],
+            'imdb_url': simple_data['imdb_url'],
+        }
 
-        # cleanup
-        simple_data['title'] = full_data['name']
-        del simple_data['name']
-
-        simple_data['release_date'] = full_data['first_air_date']
-        del simple_data['first_air_date']
-
-        return simple_data
+        return formatted_data
 
     def cleanup(self):
         for mov in self.db.all():
@@ -336,29 +342,58 @@ class Manga(Media):
         super().__init__(media_type='manga')
 
     # getters
-    def search_media(self, f_title, f_page):
+    def search_media(self, f_title, f_page, f_id=None):
         title = f_title
-        page = int(f_page)
+        page = f_page
+
+        if f_id is None:
+            page = int(f_page)
 
         # phase 1
-        request = f'https://api.mangadex.org/manga?title={title}' \
-                  f'&order%5Brelevance%5D=desc&includes[]=cover_art&limit=20'
+        if f_id is None:
+            request = f'https://api.mangadex.org/manga?title={title}' \
+                      f'&order%5Brelevance%5D=desc&includes[]=cover_art&limit=20'
+        else:
+            request = f'https://api.mangadex.org/manga/{f_id}?includes%5B%5D=cover_art'
+
         response = requests.get(request).json()
 
         if response['result'] != 'ok':
-            return make_response({}, 404)
+            return {'result': False}
 
         if len(response['data']) == 0:
-            return make_response({}, 404)
+            return {'result': False}
 
-        if len(response['data']) < page:
-            return make_response({}, 404)
+        if f_page is not None:
+            if len(response['data']) < page:
+                return {'result': False}
 
-        simple_data = response['data'][page]['attributes']
-        all_data = response['data'][page]
-        formatted_data = {}
+        if f_page is None:
+            simple_data = response['data']['attributes']
+            all_data = response['data']
+        else:
+            simple_data = response['data'][page]['attributes']
+            all_data = response['data'][page]
 
         # phase 2
+
+        formatted_data = {
+            'title': None,
+            'date_rated': str(datetime.date.today()),
+            'genres': [x['attributes']['name']['en'] for x in simple_data['tags'] if
+                       x['attributes']['group'] == 'genre'],
+            'id': all_data['id'],
+            'media_type': 'manga',
+            'my_rating': None,
+            'overview': None,
+            'poster_path': None,
+            'posters': [],
+            'release_date': str(simple_data['year']) + '-01-01',
+            'tags': None,
+            'vote_average': None,
+
+            'contentRating': simple_data['contentRating'],
+        }
 
         # clean titles
         if 'en' in simple_data['title']:
@@ -372,30 +407,25 @@ class Manga(Media):
         else:
             formatted_data['overview'] = 'No description available'
 
-        formatted_data['id'] = all_data['id']
-        formatted_data['contentRating'] = simple_data['contentRating']
-        formatted_data['release_date'] = str(simple_data['year']) + '-01-01'
-        formatted_data['links'] = simple_data['links']
-        formatted_data['media_type'] = 'manga'
-        formatted_data['genres'] = [x['attributes']['name']['en'] for x in simple_data['tags'] if
-                                    x['attributes']['group'] == 'genre']
-
-        formatted_data['images'] = {'posters': []}
-
         # phase 3
 
         request = f'https://api.mangadex.org/cover?limit=100&manga%5B%5D={formatted_data["id"]}'
         response = requests.get(request).json()
 
-        formatted_data['images']['posters'] = [
+        formatted_data['posters'] = [
             {
                 'file_path': f'{formatted_data["id"]}/{x["attributes"]["fileName"]}',
                 'volume': x['attributes']['volume']
             }
             for x in response['data']]
-        sorted(formatted_data['images']['posters'], key=lambda x: x['volume'])
 
-        formatted_data['poster_path'] = formatted_data['images']['posters'][0]['file_path']
+        #  fix volumes none
+        for poster in formatted_data['posters']:
+            if poster['volume'] is None:
+                poster['volume'] = str(len(formatted_data['posters']))
+
+        formatted_data['posters'].sort(key=lambda x: '{0:0>8}'.format(x['volume']).lower())
+        formatted_data['poster_path'] = formatted_data['posters'][0]['file_path']
 
         # phase 4
 
@@ -441,11 +471,20 @@ class Manga(Media):
         request = f'https://uploads.mangadex.org/covers/{poster_path}.256.jpg'
         return requests.get(request).content
 
-    def cleanup(self):
-        print('testr')
-        for mov in self.db:
-            mov['id'] = mov['manga_id']
-            del mov['manga_id']
+    def refresh(self):
+        print('refresh')
+        for entry in self.db.all():
+            print(entry['title'])
+
+            new_data = self.search_media(entry['title'], None, entry['id'])
+            if 'my_rating' in entry:
+                new_data['my_rating'] = entry['my_rating']
+            if 'tags' in entry:
+                new_data['tags'] = entry['tags']
+
+            # disabled for safety
+            # self.db.remove(Query().id == str(entry['id']))
+            # self.db.insert(new_data)
 
 
 class Anime(Media):
