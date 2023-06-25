@@ -108,155 +108,6 @@ function scrollPage(event) {
   searchMovie()
 }
 
-// async function searchMovie() {
-//   let search_text = currentSearchMovie.value
-//   currentSearchPage.value = 0
-//
-//   console.log(search_text, currentSearchType.value, currentSearchPage.value)
-//
-//   if (throttle_search === true) return
-//   if (search_text.length < 1) return
-//
-//   throttle_search = true
-//   // console.log('searching', search_text)
-//
-//   if (currentSearchType.value === 'movie' || currentSearchType.value === 'tv') {
-//     setTimeout(async function () {
-//       let searchResult = await axios.get(`https://api.themoviedb.org/3/search/${currentSearchType.value}?api_key=${apiKey}&language=en-US&query=${search_text}`)
-//           .then(response => {
-//
-//             if (response.data['results'].length < 1) {
-//               throttle_search = false
-//               return
-//             }
-//
-//             let simple_data = response.data['results'][currentSearchPage.value]
-//
-//             return axios.get(`https://api.themoviedb.org/3/${currentSearchType.value}/${simple_data['id']}?api_key=${apiKey}&language=en-US&append_to_response=credits,images&include_image_language=en,null`)
-//                 .then(response => {
-//                   const full_data = response.data
-//                   // console.log('full_data', full_data)
-//
-//                   //replace genres
-//                   simple_data['genres'] = full_data['genres'].map(a => a.name)
-//                   delete simple_data['genre_ids']
-//
-//                   // add others
-//                   simple_data['media_type'] = currentSearchType.value
-//                   // simple_data['date_rated'] = new Date().toISOString().slice(0, 10)
-//                   simple_data['images'] = full_data['images']
-//                   simple_data['runtime'] = full_data['runtime']
-//
-//                   // tv exceptions
-//                   if (currentSearchType.value === 'tv') {
-//
-//                     simple_data['title'] = full_data['name']
-//                     delete simple_data['name']
-//
-//                     simple_data['release_date'] = full_data['first_air_date']
-//                     delete simple_data['first_air_date']
-//                   }
-//
-// /*                  // console.log(simple_data)*/
-// /*                  throttle_search = false*/
-// /*                  return simple_data*/
-//                 })
-//           })
-//
-//       if (searchResult !== undefined) MovChanges.value = searchResult
-//
-//       await checkInDb()
-//
-//     }, 300)
-//   }
-//   if (currentSearchType.value === 'manga') {
-//
-//     setTimeout(async function () {
-//           // console.log('searching manga')
-//           let searchResult = await axios.get(`https://api.mangadex.org/manga?title=${search_text}&order%5Brelevance%5D=desc&includes[]=cover_art&limit=20`)
-//               .then(response => {
-//
-// /*                // console.log('all found', response.data.data)*/
-//
-// /*                if (response.data.data.length < 1) {*/
-// /*                  throttle_search = false*/
-// /*                  return*/
-// /*                }*/
-//
-// /*                if (response.data.data[currentSearchPage.value] === undefined) {*/
-// /*                  throttle_search = false*/
-// /*                  return*/
-// /*                }*/
-//
-// /*                let simple_data = response.data.data[currentSearchPage.value]['attributes']*/
-//                 let all_data = response.data.data[currentSearchPage.value]
-//                 let formatted_data = {}
-//                 console.log('simple_data', simple_data)
-//                 // console.log('all_data', all_data)
-//
-//                 if (simple_data['title']['en'] !== undefined) formatted_data['title'] = simple_data['title']['en']
-//                 if (simple_data['title']['en'] === undefined) formatted_data['title'] = simple_data['title']['ja']
-//
-//                 formatted_data['manga_id'] = all_data['id']
-//                 formatted_data['contentRating'] = simple_data['contentRating']
-//                 formatted_data['release_date'] = String(simple_data['year'] + '-01-01')
-//                 formatted_data['overview'] = simple_data['description']['en']
-//                 formatted_data['links'] = simple_data['links']
-//                 formatted_data['media_type'] = 'manga'
-//                 formatted_data['genres'] = []
-//                 formatted_data['genres'] = simple_data['tags'].map((elem) => {
-//                   if (elem['attributes']['group'] === 'genre') {
-//                     return elem['attributes']['name']['en']
-//                   }
-//                 }).filter(Boolean)
-//
-//                 formatted_data['images'] = {'posters': []}
-//
-//                 console.log('returned formatted', formatted_data)
-//                 throttle_search = false
-//                 return formatted_data
-//               })
-//
-//           if (searchResult !== undefined) MovChanges.value = searchResult
-//
-//           await axios.get(`https://api.mangadex.org/cover?limit=100&manga%5B%5D=${MovChanges.value['manga_id']}`)
-//               .then(response => {
-//                 // console.log('covers', response.data.data)
-//                 MovChanges.value['images']['posters'] = response.data.data.map((elem) => {
-//                   return {
-//                     'file_path': `${MovChanges.value['manga_id']}/${elem['attributes']['fileName']}`,
-//                     'volume': elem['attributes']['volume']
-//                   }
-//                 })
-//                 MovChanges.value['images']['posters'].sort((a, b) => a.volume - b.volume)
-//                 MovChanges.value['poster_path'] = MovChanges.value['images']['posters'][0]['file_path']
-//               })
-//
-//           await axios.get(`https://api.mangadex.org/statistics/manga/${MovChanges.value['manga_id']}`)
-//               .then(response => {
-//                 // console.log('stats', response.data['statistics'][MovChanges.value['manga_id']])
-//                 MovChanges.value['vote_average'] = response.data['statistics'][MovChanges.value['manga_id']]['rating']['average']
-//               })
-//
-//           await checkInDb()
-//         },
-//         300
-//     )
-//   }
-// }
-// function checkInDb() {
-//   return axios.post(`${current_api}/media/check_dupe/`, MovChanges.value)
-//       .then(response => {
-//         console.log('dupe check', response.statusText)
-//         if (response.statusText === 'True') {
-//           presentInDb.value = true
-//         }
-//         if (response.statusText === 'False') {
-//           presentInDb.value = false
-//         }
-//       })
-// }
-
 // async function refreshData() {
 //   if (currentSearchType.value === 'manga') {
 //     let searchResult = await axios.get(`https://api.mangadex.org/manga?ids%5B%5D=${MovChanges.value['manga_id']}&order%5Brelevance%5D=desc&includes[]=cover_art&limit=20`)
@@ -289,15 +140,10 @@ function addMovie(button) {
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`)
+        } else {
+          button.target.disabled = false
+          closeHelper()
         }
-        return response.json()
-      })
-
-      // Process the returned JSON data
-      .then(data => {
-        button.target.disabled = false
-        closeHelper()
-        if (devMode) console.log(data);
       })
 
       // Handle any errors that occurred during the fetch
@@ -325,11 +171,11 @@ function delMovie(button) {
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`)
+        } else {
+          button.target.disabled = false
+          closeHelper()
+          if (devMode) console.log('media deleted');
         }
-
-        button.target.disabled = false
-        closeHelper()
-        if (devMode) console.log('media deleted');
       })
 
       // Handle any errors that occurred during the fetch
@@ -378,8 +224,16 @@ function checkInDb() {
 
       // Handle http error
       .then(response => {
-        // presentInDb.value = response.json();
-        console.log(response)
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+        return response.json()
+      })
+
+      // Process the returned JSON data
+      .then(data => {
+        presentInDb.value = data['result'];
+        if (devMode) console.log(data);
       })
 
       // Handle any errors that occurred during the fetch
@@ -389,13 +243,11 @@ function checkInDb() {
 }
 
 function changePoster(input) {
-  if (MovChanges.value['images'] === undefined) return
-  if (MovChanges.value['images']['posters'] === undefined) return
 
   // console.log('changing poster')
-  if (input <= MovChanges.value['images']['posters'].length) {
+  if (input <= MovChanges.value['posters'].length) {
     currentPoster.value = input
-    MovChanges.value['poster_path'] = MovChanges.value['images']['posters'][currentPoster.value]['file_path']
+    MovChanges.value['poster_path'] = MovChanges.value['posters'][currentPoster.value]['file_path']
   }
   console.log('posters', input, currentPoster.value)
 }
@@ -448,12 +300,12 @@ function closeHelper() {
     <div class="main_win">
 
       <div v-if="MovChanges">
-        <div class="poster_preview box_wrapper" v-if="MovChanges['images']"
+        <div class="poster_preview box_wrapper" v-if="MovChanges['posters']"
              style="overflow: scroll; height:90vh; width: 10vw">
           <div class="poster_box" style="width: 9vw"
-               v-for="(poster,index) in MovChanges['images']['posters']"
+               v-for="(poster,index) in MovChanges['posters']"
                :key="index">
-            <img v-if="currentSearchType === 'movies'" v-lazy="`https://image.tmdb.org/t/p/w500${poster['file_path']}`"
+            <img v-if="currentSearchType !== 'manga'" v-lazy="`https://image.tmdb.org/t/p/w500${poster['file_path']}`"
                  @click="changePoster(index)" style="width: 100%;">
             <img v-if="currentSearchType === 'manga'"
                  v-lazy="`https://uploads.mangadex.org/covers/${poster['file_path']}.256.jpg`"
@@ -482,7 +334,7 @@ function closeHelper() {
         <div class="metadata box_wrapper input_tag_description">
           <!--      Rating-->
           <label for="rating_input">Rating</label>
-          <input type="number" id="rating_input"
+          <input type="number" id="rating_input" :value="MovChanges['my_rating']"
                  @change="MovChanges['my_rating'] = String($event.target.value)">
 
           <!--      Region-->
@@ -511,6 +363,7 @@ function closeHelper() {
               </select>
             </form>
           </div>
+
           <div v-if="mediaType==='manga'">
             <label for="re_read">Re-read</label>
             <input id="re_read" type="number" @input="MovChanges['re_read'] = String($event.target.value)">
@@ -522,7 +375,6 @@ function closeHelper() {
           <label for="date_rated_input">Date rated</label>
           <input type="date" id="date_rated_input" :value="data['date_rated'] ? data['date_rated'] : null"
                  @change="MovChanges['date_rated'] = String($event.target.value)">
-
         </div>
 
         <div class="box_wrapper">
@@ -585,8 +437,8 @@ function closeHelper() {
       </div>
 
       <div class="upload box_wrapper" v-if="MovChanges">
-        <button @click="updateMedia($event)" v-if="MovChanges['my_rating']" style="width: 100%">upload changes</button>
         <button @click="closeHelper" style="width: 100%">Close</button>
+        <button @click="updateMedia($event)" v-if="MovChanges['my_rating']" style="width: 100%">upload changes</button>
       </div>
 
     </div>
