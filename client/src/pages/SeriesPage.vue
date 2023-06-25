@@ -49,7 +49,7 @@ let filters = ref({
 let ratingDesc = {
   9: 'Near perfect masterpiece',
   8: 'Extremely good',
-  7: 'Quite good',
+  7: 'Very good',
   6: 'Good with flaws',
   5: "Meh",
   4: 'Bad',

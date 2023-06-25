@@ -52,7 +52,7 @@ function build_cover_request(info) {
 
 <!--      <div class="gradient_fill"></div>-->
 
-      <TagContainer class="tag_container" v-if="data['tags']!==undefined" :tag_input="data['tags']"></TagContainer>
+      <TagContainer class="tag_container" v-if="data['tags']!==null" :tag_input="data['tags']"></TagContainer>
 
       <div v-if="devMode" class="settings">
         <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
