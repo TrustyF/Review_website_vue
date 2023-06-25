@@ -113,6 +113,7 @@ function build_cover_request(info) {
   min-height: 340px;
   /*max-width: 400px;*/
   /*min-width: 200px;*/
+  color: white;
 
   border-radius: 8px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);

@@ -14,8 +14,6 @@ let mediaRanges = inject('mediaRanges')
 function get_media_ranges() {
 
   const url = new URL(`${current_api}/media/get_rating_ranges`)
-  url.searchParams.set('test', '1')
-
   fetch(url)
 
       .then(response => {
