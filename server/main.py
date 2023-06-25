@@ -3,10 +3,13 @@ import random
 from flask import Flask, Request, request, Response
 from flask_cors import CORS
 # from flask_caching import Cache
+import flask_color
 
 from storage import store, tag_presets
 
 app = Flask(__name__)
+app.config['DEBUG'] = True
+flask_color.init_app(app)
 # app.config['CACHE_TYPE'] = "FileSystemCache"
 # app.config['CACHE_DIR'] = "cache"
 CORS(app)
@@ -24,20 +27,29 @@ def get_all():
 
 @app.route('/media/add', methods=["POST"])
 def add():
+    print('add media', request.json)
     media_store[request.json['media_type']].add_media(request.json)
-    return 200
+    return 'OK'
 
 
-@app.route('/media/update', methods=["PUT"])
+@app.route('/media/update', methods=["POST"])
 def update():
     media_store[request.json['media_type']].update_media(request.json)
-    return 200
+    return 'OK'
 
 
-@app.route('/media/delete', methods=["DELETE"])
+@app.route('/media/delete', methods=["POST"])
 def delete():
     media_store[request.json['media_type']].del_media(request.json)
-    return 200
+    return 'OK'
+
+
+@app.route('/media/search', methods=["GET"])
+def search():
+    title = request.args.get('title')
+    page = request.args.get('page')
+    media_type = request.args.get('type')
+    return media_store[media_type].search_media(title, page)
 
 
 # Get covers
@@ -57,10 +69,11 @@ def get_rating_range():
     return store.gather_rating_ranges()
 
 
-@app.route('/media/check_dupe', methods=["POST"])
+@app.route('/media/check_dupe', methods=["GET"])
 def check_dupe():
-    print('check_dupe')
-    return media_store[request.json['media_type']].check_dupe(request.json), 200
+    media_id = request.args.get('media_id')
+    media_type = request.args.get('media_type')
+    return media_store[media_type].check_dupe(media_id)
 
 
 # Selective picks
@@ -91,4 +104,5 @@ def get_recent_release():
 #         return self.presets.del_preset(req), 200
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    media_store['manga'].cleanup()

@@ -1,13 +1,16 @@
+import datetime
+import json
 import os
 import time
 
 from tinydb import TinyDB, Query, where, operations
 import re
-from flask import Response, Request
+from flask import Response, Request, make_response
 import requests
 
 import sort_funcs
 import filter_funcs
+from constants import TMDB_API_KEY
 
 
 class Presets:
@@ -39,10 +42,10 @@ class StorageManager:
         out = {}
         for media in self.stores:
             out[self.stores[media].media_type] = self.stores[media].get_media_rating_range()
-
         return out
 
 
+# noinspection PyMethodMayBeStatic
 class Media:
 
     def __init__(self, media_type):
@@ -69,18 +72,26 @@ class Media:
 
     # operations
     def add_media(self, data):
-        self.db.insert(data)
+        self.db.insert(data['data'])
 
     def update_media(self, data):
-        new_data = data['newData']
-        old_data = data['oldData']
-
-        title_query = Query().title == str(new_data['title'])
-        self.db.update(new_data, title_query)
+        query = Query().id == str(data['data']['id'])
+        self.db.update(data['data'], query)
 
     def del_media(self, data):
-        title_query = Query().title == str(data['title'])
-        self.db.remove(title_query)
+        query = Query().id == str(data['id'])
+        self.db.remove(query)
+
+    def check_dupe(self, data):
+        print('checking', data['data']['id'])
+        query = Query().id == (str(data['data']['id']))
+        entries = self.db.search(query)
+        print(entries)
+        if len(entries) > 0:
+
+            return json.dumps(True)
+        else:
+            return json.dumps(False)
 
     # post requests
     def load_more(self):
@@ -106,8 +117,11 @@ class Media:
         my_ratings = []
 
         for mov in self.db:
-            avg_ratings.append(float(mov['vote_average']))
-            my_ratings.append(float(mov['my_rating']))
+            try:
+                avg_ratings.append(float(mov['vote_average']))
+                my_ratings.append(float(mov['my_rating']))
+            except KeyError as e:
+                print(mov, 'has no avg rating', e)
 
         tuple_avg = (min(avg_ratings), max(avg_ratings))
         tuple_rating = (min(my_ratings), max(my_ratings))
@@ -119,21 +133,6 @@ class Media:
 
     def get_media_genres(self):
         pass
-
-    # def get_cover(self, media_id, media_title):
-    #     # print('get cover', media_id, media_title)
-    #     result = None
-    #
-    #     for mov in self.list_db:
-    #         if mov['id'] == media_id:
-    #             result = mov
-    #         elif mov['title'] == media_title:
-    #             result = mov
-    #
-    #     request = f'https://image.tmdb.org/t/p/w500{result["poster_path"]}'
-    #     response = requests.get(request)
-    #
-    #     return response.content
 
     # selective pickers
     def get_rand_genre(self, data):
@@ -175,23 +174,9 @@ class Media:
         sort_arr = sort_funcs.sort_by_my_rating(sort_arr)
         return sort_arr
 
+
     def culling(self, f_arr, max_items):
         return f_arr[:max_items]
-
-    def check_dupe(self, data):
-        if data == {}:
-            return
-
-        print('checking dupe ', data['title'])
-        title_query = Query().title.matches(str(data['title']))
-        entries = self.db.search(title_query)
-
-        if len(entries) > 0:
-            state = True
-        else:
-            state = False
-
-        return state
 
     # others
     def transfer_old(self):
@@ -202,6 +187,37 @@ class Media:
 class Movies(Media):
     def __init__(self):
         super().__init__(media_type='movie')
+
+    def search_media(self, f_title, f_page):
+        title = f_title
+        page = int(f_page)
+
+        # phase 1
+        request = f'https://api.themoviedb.org/3/search/{self.media_type}?api_key={TMDB_API_KEY}' \
+                  f'&language=en-US&query={title}'
+        response = requests.get(request).json()
+
+        if len(response['results']) < 1:
+            return
+
+        simple_data = response['results'][page]
+
+        # phase 2
+        extra_request = f'https://api.themoviedb.org/3/{self.media_type}/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
+                        f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
+        full_data = requests.get(extra_request).json()
+
+        # format data
+        simple_data['genres'] = [x['name'] for x in full_data['genres']]
+        del simple_data['genre_ids']
+
+        # add extra info
+        simple_data['media_type'] = 'movie'
+        simple_data['date_rated'] = datetime.date.today()
+        simple_data['images'] = full_data['images']
+        simple_data['runtime'] = full_data['runtime']
+
+        return simple_data
 
     # getters
     # def get_cover(self, media_id):
@@ -236,9 +252,47 @@ class Series(Media):
     def __init__(self):
         super().__init__(media_type='tv')
 
+    def search_media(self, f_title, f_page):
+        title = f_title
+        page = int(f_page)
+
+        # phase 1
+        request = f'https://api.themoviedb.org/3/search/{self.media_type}?api_key={TMDB_API_KEY}' \
+                  f'&language=en-US&query={title}'
+        response = requests.get(request).json()
+
+        if len(response['results']) < 1:
+            return
+
+        simple_data = response['results'][page]
+
+        # phase 2
+        extra_request = f'https://api.themoviedb.org/3/{self.media_type}/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
+                        f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
+        full_data = requests.get(extra_request).json()
+
+        # format data
+        simple_data['genres'] = [x['name'] for x in full_data['genres']]
+        del simple_data['genre_ids']
+
+        # add extra info
+        simple_data['media_type'] = 'movie'
+        simple_data['date_rated'] = datetime.date.today()
+        simple_data['images'] = full_data['images']
+        simple_data['runtime'] = full_data['runtime']
+
+        # cleanup
+        simple_data['title'] = full_data['name']
+        del simple_data['name']
+
+        simple_data['release_date'] = full_data['first_air_date']
+        del simple_data['first_air_date']
+
+        return simple_data
+
     def cleanup(self):
         for mov in self.db.all():
-            print(mov['title'])
+            # print(mov['title'])
 
             if 'images' not in mov:
                 return
@@ -281,7 +335,78 @@ class Manga(Media):
     def __init__(self):
         super().__init__(media_type='manga')
 
+    # getters
+    def search_media(self, f_title, f_page):
+        title = f_title
+        page = int(f_page)
+
+        # phase 1
+        request = f'https://api.mangadex.org/manga?title={title}' \
+                  f'&order%5Brelevance%5D=desc&includes[]=cover_art&limit=20'
+        response = requests.get(request).json()
+
+        if response['result'] != 'ok':
+            return make_response({}, 404)
+
+        if len(response['data']) == 0:
+            return make_response({}, 404)
+
+        if len(response['data']) < page:
+            return make_response({}, 404)
+
+        simple_data = response['data'][page]['attributes']
+        all_data = response['data'][page]
+        formatted_data = {}
+
+        # phase 2
+
+        # clean titles
+        if 'en' in simple_data['title']:
+            formatted_data['title'] = simple_data['title']['en']
+        elif 'ja' in simple_data['title']:
+            formatted_data['title'] = simple_data['title']['ja']
+
+        # clean desc
+        if 'en' in simple_data['description']:
+            formatted_data['overview'] = simple_data['description']['en']
+        else:
+            formatted_data['overview'] = 'No description available'
+
+        formatted_data['id'] = all_data['id']
+        formatted_data['contentRating'] = simple_data['contentRating']
+        formatted_data['release_date'] = str(simple_data['year']) + '-01-01'
+        formatted_data['links'] = simple_data['links']
+        formatted_data['media_type'] = 'manga'
+        formatted_data['genres'] = [x['attributes']['name']['en'] for x in simple_data['tags'] if
+                                    x['attributes']['group'] == 'genre']
+
+        formatted_data['images'] = {'posters': []}
+
+        # phase 3
+
+        request = f'https://api.mangadex.org/cover?limit=100&manga%5B%5D={formatted_data["id"]}'
+        response = requests.get(request).json()
+
+        formatted_data['images']['posters'] = [
+            {
+                'file_path': f'{formatted_data["id"]}/{x["attributes"]["fileName"]}',
+                'volume': x['attributes']['volume']
+            }
+            for x in response['data']]
+        sorted(formatted_data['images']['posters'], key=lambda x: x['volume'])
+
+        formatted_data['poster_path'] = formatted_data['images']['posters'][0]['file_path']
+
+        # phase 4
+
+        request = f'https://api.mangadex.org/statistics/manga/{formatted_data["id"]}'
+        response = requests.get(request).json()
+        formatted_data['vote_average'] = response['statistics'][formatted_data["id"]]['rating']['average']
+
+        return formatted_data
+
     # helpers
+
     def filter(self, f_arr):
         return f_arr.search(
             filter_funcs.rating_filter(self.filters) &
@@ -312,9 +437,15 @@ class Manga(Media):
 
     # getters
     def get_cover(self, poster_path):
-        print('get cover', poster_path)
+        # print('get cover', poster_path)
         request = f'https://uploads.mangadex.org/covers/{poster_path}.256.jpg'
         return requests.get(request).content
+
+    def cleanup(self):
+        print('testr')
+        for mov in self.db:
+            mov['id'] = mov['manga_id']
+            del mov['manga_id']
 
 
 class Anime(Media):
