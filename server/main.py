@@ -52,6 +52,13 @@ def search():
     return media_store[media_type].search_media(title, page)
 
 
+@app.route('/media/extra_posters', methods=["GET"])
+def extra_posters():
+    media_id = request.args.get('media_id')
+    media_type = request.args.get('media_type')
+    return media_store[media_type].search_extra_posters(media_id)
+
+
 # Get covers
 @app.route('/media/cover', methods=["GET"])
 # @cache.cached(timeout=3000)
@@ -88,6 +95,8 @@ def get_recent_release():
     return media_store[request.json['media_type']].get_recent_release(request.json), 200
 
 
+# tags
+
 # class Tags:
 #     def __init__(self):
 #         self.presets = tag_presets
@@ -104,6 +113,5 @@ def get_recent_release():
 #         return self.presets.del_preset(req), 200
 
 if __name__ == '__main__':
-    media_store['anime'].refresh()
-    # app.run(debug=True)
-
+    # media_store['anime'].refresh()
+    app.run(debug=True)

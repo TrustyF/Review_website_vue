@@ -75,8 +75,9 @@ class Media:
     def add_media(self, data):
         self.db.insert(data['data'])
 
+    # noinspection PyTypeChecker
     def update_media(self, data):
-        query = Query().id == str(data['data']['id'])
+        query = Query().id == data['data']['id']
         self.db.update(data['data'], query)
 
     def del_media(self, data):
@@ -84,10 +85,8 @@ class Media:
         self.db.remove(query)
 
     def check_dupe(self, media_id):
-        print('checking', self.media_type, media_id)
         query = Query().id == str(media_id)
         entries = self.db.search(query)
-        print(len(entries))
         if len(entries) > 0:
             return {'result': True}
         else:
@@ -151,6 +150,25 @@ class Media:
         }
 
         return formatted_data
+
+    def search_extra_posters(self, f_id):
+
+        request = f'https://api.themoviedb.org/3/find/{f_id}?external_source=imdb_id'
+        headers = {
+            "accept": "application/json",
+            "Authorization": 'Bearer ' + TMDB_ACCESS_TOKEN
+        }
+
+        response = requests.get(request, headers=headers).json()
+        simple_data = response[f'{self.media_type}_results'][0]
+
+        extra_request = f'https://api.themoviedb.org/3/{self.media_type}/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
+                        f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
+        full_data = requests.get(extra_request).json()
+
+        posters = [x['file_path'] for x in full_data['images']['posters']]
+
+        return posters
 
     # others
     def refresh(self):
@@ -438,6 +456,25 @@ class Manga(Media):
         formatted_data['vote_average'] = response['statistics'][formatted_data["id"]]['rating']['average']
 
         return formatted_data
+
+    def search_extra_posters(self, f_id):
+
+        request = f'https://api.mangadex.org/cover?limit=100&manga%5B%5D={f_id}'
+        response = requests.get(request).json()
+
+        #  fix volumes none
+        for poster in response["data"]:
+            if poster["attributes"]['volume'] is None:
+                poster["attributes"]['volume'] = str(len(response["data"]))
+
+        # full_data = sorted(response["data"], key=lambda x: x["attributes"]["volume"])
+        full_data = sorted(response["data"], key=lambda x: '{0:0>8}'.format(x["attributes"]["volume"]).lower())
+
+        posters = []
+        for image in full_data:
+            posters.append(f"{f_id}/{image['attributes']['fileName']}")
+
+        return posters
 
     # helpers
 
