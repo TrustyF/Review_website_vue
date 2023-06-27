@@ -104,6 +104,6 @@ def get_recent_release():
 #         return self.presets.del_preset(req), 200
 
 if __name__ == '__main__':
-    # media_store['manga'].refresh()
-    app.run(debug=True)
+    media_store['anime'].refresh()
+    # app.run(debug=True)
 
