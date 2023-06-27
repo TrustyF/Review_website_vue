@@ -1,172 +1,46 @@
 {
   "_default": {
-    "589": {
-      "poster_path": "/49WJfeN0moxb9IPfGn8AIqMGskD.jpg", "media_type": "tv", "vote_average": 8.637, "seasons": 4,
-      "episodes": 34, "release_date": "2016-07-15", "title": "Stranger Things", "runtime": 50, "my_rating": "6",
-      "imdb_url": "https://www.imdb.com/title/tt4574334/", "genres": ["Drama", "Sci-Fi & Fantasy", "Mystery"],
-      "date_rated": "2017-11-23", "adult": false, "id": 66732, "in_production": true, "name": "Stranger Things",
-      "number_of_episodes": 34, "number_of_seasons": 4, "original_language": "en", "original_name": "Stranger Things",
+    "733": {
+      "title": "Stranger Things", "date_rated": "2017-11-23", "genres": ["Drama", "Sci-Fi & Fantasy", "Mystery"],
+      "id": 66732, "media_type": "tv", "my_rating": "6",
       "overview": "When a young boy vanishes, a small town uncovers a mystery involving secret experiments, terrifying supernatural forces, and one strange little girl.",
-      "popularity": 189.023, "vote_count": 15484, "posters": [
-        "/49WJfeN0moxb9IPfGn8AIqMGskD.jpg", "/uOOtwVbSr4QDjAGIifLDwpb2Pdl.jpg", "/q6Iy4FRCpOX3J5o0WfmtcypwLvt.jpg",
-        "/lXS60geme1LlEob5Wgvj3KilClA.jpg", "/vNJ95BMCzIBJZhW0IEoxzOoW53P.jpg", "/uKYUR8GPkKRCksczYDJb3pwZauo.jpg",
-        "/olAK0DWZmTpqRTRyNpqFUxKGbw6.jpg", "/zFE44Qks8F1IFu7qkqxNjJoelvT.jpg", "/lSbgLDlokOAwUhzzIqqxb2pNbM0.jpg",
-        "/wtH4hzhY2hbB1WVp6GctxBg2KMa.jpg", "/b5dIwR7Iqoi7URlrDKJvVJo33dG.jpg", "/b6HFla5Czn7qEzOCLIAi0XuU58i.jpg",
-        "/hvCKOXBqbubrHuKgnmQg0nTt8al.jpg", "/87mcli3G67L6dHAks5pmB8oYX8R.jpg", "/uMwn8LlJnNC943u45BzSRd2G8Df.jpg",
-        "/yAcSyazlEJ7lNRCfhjr2DS2Z6Cd.jpg", "/atKeuYoN7U6kk3QbcIBHRQ2swxD.jpg", "/iZEkgxXOc9F1Xi9IK1TvguLj5nb.jpg",
-        "/97kRxryosPhmATVJcG2FjCewaS9.jpg", "/3ihOfXDGsuG6l1QqYJcVgBJ3Vlr.jpg", "/x2LSRK2Cm7MZhjluni1msVJ3wDF.jpg",
-        "/9zNr6mET8bHAhXzwKuGMnT7OWKU.jpg", "/g3nzhHBDTrJ7RWhzozFTYFjvRbd.jpg", "/g0Q6e9IIfs0tsKi8mf8CwF5L4ZA.jpg",
-        "/iyl4jUlmBZphjz0ygbWhIPUmS4p.jpg", "/ynmNOaQ3CGZIfUZg5ho4Jpvi7wI.jpg", "/3v3f9F07m8dWvepcU6DL4Jvq3Fp.jpg",
-        "/joCCbrgiXbVxcpnWOzrIwNz8tC6.jpg", "/tgZTaCcBLpMoHiBNfFItUEfkhnz.jpg", "/lrgIfFPl19rD5paXl445Bsmpcd7.jpg",
-        "/pHl4TWzJB6YyRrOYYCvaYbhz5sr.jpg", "/1ntBCO5BPxwzo4ID6dcdBrCJGwm.jpg", "/mXDt2YeoTZfIkJAtqh00HauHViD.jpg",
-        "/ahhwpiEyPKFzEdAAT0btmyXUy3U.jpg", "/aCg5j4wjwVvSccSdX7IBvwkoxS1.jpg", "/kpZHlOFAQitAj8f9gGhKBaIYWfJ.jpg",
-        "/r2w5UNf2mO2Mdl4q6HopuBms6XM.jpg", "/2Ce4oPvzq2hTP2ZCS5eypPIVgR8.jpg", "/iN4wjqVuGuE1TYasamRkXAbWIE1.jpg",
-        "/mFemXG0pZAtH8DUvCxCT64mmMxL.jpg", "/fHL9ijWMLOoiiGvg1dPQL8yFSLt.jpg", "/vgRDBE5k7AJcUgwolw9lVH85oLa.jpg",
-        "/zNPV2gO6T3a0gSXL78N7AcuOLoo.jpg", "/oUElYcte4YlTmhFWmZNxc96G0QG.jpg", "/eGLHkWJeJJv7tauR3MHf1vZ2fpM.jpg",
-        "/3wYF9cgb3brX3ywYdKGL1W1HiCs.jpg", "/pwDBcbHO3px6Y7AkbXvOBnAQukz.jpg", "/1phjbzv4NSyISW7XYg31Y7I9Dcn.jpg",
-        "/75zl1F4ACQXa5XYXzQaV9nWUeIh.jpg", "/1wnAa9NC8972yBr8zHOtBYRk0YA.jpg", "/oMkVNujGNmGmfNeHwxcUF6mncQJ.jpg",
-        "/eOdiK8l7tTOIHLBywUnZBEHVhTr.jpg", "/8cLaszAUHG7EyRpmc3oQ3jwuf7V.jpg", "/9URpkzaMMLK5bdJ1a5HBafzYEWj.jpg",
-        "/q4ocQsuDe6DbFdEKc17Xb2AHbZh.jpg", "/dOzW7UEVlQJs1WtNHfIe9JzcKKv.jpg", "/qxIiOlASiBYzIJDkJhz1rElzWOP.jpg",
-        "/ja1QVqX2qN6lgBznuiRPf3I3wyk.jpg", "/vFqqZoO3OcidBOk0l8jd4wu6YB3.jpg", "/gysDiYJuvAmIgawZuXzH63TzynP.jpg",
-        "/x9FXBmsqrSQmTA6vkRCmp0s6Dbp.jpg", "/vqIzZJKlphpp06rSphsH1uBJAsD.jpg", "/t0hibpHpaNqEG4ZZKr3o40rkVJo.jpg",
-        "/AvBscT0YXCEe59zlExtHxsVg8Iq.jpg", "/jq7oqya75bA4QtuPDcOJi69T7Sz.jpg", "/ryzw7ZUoeKdQMKwoj4Bf03micWQ.jpg",
-        "/gfRLq4iRjlCFXqqbTw2YZBSWdJt.jpg", "/kU3VbLWkTvwuTsiqcKyTqmtuHGN.jpg", "/vzNktpUH7PrLVZ5rbeyhrRsf6gE.jpg",
-        "/m5S9H257DFrzBHUAwJRyaV0kfXF.jpg", "/6SUm4COl0pbLOa9md69xev6HHjT.jpg", "/9OrDZGDqK1cH9zOus3kBhpCxWW4.jpg",
-        "/eOOeosYawtJZ4E1S7zzV2F6gq55.jpg", "/ouWcNeaFXL4CEReT73obyxPXugL.jpg", "/ydIxqLeyKeDLl1aqIQhEN5MQnDM.jpg",
-        "/thugdJAIsmW6dUvRppId7BuTsTr.jpg", "/7p8kRed7uIwJWNdvJ1nAZ4cRkWo.jpg", "/hBaHE6KHziURdQlDq561H5GdmUa.jpg",
-        "/iw4bwhbqfFEZgpuQNK3kFkhu7Vy.jpg", "/jGtYXXps6LfsEKHIkRaQAIUnlWq.jpg", "/9IqpQjNs0iy8OaYOR4PiXWbY4Hi.jpg",
-        "/xSwEQxYNeNqHZcLg4Ae6EW7w5ZM.jpg", "/MPw2zpGnJjW3Tl1mZXGjYNlx5X.jpg", "/zAnyuJG3VaBY70Kc5k5t9qoCZSV.jpg",
-        "/2vMKrzpGITTrmFKnze9KqgAl7Y9.jpg", "/t0XkofSeQ4mtZr2AT5380DSMMro.jpg", "/v3RY9KSwYrrOCgjOnqgd21RUNWG.jpg",
-        "/rLHv5z0JJBihDW4WYGnxGFnOfnj.jpg", "/9zJBe7wyVrdTaNPmQKjQ0ihYuHh.jpg", "/tASkCVhAyqIzaEtZ3Dtqv9vBOeb.jpg",
-        "/lSl4DQQZlIKHbP8tStikaEqg6n8.jpg", "/xnO8vgv21Ofeo73WKX5UvcwibxJ.jpg", "/cZihxAPhsad3GFgZNiOyUAiSi9m.jpg",
-        "/rDsCdqis2FDN5UuSpczcXtGDQB4.jpg", "/phmyl4fbEPsYVjYD79fpEcDB6jM.jpg", "/xvSUOU0IEbLka8RixocDfwgkdWZ.jpg",
-        "/y787MvCL0MNCeZYKxl1ibH8jHkN.jpg", "/9boDDj5dBzfHuokvRW2bdGEtaP3.jpg", "/gBq5FoPpy6zfWXQx9jkCAusYzjU.jpg",
-        "/kOuPFo1mHh1mhnZhBl69JeeEKMa.jpg", "/zXY747JwbNh1RPSTtlRE1MjNlvI.jpg", "/8W53miVBj5OYVPhnZWttvgM9yDZ.jpg",
-        "/xyGpEnLUMZ6UgnYT0tI4cMJIlWP.jpg", "/bsDwUqePAC69CTcNWPETnIABy49.jpg", "/mRCkeQqZusYInkO8H7cXISLeRQJ.jpg",
-        "/wWBzfHaytP6d3pmC9GhCWWpJGdj.jpg", "/psT7TW2EpD7jrxbbl2APPmbcbwS.jpg", "/3nvN5PZK7wb4TRLp7TIQle8h21j.jpg",
-        "/8BuPURS6xkx3sH80b6yS7SJwaNt.jpg", "/wWNIRSVRGxKtFa1TqiyqVaRLmlR.jpg", "/xl6EAZcEO0wgYhf7hCfdWMnKai0.jpg",
-        "/cZybVIBlR1Su9LKh6cgWEb7HENv.jpg", "/aPsRWQd72hGJPZJTrfi95Jwoz9M.jpg", "/63pSXrvtXhGoHAZ68peN7Le7BoH.jpg",
-        "/wJG5FeCzwLmSKkClWYRymKpG9KJ.jpg", "/z0gOvohJPTlQdy324TEdg68B0ss.jpg", "/dLK5snN0BFxPzdbrAqO7B3ilsMh.jpg",
-        "/rWhKTfDnrT7LG0jJqWQYBHMaMWa.jpg", "/lltliS43YlP6b173weoypxrylEZ.jpg", "/sqtX2dwhcFgJozhs1Xmkzi0WbVe.jpg",
-        "/uAc35R8pBa7ykvDfgy1tQs76ETP.jpg", "/6ZzFtA0304kTPXOzNczwUmVnfhE.jpg", "/21744IxSk9875cHr07H0nghJ0eR.jpg",
-        "/fyENUvVtpcdgsbxNDBQC7MoTHRO.jpg", "/vfdiS3aGelaW1MBolsRyyrsZuML.jpg", "/pi8WsJtGKxuJHdp0m1W2wq7IvxW.jpg",
-        "/r8oTpfGnoFpVEb6Nei1tFb4S1mj.jpg", "/eRrzaybLiIArAmKajWqJmbDAd0C.jpg", "/LN81vduZflfl2ysMNJKjPNhdw3.jpg",
-        "/fHwQxEG8T0MAUmF8JWgCN8AX56r.jpg", "/3Emf1Nal5M3h3gsw8KGcs21IhNG.jpg", "/jS3pbMv7CCajFRd52eK77R0scku.jpg"
-      ]
-    }, "570": {
-      "poster_path": "/oBkwiozy3rnEXYy4AX2c9AWY6bx.jpg", "media_type": "tv", "vote_average": 5.6, "seasons": 5,
-      "episodes": 51, "release_date": "2010-11-18", "title": "Dick Figures", "runtime": 3, "my_rating": "7",
-      "imdb_url": "https://www.imdb.com/title/tt1901983/", "genres": ["Animation", "Comedy"],
-      "date_rated": "2017-09-29", "adult": false, "id": 35289, "in_production": false, "name": "Dick Figures",
-      "number_of_episodes": 51, "number_of_seasons": 5, "original_language": "en", "original_name": "Dick Figures",
+      "poster_path": "/49WJfeN0moxb9IPfGn8AIqMGskD.jpg", "release_date": "2016-07-15", "tags": null,
+      "vote_average": 8.629, "episodes": 34, "seasons": 4, "imdb_id": "tt4574334"
+    }, "734": {
+      "title": "Dick Figures", "date_rated": "2017-09-29", "genres": ["Animation", "Comedy"], "id": 35289,
+      "media_type": "tv", "my_rating": "7",
       "overview": "The series focuses on two stick figures named Red and Blue, who are best friends.",
-      "popularity": 5.237, "vote_count": 5, "posters": ["/oBkwiozy3rnEXYy4AX2c9AWY6bx.jpg"]
-    }, "594": {
-      "poster_path": "/eU1i6eHXlzMOlEq0ku1Rzq7Y4wA.jpg", "media_type": "tv", "vote_average": 8.48, "seasons": 3,
-      "episodes": 24, "release_date": "2019-11-12", "title": "The Mandalorian", "runtime": 0, "my_rating": "7",
-      "imdb_url": "https://www.imdb.com/title/tt8111088/",
-      "genres": ["Sci-Fi & Fantasy", "Action & Adventure", "Drama"], "date_rated": "2020-12-27", "adult": false,
-      "id": 82856, "in_production": true, "name": "The Mandalorian", "number_of_episodes": 24, "number_of_seasons": 3,
-      "original_language": "en", "original_name": "The Mandalorian",
+      "poster_path": "/zVT4erpjFeWbsZ0EcxQM5WDr7vg.jpg", "release_date": "2010-11-18", "tags": null,
+      "vote_average": 5.8, "episodes": 51, "seasons": 5, "imdb_id": "tt1901983"
+    }, "735": {
+      "title": "The Mandalorian", "date_rated": "2020-12-27",
+      "genres": ["Sci-Fi & Fantasy", "Action & Adventure", "Drama"], "id": 82856, "media_type": "tv", "my_rating": "7",
       "overview": "After the fall of the Galactic Empire, lawlessness has spread throughout the galaxy. A lone gunfighter makes his way through the outer reaches, earning his keep as a bounty hunter.",
-      "popularity": 556.82, "vote_count": 8961, "posters": [
-        "/eU1i6eHXlzMOlEq0ku1Rzq7Y4wA.jpg", "/sWgBv7LV2PRoQgkxwlibdGXKz1S.jpg", "/BbNvKCuEF4SRzFXR16aK6ISFtR.jpg",
-        "/x4b89IkzxfGnA26coS5nRpkEzPo.jpg", "/AhifyrSNkRVFMJ94CEMfBv1FaMz.jpg", "/sovNinySiSUgv7xGr2ax803R5i8.jpg",
-        "/2Z280AhbARbu7UTNMmiVI8zk4zZ.jpg", "/mUQ7Hc2Tsrs8aOLgLyUM9oWpFDe.jpg", "/vrxpwApFKUWKK0rwcaK8be5OVWK.jpg",
-        "/haOg2UTTiLBL7Qgw0bcVI1C8SMi.jpg", "/rTChPZw7Jyf4c20OZpN99QCRwkz.jpg", "/rAwwD29i8hOhvvxiO0wH8pQq4DS.jpg",
-        "/tQ07JcQg6dUX3RVFflF0F1saVjB.jpg", "/pSrV1tI8k2XLTc1I8ewQv82r0Nn.jpg", "/z4BCiJp2INv2i34XatIRuI2NlL5.jpg",
-        "/vlZz3lhUvTMXyLVzKlotRwHCkhv.jpg", "/1xO2UnWyxoyTrdvVDXW276LaHQc.jpg", "/b3zVRZ9R2QyV0klRESMLKaBwQqm.jpg",
-        "/1V4eFHJgMqP4NYJnx9YEz01OiaY.jpg", "/lY0y7u1Zb1Z99j0rIQpMxg5jLot.jpg", "/37PKG0IBg6zx4aVqRgVceiQ3jhR.jpg",
-        "/eQ8lrrhgcjtFiKZvZmChGN0e3lf.jpg", "/ra7x3hjUpL1p8QV5sFQks5HBsPz.jpg", "/jkMB7Cx5nPcTyoLg2yMUoDljTYm.jpg",
-        "/mMP137BTkVoBD9tv6gcOT43cI8C.jpg", "/4mY2tFYdO7el8jUwi5KVVy19B0N.jpg", "/3WI7ahsWGIrIZzOoy703uupzg2b.jpg",
-        "/xkYUpTPk87durYJmuh7uRgjZmeg.jpg", "/kkXe1qixFvNkyF3FvrbMjmIcsKC.jpg", "/b8u2HcOW9KZutkBI3iKTGRMp1Jr.jpg",
-        "/tmvRV1GlmVW0ELjoJ7sTyUS3qlH.jpg", "/vnrcb0H1k2PiXcaRpnUihKrUIBV.jpg", "/oFu9vP0GnByk8WuvSJxPtMTjv2e.jpg",
-        "/oBeoryaWHCBJ6CyXXZ6uxOtOGd6.jpg", "/kQxzJj4pAg7hRA4zukGGPJBiV09.jpg", "/mVpn8pacNZ5ar3zMNrJw08MZglS.jpg",
-        "/qz3AwAJmskyxt52Fubwz96EQcMX.jpg", "/ef3oklr1x8fEc4YqrRVunTnuQFj.jpg", "/wLfW4uwbiHR9dYxYZVxFy9xsAiq.jpg",
-        "/b7W24PoAtaABskcKBq7kqdqAHbp.jpg", "/AgXV6Jz9lUyTYKWYdfXE6npv1P0.jpg", "/gnMvm82IJqvJVsQm4cFN1JkLKLI.jpg",
-        "/8Fwk1GTxrt7i8d1VQ5aJZg5k2pD.jpg", "/lMCG9M9wxBSK7iHMvm1VfdCbWJC.jpg", "/zRjLX5cj4AjISGnJefgfcHAAc0i.jpg",
-        "/pkcQaBdG8Wl1kSjJP8TrqSJc6QD.jpg", "/xBTTiwo8brLEESo6UOgLGrf7qCL.jpg", "/ta1JkLPLcWdZxWBrjOwXB7a2UQw.jpg",
-        "/rexnm5Sy2HNvQV6m9DxeDoScmnv.jpg", "/wGSiwf3JG2fHtxe4GFwLWf4mCyV.jpg", "/d4Ja9AMFoWEtTPKFrzQac0ReYb.jpg",
-        "/sPsPezcK9mOne6mmxUMxNgviu6Q.jpg", "/a0KQsQS8Rs2D53Ha5INazIoU6qi.jpg", "/qrT2rEzUuaqdC2QOE28WK36ue9H.jpg",
-        "/6n8OCQlxUaiZGf0Y84SCixdqnmE.jpg", "/lX92TZSaPl7J3QZlfTLTCQddV19.jpg", "/8qud5pLb6Cgk4iOeqg7QrvA5Pf1.jpg",
-        "/q58SlmvkLhQ6m5TltCYQ2GnnIoF.jpg", "/syy87nUZZ554tfss2vEk1L4nLJv.jpg", "/koAq8twq3x5KAud7p3pY7CCZU3x.jpg",
-        "/2LibH7EwwQJgEggPjw2QaWfs8Za.jpg", "/lFIFx9e95RVpC5EPFnMiQL04LG0.jpg", "/5XJabHGBaH2qAZAE2kVKCmrnY70.jpg",
-        "/k13ORDZriI3baf1Y3cHxKR0wp6f.jpg", "/5JiZ6q3g2fCRuuOLGsp3F1gy6Jd.jpg", "/AhhVuvu87S6AHyhhoMvtIR0ywLp.jpg",
-        "/ho3Rj29XBxBmpTa3zdUCaoF1Zpb.jpg", "/rYMveNl7IW4Xgzkxt8Kjyt9Yyx9.jpg", "/mUPhzlmBeihbosLWnv6Cak18PKD.jpg",
-        "/nt0Au2TEa4WrWOfefUQnuLrXk0R.jpg", "/60pwlBl68pxd5E3cwvtL8uI3kdl.jpg", "/tg4Fa3y3tXvjLejRqC9ewFZBKyV.jpg",
-        "/8SlbRbtdggZKnxms5XMu8Ry85fi.jpg", "/k98x7IxrMXN4X2eFfS51tPgJquo.jpg", "/6iV9arZMKrQAVdK7JWcSs2QyCys.jpg",
-        "/8EDsaOFmfVXEq8O1sTilWfpbCWD.jpg", "/j4sWcuiCjm7rypN14nn02xFWTeA.jpg", "/dlcgdA3zhrAObIm0nFMqem0jK1J.jpg",
-        "/xLjERoZoLzpqQ5o57K31dSfu6MM.jpg", "/3srtmfsjMxS4O86KHxBBOLPW3Pk.jpg", "/f7kd6mEguvVtaAnZ6zQROHhRMZr.jpg",
-        "/y7mzyS2p4OeKZzXnDFxQZrgQW7x.jpg", "/lIq8JZRjINTlU9Y72RvjpgrSjyT.jpg", "/n9KuNOspLQpSVcGEa5lZGrp9CCy.jpg",
-        "/6nDirL9I3HjXcpTWdCzKMYFcZnC.jpg", "/a1sQGjW8nZcNAzqtvyU0gikYv2F.jpg", "/tizXDiSprC6zKabD657YA0Hr6sp.jpg",
-        "/pMmAHIvlmNPn1Vg41x11Db6EOLf.jpg", "/kt8SbFNePNhpQEjMt3ThcgX1w4P.jpg", "/txhNp0qmFfAER7xsbFJRQ0fHGNZ.jpg",
-        "/siXogwV4ikofWfLKznbOerwI2FQ.jpg", "/1CuziSzNhCbPSNYdYXxdxQ2ITBh.jpg", "/akABzNlpPtNojHKkNrIpNiVEcMz.jpg",
-        "/ld9PaHVnAOkAPixmS88TrUzoPhR.jpg", "/it5UNKFsjtjeLnCzYQK78KD3pVZ.jpg", "/v8K3QIs1BNfHv0h3VjcszxbBCNq.jpg",
-        "/fkuJE9aZLccrj6z039MufcW6C1R.jpg", "/6rg6avwUmNWN3bgxdmMWidK2eql.jpg", "/nGeIyBxw9ipRYj5lFYhtChSvGPu.jpg",
-        "/cRHmirVagKq3BWmEzLBpkmATIDw.jpg", "/pJYUFaNy4mDIrnoi5K8A1qYCyin.jpg", "/1uJqHKB9EWPBH0CWXo6Ymv4s8IQ.jpg",
-        "/koc1OBg8ATTHQem35Crr8piy6Za.jpg", "/y4LUuu1ur46SE9N7p8oCSaP8LCO.jpg", "/lJ9JrVy3GYSw2TEPx2Fi9d4PJSh.jpg",
-        "/24vHAXBCAfiGE0HOlPzvljwWycD.jpg", "/zUz5l4M6LNLb0F3NtnYOA68QR2b.jpg", "/jRv84cBZ1QimyelcGSOSJeJhopm.jpg",
-        "/jMCvw5xOJVg3JD8a2mYZA7gKHai.jpg", "/uQR33Kw6nUNKQuaWeCJgZm2m2Ln.jpg", "/xFPQkVSrjJ8Zj7iOqwnb1CZ65gF.jpg"
-      ]
-    }, "566": {
-      "poster_path": "/7WTsnHkbA0FaG6R9twfFde0I9hl.jpg", "media_type": "tv", "vote_average": 8.528, "seasons": 4,
-      "episodes": 12, "release_date": "2010-07-25", "title": "Sherlock", "runtime": 90, "my_rating": "7",
-      "imdb_url": "https://www.imdb.com/title/tt1475582/", "genres": ["Crime", "Drama", "Mystery"],
-      "date_rated": "2022-08-31", "adult": false, "id": 19885, "in_production": false, "name": "Sherlock",
-      "number_of_episodes": 12, "number_of_seasons": 4, "original_language": "en", "original_name": "Sherlock",
+      "poster_path": "/eU1i6eHXlzMOlEq0ku1Rzq7Y4wA.jpg", "release_date": "2019-11-12", "tags": null,
+      "vote_average": 8.468, "episodes": 24, "seasons": 3, "imdb_id": "tt8111088"
+    }, "736": {
+      "title": "Sherlock", "date_rated": "2022-08-31", "genres": ["Crime", "Drama", "Mystery"], "id": 19885,
+      "media_type": "tv", "my_rating": "7",
       "overview": "A modern update finds the famous sleuth and his doctor partner solving crime in 21st century London.",
-      "popularity": 73.482, "vote_count": 4441, "posters": [
-        "/7WTsnHkbA0FaG6R9twfFde0I9hl.jpg", "/6OUiohotV1sSSBBw7AGwNN6t81l.jpg", "/AhKO5FBbq1NmqfdaJj2Fz2Wsys8.jpg",
-        "/85jAHSIVG1QzuoWHnJ03d2qmX6P.jpg", "/xOKh59XrfFcvhK2Ps5LidFgPMKw.jpg", "/aguWVR8xNilvw7t4X03UvG1hRJr.jpg",
-        "/mKiKN6HNT3OFvQycHZDyPDfc0xH.jpg", "/cIfGAkpvWD2zxHrXzhv3uptYbyV.jpg", "/v5IhnvdjKjA1nS0vEUMwjdaygNE.jpg",
-        "/k4EBQrbbCEkX264qwGK3gREfg3H.jpg", "/rPAx6rUKO0NKPSyfiw3Yl1oKWUk.jpg", "/iaHVngRSXCKt3uTmwYjmeIN6Aar.jpg",
-        "/xfYp3q2FWwFb7ayhAyQzR8xOYfk.jpg", "/hO7OuStJQVcsr7d3kuTT4ikYrnt.jpg", "/t2mNtaoTubxOi8isicpm9VvyfiR.jpg",
-        "/sMu7WIZYzgnpFezmUnKJXODI306.jpg", "/jE4gGFaNScqEtK0Z05zayF5CdpA.jpg", "/dgs8qMaj5SS53agkJWSpZLSJZVw.jpg",
-        "/pbkrVvb6HmGn2rgNaCg8rmKcSKo.jpg", "/cdICtWDo18TWy2UsZZs1jvfPR8b.jpg", "/fbCCEKPpPaA6igcu0cCA5KtNtLZ.jpg",
-        "/xi41YehwjjFcQfeSK24MVqEg118.jpg", "/fyqTfm4ZylytYv87JPp4Fx5G9aK.jpg", "/tcxSGkDhZ9DubFh89V5HUg8d2RK.jpg",
-        "/7IJGq8HtL1XPvdn4lUF0F1rq6f0.jpg", "/jGSOsl8Ku2ysmGCS4UN2kLMhwLo.jpg", "/frmk30Hf3W2gajGNbMfg3t1Wrx3.jpg",
-        "/wpT8Z0eA4Eu6rsxyTi6lXb6JmZ6.jpg", "/zYy89Rd543ahDKqLMZJewyIdjA7.jpg", "/3GltJhdCRGyGiZvdphAI6lKZWg6.jpg",
-        "/24GwNQGZ2Bifo2C9R2q6ehGoZ8M.jpg", "/elTUnAZjC025VuV8WXCGxaNvrTQ.jpg", "/nqlL6evR24omvUGTV64j7PG85hB.jpg",
-        "/gYvidmImKkZgqY8PNfuAZfTnboJ.jpg", "/9KVbQ9DFVE4PRxKhBeCNOHZLFIU.jpg", "/czzJiwfOJVDQKddRidHkQ2lw4as.jpg",
-        "/6nFEkH8z0duMxF0oefcwZ6EFnZh.jpg"
-      ]
-    }, "561": {
-      "poster_path": "/zU0htwkhNvBQdVSIKB9s6hgVeFK.jpg", "media_type": "tv", "vote_average": 8.561, "seasons": 1,
-      "episodes": 7, "release_date": "2020-10-23", "title": "The Queen's Gambit", "runtime": 60, "my_rating": "8",
-      "imdb_url": "https://www.imdb.com/title/tt10048342/", "genres": ["Drama"], "date_rated": "2020-12-17",
-      "adult": false, "id": 87739, "in_production": false, "name": "The Queen's Gambit", "number_of_episodes": 7,
-      "number_of_seasons": 1, "original_language": "en", "original_name": "The Queen's Gambit",
+      "poster_path": "/7WTsnHkbA0FaG6R9twfFde0I9hl.jpg", "release_date": "2010-07-25", "tags": null,
+      "vote_average": 8.536, "episodes": 12, "seasons": 4, "imdb_id": "tt1475582"
+    }, "737": {
+      "title": "The Queen's Gambit", "date_rated": "2020-12-17", "genres": ["Drama"], "id": 87739, "media_type": "tv",
+      "my_rating": "8",
       "overview": "In a Kentucky orphanage in the 1950s, a young girl discovers an astonishing talent for chess while struggling with addiction.",
-      "popularity": 57.73, "vote_count": 3514, "posters": [
-        "/zU0htwkhNvBQdVSIKB9s6hgVeFK.jpg", "/veOx80SjYBPBGOFK8oGs3jyTJQh.jpg", "/8sLnOngRT57hqBQE6G2DGU8EAfF.jpg",
-        "/gHxyyKMqyCd1E6OMdwWp1JKLzdN.jpg", "/7ajta1CY2iuM2r9PTJhDL1R3Udi.jpg", "/mS2FYxJU0BhInfgw2By1VCe069o.jpg",
-        "/qIITtEn253x1x7UTVb4g288xcxI.jpg", "/vZCsknehMivJDX8ePAEi8xW1F6t.jpg", "/2EW9YB8UI90kQ3OMZqnGzgzZ8AN.jpg",
-        "/acl0y3bHtWXklzW7Y5VM7f8NaBj.jpg", "/9U82QusuCnMnQxCgJ7jEqSmudNf.jpg", "/7H6E6wQ1VQ5BVIONA6sQxGTjNmT.jpg",
-        "/rdXAJNMim3sNeloWUaZ427Os1wg.jpg", "/wahalkeHp9YSggE7zgreLbCWVnL.jpg", "/50lJ68PQ3QwjBQmG4CCxq8natSc.jpg",
-        "/aGZDuewndZXq1Zt4jLLuGft9YrR.jpg", "/yLmu3bNqUeOk3lGpGKj6tpo2xgB.jpg", "/tEEOa1XUpZMrynIMidfr0JK7IG2.jpg",
-        "/9sKYp7GthiqlFWLWE4J62vGciH2.jpg", "/yAANsNmMED9FD9cGAllzW40STr7.jpg", "/8yFpOqkVjwvVAaqfosWVoDBk51D.jpg",
-        "/1t6EIawZ3YXTapAb1Df3GA4f18D.jpg"
-      ]
-    }, "564": {
-      "poster_path": "/dXQCEjVth8P8L47XIsoRt0oL8Gw.jpg", "media_type": "tv", "vote_average": 6.926, "seasons": 2,
-      "episodes": 13, "release_date": "2020-03-20", "title": "Tiger King", "runtime": 43, "my_rating": "8",
-      "imdb_url": "https://www.imdb.com/title/tt11823076/", "genres": ["Documentary", "Crime"], "adult": false,
-      "id": 100698, "in_production": true, "name": "Tiger King", "number_of_episodes": 13, "number_of_seasons": 2,
-      "original_language": "en", "original_name": "Tiger King",
+      "poster_path": "/zU0htwkhNvBQdVSIKB9s6hgVeFK.jpg", "release_date": "2020-10-23", "tags": null,
+      "vote_average": 8.54, "episodes": 7, "seasons": 1, "imdb_id": "tt10048342"
+    }, "738": {
+      "title": "Tiger King", "date_rated": "2020-05-03", "genres": ["Documentary", "Crime"], "id": 100698,
+      "media_type": "tv", "my_rating": "8",
       "overview": "A zoo owner spirals out of control amid a cast of eccentric characters in this true murder-for-hire story from the underworld of big cat breeding.",
-      "popularity": 16.883, "vote_count": 341, "date_rated": "2020-05-03", "posters": [
-        "/dXQCEjVth8P8L47XIsoRt0oL8Gw.jpg", "/pmjYMCnSwndlEpiFZhhOWSWmUsu.jpg", "/rqF5UwP6OmwpUewHimbfKyfBtMv.jpg",
-        "/dUM8VW2gUYuDxkbA5ipJw2XXQ5h.jpg", "/6xpAWbaYHjJ9bU3t53nyDoud44P.jpg", "/e8La9fCehfrNjqnic4xthT36jVh.jpg",
-        "/uHwuHBjupA8xsg9f6N6WChyAWJu.jpg", "/5BPcppV5ZCjaTzzjq31Eh49UxJ.jpg"
-      ]
-    }, "575": {
-      "poster_path": "/lVMkbtJ0hp60iUvdNKeNWOfy4jf.jpg", "media_type": "tv", "vote_average": 7.905, "seasons": 6,
-      "episodes": 51, "release_date": "2012-05-20", "title": "The Eric Andre Show", "runtime": 11, "my_rating": "8",
-      "imdb_url": "https://www.imdb.com/title/tt2244495/", "genres": ["Comedy"], "date_rated": "2018-03-31",
-      "adult": false, "id": 56590, "in_production": true, "name": "The Eric Andre Show", "number_of_episodes": 51,
-      "number_of_seasons": 6, "original_language": "en", "original_name": "The Eric Andre Show",
+      "poster_path": "/dXQCEjVth8P8L47XIsoRt0oL8Gw.jpg", "release_date": "2020-03-20", "tags": null,
+      "vote_average": 6.935, "episodes": 13, "seasons": 2, "imdb_id": "tt11823076"
+    }, "739": {
+      "title": "The Eric Andre Show", "date_rated": "2018-03-31", "genres": ["Comedy"], "id": 56590, "media_type": "tv",
+      "my_rating": "8",
       "overview": "A comedic talk show from an alternate reality featuring unstable hosts, a variety of celebrities\u2014both real and fake\u2014and unusual studio action.",
-      "popularity": 18.142, "vote_count": 101, "tags": [
+      "poster_path": "/3OX22kBMeDBxgYNlVuMYlieoanM.jpg", "release_date": "2012-05-20", "tags": [
         {"description": "I can't breaf", "image": "402205-GOLD.png", "name": "Hilarious", "tier": "gold"}, {
           "description": "Flips established norms on their head", "image": "302305-PLATINUM.png", "name": "Subversive",
           "tier": "green"
@@ -174,79 +48,38 @@
           "description": "Has a very unique style that might put off casual viewers", "image": "302104-MASTER.png",
           "name": "Weird", "tier": "purple"
         }
-      ], "posters": [
-        "/lVMkbtJ0hp60iUvdNKeNWOfy4jf.jpg", "/mXmZJy8AtOF5s5SMW3WfAVxYG7V.jpg", "/voaJUNcX6Sbtw0DSfZ9ixBVj647.jpg"
-      ]
-    }, "580": {
-      "poster_path": "/cvhNj9eoRBe5SxjCbQTkh05UP5K.jpg", "media_type": "tv", "vote_average": 8.728, "seasons": 6,
-      "episodes": 61, "release_date": "2013-12-02", "title": "Rick and Morty", "runtime": 22, "my_rating": "8",
-      "imdb_url": "https://www.imdb.com/title/tt2861424/",
-      "genres": ["Animation", "Comedy", "Sci-Fi & Fantasy", "Action & Adventure"], "date_rated": "2017-06-12",
-      "adult": false, "id": 60625, "in_production": true, "name": "Rick and Morty", "number_of_episodes": 61,
-      "number_of_seasons": 6, "original_language": "en", "original_name": "Rick and Morty",
+      ], "vote_average": 7.9, "episodes": 60, "seasons": 6, "imdb_id": "tt2244495"
+    }, "740": {
+      "title": "Rick and Morty", "date_rated": "2017-06-12",
+      "genres": ["Animation", "Comedy", "Sci-Fi & Fantasy", "Action & Adventure"], "id": 60625, "media_type": "tv",
+      "my_rating": "8",
       "overview": "Rick is a mentally-unbalanced but scientifically gifted old man who has recently reconnected with his family. He spends most of his time involving his young grandson Morty in dangerous, outlandish adventures throughout space and alternate universes. Compounded with Morty's already unstable family life, these events cause Morty much distress at home and school.",
-      "popularity": 216.443, "vote_count": 8174, "posters": [
-        "/cvhNj9eoRBe5SxjCbQTkh05UP5K.jpg", "/7iVwF5l0jkIkIOVSvHI6HM4gKU5.jpg", "/2jS5LyatFPXNm1PaYe63vKdSBCM.jpg",
-        "/tndWEIi4lg9bKCgGMRkGO9RlfYX.jpg", "/331jpqQfTiMo9UP0OJvurvIW7KA.jpg", "/58ugmnhnrnWC8tLNvifxlQVFB7K.jpg",
-        "/24EsOf9tftcBgK3Eb4IFsODJNOk.jpg", "/fByeadDMilLBOmhs3WkpSSaFWXN.jpg", "/t4g6tZJLUksGYpjKeWycEY9Laok.jpg",
-        "/ooikdDNDOHS8hCURplWeTW7FzHJ.jpg", "/bwSKGElPwZgpScILmGUXRWMXHtQ.jpg", "/2nsaYTTW1JFl5IBmhCIKYTUx62t.jpg",
-        "/bt4uH1VCKZDy9VUiYYE73nZTSYs.jpg", "/ldHbu7elp8EFJrPTmOeNdnLv6Jm.jpg", "/mh875gK58vjhDkIa5vfExeezNUY.jpg",
-        "/3osgEcvBrfvgPC622a9qk075CCc.jpg", "/8mq0SbeoZTN1RApqPWKDkyO6sKE.jpg", "/nkhBztLdPjfvtH6SPwTXQhp8zJn.jpg",
-        "/d6nHdHGraPaK5snsRgmG7H2HLiV.jpg", "/wJ6zdDyuRswnHXvIvyZ46U3Nb7f.jpg", "/iQrJpBEt29ZpGnUbBxgEfk9zduu.jpg",
-        "/zXYTijwvlyXDCtErbsbbQvytC2i.jpg", "/fCmNFcxlyseSWDeyV16Vwi0apG4.jpg", "/tXVu9so9voTNAi3ZVfsf8SkN3s.jpg",
-        "/sGVCWtLG37mLOhl11qQVrjKsDzx.jpg", "/eFUrBaqrypHEHeRGJxuZt3650oQ.jpg", "/k0UNhiwAvxn0jqU6QcU1wxjiKDG.jpg",
-        "/aQeQJmm5boKEyUkTqIKBMvdqicF.jpg", "/sOzgi9Fe5AbG2nTfRX5L8RIqndk.jpg", "/8Y5YcoZRVjYeZGdTTDSHM5mBNl.jpg",
-        "/7Lgo0IAIO3PeGF4unNzoXqEq7CI.jpg", "/hGhLOB5WQW09jJfYYzFSAjPQU9t.jpg"
-      ]
-    }, "583": {
-      "poster_path": "/pB9L0jAnEQLMKgexqCEocEW8TA.jpg", "media_type": "tv", "vote_average": 8.554, "seasons": 6,
-      "episodes": 76, "release_date": "2014-08-22", "title": "BoJack Horseman", "runtime": 25, "my_rating": "8",
-      "imdb_url": "https://www.imdb.com/title/tt3398228/", "genres": ["Animation", "Comedy", "Drama"],
-      "date_rated": "2017-10-31", "adult": false, "id": 61222, "in_production": false, "name": "BoJack Horseman",
-      "number_of_episodes": 76, "number_of_seasons": 6, "original_language": "en", "original_name": "BoJack Horseman",
+      "poster_path": "/cvhNj9eoRBe5SxjCbQTkh05UP5K.jpg", "release_date": "2013-12-02", "tags": null,
+      "vote_average": 8.714, "episodes": 61, "seasons": 6, "imdb_id": "tt2861424"
+    }, "741": {
+      "title": "BoJack Horseman", "date_rated": "2017-10-31", "genres": ["Animation", "Comedy", "Drama"], "id": 61222,
+      "media_type": "tv", "my_rating": "8",
       "overview": "Meet the most beloved sitcom horse of the 90s - 20 years later. BoJack Horseman was the star of the hit TV show \"Horsin' Around,\" but today he's washed up, living in Hollywood, complaining about everything, and wearing colorful sweaters.",
-      "popularity": 78.045, "vote_count": 1930, "posters": [
-        "/pB9L0jAnEQLMKgexqCEocEW8TA.jpg", "/xAt1BbXyCLp6CbXgXmuk1tMOCq9.jpg", "/6JFWzlChcGgLiIUo2COgNlWGFKy.jpg",
-        "/522H6sY6PhglcvvBYCrs4WGzzaP.jpg", "/if9file4gUw0HXWR7VVEpU7qt6N.jpg", "/mxWsea65k3UNTzCv6WNl3uHVVOi.jpg",
-        "/kFInuNFqbsrr3vIzABVwlVJYnN0.jpg", "/ihAj9hMQl39OA9577dtLorbKek7.jpg", "/5GXdp7KKJYW6kwzUthKFVu4JAMn.jpg",
-        "/etfVxn4YfEetoUUzBs2a5dA57Gq.jpg", "/1WQp6sLc5Rm2k4RS3E613q3DV6E.jpg", "/r3oMWU6cGUyKidsLK84WbnsQWy5.jpg",
-        "/omfwVVicxVgrAvAfTWmHPn960nN.jpg", "/e01pnpeEsTzb1e6YVmedY6EBpAp.jpg", "/tqMfxXd05qI8hsXLhgy6QftWpAh.jpg",
-        "/xFOGvCUITL0nAo9mN0sNnU5RvTn.jpg", "/cehJGUICTrBc4DMCQK2sZIPDTu1.jpg", "/7XBufVdDXRrEsMD4eAlP8CiZcNG.jpg",
-        "/e7IrUD9DjVOobWYbgpYJx7w8EQ6.jpg", "/2Ho9eghzeDiBzOeGVVnU3HVBQ4O.jpg", "/7pLo15nX98iFHxZ9IvrlklRaHeA.jpg",
-        "/vrOWBznQLH90kcEFik6KSIiatFV.jpg", "/dx0vpucF9RSpJvaQolZCasIQJW1.jpg", "/hvob9HGzhjnAJ7LbLtyHrrWZ8QU.jpg"
-      ]
-    }, "595": {
-      "poster_path": "/c9mfeInTpaaft7FzbeAdTj1eCAt.jpg", "media_type": "tv", "vote_average": 7.338, "seasons": 1,
-      "episodes": 7, "release_date": "2018-07-15", "title": "Who Is America?", "runtime": 30, "my_rating": "8",
-      "imdb_url": "https://www.imdb.com/title/tt8679236/", "genres": ["Comedy", "News"], "date_rated": "2018-09-16",
-      "adult": false, "id": 80730, "in_production": false, "name": "Who Is America?", "number_of_episodes": 7,
-      "number_of_seasons": 1, "original_language": "en", "original_name": "Who Is America?",
+      "poster_path": "/pB9L0jAnEQLMKgexqCEocEW8TA.jpg", "release_date": "2014-08-22", "tags": null, "vote_average": 8.6,
+      "episodes": 76, "seasons": 6, "imdb_id": "tt3398228"
+    }, "742": {
+      "title": "Who Is America?", "date_rated": "2018-09-16", "genres": ["Comedy", "News"], "id": 80730,
+      "media_type": "tv", "my_rating": "8",
       "overview": "A satirical half-hour series from comedian Sacha Baron Cohen exploring the diverse individuals, from the infamous to the unknown across the political and cultural spectrum, who populate our unique nation.",
-      "popularity": 7.396, "vote_count": 103, "posters": [
-        "/c9mfeInTpaaft7FzbeAdTj1eCAt.jpg", "/cQyAdErWMtwCJT6nawdImMPdz9L.jpg", "/zDiR99mD1X4GazjKpQLBVyUNaYq.jpg",
-        "/8eKrbgxyHIy5vsRIWDZnSvkSwjG.jpg", "/nWRzwKgnyaRoRblCOZIaM3bHOsg.jpg", "/wmn5uWOQayyOfkPP1u38RcGJpvf.jpg",
-        "/1swJpMaHrq2v8WJOTViIJCpq5b4.jpg"
-      ]
-    }, "601": {
-      "poster_path": "/mEIO7PeL7D4T1gRn55A0z3XkyXG.jpg", "media_type": "tv", "vote_average": 7.96, "seasons": 1,
-      "episodes": 7, "release_date": "2008-07-13", "title": "Generation Kill", "runtime": 65, "my_rating": "8",
-      "imdb_url": "https://www.imdb.com/title/tt0995832/", "genres": ["War & Politics", "Drama", "Action & Adventure"],
-      "date_rated": "2020-03-06", "adult": false, "id": 17035, "in_production": false, "name": "Generation Kill",
-      "number_of_episodes": 7, "number_of_seasons": 1, "original_language": "en", "original_name": "Generation Kill",
+      "poster_path": "/c9mfeInTpaaft7FzbeAdTj1eCAt.jpg", "release_date": "2018-07-15", "tags": null,
+      "vote_average": 7.4, "episodes": 7, "seasons": 1, "imdb_id": "tt8679236"
+    }, "743": {
+      "title": "Generation Kill", "date_rated": "2020-03-06",
+      "genres": ["War & Politics", "Drama", "Action & Adventure"], "id": 17035, "media_type": "tv", "my_rating": "8",
       "overview": "The first 40 days of the war in Iraq as seen through the eyes of an elite group of U.S. Marines who spearheaded the invasion along with an embedded Rolling Stone reporter. A vivid account of the soldiers and of the forces that guided them in an often-improvised initiative.",
-      "popularity": 11.57, "vote_count": 332, "posters": [
-        "/wiihoYOODwh82xVzPoiaztlg6c9.jpg", "/mEIO7PeL7D4T1gRn55A0z3XkyXG.jpg", "/exVCasPFyD55Noa0qxl0YekHQz9.jpg",
-        "/oOxxLWWcwyj6Vf2ZbetfnxZGUHA.jpg", "/rXM9iFcfrle7ceJl9SIt0IfLAqt.jpg"
-      ]
-    }, "562": {
-      "poster_path": "/f0lx5axLbSHVqXU8zTro5knwzTo.jpg", "media_type": "tv", "vote_average": 8.745, "seasons": 2,
-      "episodes": 9, "release_date": "2021-11-06", "title": "Arcane", "runtime": 40, "my_rating": "9",
-      "imdb_url": "https://www.imdb.com/title/tt11126994/",
-      "genres": ["Animation", "Sci-Fi & Fantasy", "Action & Adventure", "Drama"], "adult": false, "id": 94605,
-      "in_production": true, "name": "Arcane", "number_of_episodes": 9, "number_of_seasons": 2,
-      "original_language": "en", "original_name": "Arcane",
+      "poster_path": "/wiihoYOODwh82xVzPoiaztlg6c9.jpg", "release_date": "2008-07-13", "tags": null,
+      "vote_average": 8.0, "episodes": 7, "seasons": 1, "imdb_id": "tt0995832"
+    }, "744": {
+      "title": "Arcane", "date_rated": "2021-11-22",
+      "genres": ["Animation", "Sci-Fi & Fantasy", "Action & Adventure", "Drama"], "id": 94605, "media_type": "tv",
+      "my_rating": "9",
       "overview": "Amid the stark discord of twin cities Piltover and Zaun, two sisters fight on rival sides of a war between magic technologies and clashing convictions.",
-      "popularity": 54.718, "vote_count": 3018, "tags": [
+      "poster_path": "/xQ6GijOFnxTyUzqiwGpVxgfcgqI.jpg", "release_date": "2021-11-06", "tags": [
         {
           "description": "Groundbreaking visuals with never seen before artistic techniques",
           "image": "510011-GOLD.png", "name": "Masterpiece", "tier": "gold"
@@ -257,50 +90,19 @@
           "description": "Does not require the audience to be familiar with the source material",
           "image": "301204-PLATINUM.png", "name": "For everyone!", "tier": "green"
         }
-      ], "date_rated": "2021-11-22", "posters": [
-        "/fqldf2t8ztc9aiwn3k6mlX3tvRT.jpg", "/xQ6GijOFnxTyUzqiwGpVxgfcgqI.jpg", "/4tnzS7BwLpaPPzKVmwUgCM0jc5c.jpg",
-        "/mj1gjuqDHBko2fzu1aHVZQK9ury.jpg", "/6x0LTqjAtiSnLn3zcBiPiMULGJu.jpg", "/f0lx5axLbSHVqXU8zTro5knwzTo.jpg",
-        "/aSjrXRJldAbDWlSA5OUeYIHuPKX.jpg", "/ohGz4HDYGTite1GmRhRuBMVAn03.jpg", "/cG91ExsDryCdvaTvp8IaMp9JyMZ.jpg",
-        "/h7jGnMc9f0wY8JfwFgo3Ba5l2Aq.jpg", "/3YBpdwJwLecxGDguVITeDBP0kTd.jpg", "/rHtySQByxMV5ElvSpH2QHZ7pC5f.jpg",
-        "/5gPyHhy2DE4NgcEgew2BtddMFzO.jpg", "/qZI7cyR9ARmMz8ljbY5pEPiJrZ9.jpg", "/cDDlIAfksYSLAQp8qXn7ZCdXNLf.jpg",
-        "/27OzoiWajQvcRUrWkkQoLXam425.jpg", "/z3jVVnOu3DKWYhlHWzbW3PLSPRD.jpg", "/ha1yBgNdF3qwXzs4wKluzsMbTuB.jpg",
-        "/8ggHnFNQ2G867kRonCJr1OngBIy.jpg", "/mL3QgH8T4F5tQ9cVDVY5J7glsb5.jpg", "/cMsjlMXe8sDlWyZPtIz2kM2HEXV.jpg",
-        "/8yIecXrjTo3uPBPBU2ovrIU6oOp.jpg", "/zFrsBFt8acPvcwqQBXOGF1YzSkP.jpg", "/crsEqrc97MWDr1oV7VkXcEOX5J7.jpg",
-        "/xE7br5UaWMu5eqcc6x5OSLMKVVK.jpg", "/w3fsjt3EdDLciYTlcxXO3pcvVBS.jpg", "/8dbCi6Tpq1dgOG7bKMRSll4cMCL.jpg",
-        "/2a9yqmNUtdHg3QPUxB6JFO3Z7sz.jpg", "/sda6NjPOQRY01MhYn1JPdB6fiTZ.jpg", "/lpKoVOsHe0xj7FDXAynx2rdYn3I.jpg",
-        "/4bOGGjnBcxtf7j6i9Vudeaal7cZ.jpg"
-      ]
-    }, "592": {
-      "poster_path": "/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg", "media_type": "tv", "vote_average": 8.626, "seasons": 1,
-      "episodes": 5, "release_date": "2019-05-06", "title": "Chernobyl", "runtime": 70, "my_rating": "9",
-      "imdb_url": "https://www.imdb.com/title/tt7366338/", "genres": ["Drama"], "date_rated": "2019-06-27",
-      "adult": false, "id": 87108, "in_production": false, "name": "Chernobyl", "number_of_episodes": 5,
-      "number_of_seasons": 1, "original_language": "en", "original_name": "Chernobyl",
+      ], "vote_average": 8.8, "episodes": 9, "seasons": 1, "imdb_id": "tt11126994"
+    }, "745": {
+      "title": "Chernobyl", "date_rated": "2019-06-27", "genres": ["Drama"], "id": 87108, "media_type": "tv",
+      "my_rating": "9",
       "overview": "The true story of one of the worst man-made catastrophes in history: the catastrophic nuclear accident at Chernobyl. A tale of the brave men and women who sacrificed to save Europe from unimaginable disaster.",
-      "popularity": 64.032, "vote_count": 4977,
+      "poster_path": "/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg", "release_date": "2019-05-06",
       "tags": [{"description": "Deeply unsettling", "image": "402207-GOLD.png", "name": "Nightmare", "tier": "gold"}],
-      "posters": [
-        "/hlLXt2tOPT6RRnjiUmoxyG1LTFi.jpg", "/7vcwOySsqeyEdmfHQNT5jHCL2gb.jpg", "/p3NB75PVMctDhRtLuwK4dDWWXLJ.jpg",
-        "/w9PyruPBfPC9SMi2VFSrx4veggE.jpg", "/yTFpnTASofSa8vq0qEj4jVFx0rO.jpg", "/wwt3HgxspH65msWspi3PDABU834.jpg",
-        "/pqR3sngsgZlWZR2cgFi1Xpsh4qQ.jpg", "/gyhqo8Cuv8RxY3UJZCyqHcPepHi.jpg", "/xkjBBOm3zXs9qHJRlMBYkcfofs8.jpg",
-        "/nBDqnHGvDkgDyyM7l10EhXUUK5T.jpg", "/7Tenk69NgBpSUfBaVDTieCQfovq.jpg", "/cmHSqnodfJWUFGHY5jqTOGyii2I.jpg",
-        "/8vu4faSMZQBFWeiUAT0StMrQSjA.jpg", "/4cPTQbF2GL59j2YGeUaBg3yvzJw.jpg", "/j3sxsRiEclYPBye3pQ6r6gAmIJl.jpg",
-        "/bdDmqTO82N536K9YsjO6U2gIpSI.jpg", "/1ESdH3al4Z4IBNfWdUr3I8QXONB.jpg", "/wKcDJSMBKQNVZIxSyLmM97FT60G.jpg",
-        "/o0Y8XcPJVwUbWxMtyQFSAz7XxRr.jpg", "/vL9RgSzV362B9I97u7lGaqZ5Lod.jpg", "/fnAzO6z9HhmCsyBRVxoGfavyBKn.jpg",
-        "/hwzqCWjxTV30fMFgvg6uJCARioe.jpg", "/d7076o9qEX8nGixyQg6MwOGykYg.jpg", "/oq7xsgAXJZWOAf2Ow2pgnbA51Ds.jpg",
-        "/icR5IuQDNWwVlIWxW7B3ZY16MK1.jpg", "/7VVLXSEy3CLYKNoaysFI6aAEw8k.jpg", "/5Cpb61lB12eDdQCM6MXlwMnVKCi.jpg",
-        "/oPxUGmKOTMRsAvwolDATBbmTg0L.jpg", "/7alXS9ZjzBIbswDetYonqe1So3N.jpg", "/aiJnMjWwkH6pttxceZZBCdnsu6A.jpg",
-        "/f67LHfAABmKz88mQJsyAzD522DZ.jpg"
-      ]
-    }, "597": {
-      "poster_path": "/v9rg012OtFGxXK6tO9Jq2BOWesk.jpg", "media_type": "tv", "vote_average": 8.436, "seasons": 8,
-      "episodes": 73, "release_date": "2011-04-17", "title": "Game of Thrones", "runtime": 60, "my_rating": "9",
-      "imdb_url": "https://www.imdb.com/title/tt0944947/",
-      "genres": ["Sci-Fi & Fantasy", "Drama", "Action & Adventure"], "date_rated": "2018-02-28", "adult": false,
-      "id": 1399, "in_production": false, "name": "Game of Thrones", "number_of_episodes": 73, "number_of_seasons": 8,
-      "original_language": "en", "original_name": "Game of Thrones",
+      "vote_average": 8.633, "episodes": 5, "seasons": 1, "imdb_id": "tt7366338"
+    }, "746": {
+      "title": "Game of Thrones", "date_rated": "2018-02-28",
+      "genres": ["Sci-Fi & Fantasy", "Drama", "Action & Adventure"], "id": 1399, "media_type": "tv", "my_rating": "9",
       "overview": "Seven noble families fight for control of the mythical land of Westeros. Friction between the houses leads to full-scale war. All while a very ancient evil awakens in the farthest north. Amidst the war, a neglected military order of misfits, the Night's Watch, is all that stands between the realms of men and icy horrors beyond.",
-      "popularity": 262.523, "vote_count": 21041, "tags": [
+      "poster_path": "/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg", "release_date": "2011-04-17", "tags": [
         {
           "description": "The actors pierce the screen and wrap time-space around their performance",
           "image": "202303-GOLD.png", "name": "God-like acting", "tier": "gold"
@@ -308,84 +110,12 @@
           "description": "Constantly has something going on", "image": "402205-PLATINUM.png",
           "name": "Very Entertaining", "tier": "green"
         }, {"description": "Crashed and burned", "image": "203304-GRANDMASTER.png", "name": "Fell off", "tier": "red"}
-      ], "posters": [
-        "/7WUHnWGx5OO145IRxPDUkQSh4C7.jpg", "/u3bZgnGQ9T01sWNhyveQz0wH0Hl.jpg", "/44rw2cOQrgUthZMhp3eibpXVy9p.jpg",
-        "/1XS1oqL89opfnbLl8WnZY1O1uJx.jpg", "/gKepMfnseLPwbZ0U9E1LmMW2x4V.jpg", "/mtPlRiX5xuNmx332bVyUmlC3Jjz.jpg",
-        "/gwPSoYUHAKmdyVywgLpKKA4BjRr.jpg", "/op8kIseUiSCVTT05Z067GzkDB28.jpg", "/bw6DlqljVFIinhBA7uDSNha6Lnp.jpg",
-        "/fw9hNiJO0U5MUg2XGyCOlTS3jdS.jpg", "/fpEa4iAlbE6Byu89vUUChQ42lhd.jpg", "/bk7SJsNtVP97faavetnurgXdrOF.jpg",
-        "/v9rg012OtFGxXK6tO9Jq2BOWesk.jpg", "/4KHspQhxzwKV52g1y8fNcqgtro1.jpg", "/7u5aQpmYwfUWYkJubBk7RbcHYtx.jpg",
-        "/37sTgAG9QardbdzCq51FoUw1Ijb.jpg", "/qIcu8rQHZbFo0SUZ3O1byKTQ0H9.jpg", "/gdeLQ5odsYE5EZ6hhnm2PwnjycB.jpg",
-        "/hsUphd7fTbVmnDYg2T05a4eBL8.jpg", "/ijKEdinAQUfYNQTKfrhGnSdm5HQ.jpg", "/AlwaNEiY4BsZuJFIxMXboIyycsl.jpg",
-        "/uVOL1L3a57BtWQDVsIeRRyiu6TF.jpg", "/rlKI5ErcB5dhcvkpb8RAuDkBdhO.jpg", "/pzWLzuCzj0aFVoBbEbaKE64SIwv.jpg",
-        "/2AmrHvmq0kzNpYeXFSgX5QT4nDi.jpg", "/gEVI0iWzhwSfiPHDrKQHfWsq9By.jpg", "/rInMA0yMqpLaa1Thn5j70Sr84IC.jpg",
-        "/43tKu2OiRrXoG4dG73bG3pMbPD8.jpg", "/mMHYHIiC9I2ghn12Fnr4ImvWWss.jpg", "/t4IinrhH2BN7clHpEVBbHEjSB7U.jpg",
-        "/ws1fefsSF95nNt97e5iZbGXNQkP.jpg", "/ouudK6RCNnsbT1CSXrlATXQIQTG.jpg", "/yXg63yNkgYffW72ItAAJnSIsgPY.jpg",
-        "/G1wz2PlCzM5GgcDmyVmjbEd3XZ.jpg", "/h38CNkWBKfYHucKgzCvvbBPlJ3c.jpg", "/sKk2ok4uHc5AWBP8t0rPqoOoloa.jpg",
-        "/9mxAEwP7T7wQ5j7ZCmEf39f4NiD.jpg", "/hsWwcSSfsFMhKCfsg4MqrJ7taoK.jpg", "/g6lfAWoDPEtcGGgpseo71zk0PRJ.jpg",
-        "/vePjHygDc2AJ1Thnlfx9s3jnEaX.jpg", "/jAVZd50llmUC4keP434gZAhI6VJ.jpg", "/har19AS1vLLkDFeCaqiFJQof82L.jpg",
-        "/jNFIaPkZfXNBIxeXy9oEQ7VDIS7.jpg", "/cPMjJWdHn5TlwDw5iXQ5mj5vVlI.jpg", "/dtPc5I3T0JtCTkUv8o2Li91dzcw.jpg",
-        "/uYPc0TIPK1DwU6s5iFvHQWS9ZQ9.jpg", "/uAtoZVNXUuc1N62yi63lPxGyNUt.jpg", "/8hz9OmN4hoXTAM3bHOPtbqG980Q.jpg",
-        "/3UvehGqb4C5imW1Fr2GU2XYuvnW.jpg", "/68OoBixm5YfKRQvdahh1CPdts2N.jpg", "/ruPRZykbpxmCEP0emB4Ba6069s4.jpg",
-        "/qPMxb4HGizMtbeYsBFc1sK7efve.jpg", "/m4HuxRrwHZ3Ld8SAkVejj4ygmQA.jpg", "/xeAA4C3HtMWVu4NVmtKsCpYtDXz.jpg",
-        "/uMrpnREPZShRun1kFEDkERQ6WQQ.jpg", "/7aUB012c07vz4yWeyivdjhzf8yc.jpg", "/sTFLFBrgUTjXOrLybCsGbuAuLC0.jpg",
-        "/dpqluU2g78W6bSiXFAkGojDxl0a.jpg", "/zFA9fAUmqHZBZBGqdDY6puhmQvZ.jpg", "/9huLCfrtWMzlYQC6dVhxoSzaoGx.jpg",
-        "/gOa40wFGyBqoovVDN4KZe5GvUqf.jpg", "/whMYKg2F4c5w56ygaqRnV2kYXOB.jpg", "/aSxbtt6cJTRp15cDhg29pxvw0Ey.jpg",
-        "/xAdwrrlA5jGeqhXj1JMR0Ep6j0v.jpg", "/qux8Csmw52YaQiLjiLuhgummeu6.jpg", "/jGPQ3eM3Uhbi4oKxba4I4RRIeT2.jpg",
-        "/xGjSsnbVbeZY3Uf0WZWrEcApw9b.jpg", "/z2CJdOssj6jhXbkIVn1B5rv1FYR.jpg", "/8W01aegIZpYmgpTq3zBHK8PX73X.jpg",
-        "/AfTfK9tfaXrKt7WCmJpcPcLC0MR.jpg", "/lrdVVGBzX4nX3LJcB8MMx1bTRnr.jpg", "/2m4dPNntzswa6V3afd9DU0JZyFE.jpg",
-        "/js32UVQBE5YDiNh3CzL5vxvhCsL.jpg", "/wSMBWShrptQcUJUHGFIqdvlvOkL.jpg", "/mhWqCu7qethPaYswfI6ymeSOnCw.jpg",
-        "/xGBChzi1KORteGPmtwLRGz7Jjtu.jpg", "/5GlBMNjGaNQVI51GWRkic3Q857F.jpg", "/cFNMTMVd1edLgZVcj49zUcoTcux.jpg",
-        "/iuNf5SNbZsOp5CSHX3EF7GQJZva.jpg", "/AjdT6hXVzUep7lNdDwZI7TsqFZU.jpg", "/49OHQg7eaC9W8YLaud2QJFnnHlw.jpg",
-        "/f1vdkRmEk8spjyJI0ePH55SH5DC.jpg", "/8qWiklqkErYNFqxn0EwUFQEQ8OV.jpg", "/eoAUFFm22wivRaJVEYnYZ7zUY85.jpg",
-        "/lKalmyGlx6FL8RQlXjf6O6qSpsE.jpg", "/4sforVMwIqlKuhpx6WGeANmiG3z.jpg", "/9AZ1goqr4pylvgXab8ugCqWY3rt.jpg",
-        "/469jKdUyiXJ0doRGKFkacn4m7RH.jpg", "/ln5KJ39g9XpWM0krq4c8hRvBoQX.jpg", "/1vxQXHIWBAcFH7Fu6N0xvff9IRS.jpg",
-        "/mS1cLqb1DRahhiPMjSPLcifw3fT.jpg", "/qiMKKQ8tu4ObvVa7VyzkZLZg7Ei.jpg", "/zoaehpDHg138Wd7XEz8GB3EFkS6.jpg",
-        "/2nI43xlOkBBXGiOZkARn7fk9qUF.jpg", "/aCiR3SjGg6ExMsuOWlqhFLXxq69.jpg", "/46kGza1UjqvR56JI76S5Uxc9Lau.jpg",
-        "/7cjT5M6LYAgYoB0xFDBNBmGFK3o.jpg", "/AeXjP9wECVnVij6v19urXQkzq62.jpg", "/ta48yMUfK4XgM8VrrfvVktSEuJ3.jpg",
-        "/1aNVEHBUrfcI6j1I7Tm3caYL5MZ.jpg", "/ckwet5EC31EwtG0PhLkFLjECQSw.jpg", "/nOVBOOH4mk3teMuDV9qL7ZDAb4V.jpg",
-        "/utXIIl7lSm2i7fbCZBJznaEQBGb.jpg", "/rjTl4srvqD2bkOo7Y6GcaIF2wR7.jpg", "/q33rq20zqzaJYbmi4b5PXlJEGNu.jpg",
-        "/puBibpHc23GP0SijBDz0ZeoLW0R.jpg", "/3AvFRR20njeR0V1GJ70E3sZTbcG.jpg", "/aOV4srjGKVDMUDrSzAgKks9aABu.jpg",
-        "/imkrdOTRbcdsQq12RDyLEZ7Pxtz.jpg", "/3aU1RbKoohCzlZjmXyaZbrXfQqb.jpg", "/mFsEuGiTSII0wQ6PLsfmDsiLJ2W.jpg",
-        "/y0HTWgZ80zonyF5lQUYA2R4i3UR.jpg", "/6pCuHnUJL9WZFJMLpadVq3mgkLi.jpg", "/eONQwaBcddOtB30FJEwqrraIA4Q.jpg",
-        "/tEAcCXaww2RsNiuoibvQreFg9rx.jpg", "/vMygAJRnyndVFU35Xp3u7JahPpP.jpg", "/x8brvLDONYutOsn5f27n8vUg33i.jpg",
-        "/2G9TACWDr3L5MO667oB34zoMlAX.jpg", "/vrSNmp9Q5AzHdlpgRDImD1ffJQg.jpg", "/woR7CK1AOn3ALWs1YKkeLO4MVZ6.jpg",
-        "/eqxqQ7cexMMgDOCL4L9uxBQFlnt.jpg", "/ppJ1EdizmPoqR8dgZM50DJ8wpvF.jpg", "/44G90azu6pmK0pNdy9229xhsPps.jpg",
-        "/hOQuFhN59Eph2TaJOXO0sMuSNYr.jpg", "/2Hfn3aXi2n2KJLeype3nydjKiTd.jpg", "/pD3k2B8X5b0gBpC2TKa5EEx2cnK.jpg",
-        "/mc2dQBpxR1vJpOOqZVAqY9sQHOc.jpg", "/fnpyUJ2Y2xk9mMQUrcRB4JNnCHT.jpg", "/5Hpk46yTgrnGB12fVATs1GUQfi.jpg",
-        "/1LOhnhOlM4Q1CaNvPe5AbEsMZbs.jpg", "/oKrZGZrPKLyVJvmFpJ1sYQKKqWP.jpg", "/vMZTQGA1nhmtchKEdW1p2ko1yN0.jpg",
-        "/btfbR1L3ZAZkI2Xukj0OXiNnMT4.jpg", "/cjrSkULmG2btwLOEvWZCeO5KRY2.jpg", "/rCyNXD11DgEZ6a6bwTklRVXTjda.jpg",
-        "/lcFEb7QVlKbeqkQbPA3RpAaS408.jpg", "/z6gUGv8YLDkXGF5YMvJMljmfPmv.jpg", "/catfWj715HSezOSlZjjHMSX4ygr.jpg",
-        "/sJ9uQUdFQGGiilWqlXVfZHopcbz.jpg", "/rfLswSDdELsyfNWKX8EIWZzWXfp.jpg", "/uawNCyg5J6hT5NNU5K6370qeDiT.jpg",
-        "/lyVQsfGj2GWFUrgncBfcQ4dxufF.jpg", "/2sYbTah8mOAyaR8UFKuZaMDD65e.jpg", "/s3prIydXU6G5U5pTqpfkiKg9zcS.jpg",
-        "/36DuTUwknTrJTS5ATQjvpTRqYK0.jpg", "/6sZnQrIfdN5hPF543HSxTFqwRiL.jpg", "/rURnXCB2aPGdV4nc2DZgPWrNazk.jpg",
-        "/vyFK40CoNmKaVlQGXe7vlzVDfA9.jpg", "/jHLjIVZT6K8hLZURCr95n0CrAq9.jpg", "/qH17TxOEJNZMAcVwnoez3TYokkG.jpg",
-        "/f0MffUqc6XmV7tVUxkK845MdMLp.jpg", "/80C8zbwyI8YwdUHC3azlQNjxl35.jpg", "/j1z5m1VW2cUUsJpO7mTCxLNBySz.jpg",
-        "/zqAONbgr0RYX2TBa5uKNe17tBYK.jpg", "/ps8XVcEZJhgUL8ZWToSFlCuJ36D.jpg", "/wFyAGqwEawi4oi4BA3bzQ4sbeX4.jpg",
-        "/h5rxQzDQ1NZo4jfM7Z9dNJbDgJ7.jpg", "/ve5oAu7Oa5zRAiunmDnm3lfW3zG.jpg", "/rTu3qXlEMPjb2ONPnzm3UuNXljB.jpg",
-        "/ti5riQog2P4Y044f0o7K7NyfefR.jpg", "/nJmZGPNHHjK9Au0u48qbZLAXWCj.jpg", "/rtY73dAX01owfPTqoNVC1Q9TvCr.jpg",
-        "/fbVz3OU83cruJWcZyaocAczARxt.jpg", "/dQhn31gX5PPR6Y5kkOCOBr6HPKW.jpg", "/frMIY6d1CPwhgXLQmugBHAaAu0R.jpg",
-        "/aUWwyXy9EimXwPEgRMllBjj5cUq.jpg", "/87grQp6gH1YK2iitw9gjb7jhpRr.jpg", "/4kCCoD5xAorgxxSupGZpiWXBHTh.jpg",
-        "/81gffxAWVOfRQ5cJMTjxkP785Z3.jpg", "/kinKaKx3bcS0aCeATh4nCizxADD.jpg", "/suRexSrmdVDkCeD9yuxVfGiNSW5.jpg",
-        "/8Cb8IsIveRJ49MW9GiZQVHD57zx.jpg", "/eIcfpWvLlb66X5pwZtW5LSY8Tn.jpg", "/fs4yhEkuaJJ2jVJsajGzSUoNFD0.jpg",
-        "/r3dhR8JYg6UewZH7dMmTwKh0oWY.jpg", "/AeCyzeTaBo2w3cDiY0vmvo2lm0b.jpg", "/pklO0PJym1QYB7zj0SXXJL6H7Qw.jpg",
-        "/c3BIhlujPEJF5IzKuSrm1iyOOMy.jpg", "/fCcDBvSL9BRMZjWFNrvNzFlcz5d.jpg", "/6ehYdPajBJlb4o7wFXcLvamB7Pf.jpg",
-        "/dOBaxNrvG2ZKolk8K2A631Y6bIa.jpg", "/9IXEnL61tvmlmZqJ85iEgP1yl2c.jpg", "/eEMWnIOdZpAlZHKoLOIPif8zsj3.jpg",
-        "/8Z0vYbB1w1VNEr6wugG2wJRFHqb.jpg", "/kyuMrdDyqrOPpMzkmis2vYEcswR.jpg", "/yPkyCdbtkNSO5Y2aph2w98w8Pga.jpg",
-        "/cNKbuz2sKBckUzodeMYHywIfsqc.jpg", "/l8cHmd5IjlYeLHQwfNWuGcR8aZf.jpg", "/8TlAqh3aY5Z7Kl9YXGEDYnWJgAu.jpg",
-        "/cqWvsvSwAIGOkJmsDscCrKXirQa.jpg", "/uO1uYpa2BI9kKHcASZ9uiiwCNiv.jpg", "/vQQT8m2c8sK2Ll6xZkBNhClyF9k.jpg",
-        "/bpVQG1a8AzS1Pc6emqFhBAzIWfN.jpg", "/155yQNdfvfVWK47xVOnjlXBwa1A.jpg", "/6PnXRGtudmBbU2M75yrTPUlF1Tr.jpg",
-        "/fKXEqOtMjCiIylgFzt1bHX7Ugai.jpg", "/lVI1Oax6VL9vsUVWQWaI4wLj9dr.jpg", "/j9YDgomxitWvO3o9KPSv3c9usMr.jpg",
-        "/gLWqBTA8wVNmec2GXiX35BTY2aH.jpg", "/rqQ3FwVh5StUa70Jlx4uXKjHmS6.jpg", "/wKOV7VtgYPhlHiYVkhjyGR6qY3.jpg"
-      ]
-    }, "599": {
-      "poster_path": "/vL5BQvXH96cJzmNK5n7QliQxy90.jpg", "media_type": "tv", "vote_average": 8.278, "seasons": 3,
-      "episodes": 35, "release_date": "2019-03-15", "title": "Love, Death & Robots", "runtime": 0, "my_rating": "9",
-      "imdb_url": "https://www.imdb.com/title/tt9561862/", "genres": ["Animation", "Sci-Fi & Fantasy"],
-      "date_rated": "2021-11-14", "adult": false, "id": 86831, "in_production": true, "name": "Love, Death & Robots",
-      "number_of_episodes": 35, "number_of_seasons": 3, "original_language": "en",
-      "original_name": "Love, Death & Robots",
+      ], "vote_average": 8.4, "episodes": 73, "seasons": 8, "imdb_id": "tt0944947"
+    }, "747": {
+      "title": "Love, Death & Robots", "date_rated": "2021-11-14", "genres": ["Animation", "Sci-Fi & Fantasy"],
+      "id": 86831, "media_type": "tv", "my_rating": "9",
       "overview": "Terrifying creatures, wicked surprises and dark comedy converge in this NSFW anthology of animated stories presented by Tim Miller and David Fincher.",
-      "popularity": 68.702, "vote_count": 2564, "tags": [
+      "poster_path": "/cRiDlzzZC5lL7fvImuSjs04SUIJ.jpg", "release_date": "2019-03-15", "tags": [
         {
           "description": "Various styles and genres explored with great creativity", "image": "510011-GOLD.png",
           "name": "Masterpiece", "tier": "gold"
@@ -396,322 +126,19 @@
           "description": "Due to its episodic nature, some episodes may not be of similar quality",
           "image": "302300-MASTER.png", "name": "Duality", "tier": "purple"
         }
-      ], "posters": [
-        "/cRiDlzzZC5lL7fvImuSjs04SUIJ.jpg", "/bwROV8jIXikWi34PTyhCyTqwcQu.jpg", "/iJ95qHRfhWx1zUrOtWuqeHcBKtG.jpg",
-        "/asDqvkE66EegtKJJXIRhBJPxscr.jpg", "/rlrRI2b6RvM9I9xOBTKqcTaehkE.jpg", "/yirhzFbggq8FHuAEnxCZUKr2B9H.jpg",
-        "/4jAXttZ2hlrzdC8fmQcv7Ctc2tz.jpg", "/wuAwUUqmJGQujqFCmoexM8F50uF.jpg", "/vvRpJJxAw1sB4w4r0hsOdqa9eJc.jpg",
-        "/8xvQvDM3aVoqoToS3WxFmMvGwaT.jpg", "/vL5BQvXH96cJzmNK5n7QliQxy90.jpg", "/gubgAJ0FlpGoOuPPmUNPKc1ZddH.jpg",
-        "/x1CBEZUwKO8wc3Z2W7PTjAFGkhr.jpg", "/aRbjOwtU2cwOf09GqJAVDSyQQAE.jpg", "/oFDhMz3W5jRvHsALSnDcIq7tqXE.jpg",
-        "/dMuUAIwnzLZvnUIiEBhPfjvMn6l.jpg", "/skce9ZIYu9OZR0tbTmbv8NDgAf4.jpg", "/pdlDA2UT9PZtzV0oGQ9jLs4b2BX.jpg",
-        "/fnWPZ4eJQlTrKhGyMlwUaSn9pTw.jpg", "/5hPosd5yld0HHS45QvZOpbR4OfO.jpg", "/zC25FBaMbimIS0QYHddrvJIsQ0y.jpg",
-        "/7IFffDBwMAPGrvBY8aJh6SPliso.jpg", "/cls82CWOAhEZB3HMpfkVLZNXTik.jpg", "/oirU0A0Zcisjbjob3VPyUkvyvIt.jpg",
-        "/dYECiDXfeGIQohX722AfTXP2G15.jpg", "/qgqj0lNZ8mighfj8bCyx44ulJsI.jpg", "/4qNsbt88O38K4fxWdTsonor49bK.jpg",
-        "/fJuRQniJ00ZViY7MtgZyFX0ZGeY.jpg", "/58IcUJfo8l00OzIyJzsisqoYqrk.jpg", "/t1G7e2ljVUs4YX7jjwyGYDCoT8K.jpg",
-        "/egTYSRVDx7mYCz1KZl7BmKRFGqi.jpg", "/mwnKqKS3mPyzG8Gq7aiat3TnPEA.jpg", "/rWVPJqDzDRIYCfSlf3VLyHIaJ7o.jpg",
-        "/8jUuYnIuNH7IR9vphkQVG4eUj5v.jpg", "/bL83U0Oe5arOUfmvRM9uubOdu7c.jpg"
-      ]
-    }, "602": {
-      "adult": false, "backdrop_path": "/8YVWoZO09ka8Kwj4jIrxAms7uZ7.jpg",
-      "date_rated": "Sun, 25 Jun 2023 00:00:00 GMT", "genres": ["Crime", "Drama"], "id": 60059, "images": {
-        "posters": [
-          {
-            "aspect_ratio": 0.68, "file_path": "/sYQ4ryHIEGYUWJhhyIYYiX2K6og.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.318, "vote_count": 32, "width": 680
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/s9sO3xdOE6bZx1WcMn06c03ILUL.jpg", "height": 3000, "iso_639_1": null,
-            "vote_average": 5.312, "vote_count": 1, "width": 2000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/5geQcMRFveBXizum8bHkSGu1a31.jpg", "height": 3000, "iso_639_1": "en",
-            "vote_average": 5.252, "vote_count": 44, "width": 2000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/dGcKhTi2xHOPU3yQ4lp7iMlw57k.jpg", "height": 3000, "iso_639_1": null,
-            "vote_average": 5.246, "vote_count": 2, "width": 2000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/6PJ0aBwn3ostRDqHBCoZWz6PrbT.jpg", "height": 1800, "iso_639_1": "en",
-            "vote_average": 5.218, "vote_count": 30, "width": 1200
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/iB6x0bA9XdP4MH3i1zXjMzvTNSY.jpg", "height": 3000, "iso_639_1": "en",
-            "vote_average": 5.184, "vote_count": 50, "width": 2000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/iB6x0bA9XdP4MH3i1zXjMzvTNSY.jpg", "height": 3000, "iso_639_1": "en",
-            "vote_average": 5.178, "vote_count": 33, "width": 2000
-          }, {
-            "aspect_ratio": 0.675, "file_path": "/8k0AJOkVK3pva8wLc7Vvc8W3FUD.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.172, "vote_count": 31, "width": 1012
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/lfCvpo4XkLIW6CWJ3OKWsUYpTO7.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.166, "vote_count": 29, "width": 1000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/6JVKIpjC4iu1sZuS7Mt02Q6Orp1.jpg", "height": 2550, "iso_639_1": "en",
-            "vote_average": 5.156, "vote_count": 12, "width": 1700
-          }, {
-            "aspect_ratio": 0.675, "file_path": "/vez4ZxroCIszg5dLOLWKhNCdDix.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.146, "vote_count": 10, "width": 1012
-          }, {
-            "aspect_ratio": 0.75, "file_path": "/9RgVGhieLEP5DafMbdK65u5ZHLe.jpg", "height": 2560, "iso_639_1": "en",
-            "vote_average": 5.146, "vote_count": 10, "width": 1920
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/uJN7C6mkRpMQOhkCtaXvskP8UZn.jpg", "height": 2250, "iso_639_1": "en",
-            "vote_average": 5.138, "vote_count": 8, "width": 1500
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/5OrfejsRTfA1lXClc5HdpiKYLK2.jpg", "height": 3000, "iso_639_1": "en",
-            "vote_average": 5.138, "vote_count": 8, "width": 2000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/uJN7C6mkRpMQOhkCtaXvskP8UZn.jpg", "height": 2250, "iso_639_1": "en",
-            "vote_average": 5.136, "vote_count": 21, "width": 1500
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/3u4O9GmaZSL0wjAXUKEXw0tKeLE.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.128, "vote_count": 19, "width": 680
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/gw8oWgGxc60IamLPe3erD7oyZyl.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.078, "vote_count": 20, "width": 680
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/gY54trMRzlElYrL6oVdAWJK1ICL.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.068, "vote_count": 7, "width": 1000
-          }, {
-            "aspect_ratio": 0.666, "file_path": "/g9FBJL9hqDfvFuEcfMQQueBbqjX.jpg", "height": 872, "iso_639_1": "en",
-            "vote_average": 5.068, "vote_count": 7, "width": 581
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/21fu4G5pCqRgb07ZWVwwlYNTuLz.jpg", "height": 2308, "iso_639_1": "en",
-            "vote_average": 5.068, "vote_count": 18, "width": 1539
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/2ZsZX9aq0WOEZNKjIAh7l4g6Ap2.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.058, "vote_count": 38, "width": 1000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/n6orZzLiG2aj4xz7kSISZHO7Flf.jpg", "height": 2100, "iso_639_1": "en",
-            "vote_average": 5.056, "vote_count": 5, "width": 1400
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/hADAfQu0iqADpD1DJblkQUqclZC.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.046, "vote_count": 14, "width": 1000
-          }, {
-            "aspect_ratio": 0.675, "file_path": "/f8auLh4d4y5lPuFSkcjPlDyob33.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.044, "vote_count": 3, "width": 1012
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/des5a6go6OVy7RoWf6Wv7GaknHF.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.032, "vote_count": 32, "width": 1000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/fC2HDm5t0kHl7mTm7jxMR31b7by.jpg", "height": 3000, "iso_639_1": "en",
-            "vote_average": 5.032, "vote_count": 52, "width": 2000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/tYGCEo0a22L13xgtZ5KB1kIytJv.jpg", "height": 3000, "iso_639_1": "en",
-            "vote_average": 5.022, "vote_count": 10, "width": 2000
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/nc2J9kUHNJjsfRqgG7nY57Eacjr.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.022, "vote_count": 10, "width": 680
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/18YaDePhnzqKOtnoPCWStdtUsNW.jpg", "height": 2700, "iso_639_1": "en",
-            "vote_average": 5.018, "vote_count": 19, "width": 1800
-          }, {
-            "aspect_ratio": 0.651, "file_path": "/exEZWVXyIKbsW8aFjVh14RuuUJv.jpg", "height": 1537, "iso_639_1": "en",
-            "vote_average": 5.018, "vote_count": 19, "width": 1000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/cU0kAjGjA6d2XjBzJMUIEVKiGDb.jpg", "height": 3000, "iso_639_1": "en",
-            "vote_average": 5.01, "vote_count": 37, "width": 2000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/s73aqo43YLTkhFGWc3FmCv751iY.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.006, "vote_count": 17, "width": 1000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/zjg4jpK1Wp2kiRvtt5ND0kznako.jpg", "height": 3000, "iso_639_1": "en",
-            "vote_average": 4.994, "vote_count": 15, "width": 2000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/5czxtWqG9HAbYU8ycdlAYdJ62PH.jpg", "height": 2000, "iso_639_1": "en",
-            "vote_average": 4.994, "vote_count": 15, "width": 1334
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/mXEgOsImfQ3hTk4nuHGNvlYQZbj.jpg", "height": 1714, "iso_639_1": "en",
-            "vote_average": 4.992, "vote_count": 24, "width": 1143
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/xEggmiD4WoJBQR2AiVF46yPUUgD.jpg", "height": 3000, "iso_639_1": "en",
-            "vote_average": 4.98, "vote_count": 40, "width": 2000
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/fIBGC36eUyaQvjZ6XqZo3NEXpoR.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 4.98, "vote_count": 22, "width": 680
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/8c0AckxfgPwEiH39EMKki9Vychh.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 4.928, "vote_count": 14, "width": 680
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/fFYoY25XSIfqGiamDCSltfhy2xY.jpg", "height": 3000, "iso_639_1": null,
-            "vote_average": 0, "vote_count": 0, "width": 2000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/zxCu8bKrKpIWFDKByoTWeAzSfD3.jpg", "height": 3000, "iso_639_1": null,
-            "vote_average": 0, "vote_count": 0, "width": 2000
-          }
-        ]
-      }, "media_type": "tv", "origin_country": ["US"], "original_language": "en", "original_name": "Better Call Saul",
+      ], "vote_average": 8.3, "episodes": 35, "seasons": 3, "imdb_id": "tt9561862"
+    }, "748": {
+      "title": "Better Call Saul", "date_rated": "Sun, 25 Jun 2023 00:00:00 GMT", "genres": ["Crime", "Drama"],
+      "id": 60059, "media_type": "tv", "my_rating": "9",
       "overview": "Six years before Saul Goodman meets Walter White. We meet him when the man who will become Saul Goodman is known as Jimmy McGill, a small-time lawyer searching for his destiny, and, more immediately, hustling to make ends meet. Working alongside, and, often, against Jimmy, is \u201cfixer\u201d Mike Ehrmantraut. The series tracks Jimmy\u2019s transformation into Saul Goodman, the man who puts \u201ccriminal\u201d in \u201ccriminal lawyer\".",
-      "popularity": 128.676, "poster_path": "/s9sO3xdOE6bZx1WcMn06c03ILUL.jpg", "release_date": "2015-02-08",
-      "title": "Better Call Saul", "vote_average": 8.627, "vote_count": 4131, "my_rating": "9", "region": "western"
-    }, "603": {
-      "adult": false, "backdrop_path": "/84XPpjGvxNyExjSuLQe0SzioErt.jpg",
-      "date_rated": "Sun, 25 Jun 2023 00:00:00 GMT", "genres": ["Drama", "Crime"], "id": 1396, "images": {
-        "posters": [
-          {
-            "aspect_ratio": 0.667, "file_path": "/ggFHVNu6YYI5L9pCfOacjizRGt.jpg", "height": 1800, "iso_639_1": "en",
-            "vote_average": 5.006, "vote_count": 46, "width": 1200
-          }, {
-            "aspect_ratio": 0.675, "file_path": "/ztkUQFLlC19CCMYHW9o1zWhJRNq.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 6.134, "vote_count": 38, "width": 1012
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/zKnBah5dWlFoY0yIKcSIYb4f7kC.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.816, "vote_count": 26, "width": 1000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/3xnWaLQjelJDDF7LT1WBo6f4BRe.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.522, "vote_count": 6, "width": 1000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/bMSbEx9vXCSGN4NEktjVIEuibn2.jpg", "height": 3000, "iso_639_1": null,
-            "vote_average": 5.454, "vote_count": 3, "width": 2000
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/zdzmC8rwVP17vicUx1fNqHeDEg1.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.394, "vote_count": 10, "width": 680
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/zla1t6G3mUIBG0b2tPqMY0MvM6T.jpg", "height": 1500, "iso_639_1": null,
-            "vote_average": 5.384, "vote_count": 2, "width": 1000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/nRLFup6SpwKRa1tSXwUHOi0Bfug.jpg", "height": 3000, "iso_639_1": null,
-            "vote_average": 5.384, "vote_count": 2, "width": 2000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/eG5ozVUA0x6DvTIjn9zXQIND1E2.jpg", "height": 3000, "iso_639_1": null,
-            "vote_average": 5.384, "vote_count": 2, "width": 2000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/1hATIM5eAcObWBFnMXfwS7Y086U.jpg", "height": 3000, "iso_639_1": null,
-            "vote_average": 5.384, "vote_count": 2, "width": 2000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/7TOPrmrJ8qO5cKJa7r6WSnjim54.jpg", "height": 3000, "iso_639_1": null,
-            "vote_average": 5.384, "vote_count": 2, "width": 2000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/bGOB1aVrsMlWiZ2zoAXVBKnPMO.jpg", "height": 1800, "iso_639_1": null,
-            "vote_average": 5.318, "vote_count": 3, "width": 1200
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/yfUp5k5SbZxWqC15UfbWLIlk6iL.jpg", "height": 3000, "iso_639_1": null,
-            "vote_average": 5.318, "vote_count": 3, "width": 2000
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/bD22gfzZiYQWuRTX2NrdDveRpwX.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.318, "vote_count": 3, "width": 680
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/qWSt9UMCfJQPNN6eim768JatFad.jpg", "height": 1800, "iso_639_1": "en",
-            "vote_average": 5.318, "vote_count": 3, "width": 1200
-          }, {
-            "aspect_ratio": 0.666, "file_path": "/vZ1RQSDZ3xzBhLqJdrmvpkm2Nbu.jpg", "height": 2000, "iso_639_1": "en",
-            "vote_average": 5.312, "vote_count": 1, "width": 1332
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/1uSYiDGqBU72FqjPjrvKTsuqWk0.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.276, "vote_count": 12, "width": 1000
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/7LUswjn6jgLxdJ4e6sgwkULXsZI.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.27, "vote_count": 10, "width": 680
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/oNed1FKr9h0c5FfyFE3TfIwj445.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.258, "vote_count": 6, "width": 1000
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/eve7CQBM3QXbU2oNbS73WDPV8FM.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.258, "vote_count": 6, "width": 680
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/1ktcj45eMokEv7fYRCc8jVCc7UM.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.252, "vote_count": 4, "width": 680
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/wXKRP7S2KHMmhUbSeuRIPnKI5gn.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.252, "vote_count": 4, "width": 680
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/6Knw5o5Wilsn8zZOyMCcvGfvfCe.jpg", "height": 1200, "iso_639_1": "en",
-            "vote_average": 5.246, "vote_count": 2, "width": 800
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/pg1lhgNmBXkXzMeeKipRBVKqku6.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.246, "vote_count": 2, "width": 1000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/h8Jhi8E5I0Ro5qognanD3cbZUbO.jpg", "height": 1800, "iso_639_1": "en",
-            "vote_average": 5.246, "vote_count": 2, "width": 1200
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/m9qXTc8EEKkd2mb3QUajlKGr6YQ.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.246, "vote_count": 2, "width": 1000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/A4SeCTu7Gq4LDfTq6E2GAFEqZIf.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.246, "vote_count": 2, "width": 1000
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/9PVfHEBXFeCBGvy4NVQLwh43iDt.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.198, "vote_count": 7, "width": 680
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/oB0RaJS13cejIdhXgawqrfzpw4p.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.19, "vote_count": 5, "width": 1000
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/Ahr25VAM7egQRBABjxLzEHd5bgP.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.18, "vote_count": 3, "width": 680
-          }, {
-            "aspect_ratio": 0.668, "file_path": "/b02A8dHr7rc90E3gcFSlmMjYi4R.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.18, "vote_count": 3, "width": 1002
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/ndMfQyIUy71vpKrGuN6NA4LTP06.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.18, "vote_count": 3, "width": 680
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/3ZMOKFDA3fPLlIgFnrZLYLXGoiD.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.172, "vote_count": 1, "width": 680
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/dOJ5xloGImOvWBfDkWZVYgyLQe6.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.172, "vote_count": 1, "width": 680
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/dnWOIytZNU0WGDvULMWsdzhxy0C.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.172, "vote_count": 1, "width": 680
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/yzA5ciqOrCI5pDmqt125Ffr8ujz.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.172, "vote_count": 1, "width": 680
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/iEiPvmgItLzTROvzKlFuuGYI1rc.jpg", "height": 2400, "iso_639_1": "en",
-            "vote_average": 5.118, "vote_count": 4, "width": 1600
-          }, {
-            "aspect_ratio": 0.675, "file_path": "/pbEAxyuVzApIShO9VLQ2loPKYcM.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.118, "vote_count": 4, "width": 1012
-          }, {
-            "aspect_ratio": 0.646, "file_path": "/53vznB7thE5zz22iiudoJaQDzva.jpg", "height": 774, "iso_639_1": "en",
-            "vote_average": 5.106, "vote_count": 2, "width": 500
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/p4MtEvgoebca2vQsrou2Cg8c6lO.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 5.106, "vote_count": 2, "width": 680
-          }, {
-            "aspect_ratio": 0.675, "file_path": "/8OUc4BYrUoOhfcCALFAue8oPgIX.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.044, "vote_count": 3, "width": 1012
-          }, {
-            "aspect_ratio": 0.666, "file_path": "/oUigR4DZSInL4u5cC93ap3eWWDM.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.044, "vote_count": 3, "width": 999
-          }, {
-            "aspect_ratio": 0.675, "file_path": "/w6ghT6tnydMd6vFtmJhs2zIn9fH.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 5.044, "vote_count": 3, "width": 1012
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/3cWI8ZxgfPTGarwCUVEQCSoO8Vd.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 0, "vote_count": 0, "width": 680
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/pTRLqRzAm5QRvO4qmiBgvWxpvjf.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 0, "vote_count": 0, "width": 680
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/r2Pgx9tHL1enwLJ5H7wfMsil8v2.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 0, "vote_count": 0, "width": 680
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/2svpH2Ypfy5AAKxukLOISFFoJ3U.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 0, "vote_count": 0, "width": 680
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/rQxzhQLnqMS0cJz3DVVm1tTNv6c.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 0, "vote_count": 0, "width": 680
-          }, {
-            "aspect_ratio": 0.68, "file_path": "/abV8UqCMtjgsD6pqEw8yG8VvYpJ.jpg", "height": 1000, "iso_639_1": "en",
-            "vote_average": 0, "vote_count": 0, "width": 680
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/anFx9aTOOYqgS3v7x3R84Kz67ly.jpg", "height": 3000, "iso_639_1": "en",
-            "vote_average": 0, "vote_count": 0, "width": 2000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/4WM4yvTLrRi5lSHNjQMcIYRkenm.jpg", "height": 3000, "iso_639_1": "en",
-            "vote_average": 0, "vote_count": 0, "width": 2000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/cbz48fEG8jW4mPMqRtp4mrU0CIB.jpg", "height": 1500, "iso_639_1": "en",
-            "vote_average": 0, "vote_count": 0, "width": 1000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/vmu4A5PPF5Z7BJMVsfc1pD2nY2q.jpg", "height": 3000, "iso_639_1": "en",
-            "vote_average": 0, "vote_count": 0, "width": 2000
-          }, {
-            "aspect_ratio": 0.667, "file_path": "/ineLOBPG8AZsluYwnkMpHRyu7L.jpg", "height": 1500, "iso_639_1": null,
-            "vote_average": 0, "vote_count": 0, "width": 1000
-          }
-        ]
-      }, "media_type": "tv", "origin_country": ["US"], "original_language": "en", "original_name": "Breaking Bad",
+      "poster_path": "/sYQ4ryHIEGYUWJhhyIYYiX2K6og.jpg", "release_date": "2015-02-08", "tags": null,
+      "vote_average": 8.628, "episodes": 63, "seasons": 6, "imdb_id": "tt3032476"
+    }, "749": {
+      "title": "Breaking Bad", "date_rated": "Sun, 25 Jun 2023 00:00:00 GMT", "genres": ["Drama", "Crime"], "id": 1396,
+      "media_type": "tv", "my_rating": "9",
       "overview": "When Walter White, a New Mexico chemistry teacher, is diagnosed with Stage III cancer and given a prognosis of only two years left to live. He becomes filled with a sense of fearlessness and an unrelenting desire to secure his family's financial future at any cost as he enters the dangerous world of drugs and crime.",
-      "popularity": 267.201, "poster_path": "/3xnWaLQjelJDDF7LT1WBo6f4BRe.jpg", "release_date": "2008-01-20",
-      "title": "Breaking Bad", "vote_average": 8.9, "vote_count": 11868, "my_rating": "9", "region": "western"
+      "poster_path": "/ggFHVNu6YYI5L9pCfOacjizRGt.jpg", "release_date": "2008-01-20", "tags": null, "vote_average": 8.9,
+      "episodes": 62, "seasons": 5, "imdb_id": "tt0903747"
     }
   }
 }

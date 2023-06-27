@@ -11,7 +11,7 @@ import requests
 
 import sort_funcs
 import filter_funcs
-from constants import TMDB_API_KEY
+from constants import TMDB_API_KEY, TMDB_ACCESS_TOKEN
 
 
 class Presets:
@@ -92,6 +92,85 @@ class Media:
             return {'result': True}
         else:
             return {'result': False}
+
+    # search
+    def search_media(self, f_title, f_page, f_id):
+        title = f_title
+        page = f_page
+
+        if f_id is None:
+
+            page = int(f_page)
+
+            # phase 1
+            request = f'https://api.themoviedb.org/3/search/{self.media_type}?api_key={TMDB_API_KEY}' \
+                      f'&language=en-US&query={title}'
+            response = requests.get(request).json()
+
+            if len(response['results']) < 1:
+                return
+
+            simple_data = response['results'][page]
+        else:
+
+            # phase 1
+            request = f'https://api.themoviedb.org/3/find/{f_id}?external_source=imdb_id'
+            headers = {
+                "accept": "application/json",
+                "Authorization": 'Bearer ' + TMDB_ACCESS_TOKEN
+            }
+
+            response = requests.get(request, headers=headers).json()
+
+            simple_data = response[f'{self.media_type}_results'][0]
+
+            if len(response['movie_results']) > 1:
+                raise Exception('more than one result found for ', title)
+
+                # phase 2
+        extra_request = f'https://api.themoviedb.org/3/{self.media_type}/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
+                        f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
+        full_data = requests.get(extra_request).json()
+
+        # format data
+        formatted_data = {
+            'title': simple_data['title'],
+            'date_rated': str(datetime.date.today()),
+            'genres': [x['name'] for x in full_data['genres']],
+            'id': simple_data['id'],
+            'media_type': self.media_type,
+            'my_rating': None,
+            'overview': simple_data['overview'],
+            'poster_path': simple_data['poster_path'],
+            'release_date': simple_data['release_date'],
+            'tags': None,
+            'vote_average': simple_data['vote_average'],
+
+            'runtime': full_data['runtime'],
+            'imdb_id': full_data['imdb_id'],
+        }
+
+        return formatted_data
+
+    # others
+    def refresh(self):
+        print('refresh', self.media_type)
+        mov_list = self.db.all()
+        for index, entry in enumerate(mov_list):
+
+            print(entry['title'], index)
+
+            new_data = self.search_media(entry['title'], None, entry['imdb_id'])
+            if 'my_rating' in entry:
+                new_data['my_rating'] = entry['my_rating']
+            if 'tags' in entry:
+                new_data['tags'] = entry['tags']
+            if 'date_rated' in entry:
+                new_data['date_rated'] = entry['date_rated']
+
+            # disabled for safety
+            self.db.remove(Query().imdb_id == str(entry['imdb_id']))
+            self.db.insert(new_data)
 
     # post requests
     def load_more(self):
@@ -187,93 +266,49 @@ class Movies(Media):
     def __init__(self):
         super().__init__(media_type='movie')
 
-    def search_media(self, f_title, f_page):
-        title = f_title
-        page = int(f_page)
-
-        # phase 1
-        request = f'https://api.themoviedb.org/3/search/{self.media_type}?api_key={TMDB_API_KEY}' \
-                  f'&language=en-US&query={title}'
-        response = requests.get(request).json()
-
-        if len(response['results']) < 1:
-            return
-
-        simple_data = response['results'][page]
-
-        # phase 2
-        extra_request = f'https://api.themoviedb.org/3/{self.media_type}/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
-                        f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
-        full_data = requests.get(extra_request).json()
-
-        # format data
-        formatted_data = {
-            'title': simple_data['name'],
-            'date_rated': str(datetime.date.today()),
-            'genres': [x['name'] for x in full_data['genres']],
-            'id': simple_data['id'],
-            'media_type': 'movie',
-            'my_rating': None,
-            'overview': simple_data['overview'],
-            'poster_path': simple_data['poster_path'],
-            'posters': full_data['images']['posters'],
-            'release_date': simple_data['release_date'],
-            'tags': None,
-            'vote_average': simple_data['vote_average'],
-
-            'runtime': simple_data['runtime'],
-            'imdb_id': simple_data['imdb_id'],
-            'imdb_url': simple_data['imdb_url'],
-        }
-
-        return formatted_data
-
-    # others
-    def cleanup(self):
-        for mov in self.db.all():
-
-            if 'images' not in mov:
-                return
-            if 'posters' not in mov['images']:
-                return
-
-            mov['posters'] = []
-
-            for file in mov['images']['posters']:
-                mov['posters'].append(file['file_path'])
-
-            del mov['images']
-            # print(mov['title'])
-
-            try:
-                self.db.table('_default').remove(Query().title == str(mov['title']))
-                self.db.table('_default').insert(mov)
-            except:
-                print('keyError', mov['title'])
-
 
 class Series(Media):
     def __init__(self):
         super().__init__(media_type='tv')
 
-    def search_media(self, f_title, f_page):
+    def search_media(self, f_title, f_page, f_id):
         title = f_title
-        page = int(f_page)
+        page = f_page
 
-        # phase 1
-        request = f'https://api.themoviedb.org/3/search/{self.media_type}?api_key={TMDB_API_KEY}' \
-                  f'&language=en-US&query={title}'
-        response = requests.get(request).json()
+        if f_id is None:
 
-        if len(response['results']) < 1:
-            return
+            page = int(f_page)
 
-        simple_data = response['results'][page]
+            # phase 1
+            request = f'https://api.themoviedb.org/3/search/{self.media_type}?api_key={TMDB_API_KEY}' \
+                      f'&language=en-US&query={title}'
+            response = requests.get(request).json()
 
-        # phase 2
+            if len(response['results']) < 1:
+                return
+
+            simple_data = response['results'][page]
+        else:
+
+            # phase 1
+            request = f'https://api.themoviedb.org/3/find/{f_id}?external_source=imdb_id'
+            headers = {
+                "accept": "application/json",
+                "Authorization": 'Bearer ' + TMDB_ACCESS_TOKEN
+            }
+
+            response = requests.get(request, headers=headers).json()
+
+            simple_data = response[f'{self.media_type}_results'][0]
+
+            if len(response['movie_results']) > 1:
+                raise Exception('more than one result found for ', title)
+
+                # phase 2
         extra_request = f'https://api.themoviedb.org/3/{self.media_type}/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
                         f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
         full_data = requests.get(extra_request).json()
+        # pprint.pprint(simple_data)
 
         # format data
         formatted_data = {
@@ -281,60 +316,41 @@ class Series(Media):
             'date_rated': str(datetime.date.today()),
             'genres': [x['name'] for x in full_data['genres']],
             'id': simple_data['id'],
-            'media_type': 'tv',
+            'media_type': self.media_type,
             'my_rating': None,
             'overview': simple_data['overview'],
             'poster_path': simple_data['poster_path'],
-            'posters': full_data['images']['posters'],
             'release_date': simple_data['first_air_date'],
             'tags': None,
             'vote_average': simple_data['vote_average'],
 
-            'imdb_id': simple_data['imdb_id'],
-            'imdb_url': simple_data['imdb_url'],
+            'episodes': full_data['number_of_episodes'],
+            'seasons': full_data['number_of_seasons'],
+            'imdb_id': f_id,
         }
 
         return formatted_data
 
-    def cleanup(self):
-        for mov in self.db.all():
-            # print(mov['title'])
+    def refresh(self):
+        print('refresh', self.media_type)
 
-            if 'images' not in mov:
-                return
-            if 'posters' not in mov['images']:
-                return
+        mov_list = self.db.all()
+        for index, entry in enumerate(mov_list):
 
-            mov['posters'] = []
+            if "imdb_id" not in entry:
+                entry['imdb_id'] = entry['imdb_url'].split('/')[4]
 
-            for file in mov['images']['posters']:
-                mov['posters'].append(file['file_path'])
+            new_data = self.search_media(entry['title'], None, entry['imdb_id'])
+            if 'my_rating' in entry:
+                new_data['my_rating'] = entry['my_rating']
+            if 'tags' in entry:
+                new_data['tags'] = entry['tags']
+            if 'date_rated' in entry:
+                new_data['date_rated'] = entry['date_rated']
 
-            del mov['images']
-            del mov['credits']
-            del mov['backdrop_path']
-            del mov['created_by']
-            del mov['episode_run_time']
-            del mov['first_air_date']
-            del mov['homepage']
-            del mov['languages']
-            del mov['last_air_date']
-            del mov['last_episode_to_air']
-            del mov['next_episode_to_air']
-            del mov['networks']
-            del mov['origin_country']
-            del mov['production_companies']
-            del mov['production_countries']
-            del mov['spoken_languages']
-            del mov['status']
-            del mov['tagline']
-            del mov['type']
-
-            try:
-                self.db.table('_default').remove(Query().title == str(mov['title']))
-                self.db.table('_default').insert(mov)
-            except:
-                print('keyError', mov['title'])
+            # disabled for safety
+            self.db.remove(Query().imdb_id == str(entry['imdb_id']))
+            self.db.insert(new_data)
 
 
 class Manga(Media):
@@ -387,7 +403,6 @@ class Manga(Media):
             'my_rating': None,
             'overview': None,
             'poster_path': None,
-            'posters': [],
             'release_date': str(simple_data['year']) + '-01-01',
             'tags': None,
             'vote_average': None,
@@ -412,20 +427,14 @@ class Manga(Media):
         request = f'https://api.mangadex.org/cover?limit=100&manga%5B%5D={formatted_data["id"]}'
         response = requests.get(request).json()
 
-        formatted_data['posters'] = [
-            {
-                'file_path': f'{formatted_data["id"]}/{x["attributes"]["fileName"]}',
-                'volume': x['attributes']['volume']
-            }
-            for x in response['data']]
-
         #  fix volumes none
-        for poster in formatted_data['posters']:
-            if poster['volume'] is None:
-                poster['volume'] = str(len(formatted_data['posters']))
+        for poster in response["data"]:
+            if poster["attributes"]['volume'] is None:
+                poster["attributes"]['volume'] = str(len(response["data"]))
 
-        formatted_data['posters'].sort(key=lambda x: '{0:0>8}'.format(x['volume']).lower())
-        formatted_data['poster_path'] = formatted_data['posters'][0]['file_path']
+        poster = sorted(response["data"], key=lambda x: x["attributes"]["volume"])
+        formatted_data['poster_path'] = f'{formatted_data["id"]}/' \
+                                        f'{poster[0]["attributes"]["fileName"]}'
 
         # phase 4
 
@@ -473,7 +482,11 @@ class Manga(Media):
 
     def refresh(self):
         print('refresh')
-        for entry in self.db.all():
+        for index, entry in enumerate(self.db.all()):
+
+            # if index < 50:
+            #     continue
+
             print(entry['title'])
 
             new_data = self.search_media(entry['title'], None, entry['id'])
@@ -481,10 +494,14 @@ class Manga(Media):
                 new_data['my_rating'] = entry['my_rating']
             if 'tags' in entry:
                 new_data['tags'] = entry['tags']
+            if 'contentRating' in entry:
+                new_data['contentRating'] = entry['contentRating']
+            if 'dropped' in entry:
+                new_data['dropped'] = entry['dropped']
 
             # disabled for safety
-            # self.db.remove(Query().id == str(entry['id']))
-            # self.db.insert(new_data)
+            self.db.remove(Query().id == str(entry['id']))
+            self.db.insert(new_data)
 
 
 class Anime(Media):
