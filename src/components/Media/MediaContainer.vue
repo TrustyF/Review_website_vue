@@ -5,7 +5,7 @@ import RatingBumper from "@/components/Media/components/RatingBumper/RatingBumpe
 import {defineProps, defineEmits, ref, toRefs, onMounted, onUnmounted, watch, inject} from 'vue'
 import ContentBox from "@/components/Media/components/ContentBox";
 
-const props = defineProps(['data', 'ratingRange', 'rating_desc', 'mediaType'])
+const props = defineProps(['data', 'ratingRange', 'rating_desc', 'mediaType', 'forceHover'])
 const input = toRefs(props)
 const emits = defineEmits(['MovieEdit'])
 
@@ -42,6 +42,10 @@ function build_cover_request(info) {
   return `${current_api}/media/cover?poster_path=${encodeURIComponent(data['poster_path'])}&type=${media_type}`
 }
 
+onMounted(() => {
+  main_block_hover.value = props['forceHover']
+})
+
 </script>
 <template>
   <div class="movie_container" :class="isOpen ? 'open ' : 'closed '"
@@ -50,12 +54,14 @@ function build_cover_request(info) {
 
     <div class="main_block" @mouseover="main_block_hover = true" @mouseleave="main_block_hover = false">
 
-<!--      <div class="gradient_fill"></div>-->
+      <!--      <div class="gradient_fill"></div>-->
 
       <TagContainer class="tag_container" v-if="data['tags']!==null" :tag_input="data['tags']"></TagContainer>
 
       <div v-if="devMode" class="settings">
-        <button @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">...</button>
+        <button style="width: 50px;height: 50px" @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">
+          ...
+        </button>
       </div>
 
       <img v-if="mediaType!=='manga'"
@@ -137,7 +143,7 @@ function build_cover_request(info) {
 }
 
 .main_block:hover .settings {
-  transform: translate(173px, 3px);
+  transform: translate(147px, 3px);
   visibility: visible;
   opacity: 100%;
 }

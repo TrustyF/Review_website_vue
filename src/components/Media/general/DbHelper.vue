@@ -30,17 +30,33 @@ let tagPresets = ref({})
 let currentSearchMovie = ref("")
 let currentSearchType = ref(props['mediaType'])
 let currentSearchPage = ref(0)
+let extraPosters = ref([])
 let currentPoster = ref(0)
 let presentInDb = ref(false)
 
 onMounted(() => {
   // loadPresets()
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeHelper()
+    }
+    if (event.key === 'Enter') {
+      updateMedia()
+    }
+  })
 })
 
 watch(props, (newV, oldV) => {
   MovChanges.value = newV.data
-  checkInDb()
+
+  if (newV.open === true) {
+    console.log("open")
+    getExtraPosters()
+    checkInDb()
+  }
 })
+
 
 const availableRegions = ["none", "western", "asian"]
 const availableTiers = ["cyan", "gold", "green", "purple", "red", "silver"]
@@ -95,6 +111,33 @@ function searchMovie() {
         MovChanges.value = data
         checkInDb()
         if (devMode) console.log('searchMovie', data);
+      })
+
+      // Handle any errors that occurred during the fetch
+      .catch(error => {
+        console.error('Error:', error);
+      });
+}
+
+function getExtraPosters() {
+  const url = new URL(`${current_api}/media/extra_posters`)
+  url.searchParams.set('media_id', MovChanges.value['imdb_id'] ? MovChanges.value['imdb_id'] : MovChanges.value['id'])
+  url.searchParams.set('media_type', currentSearchType.value)
+
+  fetch(url)
+
+      // Handle http error
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+        return response.json()
+      })
+
+      // Process the returned JSON data
+      .then(data => {
+        extraPosters.value = data
+        // if (devMode) console.log(data);
       })
 
       // Handle any errors that occurred during the fetch
@@ -205,7 +248,7 @@ function updateMedia() {
         }
 
         closeHelper()
-        if (devMode) console.log('media updated');
+        if (devMode) console.log('media updated', MovChanges.value);
       })
 
       // Handle any errors that occurred during the fetch
@@ -245,9 +288,9 @@ function checkInDb() {
 function changePoster(input) {
 
   // console.log('changing poster')
-  if (input <= MovChanges.value['posters'].length) {
+  if (input <= extraPosters.value.length) {
     currentPoster.value = input
-    MovChanges.value['poster_path'] = MovChanges.value['posters'][currentPoster.value]['file_path']
+    MovChanges.value['poster_path'] = extraPosters.value[currentPoster.value]
   }
   console.log('posters', input, currentPoster.value)
 }
@@ -300,16 +343,15 @@ function closeHelper() {
     <div class="main_win">
 
       <div v-if="MovChanges">
-        <div class="poster_preview box_wrapper" v-if="MovChanges['posters']"
-             style="overflow: scroll; height:90vh; width: 10vw">
-          <div class="poster_box" style="width: 9vw"
-               v-for="(poster,index) in MovChanges['posters']"
+        <div class="poster_preview" v-if="extraPosters">
+          <div class="poster_box" style="width: 200px"
+               v-for="(poster,index) in extraPosters"
                :key="index">
-            <img v-if="currentSearchType !== 'manga'" v-lazy="`https://image.tmdb.org/t/p/w500${poster['file_path']}`"
-                 @click="changePoster(index)" style="width: 100%;">
+            <img v-if="currentSearchType !== 'manga'" v-lazy="`https://image.tmdb.org/t/p/w500${poster}`" alt="poster"
+                 @click="changePoster(index)" style="width: 200px;">
             <img v-if="currentSearchType === 'manga'"
-                 v-lazy="`https://uploads.mangadex.org/covers/${poster['file_path']}.256.jpg`"
-                 @click="changePoster(index)" style="width: 100%;">
+                 v-lazy="`https://uploads.mangadex.org/covers/${poster}.256.jpg`" alt="poster"
+                 @click="changePoster(index)" style="width: 200px;">
           </div>
         </div>
       </div>
@@ -317,7 +359,7 @@ function closeHelper() {
       <div class="metadata_wrapper box_wrapper">
 
         <MovieContainer :data="MovChanges" :ratingRange="tempRange"
-                        :media-type="currentSearchType"></MovieContainer>
+                        :media-type="currentSearchType" :force-hover="true"></MovieContainer>
 
         <div class="movie_adder box_wrapper input_tag_description">
 
@@ -438,7 +480,7 @@ function closeHelper() {
 
       <div class="upload box_wrapper" v-if="MovChanges">
         <button @click="closeHelper" style="width: 100%">Close</button>
-        <button @click="updateMedia($event)" v-if="MovChanges['my_rating']" style="width: 100%">upload changes</button>
+        <button @click="updateMedia" v-if="MovChanges['my_rating']" style="width: 100%">upload changes</button>
       </div>
 
     </div>
@@ -464,7 +506,7 @@ export default {
   flex-flow: column wrap;
   /*height: 800px;*/
   height: 90vh;
-  width: 85vw;
+  width: 100%;
   z-index: 3000;
 }
 
@@ -496,6 +538,19 @@ export default {
 
 .row_flow {
   flex-flow: row;
+}
+
+.poster_preview {
+  overflow: scroll;
+  height: 90vh;
+  width: 450px;
+  /*background-color: white;*/
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  gap: 10px;
+  padding: 5px;
+
 }
 
 .input_tag_description {
