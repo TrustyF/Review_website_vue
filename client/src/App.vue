@@ -42,7 +42,7 @@ get_media_ranges()
 <template>
   <div class="main">
     <NavBar/>
-    <div class="app_wrapper">
+    <div v-if="mediaRanges!=={}" class="app_wrapper">
       <RouterView/>
     </div>
     <CreditsFooter/>
