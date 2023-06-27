@@ -77,8 +77,10 @@ class Media:
 
     # noinspection PyTypeChecker
     def update_media(self, data):
+        # print('update test ', data)
         query = Query().id == data['data']['id']
-        self.db.update(data['data'], query)
+        test = self.db.update(data['data'], query)
+        # print('update test result', test)
 
     def del_media(self, data):
         query = Query().id == str(data['id'])
