@@ -4,7 +4,9 @@ import {defineProps, defineEmits, watch, ref, toRefs, onMounted, inject} from 'v
 import RatingTag from "@/components/Media/components/RatingBumper/RatingTag";
 
 const props = defineProps(['data', 'range', 'hover'])
+let hover = toRefs(props)['hover']
 const input = toRefs(props.range)
+const forceVis = inject('forceVis')
 
 const blue_star = './assets/ui/blue_star.png'
 const gold_star = './assets/ui/gold_star.png'
@@ -48,7 +50,6 @@ const rating_diff = Math.abs(props.data['my_rating'] - scaled_user_rating.value)
 
 const arrow_state = ref(0)
 
-calc()
 
 function calc() {
 
@@ -71,6 +72,13 @@ function calc() {
   arrow_state.value = 0
 }
 
+onMounted(()=>{
+  calc()
+  if (forceVis.value){
+    console.log('bumper',forceVis.value)
+    hover = forceVis.value
+  }
+})
 
 </script>
 

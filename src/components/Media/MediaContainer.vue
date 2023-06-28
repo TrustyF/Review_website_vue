@@ -5,11 +5,12 @@ import RatingBumper from "@/components/Media/components/RatingBumper/RatingBumpe
 import {defineProps, defineEmits, ref, toRefs, onMounted, onUnmounted, watch, inject} from 'vue'
 import ContentBox from "@/components/Media/components/ContentBox";
 
-const props = defineProps(['data', 'ratingRange', 'rating_desc', 'mediaType', 'forceHover'])
+const props = defineProps(['data', 'ratingRange', 'rating_desc', 'mediaType'])
 const input = toRefs(props)
 const emits = defineEmits(['MovieEdit'])
 
 const devMode = inject('devMode')
+const forceVis = inject('forceVis')
 const current_api = inject('curr_api')
 
 let isOpen = ref(false)
@@ -42,10 +43,10 @@ function build_cover_request(info) {
   return `${current_api}/media/cover?poster_path=${encodeURIComponent(data['poster_path'])}&type=${media_type}`
 }
 
-onMounted(() => {
-  main_block_hover.value = props['forceHover']
+onMounted(()=>{
+  console.log('movie',forceVis.value)
+  main_block_hover.value = forceVis.value
 })
-
 </script>
 <template>
   <div class="movie_container" :class="isOpen ? 'open ' : 'closed '"
@@ -56,7 +57,7 @@ onMounted(() => {
 
       <!--      <div class="gradient_fill"></div>-->
 
-      <TagContainer class="tag_container" v-if="data['tags']!==null" :tag_input="data['tags']"></TagContainer>
+      <TagContainer :class="forceVis ? 'tag_container  vis_override':'tag_container'" v-if="data['tags']!==null" :tag_input="data['tags']"></TagContainer>
 
       <div v-if="devMode" class="settings">
         <button style="width: 50px;height: 50px" @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">
@@ -165,6 +166,12 @@ onMounted(() => {
   visibility: visible;
   opacity: 100%;
   transition-delay: 0ms;
+}
+
+.vis_override {
+  transform: translate(0, 0);
+  visibility: visible;
+  opacity: 100%;
 }
 
 

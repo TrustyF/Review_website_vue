@@ -16,6 +16,7 @@ app.provide('curr_api', devMode ? local_api : server_api)
 app.provide('devMode', devMode)
 app.provide('mediaRanges', mediaRanges)
 app.provide('sessionSeed', sessionSeed)
+app.provide('forceVis', ref(false))
 
 app.use(VueLazyload, {
     preLoad: 2,
