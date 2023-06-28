@@ -95,22 +95,22 @@ def get_recent_release():
     return media_store[request.json['media_type']].get_recent_release(request.json), 200
 
 
-# tags
+# presets
 
-# class Tags:
-#     def __init__(self):
-#         self.presets = tag_presets
-#
-#     def get(self):
-#         return self.presets.get_all_presets(), 200
-#
-#     def post(self):
-#         req = request.json
-#         return self.presets.add_preset(req), 200
-#
-#     def delete(self):
-#         req = request.json
-#         return self.presets.del_preset(req), 200
+@app.route('/preset/get_all', methods=["GET"])
+def get_all_presets():
+    return tag_presets.get_all_presets(), 200
+
+
+@app.route('/preset/add', methods=["POST"])
+def add_preset():
+    return tag_presets.add_preset(request.json), 200
+
+
+@app.route('/preset/delete', methods=["POST"])
+def del_preset():
+    return tag_presets.del_preset(request.json), 200
+
 
 if __name__ == '__main__':
     # media_store['anime'].refresh()

@@ -61,6 +61,8 @@ class Media:
 
         self.rank_range = (1, 10)
 
+        self.storage_lock = False
+
     # setters
     def set_settings(self, f_settings=None, f_max_media=10):
         # print('set_settings')
@@ -77,10 +79,14 @@ class Media:
 
     # noinspection PyTypeChecker
     def update_media(self, data):
-        # print('update test ', data)
-        query = Query().id == data['data']['id']
-        test = self.db.update(data['data'], query)
-        # print('update test result', test)
+
+        if not self.storage_lock:
+            self.storage_lock = True
+            query = Query().id == data['data']['id']
+            test = self.db.update(data['data'], query)
+            self.storage_lock = False
+        else:
+            print('storage locked')
 
     def del_media(self, data):
         query = Query().id == str(data['id'])
@@ -622,6 +628,90 @@ class Anime(Media):
             self.db.insert(new_data)
 
 
+class Game(Media):
+    def __init__(self):
+        super().__init__(media_type='game')
+
+    def search_media(self, f_title, f_page, f_id):
+        title = f_title
+        page = f_page
+
+        if f_id is None:
+
+            page = int(f_page)
+
+            # phase 1
+            request = f'https://api.themoviedb.org/3/search/{self.media_type}?api_key={TMDB_API_KEY}' \
+                      f'&language=en-US&query={title}'
+            response = requests.get(request).json()
+            simple_data = response['results'][page]
+
+        else:
+
+            # phase 1
+            request = f'https://api.themoviedb.org/3/find/{f_id}?external_source=imdb_id'
+            headers = {
+                "accept": "application/json",
+                "Authorization": 'Bearer ' + TMDB_ACCESS_TOKEN
+            }
+
+            response = requests.get(request, headers=headers).json()
+            simple_data = response['tv_results'][0]
+
+            if len(response['movie_results']) > 1:
+                raise Exception('more than one result found for ', title)
+
+                # phase 2
+        extra_request = f'https://api.themoviedb.org/3/tv/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
+                        f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
+        full_data = requests.get(extra_request).json()
+        # pprint.pprint(full_data)
+
+        # format data
+        formatted_data = {
+            'title': simple_data['name'],
+            'date_rated': str(datetime.date.today()),
+            'genres': [x['name'] for x in full_data['genres']],
+            'id': simple_data['id'],
+            'media_type': self.media_type,
+            'my_rating': None,
+            'overview': simple_data['overview'],
+            'poster_path': simple_data['poster_path'],
+            'release_date': simple_data['first_air_date'],
+            'tags': None,
+            'vote_average': simple_data['vote_average'],
+
+            'episodes': full_data['number_of_episodes'],
+            'seasons': full_data['number_of_seasons'],
+            'imdb_id': f_id,
+        }
+
+        return formatted_data
+
+    def refresh(self):
+        print('refresh', self.media_type)
+
+        mov_list = self.db.all()
+        for index, entry in enumerate(mov_list):
+
+            print(entry['title'])
+
+            if "imdb_id" not in entry:
+                entry['imdb_id'] = entry['imdb_url'].split('/')[4]
+
+            new_data = self.search_media(entry['title'], None, entry['imdb_id'])
+            if 'my_rating' in entry:
+                new_data['my_rating'] = entry['my_rating']
+            if 'tags' in entry:
+                new_data['tags'] = entry['tags']
+            if 'date_rated' in entry:
+                new_data['date_rated'] = entry['date_rated']
+
+            # disabled for safety
+            self.db.remove(Query().title == str(entry['title']))
+            self.db.insert(new_data)
+
+
 tag_presets = Presets()
 
 store = StorageManager()
@@ -629,3 +719,4 @@ store.add_store('movie', Movies())
 store.add_store('tv', Series())
 store.add_store('manga', Manga())
 store.add_store('anime', Anime())
+# store.add_store('game', Game())
