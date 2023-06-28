@@ -1,9 +1,10 @@
 <script setup>
-import {defineProps, defineEmits, ref, watch, onMounted, onUnmounted, inject} from 'vue'
+import {defineProps, defineEmits, toRefs, ref, watch, onMounted, onUnmounted, inject} from 'vue'
 import FloatingVue from 'floating-vue'
 
-const props = defineProps(['tag_input', 'preview'])
+const props = defineProps(['tag_input'])
 const tag_path = "./assets/tags/icons/"
+const forceVis = inject('forceVis')
 
 const screenRect = ref(null)
 const screenSide = ref(false)
@@ -26,6 +27,7 @@ function calcTagAmount() {
 onMounted(() => {
   calcScreenSide()
   calcTagAmount()
+  console.log('tag', forceVis.value)
   window.addEventListener('resize', calcScreenSide)
 })
 
@@ -37,11 +39,11 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <div ref="screenRect" class="tag_wrapper" v-if="preview===undefined">
+    <div ref="screenRect" class="tag_wrapper" v-if="forceVis===false">
 
       <div class="tooltip" v-for="tag in tag_input" :key="tag['name']">
 
-        <img class="tag_icon" :src="`${tag_path}${tag['tier']}/${tag['image']}`"
+        <img class="tag_icon" v-lazy="`${tag_path}${tag['tier']}/${tag['image']}`"
              :alt="tag['image']">
 
         <div :class="screenSide ?'hover_box_left' : 'hover_box' ">
@@ -54,7 +56,7 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div ref="screenRect" class="tag_preview" v-if="preview===true">
+    <div ref="screenRect" class="tag_preview" v-if="forceVis===true">
       <div class="tooltip" v-for="tag in tag_input" :key="tag['name']">
         <img :class="`${tag['tier']}_glow` + ' tag_icon'" :src="`${tag_path}${tag['tier']}/${tag['image']}`"
              :alt="tag['image']">
@@ -177,12 +179,6 @@ onUnmounted(() => {
   visibility: visible;
   opacity: 100%;
 }
-
-/*.tag_preview .tooltip {*/
-/*  visibility: visible;*/
-/*  opacity: 100%;*/
-/*  transition: ease-in-out 50ms;*/
-/*}*/
 
 .visible_override {
   visibility: visible;

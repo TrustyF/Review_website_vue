@@ -1,14 +1,14 @@
 <script setup>
-import {defineProps, defineEmits, ref, watch, onMounted, onUnmounted, computed, inject} from 'vue'
+import {defineProps, defineEmits, ref, watch, onMounted, onUnmounted, computed, inject, provide} from 'vue'
 import TagContainer from "@/components/Media/components/TagContainer";
 import asset_paths from '../../../../public/assets/tags/assets.json'
 import MovieContainer from "@/components/Media/MediaContainer";
 
 const current_api = inject('curr_api')
 const devMode = inject('devMode')
+let forceVis = inject('forceVis')
 
 const tag_path = "./assets/tags/icons/"
-
 
 const props = defineProps(['data', 'open', 'mediaType'])
 const emits = defineEmits(['opened', 'closed', 'updated'])
@@ -35,8 +35,7 @@ let currentPoster = ref(0)
 let presentInDb = ref(false)
 
 onMounted(() => {
-  // loadPresets()
-
+  loadPresets()
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
       closeHelper()
@@ -51,7 +50,7 @@ watch(props, (newV, oldV) => {
   MovChanges.value = newV.data
 
   if (newV.open === true) {
-    console.log("open")
+    forceVis.value = true
     getExtraPosters()
     checkInDb()
   }
@@ -62,35 +61,8 @@ const availableRegions = ["none", "western", "asian"]
 const availableTiers = ["cyan", "gold", "green", "purple", "red", "silver"]
 const availableReWatch = ["none", "up", "down"]
 
-async function loadPresets() {
 
-  const url = new URL(`${current_api}/get_presets/`)
-  url.searchParams.set('none', 'none')
-
-  fetch(url)
-
-      // Handle http error
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`)
-        }
-        return response.json()
-      })
-
-      // Process the returned JSON data
-      .then(data => {
-        tagPresets.value = data
-        if (devMode) console.log(data);
-      })
-
-      // Handle any errors that occurred during the fetch
-      .catch(error => {
-        console.error('Error:', error);
-      });
-}
-
-
-function searchMovie() {
+async function searchMovie() {
   const url = new URL(`${current_api}/media/search`)
   url.searchParams.set('type', currentSearchType.value)
   url.searchParams.set('title', currentSearchMovie.value)
@@ -110,7 +82,7 @@ function searchMovie() {
       .then(data => {
         MovChanges.value = data
         checkInDb()
-        if (devMode) console.log('searchMovie', data);
+        // if (devMode) console.log('searchMovie', data);
       })
 
       // Handle any errors that occurred during the fetch
@@ -119,7 +91,7 @@ function searchMovie() {
       });
 }
 
-function getExtraPosters() {
+async function getExtraPosters() {
   const url = new URL(`${current_api}/media/extra_posters`)
   url.searchParams.set('media_id', MovChanges.value['imdb_id'] ? MovChanges.value['imdb_id'] : MovChanges.value['id'])
   url.searchParams.set('media_type', currentSearchType.value)
@@ -146,25 +118,12 @@ function getExtraPosters() {
       });
 }
 
-function scrollPage(event) {
+async function scrollPage(event) {
   currentSearchPage.value = Number(event.target.value)
   searchMovie()
 }
 
-// async function refreshData() {
-//   if (currentSearchType.value === 'manga') {
-//     let searchResult = await axios.get(`https://api.mangadex.org/manga?ids%5B%5D=${MovChanges.value['manga_id']}&order%5Brelevance%5D=desc&includes[]=cover_art&limit=20`)
-//         .then(response => {
-//           let simple_data = response.data.data[currentSearchPage.value]['attributes']
-//           // console.log(simple_data['contentRating'],simple_data['year'])
-//           MovChanges.value['contentRating'] = simple_data['contentRating']
-//           MovChanges.value['release_date'] = String(simple_data['year'] + '-01-01')
-//           updateMedia()
-//         })
-//   }
-// }
-
-function addMovie(button) {
+async function addMovie(button) {
   button.target.disabled = true
 
   const url = new URL(`${current_api}/media/add`)
@@ -195,7 +154,7 @@ function addMovie(button) {
       });
 }
 
-function delMovie(button) {
+async function delMovie(button) {
   button.target.disabled = true
 
   const url = new URL(`${current_api}/media/delete`)
@@ -227,7 +186,7 @@ function delMovie(button) {
       });
 }
 
-function updateMedia() {
+async function updateMedia() {
 
   const url = new URL(`${current_api}/media/update`)
   const params = {
@@ -248,7 +207,7 @@ function updateMedia() {
         }
 
         closeHelper()
-        if (devMode) console.log('media updated', MovChanges.value);
+        // if (devMode) console.log('media updated', MovChanges.value);
       })
 
       // Handle any errors that occurred during the fetch
@@ -257,8 +216,7 @@ function updateMedia() {
       });
 }
 
-function checkInDb() {
-  console.log('checking in db', MovChanges.value['title'])
+async function checkInDb() {
   const url = new URL(`${current_api}/media/check_dupe`)
   url.searchParams.set('media_type', currentSearchType.value)
   url.searchParams.set('media_id', MovChanges.value['id'])
@@ -276,6 +234,62 @@ function checkInDb() {
       // Process the returned JSON data
       .then(data => {
         presentInDb.value = data['result'];
+        // if (devMode) console.log(data);
+      })
+
+      // Handle any errors that occurred during the fetch
+      .catch(error => {
+        console.error('Error:', error);
+      });
+}
+
+async function changePoster(input) {
+
+  // console.log('changing poster')
+  if (input <= extraPosters.value.length) {
+    currentPoster.value = input
+    MovChanges.value['poster_path'] = extraPosters.value[currentPoster.value]
+  }
+}
+
+async function addTagMovie() {
+  if (MovChanges.value['tags'] === undefined) {
+    MovChanges.value['tags'] = []
+  }
+  MovChanges.value['tags'].push({...iconData.value})
+  // console.log('added tag', MovChanges.value)
+}
+
+async function delTagMovie() {
+  MovChanges.value['tags'].forEach((tag, index) => {
+    if (tag['name'] === iconData.value['name']) {
+      MovChanges.value['tags'].splice(index, 1)
+    }
+  })
+}
+
+async function delAllTagMovie() {
+  MovChanges.value['tags'] = []
+}
+
+async function loadPresets() {
+
+  const url = new URL(`${current_api}/preset/get_all`)
+  url.searchParams.set('none', 'none')
+
+  fetch(url)
+
+      // Handle http error
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+        return response.json()
+      })
+
+      // Process the returned JSON data
+      .then(data => {
+        tagPresets.value = data
         if (devMode) console.log(data);
       })
 
@@ -285,53 +299,56 @@ function checkInDb() {
       });
 }
 
-function changePoster(input) {
+async function addTagPresets() {
 
-  // console.log('changing poster')
-  if (input <= extraPosters.value.length) {
-    currentPoster.value = input
-    MovChanges.value['poster_path'] = extraPosters.value[currentPoster.value]
-  }
-  console.log('posters', input, currentPoster.value)
-}
+  const url = new URL(`${current_api}/preset/add`)
+  const params = {'data': iconData.value}
 
-function addTagMovie() {
-  if (MovChanges.value['tags'] === undefined) {
-    MovChanges.value['tags'] = []
-  }
-  MovChanges.value['tags'].push({...iconData.value})
-  // console.log('added tag', MovChanges.value)
-}
-
-function delTagMovie() {
-  MovChanges.value['tags'].forEach((tag, index) => {
-    if (tag['name'] === iconData.value['name']) {
-      MovChanges.value['tags'].splice(index, 1)
-    }
+  fetch(url, {
+    method: 'POST',
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(params)
   })
+
+      // Handle http error
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+      })
+
+      // Handle any errors that occurred during the fetch
+      .catch(error => {
+        console.error('Error:', error);
+      });
 }
 
-function delAllTagMovie() {
-  MovChanges.value['tags'] = []
+async function delTagPresets() {
+
+  const url = new URL(`${current_api}/preset/delete`)
+  const params = {'data': iconData.value}
+
+  fetch(url, {
+    method: 'POST',
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(params)
+  })
+
+      // Handle http error
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+      })
+
+      // Handle any errors that occurred during the fetch
+      .catch(error => {
+        console.error('Error:', error);
+      });
 }
 
-// function addTagPresets() {
-//   axios.post(`${current_api}/add_preset/`, iconData.value)
-//       .then(response => {
-//         // console.log("added preset")
-//         loadPresets()
-//       })
-// }
-
-// function delTagPresets() {
-//   axios.post(`${current_api}/del_preset/`, iconData.value)
-//       .then(response => {
-//         // console.log("removed preset")
-//         loadPresets()
-//       })
-// }
-
-function closeHelper() {
+async function closeHelper() {
+  forceVis.value = false
   emits('closed', true)
   emits('updated', true)
 }
@@ -344,14 +361,14 @@ function closeHelper() {
 
       <div v-if="MovChanges">
         <div class="poster_preview" v-if="extraPosters">
-          <div class="poster_box" style="width: 200px"
+          <div class="poster_box" style="width: 150px"
                v-for="(poster,index) in extraPosters"
                :key="index">
             <img v-if="currentSearchType !== 'manga'" v-lazy="`https://image.tmdb.org/t/p/w500${poster}`" alt="poster"
-                 @click="changePoster(index)" style="width: 200px;">
+                 @click="changePoster(index)" style="width: 150px;">
             <img v-if="currentSearchType === 'manga'"
                  v-lazy="`https://uploads.mangadex.org/covers/${poster}.256.jpg`" alt="poster"
-                 @click="changePoster(index)" style="width: 200px;">
+                 @click="changePoster(index)" style="width: 150px;">
           </div>
         </div>
       </div>
@@ -463,7 +480,7 @@ function closeHelper() {
 
         </div>
 
-        <div class="icon_selector box_wrapper" style="min-height: 90vh; max-width: 30vw">
+        <div class="icon_selector box_wrapper" style="min-height: 90vh; max-width: 20vw">
           <form id="tier" @input="iconData['tier'] = $event.target.value">
             <select>
               <option v-for="tier in availableTiers" :key="tier">{{ tier }}</option>
@@ -543,12 +560,11 @@ export default {
 .poster_preview {
   overflow: scroll;
   height: 90vh;
-  width: 450px;
+  width: 400px;
   /*background-color: white;*/
   display: flex;
-  flex-flow: row wrap;
+  flex-wrap: wrap;
   justify-content: space-evenly;
-  gap: 10px;
   padding: 5px;
 
 }
@@ -564,7 +580,7 @@ export default {
   display: flex;
   flex-flow: row wrap;
   overflow: scroll;
-  max-height: 90vh;
+  max-height: 500px;
   max-width: 20vw;
 }
 
