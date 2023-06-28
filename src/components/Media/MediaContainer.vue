@@ -43,7 +43,7 @@ function build_cover_request(info) {
   return `${current_api}/media/cover?poster_path=${encodeURIComponent(data['poster_path'])}&type=${media_type}`
 }
 
-onMounted(()=>{
+watch(forceVis,()=>{
   console.log('movie',forceVis.value)
   main_block_hover.value = forceVis.value
 })

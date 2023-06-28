@@ -82,6 +82,7 @@ async function searchMovie() {
       .then(data => {
         MovChanges.value = data
         checkInDb()
+        getExtraPosters()
         // if (devMode) console.log('searchMovie', data);
       })
 
@@ -93,6 +94,7 @@ async function searchMovie() {
 
 async function getExtraPosters() {
   const url = new URL(`${current_api}/media/extra_posters`)
+  console.log('test',MovChanges.value)
   url.searchParams.set('media_id', MovChanges.value['imdb_id'] ? MovChanges.value['imdb_id'] : MovChanges.value['id'])
   url.searchParams.set('media_type', currentSearchType.value)
 
@@ -381,8 +383,8 @@ async function closeHelper() {
         <div class="movie_adder box_wrapper input_tag_description">
 
           <label for="search_m_input">Search</label>
-          <input type="search" @input="currentSearchMovie = $event.target.value" @keyup.enter="searchMovie"
-                 id="search_m_input">
+          <input type="search" @input="currentSearchMovie = $event.target.value" id="search_m_input">
+          <button @click="searchMovie">Search</button>
 
           <label for="search_list_input">Search scroll</label>
           <input type="number" @change="scrollPage" value="0"
