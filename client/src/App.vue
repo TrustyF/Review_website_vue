@@ -1,5 +1,5 @@
 <script setup>
-import {inject} from 'vue'
+import {inject, onMounted} from 'vue'
 import {RouterView, RouterLink} from 'vue-router'
 import NavBar from "@/components/General/NavBar";
 import './styles/globals.css'
@@ -16,37 +16,41 @@ async function get_media_ranges() {
   let retryLeft = 3
 
   while (retryLeft > 0) {
-      await fetch(url)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`)
-            }
-            return response.json()
-          })
+    await fetch(url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`)
+          }
+          return response.json()
+        })
 
-          // Process the returned JSON data
-          .then(data => {
-            mediaRanges.value = data
-            if (devMode) console.log('get all ranges', data);
-            retryLeft = 0
-          })
+        // Process the returned JSON data
+        .then(data => {
+          mediaRanges.value = data
+          if (devMode) console.log('get all ranges', data);
+          retryLeft = 0
+        })
 
-          // Handle any errors that occurred during the fetch
-          .catch(error => {
-            console.error('Caught Error:', error);
-          });
+        // Handle any errors that occurred during the fetch
+        .catch(error => {
+          console.error('Caught Error:', error);
+        });
+
     retryLeft -= 1
   }
 }
 
-get_media_ranges()
+onMounted(() => {
+  get_media_ranges()
+
+})
 
 </script>
 
 <template>
   <div class="main">
     <NavBar/>
-    <div v-if="mediaRanges!=={}" class="app_wrapper">
+    <div v-if="mediaRanges!==undefined" class="app_wrapper">
       <RouterView/>
     </div>
     <CreditsFooter/>
