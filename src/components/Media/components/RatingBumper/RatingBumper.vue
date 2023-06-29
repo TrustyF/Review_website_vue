@@ -32,6 +32,7 @@ let ratingDesc = {
 }
 let avg_range = [1, 10]
 let my_range = [1, 10]
+console.log(input.value)
 
 if (input['avg_range'] !== undefined) {
   avg_range = input['avg_range'].value

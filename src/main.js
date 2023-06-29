@@ -8,7 +8,7 @@ const local_api = "http://localhost:5000"
 const server_api = "https://trustyfox.pythonanywhere.com"
 let devMode = false
 let sessionSeed = Math.random()
-let mediaRanges = ref({})
+let mediaRanges = ref(undefined)
 
 const app = createApp(App)
 
