@@ -43,7 +43,7 @@ let ratingDesc = {
   2: 'Holy shit bad',
   1: 'Affront to god',
 }
-const mediaType = "manga"
+const mediaType = ref("manga")
 </script>
 
 <template>

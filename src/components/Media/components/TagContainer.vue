@@ -27,7 +27,6 @@ function calcTagAmount() {
 onMounted(() => {
   calcScreenSide()
   calcTagAmount()
-  console.log('tag', forceVis.value)
   window.addEventListener('resize', calcScreenSide)
 })
 

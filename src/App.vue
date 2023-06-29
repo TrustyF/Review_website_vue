@@ -11,28 +11,32 @@ let devMode = inject('devMode')
 const current_api = inject('curr_api')
 let mediaRanges = inject('mediaRanges')
 
-function get_media_ranges() {
-
+async function get_media_ranges() {
   const url = new URL(`${current_api}/media/get_rating_ranges`)
-  fetch(url)
+  let retryLeft = 3
 
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`)
-        }
-        return response.json()
-      })
+  while (retryLeft > 0) {
+      await fetch(url)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`)
+            }
+            return response.json()
+          })
 
-      // Process the returned JSON data
-      .then(data => {
-        mediaRanges.value = data
-        if (devMode) console.log('get all ranges', data);
-      })
+          // Process the returned JSON data
+          .then(data => {
+            mediaRanges.value = data
+            if (devMode) console.log('get all ranges', data);
+            retryLeft = 0
+          })
 
-      // Handle any errors that occurred during the fetch
-      .catch(error => {
-        console.error('Error:', error);
-      });
+          // Handle any errors that occurred during the fetch
+          .catch(error => {
+            console.error('Caught Error:', error);
+          });
+    retryLeft -= 1
+  }
 }
 
 get_media_ranges()
