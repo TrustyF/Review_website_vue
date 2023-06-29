@@ -1,9 +1,11 @@
+import pprint
 import random
 
 from flask import Flask, Request, request, Response
 from flask_cors import CORS
 # from flask_caching import Cache
 import flask_color
+import random
 
 from storage import store, tag_presets
 
@@ -73,7 +75,11 @@ def get_cover():
 # @cache.cached(timeout=3000)
 def get_rating_range():
     # print(request.args.get('test'), request.args.get('good'))
-    return store.gather_rating_ranges()
+    if random.randint(0,1) == 1:
+        return store.gather_rating_ranges()
+    else:
+        print('failed rand check')
+        return {}
 
 
 @app.route('/media/check_dupe', methods=["GET"])

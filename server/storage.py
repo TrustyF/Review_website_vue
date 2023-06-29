@@ -168,6 +168,7 @@ class Media:
         }
 
         response = requests.get(request, headers=headers).json()
+        pprint.pprint(response)
         simple_data = response[f'{self.media_type}_results'][0]
 
         extra_request = f'https://api.themoviedb.org/3/{self.media_type}/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
@@ -213,7 +214,11 @@ class Media:
         sorted_arr = self.sorting(filtered_arr)
         culled_arr = self.culling(sorted_arr, self.max_page_items)
         ranked_arr = sort_funcs.place_in_rank_category(culled_arr, self.rank_range)
-        return ranked_arr
+
+        return {
+            'media': ranked_arr,
+            'media_length': len(filtered_arr)
+        }
 
     def get_media_rating_range(self):
         avg_ratings = []
@@ -295,7 +300,7 @@ class Series(Media):
     def __init__(self):
         super().__init__(media_type='tv')
 
-    def search_media(self, f_title, f_page, f_id):
+    def search_media(self, f_title, f_page, f_id=None):
         title = f_title
         page = f_page
 
@@ -329,7 +334,8 @@ class Series(Media):
         extra_request = f'https://api.themoviedb.org/3/{self.media_type}/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
                         f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
         full_data = requests.get(extra_request).json()
-        # pprint.pprint(simple_data)
+
+        # id_request = f"https://api.themoviedb.org/3/{self.media_type}/series_id/external_ids"
 
         # format data
         formatted_data = {
