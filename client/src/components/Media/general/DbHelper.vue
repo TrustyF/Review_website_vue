@@ -277,7 +277,6 @@ async function delAllTagMovie() {
 async function loadPresets() {
 
   const url = new URL(`${current_api}/preset/get_all`)
-  url.searchParams.set('none', 'none')
 
   fetch(url)
 
@@ -292,7 +291,7 @@ async function loadPresets() {
       // Process the returned JSON data
       .then(data => {
         tagPresets.value = data
-        if (devMode) console.log(data);
+        // if (devMode) console.log(data);
       })
 
       // Handle any errors that occurred during the fetch

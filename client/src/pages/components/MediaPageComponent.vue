@@ -4,12 +4,10 @@ import DbHelper from "@/components/Media/general/DbHelper";
 import RatingHeader from "@/components/Media/general/RatingHeader";
 import {inject, watch, defineProps} from 'vue'
 
-import {ref, onMounted, toRefs} from 'vue'
+import {ref, onMounted, onUnmounted, toRefs} from 'vue'
 import FilterMenu from "@/components/Media/general/FilterMenu";
 import {eventThrottle} from "@/utils";
 
-// to do
-// add fresh review
 const props = defineProps(['filters', 'ratingDesc', 'mediaType'])
 const input_props = toRefs(props)
 
@@ -20,6 +18,8 @@ const sessionSeed = inject('sessionSeed')
 
 const movies = ref([])
 const moviesFetched = ref(false)
+let scrollFetchLock = ref(false)
+const maxMovies = ref(0)
 let filters = input_props['filters']
 let ratingDesc = input_props['ratingDesc']
 let mediaType = input_props['mediaType']
@@ -34,7 +34,6 @@ const mediaRatingRanges = ref({})
 
 // API
 function update_movies() {
-
   const url = new URL(`${current_api}/media/get_all`)
   const params = {
     'settings': settings.value,
@@ -59,8 +58,12 @@ function update_movies() {
 
       // Process the returned JSON data
       .then(data => {
-        movies.value = data
+        movies.value = data['media']
         moviesFetched.value = true
+        maxMovies.value = data['media_length']
+        setTimeout(() => {
+          scrollFetchLock.value = false
+        }, 100)
         if (devMode) console.log('get movies', data);
       })
 
@@ -70,7 +73,7 @@ function update_movies() {
       });
 }
 
-function editMovie(input) {
+async function editMovie(input) {
   settingsOpen.value = true
   currentSelectedMovie.value = input
 }
@@ -97,7 +100,8 @@ function handleScroll() {
   const scrollHeight = document.documentElement.scrollHeight
   const clientHeight = document.documentElement.clientHeight
 
-  if (scrollTop + clientHeight >= (scrollHeight - (scrollHeight / 3))) {
+  if (scrollTop + clientHeight >= (scrollHeight - (scrollHeight / 3)) && maxMovies.value >= maxMedia.value && !scrollFetchLock.value) {
+    scrollFetchLock.value = true
     maxMedia.value += 50
     update_movies()
   }
@@ -109,7 +113,10 @@ watch(settingsOpen, (newV, oldV) => {
 
 onMounted(() => {
   update_movies()
-  window.addEventListener('scroll', eventThrottle(handleScroll, 300))
+  window.addEventListener('scroll', handleScroll)
+})
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
 })
 </script>
 
@@ -134,7 +141,7 @@ onMounted(() => {
                             :key="mov.id"
                             :data="mov"
                             :ratingRange="mediaRanges[mediaType]"
-                            :media-type="mediaType"
+                            :media-type="props.mediaType"
                             @MovieEdit="editMovie"></MovieContainer>
           </div>
         </div>

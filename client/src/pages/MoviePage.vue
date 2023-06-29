@@ -58,7 +58,7 @@ let ratingDesc = {
   1: 'Affront to god',
 }
 
-const mediaType = "movie"
+const mediaType = ref("movie")
 </script>
 
 <template>
