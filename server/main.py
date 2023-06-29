@@ -120,4 +120,4 @@ def del_preset():
 
 if __name__ == '__main__':
     # media_store['anime'].refresh()
-    app.run(debug=True)
+    app.run(debug=False)

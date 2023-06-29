@@ -11,7 +11,13 @@ import requests
 
 import sort_funcs
 import filter_funcs
-from constants import TMDB_API_KEY, TMDB_ACCESS_TOKEN
+from dotenv import load_dotenv, dotenv_values
+
+env_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(env_path)
+
+TMDB_API_KEY = os.environ.get("TMDB_API_KEY")
+TMDB_ACCESS_TOKEN = os.environ.get("TMDB_ACCESS_TOKEN")
 
 
 class Presets:
