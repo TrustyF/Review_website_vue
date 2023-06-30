@@ -98,8 +98,9 @@ class Media:
         query = Query().id == data['data']['id']
         test = self.db.remove(query)
 
+    # noinspection PyTypeChecker
     def check_dupe(self, media_id):
-        entries = self.db.search(Query().id == int(media_id))
+        entries = self.db.search(Query().id == media_id)
         if len(entries) > 0:
             print('found dupe')
             return {'result': True}
