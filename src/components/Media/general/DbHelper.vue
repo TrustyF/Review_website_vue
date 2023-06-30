@@ -40,7 +40,7 @@ onMounted(() => {
     if (event.key === 'Escape') {
       closeHelper()
     }
-    if (event.key === 'Enter') {
+    if (event.key === '\\') {
       updateMedia()
     }
   })
@@ -157,7 +157,7 @@ async function addMovie(button) {
 }
 
 async function delMovie(button) {
-  button.target.disabled = true
+  // button.target.disabled = true
 
   const url = new URL(`${current_api}/media/delete`)
   const params = {
@@ -176,7 +176,7 @@ async function delMovie(button) {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`)
         } else {
-          button.target.disabled = false
+          // button.target.disabled = false
           closeHelper()
           if (devMode) console.log('media deleted');
         }
@@ -384,8 +384,8 @@ async function closeHelper() {
         <div class="movie_adder box_wrapper input_tag_description">
 
           <label for="search_m_input">Search</label>
-          <input type="search" @input="currentSearchMovie = $event.target.value" id="search_m_input">
-          <button @click="searchMovie">Search</button>
+          <input type="search" @input="currentSearchMovie = $event.target.value" @keydown.enter="searchMovie" id="search_m_input">
+<!--          <button @click="searchMovie">Search</button>-->
 
           <label for="search_list_input">Search scroll</label>
           <input type="number" @change="scrollPage" value="0"
@@ -419,7 +419,7 @@ async function closeHelper() {
             </form>
           </div>
 
-          <div v-if="mediaType==='manga'">
+          <div v-if="mediaType==='manga' || 'anime' || 'tv'">
             <label for="re_read">Re-read</label>
             <input id="re_read" type="number" @input="MovChanges['re_read'] = String($event.target.value)">
 
@@ -493,7 +493,7 @@ async function closeHelper() {
 
       <div class="upload box_wrapper" v-if="MovChanges">
         <button @click="closeHelper" style="width: 100%">Close</button>
-        <button @click="updateMedia" v-if="MovChanges['my_rating']" style="width: 100%">upload changes</button>
+        <button @click="updateMedia" v-if="MovChanges['my_rating'] && presentInDb" style="width: 100%">upload changes</button>
       </div>
 
     </div>
