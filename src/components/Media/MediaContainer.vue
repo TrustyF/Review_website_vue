@@ -75,7 +75,6 @@ function RatingChange(state) {
       });
 }
 
-
 function build_cover_request(info) {
   let data = input.data.value
   let media_type = input['mediaType'].value
@@ -87,19 +86,20 @@ watch(forceVis, () => {
   console.log('movie', forceVis.value)
   main_block_hover.value = forceVis.value
 })
+
 </script>
 <template>
   <div class="movie_container" :class="isOpen ? 'open ' : 'closed '"
        v-click-out-side="clickOutside"
        @click="isOpen = !isOpen">
 
-    <div class="main_block" @mouseover="main_block_hover = true" @mouseleave="main_block_hover = false">
-
-      <div v-if="data.hasOwnProperty('tags') && data['tags']!==undefined && data['tags']!==null">
-        <div v-if="data['tags'].length > 0">
-          <div class="fill" v-if="Object.values(data['tags'][0]).includes('Childhood')"></div>
-        </div>
+    <div v-if="data.hasOwnProperty('tags') && data['tags']!==undefined && data['tags']!==null">
+      <div v-if="data['tags'].length > 0">
+        <div class="fill" v-if="Object.values(data['tags'][0]).includes('Childhood')"></div>
       </div>
+    </div>
+
+    <div class="main_block" @mouseover="main_block_hover = true" @mouseleave="main_block_hover = false">
 
       <TagContainer :class="forceVis ? 'tag_container  vis_override':'tag_container'" v-if="data['tags']!==null"
                     :tag_input="data['tags']"></TagContainer>
@@ -117,12 +117,16 @@ watch(forceVis, () => {
         </button>
       </div>
 
-      <img v-if="mediaType!=='manga'"
+      <img v-if="mediaType==='movie'||mediaType==='tv'||mediaType==='anime'"
            v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`"
            class="poster" alt="poster" draggable="false">
 
       <img v-if="mediaType==='manga'"
            v-lazy="build_cover_request()"
+           class="poster" alt="poster" draggable="false">
+
+      <img v-if="mediaType==='game'"
+           v-lazy="data['poster_path']"
            class="poster" alt="poster" draggable="false">
 
       <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"
@@ -169,9 +173,9 @@ watch(forceVis, () => {
   /*outline: 1px solid green;*/
 
   width: 200px;
-  min-height: 340px;
-  /*max-width: 400px;*/
-  /*min-width: 200px;*/
+  height: 350px;
+  /*height: fit-content;*/
+  position: relative;
   color: white;
 
   border-radius: 8px;
@@ -258,11 +262,11 @@ watch(forceVis, () => {
 
 .expanded {
   /*outline: 1px red solid;*/
-  border-radius: 8px 8px 0 0;
+  border-radius: 8px;
 
   position: absolute;
   width: 200px;
-  height: 300px;
+  height: 100%;
 
   background-color: rgba(0, 0, 0, 0.9);
 
@@ -297,25 +301,29 @@ watch(forceVis, () => {
 }
 
 .poster {
+  object-fit: cover;
   cursor: help;
   user-select: none;
   border-radius: 8px 8px 0 0;
-  width: 200px;
-  aspect-ratio: 1/1.5;
+  /*width: 200px;*/
+  width: 100%;
+  height: 310px;
 }
 
 .fill {
+  top: 0;
+  left: 0;
   width: 200px;
+  height: 100%;
   position: absolute;
   background-color: rgba(19, 18, 21, 0.85);
-  height: 340px;
   border-radius: 7px;
   pointer-events: none;
   z-index: 900;
   transition: 50ms ease-in-out;
 }
 
-.main_block:hover .fill {
+.movie_container:hover .fill {
   background-color: rgba(0, 0, 0, 0);
 }
 

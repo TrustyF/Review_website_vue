@@ -4,6 +4,7 @@ import MoviePage from "@/pages/MoviePage"
 import MangaPage from "@/pages/MangaPage"
 import SeriesPage from "@/pages/SeriesPage"
 import AnimePage from "@/pages/AnimePage"
+import GamePage from "@/pages/GamePage"
 import MoviePickerPage from "@/pages/MoviePickerPage";
 
 const router = createRouter({
@@ -39,6 +40,11 @@ const router = createRouter({
             path: "/manga",
             name: "manga",
             component: MangaPage
+        },
+        {
+            path: "/games",
+            name: "games",
+            component: GamePage
         },
     ]
 })

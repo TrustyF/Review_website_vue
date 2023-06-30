@@ -14,6 +14,7 @@ import logo from '/public/assets/ui/logo.png'
       <RouterLink active-class="active" class="link" to="/series">Series</RouterLink>
       <RouterLink active-class="active" class="link" to="/anime">Anime</RouterLink>
       <RouterLink active-class="active" class="link" to="/manga">Manga</RouterLink>
+      <RouterLink active-class="active" class="link" to="/games">Games</RouterLink>
     </div>
   </nav>
 
