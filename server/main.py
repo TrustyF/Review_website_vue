@@ -29,7 +29,6 @@ def get_all():
 
 @app.route('/media/add', methods=["POST"])
 def add():
-    print('add media', request.json)
     media_store[request.json['media_type']].add_media(request.json)
     return 'OK'
 
@@ -75,11 +74,7 @@ def get_cover():
 # @cache.cached(timeout=3000)
 def get_rating_range():
     # print(request.args.get('test'), request.args.get('good'))
-    if random.randint(0,1) == 1:
-        return store.gather_rating_ranges()
-    else:
-        print('failed rand check')
-        return {}
+    return store.gather_rating_ranges()
 
 
 @app.route('/media/check_dupe', methods=["GET"])
@@ -110,14 +105,16 @@ def get_all_presets():
 
 @app.route('/preset/add', methods=["POST"])
 def add_preset():
-    return tag_presets.add_preset(request.json), 200
+    tag_presets.add_preset(request.json)
+    return 'OK'
 
 
 @app.route('/preset/delete', methods=["POST"])
 def del_preset():
-    return tag_presets.del_preset(request.json), 200
+    tag_presets.del_preset(request.json)
+    return 'OK'
 
 
 if __name__ == '__main__':
     # media_store['anime'].refresh()
-    app.run(debug=False)
+    app.run(debug=True)

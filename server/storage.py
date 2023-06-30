@@ -31,10 +31,10 @@ class Presets:
         return sorted(self.db.all(), key=lambda d: d['tier'])
 
     def add_preset(self, data):
-        self.db.insert(data)
+        self.db.insert(data['data'])
 
     def del_preset(self, data):
-        self.db.remove(Query().name == str(data['name']))
+        self.db.remove(Query().name == str(data['data']['name']))
 
 
 class StorageManager:
@@ -85,7 +85,6 @@ class Media:
 
     # noinspection PyTypeChecker
     def update_media(self, data):
-
         if not self.storage_lock:
             self.storage_lock = True
             query = Query().id == data['data']['id']
@@ -99,15 +98,16 @@ class Media:
         self.db.remove(query)
 
     def check_dupe(self, media_id):
-        query = Query().id == str(media_id)
-        entries = self.db.search(query)
+        entries = self.db.search(Query().id == int(media_id))
         if len(entries) > 0:
+            print('found dupe')
             return {'result': True}
         else:
+            print('no dupe')
             return {'result': False}
 
     # search
-    def search_media(self, f_title, f_page, f_id):
+    def search_media(self, f_title, f_page, f_id=None):
         title = f_title
         page = f_page
 
@@ -174,7 +174,7 @@ class Media:
         }
 
         response = requests.get(request, headers=headers).json()
-        pprint.pprint(response)
+        print('posters', response)
         simple_data = response[f'{self.media_type}_results'][0]
 
         extra_request = f'https://api.themoviedb.org/3/{self.media_type}/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
@@ -341,7 +341,9 @@ class Series(Media):
                         f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
         full_data = requests.get(extra_request).json()
 
-        # id_request = f"https://api.themoviedb.org/3/{self.media_type}/series_id/external_ids"
+        id_request = f"https://api.themoviedb.org/3/{self.media_type}/{simple_data['id']}/external_ids?api_key={TMDB_API_KEY}"
+        id_response = requests.get(id_request).json()
+        print(id_response)
 
         # format data
         formatted_data = {
@@ -359,7 +361,7 @@ class Series(Media):
 
             'episodes': full_data['number_of_episodes'],
             'seasons': full_data['number_of_seasons'],
-            'imdb_id': f_id,
+            'imdb_id': f_id if f_id is not None else id_response['imdb_id'],
         }
 
         return formatted_data

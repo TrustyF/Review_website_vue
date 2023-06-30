@@ -6,9 +6,6 @@
     }, "4": {
       "description": "Single-handedly established an entire genre", "image": "101307-PLATINUM.png", "name": "Pillar",
       "tier": "green"
-    }, "5": {
-      "name": "Unfortunately Superficial", "description": "Gorgeous visuals, not much story", "tier": "purple",
-      "image": "103207-MASTER.png"
     }, "6": {
       "name": "Dramatic", "description": "Actors bring a solid performance to the table", "tier": "green",
       "image": "204200-PLATINUM.png"
@@ -154,6 +151,9 @@
     }, "83": {
       "description": "Will keep you on the edge of your seat", "image": "101206-PLATINUM.png", "name": "Thrilling",
       "tier": "green"
-    }, "84": {"description": "Don't blink", "image": "202300-PLATINUM.png", "name": "Tense", "tier": "green"}
+    }, "84": {"description": "Don't blink", "image": "202300-PLATINUM.png", "name": "Tense", "tier": "green"}, "85": {
+      "name": "Unfortunately Superficial", "description": "Gorgeous visuals, but not much in the way of story.",
+      "tier": "red", "image": "103207-GRANDMASTER.png"
+    }
   }
 }
