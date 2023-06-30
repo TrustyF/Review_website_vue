@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timedelta
 import json
 import os
 import pprint
@@ -14,10 +14,13 @@ import filter_funcs
 from dotenv import load_dotenv, dotenv_values
 
 env_path = os.path.join(os.path.dirname(__file__), '.env')
+token_path = os.path.join(os.path.dirname(__file__), 'tokens')
 load_dotenv(env_path)
 
 TMDB_API_KEY = os.environ.get("TMDB_API_KEY")
 TMDB_ACCESS_TOKEN = os.environ.get("TMDB_ACCESS_TOKEN")
+IGDB_CLIENT_ID = os.environ.get("IGDB_CLIENT_ID")
+IGDB_CLIENT_SECRET = os.environ.get("IGDB_CLIENT_SECRET")
 
 
 class Presets:
@@ -150,7 +153,7 @@ class Media:
         # format data
         formatted_data = {
             'title': simple_data['title'],
-            'date_rated': str(datetime.date.today()),
+            'date_rated': str(datetime.today()),
             'genres': [x['name'] for x in full_data['genres']],
             'id': simple_data['id'],
             'media_type': self.media_type,
@@ -348,7 +351,7 @@ class Series(Media):
         # format data
         formatted_data = {
             'title': simple_data['name'],
-            'date_rated': str(datetime.date.today()),
+            'date_rated': str(datetime.today()),
             'genres': [x['name'] for x in full_data['genres']],
             'id': simple_data['id'],
             'media_type': self.media_type,
@@ -430,7 +433,7 @@ class Manga(Media):
 
         formatted_data = {
             'title': None,
-            'date_rated': str(datetime.date.today()),
+            'date_rated': str(datetime.today()),
             'genres': [x['attributes']['name']['en'] for x in simple_data['tags'] if
                        x['attributes']['group'] == 'genre'],
             'id': all_data['id'],
@@ -604,7 +607,7 @@ class Anime(Media):
         # format data
         formatted_data = {
             'title': simple_data['name'],
-            'date_rated': str(datetime.date.today()),
+            'date_rated': str(datetime.today()),
             'genres': [x['name'] for x in full_data['genres']],
             'id': simple_data['id'],
             'media_type': self.media_type,
@@ -668,85 +671,143 @@ class Anime(Media):
 class Game(Media):
     def __init__(self):
         super().__init__(media_type='game')
+        self.date_encode = '%Y-%m-%dT%H:%M:%S'
+
+    def handle_access_token(self, f_source):
+
+        def request_access_token():
+            # get token
+            token_request = f'https://id.twitch.tv/oauth2/token'
+            token_params = {
+                'client_id': IGDB_CLIENT_ID,
+                'client_secret': IGDB_CLIENT_SECRET,
+                'grant_type': 'client_credentials'
+            }
+            token_response = requests.post(token_request, params=token_params).json()
+            token_response['date_added'] = datetime.now().isoformat()
+            print('requesting new token')
+
+            return token_response
+
+        def make_new_token():
+            print('making new token')
+            f_token = request_access_token()
+
+            with open(file_path, 'w') as outfile:
+                json.dump(f_token, outfile, indent=1)
+
+            return f_token
+
+        file_path = os.path.join(token_path, (f_source + '.json'))
+        token = None
+        old_token = None
+
+        # no file
+        if not os.path.isfile(file_path):
+            return make_new_token()
+
+        # get old token
+        with open(file_path, 'r') as infile:
+            old_token = json.load(infile)
+
+        # check if outdated
+        token_date_added = datetime.fromisoformat(old_token['date_added'])
+        token_time_diff = abs((token_date_added - datetime.now()))
+
+        if token_time_diff.total_seconds() > old_token['expires_in']:
+            # refresh token
+            return make_new_token()
+        else:
+            # return current token
+            print('token time left', timedelta(seconds=old_token['expires_in'] - token_time_diff.total_seconds()))
+            return old_token
 
     def search_media(self, f_title, f_page, f_id=None):
         title = f_title
         page = f_page
 
-        if f_id is None:
+        token = self.handle_access_token('igdb_token')
 
+        print(token)
+
+        if f_id is None:
             page = int(f_page)
 
-            # phase 1
-            request = f'https://api.themoviedb.org/3/search/{self.media_type}?api_key={TMDB_API_KEY}' \
-                      f'&language=en-US&query={title}'
-            response = requests.get(request).json()
-            simple_data = response['results'][page]
+            title_request = f'https://api.igdb.com/v4/games'
+            title_data = f'search "{f_title}";' \
+                         f' fields name,release_dates.y,genres.name,themes.name,total_rating,url,summary,cover.url;'
+            title_headers = {
+                'Client-ID': IGDB_CLIENT_ID,
+                'Authorization': f"{token['token_type']} {token['access_token']}",
+            }
+            title_response = requests.post(title_request, data=title_data, headers=title_headers).json()
+            # pprint.pprint(title_response)
+
+            full_data = title_response[page]
 
         else:
-
-            # phase 1
-            request = f'https://api.themoviedb.org/3/find/{f_id}?external_source=imdb_id'
-            headers = {
-                "accept": "application/json",
-                "Authorization": 'Bearer ' + TMDB_ACCESS_TOKEN
-            }
-
-            response = requests.get(request, headers=headers).json()
-            simple_data = response['tv_results'][0]
-
-            if len(response['movie_results']) > 1:
-                raise Exception('more than one result found for ', title)
-
-                # phase 2
-        extra_request = f'https://api.themoviedb.org/3/tv/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
-                        f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
-        full_data = requests.get(extra_request).json()
-        # pprint.pprint(full_data)
+            full_data = {}
 
         # format data
         formatted_data = {
-            'title': simple_data['name'],
-            'date_rated': str(datetime.date.today()),
-            'genres': [x['name'] for x in full_data['genres']],
-            'id': simple_data['id'],
+            'title': full_data['name'],
+            'date_rated': str(datetime.today()),
+            'genres': [x['name'] for x in full_data['genres']] if 'genres' in full_data else [],
+            'themes': [x['name'] for x in full_data['themes']] if 'themes' in full_data else [],
+            'id': full_data['id'],
             'media_type': self.media_type,
             'my_rating': None,
-            'overview': simple_data['overview'],
-            'poster_path': simple_data['poster_path'],
-            'release_date': simple_data['first_air_date'],
+            'overview': full_data['summary'],
+            'poster_path': full_data['cover']['url'].replace('t_thumb', 't_cover_big'),
+            'release_date': str(full_data['release_dates'][0]['y']) + '-0-0',
             'tags': [],
-            'vote_average': simple_data['vote_average'],
-
-            'episodes': full_data['number_of_episodes'],
-            'seasons': full_data['number_of_seasons'],
-            'imdb_id': f_id,
+            'vote_average': full_data['total_rating'] if 'total_rating' in full_data else 0,
         }
+
+        pprint.pprint(formatted_data)
 
         return formatted_data
 
-    def refresh(self):
-        print('refresh', self.media_type)
+    def search_extra_posters(self, f_id):
+        # print('searching extra posters',f_id)
+        # token = self.handle_access_token('igdb_token')
+        #
+        # covers_request = f'https://api.igdb.com/v4/games'
+        # covers_data = f'fields artworks.url; where id={f_id};'
+        # covers_headers = {
+        #     'Client-ID': IGDB_CLIENT_ID,
+        #     'Authorization': f"{token['token_type']} {token['access_token']}",
+        # }
+        # covers_response = requests.post(covers_request, data=covers_data, headers=covers_headers).json()
+        # print(covers_response)
+        # posters = [x['url'] for x in covers_response[0]['artworks']]
+        #
+        # pprint.pprint(posters)
+        # return posters
+        return []
 
-        mov_list = self.db.all()
-        for index, entry in enumerate(mov_list):
-
-            print(entry['title'])
-
-            if "imdb_id" not in entry:
-                entry['imdb_id'] = entry['imdb_url'].split('/')[4]
-
-            new_data = self.search_media(entry['title'], None, entry['imdb_id'])
-            if 'my_rating' in entry:
-                new_data['my_rating'] = entry['my_rating']
-            if 'tags' in entry:
-                new_data['tags'] = entry['tags']
-            if 'date_rated' in entry:
-                new_data['date_rated'] = entry['date_rated']
-
-            # disabled for safety
-            self.db.remove(Query().title == str(entry['title']))
-            self.db.insert(new_data)
+    # def refresh(self):
+    #     print('refresh', self.media_type)
+    #
+    #     mov_list = self.db.all()
+    #     for index, entry in enumerate(mov_list):
+    #
+    #         print(entry['title'])
+    #
+    #         if "imdb_id" not in entry:
+    #             entry['imdb_id'] = entry['imdb_url'].split('/')[4]
+    #
+    #         new_data = self.search_media(entry['title'], None, entry['imdb_id'])
+    #         if 'my_rating' in entry:
+    #             new_data['my_rating'] = entry['my_rating']
+    #         if 'tags' in entry:
+    #             new_data['tags'] = entry['tags']
+    #         if 'date_rated' in entry:
+    #             new_data['date_rated'] = entry['date_rated']
+    #
+    #         # disabled for safety
+    #         self.db.remove(Query().title == str(entry['title']))
+    #         self.db.insert(new_data)
 
 
 tag_presets = Presets()
@@ -756,4 +817,4 @@ store.add_store('movie', Movies())
 store.add_store('tv', Series())
 store.add_store('manga', Manga())
 store.add_store('anime', Anime())
-# store.add_store('game', Game())
+store.add_store('game', Game())
