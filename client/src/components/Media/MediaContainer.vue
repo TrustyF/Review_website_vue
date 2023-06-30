@@ -7,7 +7,7 @@ import ContentBox from "@/components/Media/components/ContentBox";
 
 const props = defineProps(['data', 'rating_desc', 'mediaType'])
 const input = toRefs(props)
-const emits = defineEmits(['MovieEdit','MovieUpdate'])
+const emits = defineEmits(['MovieEdit', 'MovieUpdate'])
 
 const devMode = inject('devMode')
 const forceVis = inject('forceVis')
@@ -95,7 +95,11 @@ watch(forceVis, () => {
 
     <div class="main_block" @mouseover="main_block_hover = true" @mouseleave="main_block_hover = false">
 
-      <!--      <div class="gradient_fill"></div>-->
+      <div v-if="data.hasOwnProperty('tags') && data['tags']!==undefined && data['tags']!==null">
+        <div v-if="data['tags'].length > 0">
+          <div class="fill" v-if="Object.values(data['tags'][0]).includes('Childhood')"></div>
+        </div>
+      </div>
 
       <TagContainer :class="forceVis ? 'tag_container  vis_override':'tag_container'" v-if="data['tags']!==null"
                     :tag_input="data['tags']"></TagContainer>
@@ -300,13 +304,19 @@ watch(forceVis, () => {
   aspect-ratio: 1/1.5;
 }
 
-.gradient_fill {
+.fill {
   width: 200px;
   position: absolute;
-  height: 300px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 90%, rgba(0, 0, 0, 0.3) 100%);
-  /*border-radius: 8px;*/
+  background-color: rgba(19, 18, 21, 0.85);
+  height: 340px;
+  border-radius: 8px;
   pointer-events: none;
+  z-index: 900;
+  transition: 50ms ease-in-out;
+}
+
+.main_block:hover .fill {
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .gold_glow {
