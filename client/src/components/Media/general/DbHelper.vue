@@ -94,7 +94,7 @@ async function searchMovie() {
 
 async function getExtraPosters() {
   const url = new URL(`${current_api}/media/extra_posters`)
-  console.log('test',MovChanges.value)
+  console.log('test', MovChanges.value)
   url.searchParams.set('media_id', MovChanges.value['imdb_id'] ? MovChanges.value['imdb_id'] : MovChanges.value['id'])
   url.searchParams.set('media_type', currentSearchType.value)
 
@@ -367,10 +367,14 @@ async function closeHelper() {
           <div class="poster_box" style="width: 150px"
                v-for="(poster,index) in extraPosters"
                :key="index">
-            <img v-if="currentSearchType !== 'manga'" v-lazy="`https://image.tmdb.org/t/p/w500${poster}`" alt="poster"
+            <img v-if="currentSearchType === 'movie' || currentSearchType === 'tv'"
+                 v-lazy="`https://image.tmdb.org/t/p/w500${poster}`" alt="poster"
                  @click="changePoster(index)" style="width: 150px;">
             <img v-if="currentSearchType === 'manga'"
                  v-lazy="`https://uploads.mangadex.org/covers/${poster}.256.jpg`" alt="poster"
+                 @click="changePoster(index)" style="width: 150px;">
+            <img v-if="currentSearchType === 'game'"
+                 v-lazy="poster" alt="poster"
                  @click="changePoster(index)" style="width: 150px;">
           </div>
         </div>
@@ -384,8 +388,9 @@ async function closeHelper() {
         <div class="movie_adder box_wrapper input_tag_description">
 
           <label for="search_m_input">Search</label>
-          <input type="search" @input="currentSearchMovie = $event.target.value" @keydown.enter="searchMovie" id="search_m_input">
-<!--          <button @click="searchMovie">Search</button>-->
+          <input type="search" @input="currentSearchMovie = $event.target.value" @keydown.enter="searchMovie"
+                 id="search_m_input">
+          <!--          <button @click="searchMovie">Search</button>-->
 
           <label for="search_list_input">Search scroll</label>
           <input type="number" @change="scrollPage" value="0"
@@ -417,6 +422,12 @@ async function closeHelper() {
                 <option v-for="elem in availableReWatch" :key="elem">{{ elem }}</option>
               </select>
             </form>
+          </div>
+
+          <!--      Hours Played-->
+          <div v-if="mediaType === 'game'">
+            <label for="hours_played">Hours played</label>
+            <input id="hours_played" type="number" @input="MovChanges['hours_played'] = Number($event.target.value)">
           </div>
 
           <div v-if="mediaType==='manga' || 'anime' || 'tv'">
@@ -493,7 +504,8 @@ async function closeHelper() {
 
       <div class="upload box_wrapper" v-if="MovChanges">
         <button @click="closeHelper" style="width: 100%">Close</button>
-        <button @click="updateMedia" v-if="MovChanges['my_rating'] && presentInDb" style="width: 100%">upload changes</button>
+        <button @click="updateMedia" v-if="MovChanges['my_rating'] && presentInDb" style="width: 100%">upload changes
+        </button>
       </div>
 
     </div>
