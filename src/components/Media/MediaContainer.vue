@@ -309,7 +309,7 @@ watch(forceVis, () => {
   position: absolute;
   background-color: rgba(19, 18, 21, 0.85);
   height: 340px;
-  border-radius: 8px;
+  border-radius: 7px;
   pointer-events: none;
   z-index: 900;
   transition: 50ms ease-in-out;
