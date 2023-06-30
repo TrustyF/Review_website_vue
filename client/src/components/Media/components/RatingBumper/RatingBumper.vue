@@ -3,10 +3,11 @@ import {defineProps, defineEmits, watch, ref, toRefs, onMounted, inject} from 'v
 
 import RatingTag from "@/components/Media/components/RatingBumper/RatingTag";
 
-const props = defineProps(['data', 'range', 'hover'])
+const props = defineProps(['data', 'hover', 'mediaType'])
 let hover = toRefs(props)['hover']
-const input = toRefs(props.range)
+let mediaType = toRefs(props)['mediaType']
 const forceVis = inject('forceVis')
+const mediaRanges = inject('mediaRanges')
 
 const blue_star = './assets/ui/blue_star.png'
 const gold_star = './assets/ui/gold_star.png'
@@ -32,22 +33,15 @@ let ratingDesc = {
 }
 let avg_range = [1, 10]
 let my_range = [1, 10]
-console.log(input.value)
-
-if (input['avg_range'] !== undefined) {
-  avg_range = input['avg_range'].value
-  my_range = input['my_range'].value
-}
-
 
 function map_range(value, low1, high1, low2, high2) {
   return low2 + (high2 - low2) * (value - low1) / (high1 - low1);
 }
 
-const scaled_user_rating = ref(Math.round(map_range(props.data['vote_average'], avg_range[0], avg_range[1], Number(my_range[0]), 10) * 10) / 10)
-const round_user_rating = ref(Math.round(props.data['vote_average'] * 10) / 10)
+const scaled_user_rating = ref(0)
+const round_user_rating = ref(0)
 
-const rating_diff = Math.abs(props.data['my_rating'] - scaled_user_rating.value).toFixed(0)
+let rating_diff = 0
 
 const arrow_state = ref(0)
 
@@ -73,10 +67,20 @@ function calc() {
   arrow_state.value = 0
 }
 
-onMounted(()=>{
+onMounted(() => {
+  if (mediaRanges.value[mediaType.value]['avg_range'] !== undefined) {
+    avg_range = mediaRanges.value[mediaType.value]['avg_range']
+    my_range = mediaRanges.value[mediaType.value]['my_range']
+  }
+
+  scaled_user_rating.value = (Math.round(map_range(props.data['vote_average'], avg_range[0], avg_range[1], Number(my_range[0]), 10) * 10) / 10)
+  round_user_rating.value = (Math.round(props.data['vote_average'] * 10) / 10)
+
+  rating_diff = Math.abs(props.data['my_rating'] - scaled_user_rating.value).toFixed(0)
+
   calc()
-  if (forceVis.value){
-    console.log('bumper',forceVis.value)
+  if (forceVis.value) {
+    console.log('bumper', forceVis.value)
     hover = forceVis.value
   }
 })
