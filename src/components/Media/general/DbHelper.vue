@@ -399,13 +399,6 @@ async function closeHelper() {
           <input type="number" id="rating_input" :value="MovChanges['my_rating']"
                  @change="MovChanges['my_rating'] = String($event.target.value)">
 
-          <!--      Region-->
-          <label for="region">Region</label>
-          <form id="region" @click="MovChanges['region'] = String($event.target.value)">
-            <select>
-              <option v-for="elem in availableRegions" :key="elem" :selected="data['region']">{{ elem }}</option>
-            </select>
-          </form>
           <!--      Content rating-->
           <label for="content_rating">Content rating</label>
           <form id="content_rating" @click="MovChanges['contentRating'] = String($event.target.value)">
