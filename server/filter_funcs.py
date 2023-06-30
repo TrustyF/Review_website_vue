@@ -62,29 +62,29 @@ def genre_filter(f_filters):
     return genre_query
 
 
-def region_filter(f_filters):
-    match_everything = Query().title.matches('[aZ]*')
-
-    if 'region' not in f_filters:
-        return match_everything
-
-    region_filters = f_filters['region']['filter']
-
-    if region_filters == '':
-        return match_everything
-
-    region_query = Query().title.matches('[aZ]*')
-
-    # filter region
-    for region in region_filters:
-        match region:
-            case "western":
-                region_query = (~Query().region.any("asian"))
-
-            case "asian":
-                region_query = (Query().region.any("western"))
-
-    return region_query
+# def region_filter(f_filters):
+#     match_everything = Query().title.matches('[aZ]*')
+#
+#     if 'region' not in f_filters:
+#         return match_everything
+#
+#     region_filters = f_filters['region']['filter']
+#
+#     if region_filters == '':
+#         return match_everything
+#
+#     region_query = Query().title.matches('[aZ]*')
+#
+#     # filter region
+#     for region in region_filters:
+#         match region:
+#             case "western":
+#                 region_query = (~Query().region.any("asian"))
+#
+#             case "asian":
+#                 region_query = (Query().region.any("western"))
+#
+#     return region_query
 
 
 def format_filter(f_filters):
@@ -156,9 +156,12 @@ def pick_one_each_genre(f_array):
     selected_movies = []
 
     for movie in f_array:
-        if movie['genres'][0] not in genres:
-            selected_movies.append(movie)
-            genres.append(movie['genres'][0])
+        try:
+            if movie['genres'][0] not in genres:
+                selected_movies.append(movie)
+                genres.append(movie['genres'][0])
+        except IndexError as error:
+            print(movie['title'], error)
 
     # print(genres)
     return selected_movies

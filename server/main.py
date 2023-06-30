@@ -117,4 +117,5 @@ def del_preset():
 
 if __name__ == '__main__':
     # media_store['anime'].refresh()
+    # media_store['tv'].add_test()
     app.run(debug=True)

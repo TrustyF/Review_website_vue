@@ -93,9 +93,10 @@ class Media:
         else:
             print('storage locked')
 
+    # noinspection PyTypeChecker
     def del_media(self, data):
-        query = Query().id == str(data['id'])
-        self.db.remove(query)
+        query = Query().id == data['data']['id']
+        test = self.db.remove(query)
 
     def check_dupe(self, media_id):
         entries = self.db.search(Query().id == int(media_id))
@@ -156,14 +157,14 @@ class Media:
             'overview': simple_data['overview'],
             'poster_path': simple_data['poster_path'],
             'release_date': simple_data['release_date'],
-            'tags': None,
+            'tags': [],
             'vote_average': simple_data['vote_average'],
 
             'runtime': full_data['runtime'],
             'imdb_id': full_data['imdb_id'],
         }
 
-        return formatted_data
+        return formatted_data if formatted_data is not None else {}
 
     def search_extra_posters(self, f_id):
 
@@ -174,7 +175,6 @@ class Media:
         }
 
         response = requests.get(request, headers=headers).json()
-        print('posters', response)
         simple_data = response[f'{self.media_type}_results'][0]
 
         extra_request = f'https://api.themoviedb.org/3/{self.media_type}/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
@@ -269,7 +269,6 @@ class Media:
             filter_funcs.rating_filter(self.filters) &
             filter_funcs.length_filter(self.filters) &
             filter_funcs.genre_filter(self.filters) &
-            filter_funcs.region_filter(self.filters) &
             filter_funcs.format_filter(self.filters) &
             filter_funcs.searchbar_filter(self.filters)
         )
@@ -305,6 +304,7 @@ class Movies(Media):
 class Series(Media):
     def __init__(self):
         super().__init__(media_type='tv')
+        self.media_search_type = 'tv'
 
     def search_media(self, f_title, f_page, f_id=None):
         title = f_title
@@ -315,7 +315,7 @@ class Series(Media):
             page = int(f_page)
 
             # phase 1
-            request = f'https://api.themoviedb.org/3/search/{self.media_type}?api_key={TMDB_API_KEY}' \
+            request = f'https://api.themoviedb.org/3/search/{self.media_search_type}?api_key={TMDB_API_KEY}' \
                       f'&language=en-US&query={title}'
             response = requests.get(request).json()
 
@@ -343,7 +343,6 @@ class Series(Media):
 
         id_request = f"https://api.themoviedb.org/3/{self.media_type}/{simple_data['id']}/external_ids?api_key={TMDB_API_KEY}"
         id_response = requests.get(id_request).json()
-        print(id_response)
 
         # format data
         formatted_data = {
@@ -356,7 +355,7 @@ class Series(Media):
             'overview': simple_data['overview'],
             'poster_path': simple_data['poster_path'],
             'release_date': simple_data['first_air_date'],
-            'tags': None,
+            'tags': [],
             'vote_average': simple_data['vote_average'],
 
             'episodes': full_data['number_of_episodes'],
@@ -439,7 +438,7 @@ class Manga(Media):
             'overview': None,
             'poster_path': None,
             'release_date': str(simple_data['year']) + '-01-01',
-            'tags': None,
+            'tags': [],
             'vote_average': None,
 
             'contentRating': simple_data['contentRating'],
@@ -561,8 +560,9 @@ class Manga(Media):
 class Anime(Media):
     def __init__(self):
         super().__init__(media_type='anime')
+        self.media_search_type = 'tv'
 
-    def search_media(self, f_title, f_page, f_id):
+    def search_media(self, f_title, f_page, f_id=None):
         title = f_title
         page = f_page
 
@@ -571,11 +571,11 @@ class Anime(Media):
             page = int(f_page)
 
             # phase 1
-            request = f'https://api.themoviedb.org/3/search/{self.media_type}?api_key={TMDB_API_KEY}' \
+            request = f'https://api.themoviedb.org/3/search/{self.media_search_type}?api_key={TMDB_API_KEY}' \
                       f'&language=en-US&query={title}'
             response = requests.get(request).json()
-            simple_data = response['results'][page]
 
+            simple_data = response['results'][page]
         else:
 
             # phase 1
@@ -586,16 +586,19 @@ class Anime(Media):
             }
 
             response = requests.get(request, headers=headers).json()
-            simple_data = response['tv_results'][0]
+
+            simple_data = response[f'{self.media_search_type}_results'][0]
 
             if len(response['movie_results']) > 1:
                 raise Exception('more than one result found for ', title)
 
                 # phase 2
-        extra_request = f'https://api.themoviedb.org/3/tv/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
+        extra_request = f'https://api.themoviedb.org/3/{self.media_search_type}/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
                         f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
         full_data = requests.get(extra_request).json()
-        # pprint.pprint(full_data)
+
+        id_request = f"https://api.themoviedb.org/3/{self.media_search_type}/{simple_data['id']}/external_ids?api_key={TMDB_API_KEY}"
+        id_response = requests.get(id_request).json()
 
         # format data
         formatted_data = {
@@ -608,15 +611,34 @@ class Anime(Media):
             'overview': simple_data['overview'],
             'poster_path': simple_data['poster_path'],
             'release_date': simple_data['first_air_date'],
-            'tags': None,
+            'tags': [],
             'vote_average': simple_data['vote_average'],
 
             'episodes': full_data['number_of_episodes'],
             'seasons': full_data['number_of_seasons'],
-            'imdb_id': f_id,
+            'imdb_id': f_id if f_id is not None else id_response['imdb_id'],
         }
 
         return formatted_data
+
+    def search_extra_posters(self, f_id):
+
+        request = f'https://api.themoviedb.org/3/find/{f_id}?external_source=imdb_id'
+        headers = {
+            "accept": "application/json",
+            "Authorization": 'Bearer ' + TMDB_ACCESS_TOKEN
+        }
+
+        response = requests.get(request, headers=headers).json()
+        simple_data = response[f'{self.media_search_type}_results'][0]
+
+        extra_request = f'https://api.themoviedb.org/3/{self.media_search_type}/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
+                        f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
+        full_data = requests.get(extra_request).json()
+
+        posters = [x['file_path'] for x in full_data['images']['posters']]
+
+        return posters
 
     def refresh(self):
         print('refresh', self.media_type)
@@ -646,7 +668,7 @@ class Game(Media):
     def __init__(self):
         super().__init__(media_type='game')
 
-    def search_media(self, f_title, f_page, f_id):
+    def search_media(self, f_title, f_page, f_id=None):
         title = f_title
         page = f_page
 
@@ -692,7 +714,7 @@ class Game(Media):
             'overview': simple_data['overview'],
             'poster_path': simple_data['poster_path'],
             'release_date': simple_data['first_air_date'],
-            'tags': None,
+            'tags': [],
             'vote_average': simple_data['vote_average'],
 
             'episodes': full_data['number_of_episodes'],
