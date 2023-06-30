@@ -316,6 +316,7 @@ async function addTagPresets() {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`)
         }
+        loadPresets()
       })
 
       // Handle any errors that occurred during the fetch
@@ -340,6 +341,7 @@ async function delTagPresets() {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`)
         }
+        loadPresets()
       })
 
       // Handle any errors that occurred during the fetch

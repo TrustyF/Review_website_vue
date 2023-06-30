@@ -10,13 +10,6 @@ let filters = ref({
     'filter': [],
     'checkbox': false,
   },
-  'region': {
-    'name': 'Region',
-    'available': ["western", "asian"],
-    'display': ["Western", "Asian"],
-    'filter': [],
-    'checkbox': false,
-  },
   'genre': {
     'name': 'Genre',
     'available': ["Action & Adventure", "Crime", "Comedy", "Drama", "Mystery", "Sci-Fi & Fantasy"],

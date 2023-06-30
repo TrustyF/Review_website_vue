@@ -5,9 +5,9 @@ import RatingBumper from "@/components/Media/components/RatingBumper/RatingBumpe
 import {defineProps, defineEmits, ref, toRefs, onMounted, onUnmounted, watch, inject} from 'vue'
 import ContentBox from "@/components/Media/components/ContentBox";
 
-const props = defineProps(['data', 'ratingRange', 'rating_desc', 'mediaType'])
+const props = defineProps(['data', 'rating_desc', 'mediaType'])
 const input = toRefs(props)
-const emits = defineEmits(['MovieEdit'])
+const emits = defineEmits(['MovieEdit','MovieUpdate'])
 
 const devMode = inject('devMode')
 const forceVis = inject('forceVis')
@@ -36,6 +36,46 @@ function emitSelectedMovie(input) {
   emits('MovieEdit', props['data'])
 }
 
+function RatingChange(state) {
+
+  const url = new URL(`${current_api}/media/update`)
+  let newRating = Number(input['data'].value['my_rating'])
+  console.log(newRating, state)
+
+  if (state) {
+    newRating += 1
+  } else {
+    newRating -= 1
+  }
+
+  input['data'].value['my_rating'] = String(newRating)
+
+  const params = {
+    'data': input['data'].value,
+    'media_type': input['mediaType'].value
+  }
+
+  fetch(url, {
+    method: 'POST',
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(params)
+  })
+
+      // Handle http error
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`)
+        }
+        emits('MovieUpdate')
+      })
+
+      // Handle any errors that occurred during the fetch
+      .catch(error => {
+        console.error('Error:', error);
+      });
+}
+
+
 function build_cover_request(info) {
   let data = input.data.value
   let media_type = input['mediaType'].value
@@ -43,8 +83,8 @@ function build_cover_request(info) {
   return `${current_api}/media/cover?poster_path=${encodeURIComponent(data['poster_path'])}&type=${media_type}`
 }
 
-watch(forceVis,()=>{
-  console.log('movie',forceVis.value)
+watch(forceVis, () => {
+  console.log('movie', forceVis.value)
   main_block_hover.value = forceVis.value
 })
 </script>
@@ -57,11 +97,19 @@ watch(forceVis,()=>{
 
       <!--      <div class="gradient_fill"></div>-->
 
-      <TagContainer :class="forceVis ? 'tag_container  vis_override':'tag_container'" v-if="data['tags']!==null" :tag_input="data['tags']"></TagContainer>
+      <TagContainer :class="forceVis ? 'tag_container  vis_override':'tag_container'" v-if="data['tags']!==null"
+                    :tag_input="data['tags']"></TagContainer>
 
       <div v-if="devMode" class="settings">
-        <button style="width: 50px;height: 50px" @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">
+        <button style="width: 35px;height: 35px" @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">
           ...
+        </button>
+
+        <button style="width: 35px;height: 35px" @mousedown="RatingChange(true)">
+          ▲
+        </button>
+        <button style="width: 35px;height: 35px" @mousedown="RatingChange(false)">
+          ▼
         </button>
       </div>
 
@@ -74,7 +122,7 @@ watch(forceVis,()=>{
            class="poster" alt="poster" draggable="false">
 
       <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"
-                    :range="ratingRange" :rating_desc="rating_desc" :hover="main_block_hover"></RatingBumper>
+                    :rating_desc="rating_desc" :hover="main_block_hover" :mediaType="mediaType"></RatingBumper>
 
       <ContentBox class="content_box" :data="data"></ContentBox>
 
@@ -136,15 +184,19 @@ watch(forceVis,()=>{
 .settings {
   position: absolute;
   transform: translate(180px, 3px);
+  display: flex;
+  flex-flow: column wrap;
+  gap: 10px;
 
   visibility: hidden;
   opacity: 0;
 
   transition: 50ms ease-in-out;
+  z-index: 999;
 }
 
 .main_block:hover .settings {
-  transform: translate(147px, 3px);
+  transform: translate(162px, 3px);
   visibility: visible;
   opacity: 100%;
 }

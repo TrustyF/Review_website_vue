@@ -142,7 +142,9 @@ onUnmounted(() => {
                             :data="mov"
                             :ratingRange="mediaRanges[mediaType]"
                             :media-type="props.mediaType"
-                            @MovieEdit="editMovie"></MovieContainer>
+                            @MovieEdit="editMovie"
+                            @MovieUpdate="update_movies"
+                            ></MovieContainer>
           </div>
         </div>
       </div>
