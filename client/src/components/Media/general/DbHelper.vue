@@ -351,6 +351,7 @@ async function delTagPresets() {
 }
 
 async function closeHelper() {
+  currentSearchPage.value = 0
   forceVis.value = false
   emits('closed', true)
   emits('updated', true)
