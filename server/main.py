@@ -35,6 +35,7 @@ def add():
 
 @app.route('/media/update', methods=["POST"])
 def update():
+    # pprint.pprint(request.json)
     media_store[request.json['media_type']].update_media(request.json)
     return 'OK'
 

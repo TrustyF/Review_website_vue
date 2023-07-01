@@ -103,7 +103,7 @@ class Media:
 
     # noinspection PyTypeChecker
     def check_dupe(self, media_id):
-        entries = self.db.search(Query().id == media_id)
+        entries = self.db.search(Query().id == int(media_id))
         if len(entries) > 0:
             print('found dupe')
             return {'result': True}
@@ -511,6 +511,16 @@ class Manga(Media):
             filter_funcs.searchbar_filter(self.filters)
         )
 
+    # noinspection PyTypeChecker
+    def check_dupe(self, media_id):
+        entries = self.db.search(Query().id == str(media_id))
+        if len(entries) > 0:
+            print('found dupe')
+            return {'result': True}
+        else:
+            print('no dupe')
+            return {'result': False}
+
     # selective pickers
     def get_rand_genre(self, data):
         # print(data['max_media'])
@@ -734,7 +744,7 @@ class Game(Media):
             page = int(f_page)
 
             title_request = f'https://api.igdb.com/v4/games'
-            title_data = f'search "{f_title}";' \
+            title_data = f'search "{f_title}"; limit 50;' \
                          f' fields name,release_dates.y,genres.name,themes.name,total_rating,url,summary,cover.url;'
             title_headers = {
                 'Client-ID': IGDB_CLIENT_ID,
@@ -742,7 +752,6 @@ class Game(Media):
             }
             title_response = requests.post(title_request, data=title_data, headers=title_headers).json()
             # pprint.pprint(title_response)
-
             full_data = title_response[page]
 
         else:
@@ -757,14 +766,18 @@ class Game(Media):
             'id': full_data['id'],
             'media_type': self.media_type,
             'my_rating': None,
-            'overview': full_data['summary'],
-            'poster_path': full_data['cover']['url'].replace('t_thumb', 't_cover_big'),
-            'release_date': str(full_data['release_dates'][0]['y']) + '-0-0',
+            'overview': full_data['summary'] if 'summary' in full_data else "None",
+            'poster_path': full_data['cover']['url'].replace('t_thumb',
+                                                             't_cover_big') if 'cover' in full_data else "None",
+            'release_date': str(
+                full_data['release_dates'][0]['y']) + '-0-0' if 'release_dates' in full_data else "None",
             'tags': [],
             'vote_average': full_data['total_rating'] if 'total_rating' in full_data else 0,
+
+            'hours_played': 0
         }
 
-        pprint.pprint(formatted_data)
+        # pprint.pprint(formatted_data)
 
         return formatted_data
 
