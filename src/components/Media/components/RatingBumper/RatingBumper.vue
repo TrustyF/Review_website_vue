@@ -189,6 +189,13 @@ onMounted(() => {
                desc="Porn, its porn..."
     ></RatingTag>
 
+    <RatingTag v-if="data['hours_played']!==undefined"
+               :class="hover ? 'extras hover' : 'extras'"
+               :rating="`${data['hours_played']} hours`"
+               name="Playtime"
+               desc="How much of my life I lost to this"
+    ></RatingTag>
+
   </div>
 </template>
 <style scoped>
