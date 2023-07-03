@@ -93,11 +93,11 @@ watch(forceVis, () => {
        v-click-out-side="clickOutside"
        @click="isOpen = !isOpen">
 
-    <div v-if="data.hasOwnProperty('tags') && data['tags']!==undefined && data['tags']!==null">
-      <div v-if="data['tags'].length > 0">
-        <div class="fill" v-if="Object.values(data['tags'][0]).includes('Childhood')"></div>
-      </div>
-    </div>
+<!--    <div v-if="data.hasOwnProperty('tags') && data['tags']!==undefined && data['tags']!==null">-->
+<!--      <div v-if="data['tags'].length > 0">-->
+<!--        <div class="fill" v-if="Object.values(data['tags'][0]).includes('Childhood')"></div>-->
+<!--      </div>-->
+<!--    </div>-->
 
     <div class="main_block" @mouseover="main_block_hover = true" @mouseleave="main_block_hover = false">
 
@@ -127,7 +127,7 @@ watch(forceVis, () => {
 
       <img v-if="mediaType==='game'"
            v-lazy="data['poster_path']"
-           class="poster" alt="poster" draggable="false">
+           class="game_poster" alt="poster" draggable="false">
 
       <RatingBumper class="rating_bumper" v-if="data['my_rating']!==undefined" :data="data"
                     :rating_desc="rating_desc" :hover="main_block_hover" :mediaType="mediaType"></RatingBumper>
@@ -150,16 +150,17 @@ watch(forceVis, () => {
             {{ data['genres'].map(elem => elem).join(', ') }}
           </p>
 
-          <div v-if="data['media_type']==='movie' || data['media_type']==='tv'">
+          <div v-if="data['media_type']==='movie' || data['media_type']==='tv' || data['media_type']==='anime'">
             <p class="rank" style="margin-bottom:5px;" v-if="data['runtime'] && data['media_type']==='movie'">
               {{ "Duration: " + timeConvert(data['runtime']) }}
             </p>
-            <a :href="data['imdb_url']" target="_blank" rel="noopener noreferrer">
+            <a :href="`https://www.imdb.com/title/${data['imdb_id']}/`" target="_blank" rel="noopener noreferrer">
               <button type="button"
                       style="background-color: #F5C518;border-radius: 3px;padding: 3px;outline: 1px black solid;border-style: none;cursor:pointer ">
                 Imdb
               </button>
             </a>
+            <p>{{data['imdb_url']}}</p>
           </div>
 
         </div>
@@ -173,7 +174,7 @@ watch(forceVis, () => {
   /*outline: 1px solid green;*/
 
   width: 200px;
-  height: 350px;
+  /*height: 350px;*/
   /*height: fit-content;*/
   position: relative;
   color: white;
@@ -187,6 +188,29 @@ watch(forceVis, () => {
   transition: 0.2s ease;
 
   display: flex;
+}
+
+.poster {
+  object-fit: cover;
+  cursor: help;
+  user-select: none;
+  border-radius: 8px 8px 0 0;
+  /*width: 200px;*/
+
+  width: 100%;
+  height: 310px;
+}
+
+.game_poster {
+  object-fit: cover;
+  object-position: top;
+  cursor: help;
+  user-select: none;
+  border-radius: 8px 8px 0 0;
+  width: 200px;
+
+  /*width: 100%;*/
+  height: 267px;
 }
 
 .settings {
@@ -300,23 +324,13 @@ watch(forceVis, () => {
   text-decoration: underline;
 }
 
-.poster {
-  object-fit: cover;
-  cursor: help;
-  user-select: none;
-  border-radius: 8px 8px 0 0;
-  /*width: 200px;*/
-  width: 100%;
-  height: 310px;
-}
-
 .fill {
   top: 0;
   left: 0;
   width: 200px;
   height: 100%;
   position: absolute;
-  background-color: rgba(19, 18, 21, 0.85);
+  background-color: rgba(19, 18, 21, 0.5);
   border-radius: 7px;
   pointer-events: none;
   z-index: 900;
