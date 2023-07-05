@@ -1,5 +1,5 @@
 <script setup>
-import {defineProps, defineEmits, toRefs, ref, watch, onMounted, onUnmounted, inject} from 'vue'
+import {defineProps,getCurrentInstance, defineEmits, toRefs, ref, watch, onMounted, onUnmounted, inject} from 'vue'
 import FloatingVue from 'floating-vue'
 
 const props = defineProps(['tag_input'])
@@ -12,10 +12,13 @@ const screenSide = ref(false)
 let tagAmount = ref(0)
 
 function calcScreenSide() {
-  let rect = screenRect.value.getBoundingClientRect()
-  let screen = [window.outerWidth, window.outerHeight]
+  let instance = getCurrentInstance()
+  console.log(instance.parent)
+  // let parent = document.getElementById(instance.parent.uid)
+  // let rect = screenRect.value.getBoundingClientRect()
+  // let screen = [parent.outerWidth, parent.outerHeight]
 
-  screenSide.value = rect.right > (screen[0] / 2);
+  // screenSide.value = rect.right > (screen[0] / 2);
 }
 
 function calcTagAmount() {
@@ -38,7 +41,7 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <div ref="screenRect" class="tag_wrapper" v-if="forceVis===false">
+    <div ref="screenRect" class="tag_wrapper" >
 
       <div class="tooltip" v-for="tag in tag_input" :key="tag['name']">
 
@@ -55,18 +58,18 @@ onUnmounted(() => {
       </div>
     </div>
 
-    <div ref="screenRect" class="tag_preview" v-if="forceVis===true">
-      <div class="tooltip" v-for="tag in tag_input" :key="tag['name']">
-        <img :class="`${tag['tier']}_glow` + ' tag_icon'" :src="`${tag_path}${tag['tier']}/${tag['image']}`"
-             :alt="tag['image']">
-        <div class="hover_box">
-          <div class="description">
-            <p class=tag_name>{{ tag['name'] }}</p>
-            <p class="tag_description">{{ tag['description'] }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
+<!--    <div ref="screenRect" class="tag_preview" v-if="forceVis===true">-->
+<!--      <div class="tooltip" v-for="tag in tag_input" :key="tag['name']">-->
+<!--        <img :class="`${tag['tier']}_glow` + ' tag_icon'" :src="`${tag_path}${tag['tier']}/${tag['image']}`"-->
+<!--             :alt="tag['image']">-->
+<!--        <div class="hover_box">-->
+<!--          <div class="description">-->
+<!--            <p class=tag_name>{{ tag['name'] }}</p>-->
+<!--            <p class="tag_description">{{ tag['description'] }}</p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
 
   </div>
 </template>
@@ -75,11 +78,11 @@ onUnmounted(() => {
 .tag_wrapper {
   display: flex;
   flex-flow: column;
-  /*outline: red 1px solid;*/
-  width: 200px;
+  outline: red 1px solid;
+  /*width: 200px;*/
   user-select: none;
   cursor: help;
-  height: 300px;
+  /*height: 300px;*/
   font-weight: normal;
 }
 
@@ -107,7 +110,7 @@ onUnmounted(() => {
 
   filter: drop-shadow(0px 0 2px rgba(0, 0, 0, 1));
   -webkit-filter: drop-shadow(0px 0 2px rgba(0, 0, 0, 1));
-  z-index: 400000;
+  z-index: 99;
 }
 
 .hover_box:after {
@@ -139,7 +142,7 @@ onUnmounted(() => {
   transition: 100ms ease-out;
 
   filter: drop-shadow(0px 0 2px rgba(0, 0, 0, 1));
-  z-index: 400000;
+  z-index: 99;
 }
 
 .hover_box_left:after {
@@ -202,6 +205,7 @@ onUnmounted(() => {
   font-size: 1.2em;
   opacity: 0.6;
   line-height: 15px;
+  outline: 1px solid red;
 }
 
 .tag_icon {
