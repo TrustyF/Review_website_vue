@@ -31,7 +31,7 @@ export default {
   user-select: none;
   top: 20px;
   /*margin: 5px;*/
-  /*z-index: 10;*/
+  z-index: 10;
 }
 
 .rating_content {
