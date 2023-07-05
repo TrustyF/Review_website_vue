@@ -1,5 +1,6 @@
 import pprint
 import random
+import sys
 
 from flask import Flask, Request, request, Response
 from flask_cors import CORS
@@ -119,4 +120,7 @@ def del_preset():
 if __name__ == '__main__':
     # media_store['anime'].refresh()
     # media_store['game'].search_media('Subnautica', 1)
-    app.run(debug=True)
+    if sys.flags.dev_mode:
+        app.run(debug=True)
+    else:
+        app.run()
