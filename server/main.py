@@ -11,7 +11,7 @@ import random
 from storage import store, tag_presets
 
 app = Flask(__name__)
-app.config['DEBUG'] = True
+# app.config['DEBUG'] = True
 flask_color.init_app(app)
 # app.config['CACHE_TYPE'] = "FileSystemCache"
 # app.config['CACHE_DIR'] = "cache"
@@ -96,6 +96,12 @@ def get_rand_genre():
 # @cache.cached(timeout=3000)
 def get_recent_release():
     return media_store[request.json['media_type']].get_recent_release(request.json), 200
+
+
+@app.route('/media/get_recent_review', methods=["POST"])
+# @cache.cached(timeout=3000)
+def get_recent_review():
+    return media_store[request.json['media_type']].get_recent_review(request.json), 200
 
 
 # presets

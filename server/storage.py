@@ -66,7 +66,10 @@ class Media:
         self.db_path = os.path.join(self.base_path, f'database/{self.media_type}_db.json')
 
         self.db = TinyDB(self.db_path)
-        self.list_db = self.db.all()
+        # self.list_db = self.db.all()
+        self.filters = {}
+        self.settings = {}
+        self.max_page_items = 0
 
         self.rank_range = (1, 10)
 
@@ -74,7 +77,7 @@ class Media:
 
     # setters
     def set_settings(self, f_settings=None, f_max_media=10):
-        # print('set_settings')
+        # print('set_settings',f_settings)
         self.settings = f_settings
         self.max_page_items = f_max_media
 
@@ -249,13 +252,10 @@ class Media:
             'my_range': tuple_rating
         }
 
-    def get_media_genres(self):
-        pass
-
     # selective pickers
     def get_rand_genre(self, data):
         # print(data['max_media'])
-        filtered_arr = self.db.search(filter_funcs.rating_filter({'rating': {'filter': ['6', '7', '8', '9']}}))
+        filtered_arr = self.db.search(filter_funcs.rating_filter({'rating': {'filter': ['6', '7', '8', '9', '10']}}))
         sort_arr = sort_funcs.sort_randomize(filtered_arr, data['session_seed'])
         picked_arr = filter_funcs.pick_one_each_genre(sort_arr)
         culled_arr = self.culling(picked_arr, data['max_media'])
@@ -264,6 +264,11 @@ class Media:
 
     def get_recent_release(self, data):
         sort_arr = sort_funcs.sort_by_date_released(self.db)
+        culled_arr = self.culling(sort_arr, data['max_media'])
+        return culled_arr
+
+    def get_recent_review(self, data):
+        sort_arr = sort_funcs.sort_by_date_rated(self.db)
         culled_arr = self.culling(sort_arr, data['max_media'])
         return culled_arr
 
