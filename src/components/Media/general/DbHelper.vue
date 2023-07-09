@@ -448,7 +448,7 @@ async function closeHelper() {
           </div>
           <!--          Date rated-->
           <label for="date_rated_input">Date rated</label>
-          <input type="date" id="date_rated_input" :value="presentInDb ? null : currentDate"
+          <input type="date" id="date_rated_input" :value="presentInDb ? MovChanges['date_rated'] : currentDate"
                  @change="MovChanges['date_rated'] = String($event.target.value)">
         </div>
 
