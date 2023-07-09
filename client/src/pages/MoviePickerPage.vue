@@ -5,7 +5,7 @@ import FilterMenu from "@/components/Media/general/FilterMenu";
 import {eventThrottle} from "@/utils";
 
 let num_media_fit = ref(0)
-let banners_media = ref([[],[],[],[],[]])
+let banners_media = ref([[],[],[],[],[],[]])
 
 let devMode = inject('devMode')
 let sessionSeed = inject('sessionSeed')
@@ -43,7 +43,7 @@ function get_home_banners() {
         banners_media.value = data
         bannerLoaded = true
         console.log('banner loaded')
-        // if (devMode) console.log('recent release banner', data);
+        if (devMode) console.log('recent release banner', data);
       })
 
       // Handle any errors that occurred during the fetch
@@ -121,6 +121,14 @@ onUnmounted(() => {
                            :bannerFit="num_media_fit"
         ></RandomGenreBanner>
       </div>
+    <div>
+      <h1 class="headers">Games for GAMERS</h1>
+      <RandomGenreBanner mediaType="game"
+                         :banner-media="banners_media"
+                         :banner-index="5"
+                         :bannerFit="num_media_fit"
+      ></RandomGenreBanner>
+    </div>
 <!--    </div>-->
   </div>
 </template>
@@ -131,7 +139,7 @@ onUnmounted(() => {
 
 <style scoped>
 .pick_page_feed_wrapper {
-  outline: 1px solid green;
+  /*outline: 1px solid green;*/
   padding: 30px 0 30px 0;
   /*width: 80%;*/
   margin: auto;

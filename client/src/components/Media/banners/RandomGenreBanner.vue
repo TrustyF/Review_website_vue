@@ -62,10 +62,10 @@ function page_backwards() {
         </div>
 
     </div>
-    <div class="button_wrapper right" @click="page_forward">
+    <div class="button_wrapper right" @click="page_forward" v-if="page !== (bannerFit*5-bannerFit)">
       <img :src="arrow_left" alt="refresh_selection" class="refresh_button">
     </div>
-    <div class="button_wrapper left" @click="page_backwards">
+    <div class="button_wrapper left" @click="page_backwards" v-if="page !== 0">
       <img :src="arrow_right" alt="refresh_selection" class="refresh_button">
     </div>
   </div>

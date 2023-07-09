@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <h1>Data and images provided by mangadex.org and themoviedb.org </h1>
+    <h1>Data and images provided by mangadex.org, themoviedb.org and igdb.com </h1>
   </div>
 </template>
 
