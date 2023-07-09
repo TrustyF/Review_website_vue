@@ -4,97 +4,21 @@ import {inject, watch, defineProps} from 'vue'
 import {ref, onMounted, onUnmounted, toRefs} from 'vue'
 import {eventThrottle} from "@/utils";
 
-let devMode = inject('devMode')
-let sessionSeed = inject('sessionSeed')
-let mediaRanges = inject('mediaRanges')
-
-const rewind = './assets/ui/rewind.png'
-
-const props = defineProps(['bannerType', 'mediaType'])
+const props = defineProps(['bannerMedia', 'bannerType', 'mediaType', 'bannerIndex', 'bannerFit'])
 const input = toRefs(props)
-const current_api = inject('curr_api')
 
-let bannerMedia = ref({})
-let num_media_fit = ref(0)
+// let bannerMedia =  input['bannerMedia'].value
+// let bannerIndex =  input['bannerIndex'].value
 
-function get_recent_releases() {
+let mediaRanges = inject('mediaRanges')
+let page = ref(0)
 
-  const url = new URL(`${current_api}/media/get_recent_release`)
-  const params = {
-    'media_type': props['mediaType'],
-    'max_media': num_media_fit.value,
-    'session_seed': sessionSeed
-  }
+// let startIndex = bannerLength * page.value
 
-  fetch(url, {
-    method: 'POST',
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(params)
-  })
+let slicedBanner = ref([])
 
-      // Handle http error
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`)
-        }
-        return response.json()
-      })
-
-      // Process the returned JSON data
-      .then(data => {
-        bannerMedia.value = data
-        // if (devMode) console.log('recent release banner', data);
-      })
-
-      // Handle any errors that occurred during the fetch
-      .catch(error => {
-        console.error('Error:', error);
-      });
-}
-
-function get_random_genre() {
-
-  const url = new URL(`${current_api}/media/get_rand_genre`)
-  const params = {
-    'media_type': props['mediaType'],
-    'max_media': num_media_fit.value,
-    'session_seed': sessionSeed
-  }
-
-  fetch(url, {
-    method: 'POST',
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(params)
-  })
-
-      // Handle http error
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`)
-        }
-        return response.json()
-      })
-
-      // Process the returned JSON data
-      .then(data => {
-        bannerMedia.value = data
-        // if (devMode) console.log('recent release banner', data);
-      })
-
-      // Handle any errors that occurred during the fetch
-      .catch(error => {
-        console.error('Error:', error);
-      });
-}
-
-function update_media() {
-  if (input['bannerType'].value === 'random_genre') {
-    get_random_genre()
-  }
-  if (input['bannerType'].value === 'recent_release') {
-    get_recent_releases()
-  }
-}
+const arrow_left = './assets/ui/arrow_left_single_white.png'
+const arrow_right = './assets/ui/arrow_right_single_white.png'
 
 function format_header(movie) {
   let genres = movie['genres']
@@ -106,54 +30,43 @@ function format_header(movie) {
   }
 }
 
-function calc_screen_fit() {
-
-  let w_box = document.getElementById("genre_box").getBoundingClientRect()
-  let gap = 20
-  let media_width = 200
-  let fit_num = Math.floor(w_box.width / (media_width + (gap)))
-
-  if (num_media_fit.value !== fit_num) {
-    num_media_fit.value = fit_num
-    // console.log(num_media_fit.value)
-    update_media()
+function page_forward() {
+  console.log(props['bannerFit']*5,page.value)
+  if (page.value !== (props['bannerFit']*5)-props['bannerFit']){
+    page.value += props['bannerFit']
   }
-
 }
 
-function refresh() {
-  sessionSeed = Math.random()
-  update_media()
+function page_backwards() {
+  if (page.value !== 0){
+    page.value -= props['bannerFit']
+  }
 }
-
-onMounted(() => {
-  calc_screen_fit()
-  addEventListener('resize', eventThrottle(calc_screen_fit, 100))
-})
-onUnmounted(() => {
-  removeEventListener('resize', calc_screen_fit)
-})
 
 </script>
 <template>
   <div class="bg_wrapper">
     <div class="genre_wrapper" id="genre_box">
 
-      <div v-for="mov in bannerMedia" :key="mov.title" class="banner_wrapper">
+        <div v-for="mov in bannerMedia[bannerIndex].slice(0+page,bannerFit+page)" :key="mov.title"
+             class="banner_wrapper">
 
-        <div class="hover_box dark_accent">
-          <h1 class="genre_title">{{ format_header(mov) }}</h1>
+          <div class="hover_box dark_accent">
+            <h1 class="genre_title">{{ format_header(mov) }}</h1>
+          </div>
+
+          <MediaContainer id="media_container" :key="mov.id" :data="mov"
+                          :ratingRange="mediaRanges[mediaType]"
+                          :media-type="mediaType"
+          ></MediaContainer>
         </div>
 
-        <MediaContainer id="media_container" :key="mov.id" :data="mov"
-                        :ratingRange="mediaRanges[mediaType]"
-                        :media-type="mediaType"
-        ></MediaContainer>
-      </div>
-
     </div>
-    <div class="button_wrapper" @click="refresh" v-show="bannerType==='random_genre'">
-      <img :src="rewind" alt="refresh_selection" class="refresh_button">
+    <div class="button_wrapper right" @click="page_forward">
+      <img :src="arrow_left" alt="refresh_selection" class="refresh_button">
+    </div>
+    <div class="button_wrapper left" @click="page_backwards">
+      <img :src="arrow_right" alt="refresh_selection" class="refresh_button">
     </div>
   </div>
 
@@ -161,6 +74,7 @@ onUnmounted(() => {
 <style scoped>
 
 .bg_wrapper {
+  min-height: 400px;
   /*outline: 1px red solid;*/
   display: flex;
   position: relative;
@@ -184,15 +98,25 @@ onUnmounted(() => {
 }
 
 .button_wrapper {
+  cursor: pointer;
   position: absolute;
   /*transform: translate(-400%, 0);*/
-  right: 8%;
+  top: 45%;
   width: 20px;
   height: 20px;
   background-color: #2b2a34;
   padding: 10px;
   border-radius: 100%;
   transition: 50ms ease-in-out;
+}
+
+.left {
+  left: 6%;
+}
+
+.right {
+  right: 6%;
+
 }
 
 .button_wrapper:hover {
@@ -202,6 +126,8 @@ onUnmounted(() => {
 .refresh_button {
   width: 100%;
   height: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .banner_wrapper {
