@@ -141,7 +141,7 @@ watch(forceVis, () => {
 
         <h3 class="heading">Overview</h3>
         <div class="details_wrapper">
-          <p class="rank" v-if="data['overview']" style="margin-bottom:5px;">
+          <p class="rank" v-if="data['overview']" style="margin-bottom:5px; line-height: 120%">
             {{ data['overview'] }}
           </p>
 
@@ -322,6 +322,8 @@ watch(forceVis, () => {
   /*padding: 10px 0 5px 0 ;*/
   line-height: 25px;
   text-decoration: underline;
+  font-size: 1.2em;
+  font-weight: bold;
 }
 
 .fill {

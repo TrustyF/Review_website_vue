@@ -13,6 +13,14 @@ const tag_path = "./assets/tags/icons/"
 const props = defineProps(['data', 'open', 'mediaType'])
 const emits = defineEmits(['opened', 'closed', 'updated'])
 
+const date = new Date()
+
+let currentDate = date.toLocaleDateString('en-CA',{
+  year:"numeric",
+  month:'2-digit',
+  day:'2-digit',
+})
+
 let MovChanges = ref({'title': 'test', 'my_rating': '0'})
 let iconData = ref({
   'name': "",
@@ -440,14 +448,14 @@ async function closeHelper() {
           </div>
           <!--          Date rated-->
           <label for="date_rated_input">Date rated</label>
-          <input type="date" id="date_rated_input" :value="data['date_rated'] ? data['date_rated'] : null"
+          <input type="date" id="date_rated_input" :value="presentInDb ? null : currentDate"
                  @change="MovChanges['date_rated'] = String($event.target.value)">
         </div>
 
         <div class="box_wrapper">
           <!--          <button @click="refreshData">Refresh data</button>-->
           <p v-if="presentInDb">!! Movie already added !!</p>
-          <button @click="addMovie" v-if="!presentInDb">add movie</button>
+          <button @click="addMovie" v-if="MovChanges['my_rating'] && !presentInDb">add movie</button>
           <button @click="delMovie">remove movie</button>
         </div>
       </div>
