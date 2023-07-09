@@ -43,7 +43,7 @@ class Presets:
 class StorageManager:
     def __init__(self):
         self.stores = {}
-        self.curr_media = 'movie'
+        self.storage_lock = False
 
     def add_store(self, name, media):
         self.stores[name] = media
@@ -52,6 +52,19 @@ class StorageManager:
         out = {}
         for media in self.stores:
             out[self.stores[media].media_type] = self.stores[media].get_media_rating_range()
+        return out
+
+    def get_home_banners(self, data):
+
+        out = [
+            self.stores['movie'].get_rand_genre(data),
+            self.stores['movie'].get_recent_release(data),
+            self.stores['movie'].get_recent_review(data),
+            self.stores['tv'].get_rand_genre(data),
+            self.stores['manga'].get_rand_genre(data),
+            self.stores['game'].get_rand_genre(data)
+        ]
+
         return out
 
 
@@ -66,7 +79,7 @@ class Media:
         self.db_path = os.path.join(self.base_path, f'database/{self.media_type}_db.json')
 
         self.db = TinyDB(self.db_path)
-        # self.list_db = self.db.all()
+        self.list_db = self.db.all()
         self.filters = {}
         self.settings = {}
         self.max_page_items = 0
@@ -253,12 +266,13 @@ class Media:
         }
 
     # selective pickers
+
     def get_rand_genre(self, data):
         # print(data['max_media'])
         filtered_arr = self.db.search(filter_funcs.rating_filter({'rating': {'filter': ['6', '7', '8', '9', '10']}}))
         sort_arr = sort_funcs.sort_randomize(filtered_arr, data['session_seed'])
-        picked_arr = filter_funcs.pick_one_each_genre(sort_arr)
-        culled_arr = self.culling(picked_arr, data['max_media'])
+        # picked_arr = filter_funcs.pick_one_each_genre(sort_arr)
+        culled_arr = self.culling(sort_arr, data['max_media'])
         # ranked_arr = sort_funcs.place_in_rank_category(filtered_arr, self.rank_range)
         return culled_arr
 
@@ -541,8 +555,8 @@ class Manga(Media):
             })
         )
         sort_arr = sort_funcs.sort_randomize(filtered_arr)
-        picked_arr = filter_funcs.pick_one_each_genre(sort_arr)
-        culled_arr = self.culling(picked_arr, data['max_media'])
+        # picked_arr = filter_funcs.pick_one_each_genre(sort_arr)
+        culled_arr = self.culling(sort_arr, data['max_media'])
         # ranked_arr = sort_funcs.place_in_rank_category(filtered_arr, self.rank_range)
         return culled_arr
 

@@ -87,21 +87,9 @@ def check_dupe():
 
 
 # Selective picks
-@app.route('/media/get_rand_genre', methods=["POST"])
-def get_rand_genre():
-    return media_store[request.json['media_type']].get_rand_genre(request.json), 200
-
-
-@app.route('/media/get_recent_release', methods=["POST"])
-# @cache.cached(timeout=3000)
-def get_recent_release():
-    return media_store[request.json['media_type']].get_recent_release(request.json), 200
-
-
-@app.route('/media/get_recent_review', methods=["POST"])
-# @cache.cached(timeout=3000)
-def get_recent_review():
-    return media_store[request.json['media_type']].get_recent_review(request.json), 200
+@app.route('/media/get_home_banners', methods=["POST"])
+def get_home_banners():
+    return store.get_home_banners(request.json), 200
 
 
 # presets
