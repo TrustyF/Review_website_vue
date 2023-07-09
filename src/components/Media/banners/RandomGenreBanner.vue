@@ -43,7 +43,7 @@ function get_recent_releases() {
       // Process the returned JSON data
       .then(data => {
         bannerMedia.value = data
-        if (devMode) console.log('recent release banner', data);
+        // if (devMode) console.log('recent release banner', data);
       })
 
       // Handle any errors that occurred during the fetch
@@ -78,7 +78,7 @@ function get_random_genre() {
       // Process the returned JSON data
       .then(data => {
         bannerMedia.value = data
-        if (devMode) console.log('recent release banner', data);
+        // if (devMode) console.log('recent release banner', data);
       })
 
       // Handle any errors that occurred during the fetch

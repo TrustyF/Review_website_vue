@@ -80,7 +80,7 @@ onMounted(() => {
 
   calc()
   if (forceVis.value) {
-    console.log('bumper', forceVis.value)
+    // console.log('bumper', forceVis.value)
     hover = forceVis.value
   }
 })

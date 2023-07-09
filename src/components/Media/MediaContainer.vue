@@ -40,7 +40,7 @@ function RatingChange(state) {
 
   const url = new URL(`${current_api}/media/update`)
   let newRating = Number(input['data'].value['my_rating'])
-  console.log(newRating, state)
+  // console.log(newRating, state)
 
   if (state) {
     newRating += 1
@@ -83,7 +83,7 @@ function build_cover_request(info) {
 }
 
 watch(forceVis, () => {
-  console.log('movie', forceVis.value)
+  // console.log('movie', forceVis.value)
   main_block_hover.value = forceVis.value
 })
 

@@ -1,6 +1,6 @@
 <script setup>
 import MediaPageComponent from "./components/MediaPageComponent"
-import {ref, onMounted,inject} from 'vue'
+import {ref, onMounted, inject} from 'vue'
 
 let filters = ref({
   'format': {
@@ -19,8 +19,8 @@ let filters = ref({
   },
   'rating': {
     'name': 'Rating',
-    'available': ["9", "8", "7", "6", "5", "4", "3", "2", "1"],
-    'display': ["9★", "8★", "7★", "6★", "5★", "4★", "3★", "2★", "1★"],
+    'available': ["10", "9", "8", "7", "6", "5", "4", "3", "2", "1"],
+    'display': ["10★", "9★", "8★", "7★", "6★", "5★", "4★", "3★", "2★", "1★"],
     'filter': [],
     'checkbox': true
   },
@@ -40,10 +40,11 @@ let filters = ref({
   'search_bar': "",
 })
 let ratingDesc = {
-  9: 'Near perfect masterpiece',
+  10: 'Masterpiece',
+  9: 'Near perfect',
   8: 'Extremely good',
-  7: 'Very good',
-  6: 'Good with flaws',
+  7: 'Good',
+  6: 'Decent',
   5: "Meh",
   4: 'Bad',
   3: 'Fucking bad',
