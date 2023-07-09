@@ -12,13 +12,13 @@ const screenSide = ref(false)
 let tagAmount = ref(0)
 
 function calcScreenSide() {
-  let instance = getCurrentInstance()
-  console.log(instance.parent)
+  // let instance = getCurrentInstance()
+  // console.log(instance.parent)
   // let parent = document.getElementById(instance.parent.uid)
-  // let rect = screenRect.value.getBoundingClientRect()
-  // let screen = [parent.outerWidth, parent.outerHeight]
+  let rect = screenRect.value.getBoundingClientRect()
+  let screen = [parent.outerWidth, parent.outerHeight]
 
-  // screenSide.value = rect.right > (screen[0] / 2);
+  screenSide.value = rect.right > (screen[0] / 2);
 }
 
 function calcTagAmount() {
@@ -58,19 +58,6 @@ onUnmounted(() => {
       </div>
     </div>
 
-<!--    <div ref="screenRect" class="tag_preview" v-if="forceVis===true">-->
-<!--      <div class="tooltip" v-for="tag in tag_input" :key="tag['name']">-->
-<!--        <img :class="`${tag['tier']}_glow` + ' tag_icon'" :src="`${tag_path}${tag['tier']}/${tag['image']}`"-->
-<!--             :alt="tag['image']">-->
-<!--        <div class="hover_box">-->
-<!--          <div class="description">-->
-<!--            <p class=tag_name>{{ tag['name'] }}</p>-->
-<!--            <p class="tag_description">{{ tag['description'] }}</p>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-
   </div>
 </template>
 <style scoped>
@@ -78,7 +65,7 @@ onUnmounted(() => {
 .tag_wrapper {
   display: flex;
   flex-flow: column;
-  outline: red 1px solid;
+  /*outline: red 1px solid;*/
   /*width: 200px;*/
   user-select: none;
   cursor: help;
@@ -205,7 +192,8 @@ onUnmounted(() => {
   font-size: 1.2em;
   opacity: 0.6;
   line-height: 15px;
-  outline: 1px solid red;
+  max-width: 150px;
+  /*outline: 1px solid red;*/
 }
 
 .tag_icon {

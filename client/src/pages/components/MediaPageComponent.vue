@@ -64,7 +64,7 @@ function update_movies() {
         setTimeout(() => {
           scrollFetchLock.value = false
         }, 100)
-        if (devMode) console.log('get movies', data);
+        // if (devMode) console.log('get movies', data);
       })
 
       // Handle any errors that occurred during the fetch
@@ -132,7 +132,7 @@ onUnmounted(() => {
 
     <div class="feed" v-if="moviesFetched">
 
-      <div class="movie_grid" v-show="movies[rating].length > 0" v-for="rating in Object.keys(ratingDesc).reverse()"
+      <div class="movie_grid" v-show="movies[rating]" v-for="rating in Object.keys(ratingDesc).reverse()"
            :key="rating">
         <rating-header :rating="rating" :rating_desc="ratingDesc"></rating-header>
         <div class="movie_container_wrapper">

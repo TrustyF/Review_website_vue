@@ -94,7 +94,7 @@ async function searchMovie() {
 
 async function getExtraPosters() {
   const url = new URL(`${current_api}/media/extra_posters`)
-  console.log('test', MovChanges.value)
+  // console.log('test', MovChanges.value)
   url.searchParams.set('media_id', MovChanges.value['imdb_id'] ? MovChanges.value['imdb_id'] : MovChanges.value['id'])
   url.searchParams.set('media_type', currentSearchType.value)
 
@@ -178,7 +178,7 @@ async function delMovie(button) {
         } else {
           // button.target.disabled = false
           closeHelper()
-          if (devMode) console.log('media deleted');
+          // if (devMode) console.log('media deleted');
         }
       })
 
