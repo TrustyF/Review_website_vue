@@ -1,10 +1,10 @@
 <script setup>
 import {inject, onMounted} from 'vue'
 import {RouterView, RouterLink} from 'vue-router'
-import NavBar from "@/components/General/NavBar";
-import './styles/globals.css'
-import './styles/dark.css'
-import CreditsFooter from "@/components/General/CreditsFooter";
+import NavBar from "@/components/General/NavBar.vue";
+import '@/assets/styles/globals.css'
+import '@/assets/styles/dark.css'
+import CreditsFooter from "@/components/General/CreditsFooter.vue";
 
 let devMode = inject('devMode')
 

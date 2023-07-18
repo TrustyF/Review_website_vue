@@ -1,5 +1,5 @@
 <script setup>
-import {defineProps, defineEmits, onMounted, ref, watch, inject} from 'vue'
+import {ref, watch, inject, onMounted} from 'vue'
 
 const devMode = inject('devMode')
 const props = defineProps(['data'])
@@ -40,11 +40,6 @@ onMounted(() => {
 
 </template>
 
-<script>
-export default {
-  name: "ContentBox"
-}
-</script>
 <style scoped>
 .content {
   /*user-select: none;*/

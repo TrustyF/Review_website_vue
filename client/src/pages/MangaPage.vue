@@ -1,5 +1,5 @@
 <script setup>
-import MediaPageComponent from "./components/MediaPageComponent"
+import MediaPageComponent from "@/pages/components/MediaPageComponent.vue"
 import {ref, onMounted} from 'vue'
 
 let filters = ref({
@@ -49,10 +49,3 @@ const mediaType = ref("manga")
 <template>
   <MediaPageComponent :filters="filters" :rating-desc="ratingDesc" :mediaType="mediaType"></MediaPageComponent>
 </template>
-
-<script>
-
-export default {
-  name: "MangaPage"
-}
-</script>

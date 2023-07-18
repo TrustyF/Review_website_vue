@@ -1,15 +1,17 @@
 <script setup>
-import TagContainer from "@/components/Media/components/TagContainer";
+import TagContainer from "@/components/Media/components/TagContainer.vue";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
-import RatingBumper from "@/components/Media/components/RatingBumper/RatingBumper";
-import {defineProps, defineEmits, ref, toRefs, onMounted, onUnmounted, watch, inject} from 'vue'
-import ContentBox from "@/components/Media/components/ContentBox";
+import RatingBumper from "@/components/Media/components/RatingBumper/RatingBumper.vue";
+import {ref, toRefs, watch, inject} from 'vue'
+import ContentBox from "@/components/Media/components/ContentBox.vue";
 
 const props = defineProps(['data', 'rating_desc', 'mediaType'])
 const input = toRefs(props)
 const emits = defineEmits(['MovieEdit', 'MovieUpdate'])
 
 const devMode = inject('devMode')
+let editMode = inject('editMode')
+
 const forceVis = inject('forceVis')
 const current_api = inject('curr_api')
 
@@ -104,7 +106,7 @@ watch(forceVis, () => {
       <TagContainer :class="forceVis ? 'tag_container  vis_override':'tag_container'" v-if="data['tags']!==null"
                     :tag_input="data['tags']"></TagContainer>
 
-      <div v-if="devMode" class="settings">
+      <div v-if="editMode" class="settings">
         <button style="width: 35px;height: 35px" @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">
           ...
         </button>

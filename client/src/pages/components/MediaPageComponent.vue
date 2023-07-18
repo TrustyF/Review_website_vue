@@ -1,18 +1,20 @@
 <script setup>
-import MovieContainer from "@/components/Media/MediaContainer";
-import DbHelper from "@/components/Media/general/DbHelper";
-import RatingHeader from "@/components/Media/general/RatingHeader";
-import {inject, watch, defineProps} from 'vue'
+import MovieContainer from "@/components/Media/MediaContainer.vue";
+import DbHelper from "@/components/Media/general/DbHelper.vue";
+import RatingHeader from "@/components/Media/general/RatingHeader.vue";
 
-import {ref, onMounted, onUnmounted, toRefs} from 'vue'
-import FilterMenu from "@/components/Media/general/FilterMenu";
+import {ref, toRefs, inject, watch, onMounted, onUnmounted} from 'vue'
+import FilterMenu from "@/components/Media/general/FilterMenu.vue";
 import {eventThrottle} from "@/utils";
 
 const props = defineProps(['filters', 'ratingDesc', 'mediaType'])
 const input_props = toRefs(props)
 
 const current_api = inject('curr_api')
+
 let devMode = inject('devMode')
+let editMode = inject('editMode')
+
 const mediaRanges = inject('mediaRanges')
 const sessionSeed = inject('sessionSeed')
 
@@ -122,9 +124,9 @@ onUnmounted(() => {
 
 <template>
   <div class="page">
-    <db-helper v-if="devMode" :data="currentSelectedMovie" :open="settingsOpen" :mediaType="mediaType"
+    <db-helper v-if="editMode" :data="currentSelectedMovie" :open="settingsOpen" :mediaType="mediaType"
                @closed="settingsOpen = !settingsOpen" @updated="update_movies"></db-helper>
-    <div v-if="devMode" style="visibility: hidden">
+    <div v-if="editMode" style="visibility: hidden">
       <button @click="settingsOpen = true" style="margin: 13px 0 0 20px; position: fixed">Add {{ mediaType }}</button>
     </div>
 
@@ -153,7 +155,7 @@ onUnmounted(() => {
 
     <div class="feed loader" v-else>
       Loading...
-      <img src="../../../public/assets/ui/Loading_icon.gif" alt="loading icon"
+      <img src="@/assets/ui/Loading_icon.gif" alt="loading icon"
            style="width: 25px; margin: 10px">
     </div>
   </div>

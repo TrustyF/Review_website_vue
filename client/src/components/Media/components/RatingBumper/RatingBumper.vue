@@ -1,7 +1,7 @@
 <script setup>
-import {defineProps, defineEmits, watch, ref, toRefs, onMounted, inject} from 'vue'
+import {watch, ref, toRefs, inject, onMounted} from 'vue'
 
-import RatingTag from "@/components/Media/components/RatingBumper/RatingTag";
+import RatingTag from "@/components/Media/components/RatingBumper/RatingTag.vue";
 
 const props = defineProps(['data', 'hover', 'mediaType'])
 let hover = toRefs(props)['hover']
@@ -9,16 +9,16 @@ let mediaType = toRefs(props)['mediaType']
 const forceVis = inject('forceVis')
 const mediaRanges = inject('mediaRanges')
 
-const blue_star = './assets/ui/blue_star.png'
-const gold_star = './assets/ui/gold_star.png'
-const arrow_up_single = './assets/ui/arrow_up_single.png'
-const arrow_up_double = './assets/ui/arrow_up_double.png'
-const arrow_down_single = './assets/ui/arrow_down_single.png'
-const arrow_down_double = './assets/ui/arrow_down_double.png'
-const re_watch_down = './assets/ui/rewind_down.png'
-const re_watch_up = './assets/ui/rewind_up.png'
-const re_read = './assets/ui/reading.png'
-const stop = './assets/ui/stop.png'
+import blue_star from '@/assets/ui/blue_star.png'
+import gold_star from '@/assets/ui/gold_star.png'
+import arrow_up_single from '@/assets/ui/arrow_up_single.png'
+import arrow_up_double from '@/assets/ui/arrow_up_double.png'
+import arrow_down_single from '@/assets/ui/arrow_down_single.png'
+import arrow_down_double from '@/assets/ui/arrow_down_double.png'
+import re_watch_down from '@/assets/ui/rewind_down.png'
+import re_watch_up from '@/assets/ui/rewind_up.png'
+import re_read from '@/assets/ui/reading.png'
+import stop from '@/assets/ui/stop.png'
 
 let ratingDesc = {
   9: 'Near perfect masterpiece',

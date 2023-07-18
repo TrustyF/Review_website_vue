@@ -1,5 +1,5 @@
 <script setup>
-import {defineProps, defineEmits, ref, watch, inject} from 'vue'
+// import {ref, watch, inject} from 'vue'
 
 const props = defineProps(['rating', 'rating_desc'])
 
@@ -16,11 +16,6 @@ const props = defineProps(['rating', 'rating_desc'])
 
 </template>
 
-<script>
-export default {
-  name: "RatingHeader"
-}
-</script>
 <style scoped>
 
 .rating_container {

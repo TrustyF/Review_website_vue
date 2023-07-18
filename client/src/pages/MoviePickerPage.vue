@@ -1,7 +1,7 @@
 <script setup>
 import {ref, onMounted, onUnmounted, inject} from 'vue'
-import RandomGenreBanner from '@/components/Media/banners/RandomGenreBanner'
-import FilterMenu from "@/components/Media/general/FilterMenu";
+import RandomGenreBanner from '@/components/Media/banners/RandomGenreBanner.vue'
+import FilterMenu from "@/components/Media/general/FilterMenu.vue";
 import {eventThrottle} from "@/utils";
 
 let num_media_fit = ref(0)
@@ -80,7 +80,6 @@ onUnmounted(() => {
 
 <template>
   <div class="pick_page_feed_wrapper">
-<!--    <div v-if="bannerLoaded">-->
       <div>
         <h1 class="headers"> What are you in the mood for ?</h1>
         <RandomGenreBanner mediaType="movie"
@@ -129,7 +128,6 @@ onUnmounted(() => {
                          :bannerFit="num_media_fit"
       ></RandomGenreBanner>
     </div>
-<!--    </div>-->
   </div>
 </template>
 
