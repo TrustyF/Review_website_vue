@@ -95,12 +95,6 @@ watch(forceVis, () => {
        v-click-out-side="clickOutside"
        @click="isOpen = !isOpen">
 
-<!--    <div v-if="data.hasOwnProperty('tags') && data['tags']!==undefined && data['tags']!==null">-->
-<!--      <div v-if="data['tags'].length > 0">-->
-<!--        <div class="fill" v-if="Object.values(data['tags'][0]).includes('Childhood')"></div>-->
-<!--      </div>-->
-<!--    </div>-->
-
     <div class="main_block" @mouseover="main_block_hover = true" @mouseleave="main_block_hover = false">
 
       <TagContainer :class="forceVis ? 'tag_container  vis_override':'tag_container'" v-if="data['tags']!==null"
