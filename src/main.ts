@@ -1,5 +1,5 @@
 import {createApp, ref} from 'vue'
-import router from './router/index.ts'
+import router from './router/index'
 import App from './App.vue'
 // import Popper from "vue3-popper";
 import VueLazyLoad from "vue-lazyload";
