@@ -1,9 +1,10 @@
 <script setup>
-import {defineProps,getCurrentInstance, defineEmits, toRefs, ref, watch, onMounted, onUnmounted, inject} from 'vue'
-import FloatingVue from 'floating-vue'
+import {toRefs, ref, watch, inject, onMounted, onUnmounted} from 'vue'
+// import FloatingVue from 'floating-vue'
 
 const props = defineProps(['tag_input'])
-const tag_path = "./assets/tags/icons/"
+// const tag_path = "./assets/tags/icons/"
+const tag_path = "/tags/icons/"
 const forceVis = inject('forceVis')
 
 const screenRect = ref(null)

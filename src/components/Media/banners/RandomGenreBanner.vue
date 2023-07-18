@@ -1,7 +1,6 @@
 <script setup>
-import MediaContainer from '@/components/Media/MediaContainer'
-import {inject, watch, defineProps} from 'vue'
-import {ref, onMounted, onUnmounted, toRefs} from 'vue'
+import MediaContainer from '@/components/Media/MediaContainer.vue'
+import {inject, watch, ref, toRefs} from 'vue'
 import {eventThrottle} from "@/utils";
 
 const props = defineProps(['bannerMedia', 'bannerType', 'mediaType', 'bannerIndex', 'bannerFit'])
@@ -17,8 +16,8 @@ let page = ref(0)
 
 let slicedBanner = ref([])
 
-const arrow_left = './assets/ui/arrow_left_single_white.png'
-const arrow_right = './assets/ui/arrow_right_single_white.png'
+import arrow_left from '@/assets/ui/arrow_left_single_white.png'
+import arrow_right from '@/assets/ui/arrow_right_single_white.png'
 
 function format_header(movie) {
   let genres = movie['genres']
@@ -31,14 +30,14 @@ function format_header(movie) {
 }
 
 function page_forward() {
-  console.log(props['bannerFit']*5,page.value)
-  if (page.value !== (props['bannerFit']*5)-props['bannerFit']){
+  console.log(props['bannerFit'] * 5, page.value)
+  if (page.value !== (props['bannerFit'] * 5) - props['bannerFit']) {
     page.value += props['bannerFit']
   }
 }
 
 function page_backwards() {
-  if (page.value !== 0){
+  if (page.value !== 0) {
     page.value -= props['bannerFit']
   }
 }
@@ -48,18 +47,18 @@ function page_backwards() {
   <div class="bg_wrapper">
     <div class="genre_wrapper" id="genre_box">
 
-        <div v-for="mov in bannerMedia[bannerIndex].slice(0+page,bannerFit+page)" :key="mov.title"
-             class="banner_wrapper">
+      <div v-for="mov in bannerMedia[bannerIndex].slice(0+page,bannerFit+page)" :key="mov.title"
+           class="banner_wrapper">
 
-          <div class="hover_box dark_accent">
-            <h1 class="genre_title">{{ format_header(mov) }}</h1>
-          </div>
-
-          <MediaContainer id="media_container" :key="mov.id" :data="mov"
-                          :ratingRange="mediaRanges[mediaType]"
-                          :media-type="mediaType"
-          ></MediaContainer>
+        <div class="hover_box dark_accent">
+          <h1 class="genre_title">{{ format_header(mov) }}</h1>
         </div>
+
+        <MediaContainer id="media_container" :key="mov.id" :data="mov"
+                        :ratingRange="mediaRanges[mediaType]"
+                        :media-type="mediaType"
+        ></MediaContainer>
+      </div>
 
     </div>
     <div class="button_wrapper right" @click="page_forward" v-if="page !== (bannerFit*5-bannerFit)">

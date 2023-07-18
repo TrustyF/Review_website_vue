@@ -1,14 +1,14 @@
 <script setup>
-import {defineProps, defineEmits, ref, watch, onMounted, onUnmounted, computed, inject, provide} from 'vue'
-import TagContainer from "@/components/Media/components/TagContainer";
-import asset_paths from '../../../../public/assets/tags/assets.json'
-import MovieContainer from "@/components/Media/MediaContainer";
+import {ref, watch, inject, onMounted} from 'vue'
+import TagContainer from "@/components/Media/components/TagContainer.vue";
+import asset_paths from '@/assets/tags/assets.json'
+import MovieContainer from "@/components/Media/MediaContainer.vue";
 
 const current_api = inject('curr_api')
 const devMode = inject('devMode')
 let forceVis = inject('forceVis')
 
-const tag_path = "./assets/tags/icons/"
+const tag_path = "/tags/icons/"
 
 const props = defineProps(['data', 'open', 'mediaType'])
 const emits = defineEmits(['opened', 'closed', 'updated'])
@@ -520,12 +520,6 @@ async function closeHelper() {
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  name: "DbHelper"
-}
-</script>
 
 <style scoped>
 .main_win {

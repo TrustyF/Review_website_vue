@@ -1,8 +1,8 @@
 <script setup>
-import {defineProps, defineEmits, ref, watchEffect, onMounted, watch, toRefs, inject} from 'vue'
+import {ref, toRefs, inject, onMounted} from 'vue'
 import {Collapse} from 'vue-collapsed'
-import filterButton from '/public/assets/ui/filter_button.png'
-import crossButton from '/public/assets/ui/cross_button.png'
+import filterButton from '@/assets/ui/filter_button.png'
+import crossButton from '@/assets/ui/cross_button.png'
 
 let props = defineProps(['props'])
 const emits = defineEmits(['filtersChange'])

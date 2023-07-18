@@ -1,5 +1,5 @@
 <script setup>
-import {defineProps, defineEmits, ref, watch, onMounted, onUnmounted, computed, inject} from 'vue'
+// import {ref, watch, onMounted, onUnmounted, computed, inject} from 'vue'
 
 const props = defineProps(['image', 'name', 'desc', 'sub_desc', 'number', 'rating'])
 
@@ -35,11 +35,6 @@ const props = defineProps(['image', 'name', 'desc', 'sub_desc', 'number', 'ratin
   </div>
 </template>
 
-<script>
-export default {
-  name: "RatingTag"
-}
-</script>
 <style scoped>
 .box {
   filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8));

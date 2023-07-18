@@ -1,6 +1,6 @@
 <script setup>
 import {RouterLink} from "vue-router";
-import logo from '/public/assets/ui/logo.png'
+import logo from '@/assets/ui/logo.png'
 
 </script>
 
@@ -20,12 +20,6 @@ import logo from '/public/assets/ui/logo.png'
 
 
 </template>
-
-<script>
-export default {
-  name: "NavBar"
-}
-</script>
 
 <style scoped>
 nav {
