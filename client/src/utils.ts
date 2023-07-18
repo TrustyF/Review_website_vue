@@ -5,7 +5,7 @@ export const eventThrottle = function (callback, interval) {
         if (!enableCall) return;
 
         enableCall = false;
-        callback.apply(this, args);
+        callback.apply(args);
         setTimeout(() => enableCall = true, interval);
     }
 }
