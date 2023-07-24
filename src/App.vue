@@ -53,6 +53,11 @@ onMounted(() => {
     <div v-if="mediaRanges!==undefined" class="app_wrapper">
       <RouterView/>
     </div>
+    <div class="feed loader" id="genre_box" v-else>
+      Loading...
+      <img src="@/assets/ui/Loading_icon.gif" alt="loading icon"
+           style="width: 25px; margin: 10px">
+    </div>
     <CreditsFooter/>
   </div>
 </template>
@@ -64,5 +69,19 @@ onMounted(() => {
   display: block;
   margin: auto;
   transition: 500ms;
+}
+.feed {
+  /*outline: 1px solid blue;*/
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+}
+
+.loader {
+  /*outline: 1px solid red;*/
+  padding: 20px;
+  display: flex;
+  text-align: center;
+  align-items: center;
 }
 </style>
