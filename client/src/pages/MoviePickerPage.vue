@@ -5,7 +5,7 @@ import FilterMenu from "@/components/Media/general/FilterMenu.vue";
 import {eventThrottle} from "@/utils";
 
 let num_media_fit = ref(0)
-let banners_media = ref([[],[],[],[],[],[]])
+let banners_media = ref([[], [], [], [], [], []])
 
 let devMode = inject('devMode')
 let sessionSeed = inject('sessionSeed')
@@ -53,7 +53,10 @@ function get_home_banners() {
 }
 
 function calc_screen_fit() {
-
+  console.log(mediaRanges.value)
+  if (mediaRanges.value === undefined) {
+    return
+  }
   let w_box = document.getElementById("genre_box").getBoundingClientRect()
   // let w_box = document.getElementById("main_banner").getElementById("genre_box").getBoundingClientRect()
   let gap = 20
@@ -80,47 +83,47 @@ onUnmounted(() => {
 
 <template>
   <div class="pick_page_feed_wrapper">
-      <div>
-        <h1 class="headers"> What are you in the mood for ?</h1>
-        <RandomGenreBanner mediaType="movie"
-                           :banner-media="banners_media"
-                           :banner-index="0"
-                           :bannerFit="num_media_fit"
-        ></RandomGenreBanner>
-      </div>
-      <div>
-        <h1 class="headers">How about a recent release.</h1>
-        <RandomGenreBanner mediaType="movie"
-                           :banner-media="banners_media"
-                           :banner-index="1"
-                           :bannerFit="num_media_fit"
-        ></RandomGenreBanner>
-      </div>
-      <div>
-        <h1 class="headers">What I watched recently.</h1>
-        <RandomGenreBanner mediaType="movie"
-                           :banner-media="banners_media"
-                           :banner-index="2"
-                           :bannerFit="num_media_fit"
-        ></RandomGenreBanner>
-      </div>
-      <div>
-        <h1 class="headers">Longer form content perhaps ?</h1>
-        <RandomGenreBanner mediaType="tv"
-                           :banner-media="banners_media"
-                           :banner-index="3"
-                           :bannerFit="num_media_fit"
-        ></RandomGenreBanner>
-      </div>
-      <div>
-        <h1 class="headers">Looking for a good read ?</h1>
-        <RandomGenreBanner mediaType="manga"
-                           :banner-media="banners_media"
-                           :banner-index="4"
-                           :bannerFit="num_media_fit"
-        ></RandomGenreBanner>
-      </div>
-    <div>
+    <div class="banner">
+      <h1 class="headers"> What are you in the mood for ?</h1>
+      <RandomGenreBanner mediaType="movie"
+                         :banner-media="banners_media"
+                         :banner-index="0"
+                         :bannerFit="num_media_fit"
+      ></RandomGenreBanner>
+    </div>
+    <div class="banner">
+      <h1 class="headers">How about a recent release.</h1>
+      <RandomGenreBanner mediaType="movie"
+                         :banner-media="banners_media"
+                         :banner-index="1"
+                         :bannerFit="num_media_fit"
+      ></RandomGenreBanner>
+    </div>
+    <div class="banner">
+      <h1 class="headers">What I watched recently.</h1>
+      <RandomGenreBanner mediaType="movie"
+                         :banner-media="banners_media"
+                         :banner-index="2"
+                         :bannerFit="num_media_fit"
+      ></RandomGenreBanner>
+    </div>
+    <div class="banner">
+      <h1 class="headers">Longer form content perhaps ?</h1>
+      <RandomGenreBanner mediaType="tv"
+                         :banner-media="banners_media"
+                         :banner-index="3"
+                         :bannerFit="num_media_fit"
+      ></RandomGenreBanner>
+    </div>
+    <div class="banner">
+      <h1 class="headers">Looking for a good read ?</h1>
+      <RandomGenreBanner mediaType="manga"
+                         :banner-media="banners_media"
+                         :banner-index="4"
+                         :bannerFit="num_media_fit"
+      ></RandomGenreBanner>
+    </div>
+    <div class="banner">
       <h1 class="headers">Games for GAMERS</h1>
       <RandomGenreBanner mediaType="game"
                          :banner-media="banners_media"

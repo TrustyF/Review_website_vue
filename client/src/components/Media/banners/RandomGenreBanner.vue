@@ -44,7 +44,7 @@ function page_backwards() {
 
 </script>
 <template>
-  <div class="bg_wrapper">
+  <div class="bg_wrapper" >
     <div class="genre_wrapper" id="genre_box">
 
       <div v-for="mov in bannerMedia[bannerIndex].slice(0+page,bannerFit+page)" :key="mov.title"
@@ -61,6 +61,7 @@ function page_backwards() {
       </div>
 
     </div>
+
     <div class="button_wrapper right" @click="page_forward" v-if="page !== (bannerFit*5-bannerFit)">
       <img :src="arrow_left" alt="refresh_selection" class="refresh_button">
     </div>
@@ -68,7 +69,6 @@ function page_backwards() {
       <img :src="arrow_right" alt="refresh_selection" class="refresh_button">
     </div>
   </div>
-
 </template>
 <style scoped>
 
@@ -167,5 +167,4 @@ function page_backwards() {
   border-left: 7px solid transparent;
   border-right: 7px solid transparent;
 }
-
 </style>
