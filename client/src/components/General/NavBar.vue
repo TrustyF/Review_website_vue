@@ -1,6 +1,13 @@
 <script setup>
 import {RouterLink} from "vue-router";
 import logo from '@/assets/ui/logo.png'
+import {inject} from 'vue'
+
+let editMode = inject('editMode')
+
+function activate_edit_mode() {
+  editMode.value = !editMode.value
+}
 
 </script>
 
@@ -18,6 +25,7 @@ import logo from '@/assets/ui/logo.png'
       <h1>•</h1>
       <RouterLink active-class="active" class="link" to="/games">Games</RouterLink>
     </div>
+    <div class="edit_button" @click="activate_edit_mode"></div>
   </nav>
 
 
@@ -47,6 +55,14 @@ nav ul li {
   color: white;
 }
 
+.edit_button {
+  position: absolute;
+  right: 0;
+  width: 50px;
+  height: 100%;
+  /*outline: 1px solid red;*/
+}
+
 .wrapper {
   /*outline: 1px solid blue;*/
   display: flex;
@@ -56,13 +72,16 @@ nav ul li {
   margin: auto;
   gap: 20px;
 }
+
 .link {
   font-weight: lighter;
 }
+
 .link, link:visited {
   text-decoration: none;
   color: white;
 }
+
 .active {
   font-weight: bold;
   text-decoration: underline;
