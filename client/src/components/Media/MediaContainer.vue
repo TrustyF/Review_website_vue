@@ -87,18 +87,22 @@ function build_cover_request(info) {
 watch(forceVis, () => {
   // console.log('movie', forceVis.value)
   main_block_hover.value = forceVis.value
+  console.log(main_block_hover.value)
 })
 
 </script>
 <template>
-  <div class="movie_container" :class="isOpen ? 'open ' : 'closed '"
+<!--  <div class="movie_container" :class="isOpen ? 'open ' : 'closed '"-->
+<!--       v-click-out-side="clickOutside"-->
+<!--       @click="isOpen = !isOpen">-->
+  <div class="movie_container" :class="isOpen ? 'open ' : 'open '"
        v-click-out-side="clickOutside"
-       @click="isOpen = !isOpen">
+       @click="main_block_hover = !main_block_hover">
 
     <div class="main_block" @mouseover="main_block_hover = true" @mouseleave="main_block_hover = false">
 
       <TagContainer :class="forceVis ? 'tag_container  vis_override':'tag_container'" v-if="data['tags']!==null"
-                    :tag_input="data['tags']"></TagContainer>
+                    :tag_input="data['tags']" ></TagContainer>
 
       <div v-if="editMode" class="settings">
         <button style="width: 35px;height: 35px" @click="settingsOpen = !settingsOpen" @mousedown="emitSelectedMovie">
@@ -132,36 +136,36 @@ watch(forceVis, () => {
 
     </div>
 
-    <div class="expanded">
-      <div class="overview">
+<!--    <div class="expanded">-->
+<!--      <div class="overview">-->
 
-        <h3 class="heading">Overview</h3>
-        <div class="details_wrapper">
-          <p class="rank" v-if="data['overview']" style="margin-bottom:5px; line-height: 120%">
-            {{ data['overview'] }}
-          </p>
+<!--        <h3 class="heading">Overview</h3>-->
+<!--        <div class="details_wrapper">-->
+<!--          <p class="rank" v-if="data['overview']" style="margin-bottom:5px; line-height: 120%">-->
+<!--            {{ data['overview'] }}-->
+<!--          </p>-->
 
-          <h3 class="heading">Extras</h3>
-          <p class="rank" v-if="data['genres']" style="margin-bottom:5px;">
-            {{ data['genres'].map(elem => elem).join(', ') }}
-          </p>
+<!--          <h3 class="heading">Extras</h3>-->
+<!--          <p class="rank" v-if="data['genres']" style="margin-bottom:5px;">-->
+<!--            {{ data['genres'].map(elem => elem).join(', ') }}-->
+<!--          </p>-->
 
-          <div v-if="data['media_type']==='movie' || data['media_type']==='tv' || data['media_type']==='anime'">
-            <p class="rank" style="margin-bottom:5px;" v-if="data['runtime'] && data['media_type']==='movie'">
-              {{ "Duration: " + timeConvert(data['runtime']) }}
-            </p>
-            <a :href="`https://www.imdb.com/title/${data['imdb_id']}/`" target="_blank" rel="noopener noreferrer">
-              <button type="button"
-                      style="background-color: #F5C518;border-radius: 3px;padding: 3px;outline: 1px black solid;border-style: none;cursor:pointer ">
-                Imdb
-              </button>
-            </a>
-            <p>{{data['imdb_url']}}</p>
-          </div>
+<!--          <div v-if="data['media_type']==='movie' || data['media_type']==='tv' || data['media_type']==='anime'">-->
+<!--            <p class="rank" style="margin-bottom:5px;" v-if="data['runtime'] && data['media_type']==='movie'">-->
+<!--              {{ "Duration: " + timeConvert(data['runtime']) }}-->
+<!--            </p>-->
+<!--            <a :href="`https://www.imdb.com/title/${data['imdb_id']}/`" target="_blank" rel="noopener noreferrer">-->
+<!--              <button type="button"-->
+<!--                      style="background-color: #F5C518;border-radius: 3px;padding: 3px;outline: 1px black solid;border-style: none;cursor:pointer ">-->
+<!--                Imdb-->
+<!--              </button>-->
+<!--            </a>-->
+<!--            <p>{{data['imdb_url']}}</p>-->
+<!--          </div>-->
 
-        </div>
-      </div>
-    </div>
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
 
   </div>
 </template>
