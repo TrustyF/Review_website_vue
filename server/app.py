@@ -4,12 +4,12 @@ from pprint import pprint
 from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from sql_models.media_model import *
+from sql_models.media_model import Movie
 from dotenv import load_dotenv
 
-# from database import db
 from constants import MAIN_DIR
 from db_loader import db
+from migrate import insert_in_db
 
 # check if using locally
 dev_mode = os.path.exists(os.path.join(MAIN_DIR, 'devmode.txt'))
@@ -20,7 +20,7 @@ app = Flask(__name__)
 
 db_username = os.getenv('MYSQL_DATABASE_USERNAME')
 db_password = os.getenv('MYSQL_DATABASE_PASSWORD')
-db_name = 'TrustyFox$ygo_cards_library'
+db_name = 'TrustyFox$review_site'
 
 database_uri = f'mysql+pymysql://{db_username}:{db_password}@TrustyFox.mysql.pythonanywhere-services.com:3306/{db_name}'
 local_database_uri = f'mysql+pymysql://root:{db_password}@127.0.0.1:3306/{db_name}'
@@ -41,17 +41,13 @@ def test():
 
 
 with app.app_context():
-    # app.config['SQLALCHEMY_POOL_SIZE'] = 1
-    # app.config['SQLALCHEMY_MAX_OVERFLOW'] = 0
-    # app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {"pool_size": 100, "max_overflow": 0}
     db.init_app(app)
 
-    # db.drop_all()
-    # db.create_all()
+    db.drop_all()
+    db.create_all()
 
-    from flask_blueprints import card_detector_blueprint, datasbase_blueprint, movie_blueprint, storage_blueprint
+    insert_in_db()
 
-    app.register_blueprint(card_detector_blueprint.bp, url_prefix='/card_detector')
-    app.register_blueprint(datasbase_blueprint.bp, url_prefix='/database')
-    app.register_blueprint(card_blueprint.bp, url_prefix='/card')
-    app.register_blueprint(storage_blueprint.bp, url_prefix='/storage')
+    from flask_blueprints import movie_blueprint
+
+    app.register_blueprint(movie_blueprint.bp, url_prefix='/movie')
