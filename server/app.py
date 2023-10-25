@@ -4,7 +4,7 @@ from pprint import pprint
 from flask import Flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from sql_models.media_model import Movie
+from sql_models.media_model import Movie, MovieGenre
 from dotenv import load_dotenv
 
 from constants import MAIN_DIR
@@ -45,8 +45,10 @@ with app.app_context():
 
     db.drop_all()
     db.create_all()
-
     insert_in_db()
+
+    # test = db.session.query(Genre).first()
+    # print(test.movies)
 
     from flask_blueprints import movie_blueprint
 
