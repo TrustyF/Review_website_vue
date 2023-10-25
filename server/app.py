@@ -45,7 +45,7 @@ with app.app_context():
 
     db.drop_all()
     db.create_all()
-    insert_in_db()
+    # insert_in_db()
 
     # test = db.session.query(Genre).first()
     # print(test.movies)
