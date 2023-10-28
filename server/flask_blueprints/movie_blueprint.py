@@ -9,7 +9,7 @@ from flask import Blueprint, request, Response, jsonify, send_file
 from constants import MAIN_DIR
 from data_mapper.movie_mapper import map_movie
 from db_loader import db
-from sql_models.media_model import Movie
+from sql_models.media_model import Media
 
 bp = Blueprint('movie', __name__)
 
@@ -26,7 +26,7 @@ def get():
 
     # setup query
     query = (
-        db.session.query(Movie)
+        db.session.query(Media)
     )
 
     # match ordering:

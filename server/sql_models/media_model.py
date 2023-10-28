@@ -3,16 +3,61 @@ from dataclasses import dataclass
 
 from db_loader import db
 
+media_genre_association = db.Table('media_genre_assoc', db.Model.metadata,
+                                   db.Column('media_id', db.Integer, db.ForeignKey('medias.id')),
+                                   db.Column('genre_id', db.Integer, db.ForeignKey('genres.id'))
+                                   )
 
-# movie_genre_association = db.Table('movie_genre_association', TimeStampedModel.metadata,
-#                                    db.Column('movie_id', db.Integer, db.ForeignKey('movies.id')),
-#                                    db.Column('genre_id', db.Integer, db.ForeignKey('movie_genres.id'))
-#                                    )
+media_theme_association = db.Table('media_theme_assoc', db.Model.metadata,
+                                   db.Column('media_id', db.Integer, db.ForeignKey('medias.id')),
+                                   db.Column('theme_id', db.Integer, db.ForeignKey('themes.id'))
+                                   )
+
+media_tag_association = db.Table('media_tag_assoc', db.Model.metadata,
+                                 db.Column('media_id', db.Integer, db.ForeignKey('medias.id')),
+                                 db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'))
+                                 )
 
 
 @dataclass
-class MediaItem(db.Model):
-    __tablename__ = "media_items"
+class Genre(db.Model):
+    __tablename__ = "genres"
+
+    id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name: str = db.Column(db.String(50), nullable=False, unique=True)
+    origin: str = db.Column(db.String(50), nullable=False)
+
+    media = db.relationship("Media", secondary=media_genre_association)
+
+
+@dataclass
+class Theme(db.Model):
+    __tablename__ = "themes"
+
+    id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name: str = db.Column(db.String(50), nullable=False, unique=True)
+    origin: str = db.Column(db.String(50), nullable=False)
+
+    media = db.relationship("Media", secondary=media_theme_association)
+
+
+@dataclass
+class Tag(db.Model):
+    __tablename__ = "tags"
+
+    id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name: str = db.Column(db.String(50), nullable=False, unique=True)
+    overview: str = db.Column(db.String(1000))
+    image_path: str = db.Column(db.String(100))
+    tier: str = db.Column(db.String(100))
+    origin: str = db.Column(db.String(50), nullable=False)
+
+    media = db.relationship("Media", secondary=media_tag_association)
+
+
+@dataclass
+class Media(db.Model):
+    __tablename__ = "medias"
 
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name: str = db.Column(db.String(255), nullable=False)
@@ -21,7 +66,7 @@ class MediaItem(db.Model):
     poster_path: str = db.Column(db.String(100))
 
     media_type: str = db.Column(db.String(50), nullable=False)
-    media_medium: str = db.Column(db.String(50), nullable=False)
+    media_medium: str = db.Column(db.String(50))
 
     user_rating: int = db.Column(db.Integer, nullable=False)
     public_rating: float = db.Column(db.Float)
@@ -31,58 +76,13 @@ class MediaItem(db.Model):
     created_at: datetime.datetime = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at: datetime.datetime = db.Column(db.DateTime, onupdate=datetime.datetime.utcnow)
 
-    # genres = db.relationship("MovieGenre", secondary=movie_genre_association)
-
-    __mapper_args__ = {'polymorphic_on': media_type}
-
-
-@dataclass
-class Movie(MediaItem):
-    __mapper_args__ = {'polymorphic_identity': 'movie'}
+    external_id: str = db.Column(db.String(100), unique=True)
 
     runtime: int = db.Column(db.Integer)
-
-    imdb_id: str = db.Column(db.String(20), unique=True)
-
-
-@dataclass
-class Tv(MediaItem):
-    __mapper_args__ = {'polymorphic_identity': 'tv'}
-
-    imdb_id: str = db.Column(db.String(20), unique=True)
-
     episodes: int = db.Column(db.Integer)
     seasons: int = db.Column(db.Integer)
-
-
-@dataclass
-class Anime(MediaItem):
-    __mapper_args__ = {'polymorphic_identity': 'anime'}
-
-    imdb_id: str = db.Column(db.String(20), unique=True)
-
-    episodes: int = db.Column(db.Integer)
-    seasons: int = db.Column(db.Integer)
-
-
-@dataclass
-class Manga(MediaItem):
-    __mapper_args__ = {'polymorphic_identity': 'manga'}
-
     content_rating: str = db.Column(db.String(50))
 
-
-@dataclass
-class Game(MediaItem):
-    __mapper_args__ = {'polymorphic_identity': 'game'}
-
-    hours_played: int = db.Column(db.Integer)
-
-# @dataclass
-# class Genre(TimeStampedModel):
-#     __tablename__ = "genres"
-#
-#     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#     name: str = db.Column(db.String(255), nullable=False, unique=True)
-#
-#     movies = db.relationship("Movie", secondary=movie_genre_association)
+    genres = db.relationship("Genre", secondary=media_genre_association)
+    themes = db.relationship("Theme", secondary=media_theme_association)
+    tags = db.relationship("Tag", secondary=media_tag_association)
