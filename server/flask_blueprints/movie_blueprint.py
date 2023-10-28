@@ -16,7 +16,6 @@ bp = Blueprint('movie', __name__)
 
 @bp.route("/get")
 def get():
-
     # parameters
     limit = request.args.get('limit')
     page = request.args.get('page')
@@ -27,25 +26,38 @@ def get():
     # setup query
     query = (
         db.session.query(Media)
+        .filter_by(media_type='movie')
     )
 
-    # match ordering:
-    #     case 'new_first':
-    #         query = query.order_by(UserCard.created_at.desc())
+    # order result
+    match ordering:
+        case 'release_date':
+            query = query.order_by(Media.created_at)
+        case 'name':
+            query = query.order_by(Media.name)
+
+        #     query = query.join(Card).order_by(Card.card_price.desc())
+        #     query = query.join(CardTemplate).order_by(UserCard.storage_id, CARD_TYPE_PRIORITY, CardTemplate.name)
+
+    # order direction
+    # match direction:
+    #     case 'asc':
+    #         query = query.asc()
+    #     case 'desc':
+    #         query = query.desc()
     #     case _:
-    #         query = query.join(Card).order_by(Card.card_price.desc())
-    #         query = query.join(CardTemplate).order_by(UserCard.storage_id, CARD_TYPE_PRIORITY, CardTemplate.name)
-    #
-    # if card_limit != 'undefined':
-    #     print('limit is not none')
-    #     query = query.offset(int(card_limit) * int(card_page))
-    #     query = query.limit(int(card_limit))
+    #         pass
+
+    # limiting
+    if limit is not None:
+        # query = query.offset(int(card_limit) * int(card_page))
+        query = query.limit(int(limit))
 
     # get query and map
-    movies = query.all()
-    mapped_cards = [map_movie(mov) for mov in movies]
+    media = query.all()
+    # mapped_media = [map_media(mov) for mov in media]
 
-    return mapped_cards
+    return media
 
 # @bp.route("/get_image")
 # def get_image():
