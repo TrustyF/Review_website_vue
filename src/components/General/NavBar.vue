@@ -15,7 +15,7 @@ function activate_edit_mode() {
   <nav class="dark_accent">
     <div class="wrapper">
       <img :src="logo" alt="website icon" style="height: 40px">
-      <RouterLink active-class="active" class="link" to="/movie_picker">Home</RouterLink>
+      <RouterLink active-class="active" class="link" to="/">Home</RouterLink>
       <h1>|</h1>
       <RouterLink active-class="active" class="link" to="/movies">Movies</RouterLink>
       <RouterLink active-class="active" class="link" to="/series">Series</RouterLink>
