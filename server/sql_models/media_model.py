@@ -27,7 +27,7 @@ class Genre(db.Model):
     name: str = db.Column(db.String(50), nullable=False, unique=True)
     origin: str = db.Column(db.String(50), nullable=False)
 
-    media = db.relationship("Media", secondary=media_genre_association)
+    media = db.relationship("Media", back_populates='genres', secondary=media_genre_association)
 
 
 @dataclass
@@ -38,7 +38,7 @@ class Theme(db.Model):
     name: str = db.Column(db.String(50), nullable=False, unique=True)
     origin: str = db.Column(db.String(50), nullable=False)
 
-    media = db.relationship("Media", secondary=media_theme_association)
+    media = db.relationship("Media", back_populates='themes', secondary=media_theme_association)
 
 
 @dataclass
@@ -52,7 +52,7 @@ class Tag(db.Model):
     tier: str = db.Column(db.String(100))
     origin: str = db.Column(db.String(50), nullable=False)
 
-    media = db.relationship("Media", secondary=media_tag_association)
+    media = db.relationship("Media", back_populates='tags', secondary=media_tag_association)
 
 
 @dataclass

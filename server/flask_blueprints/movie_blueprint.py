@@ -7,7 +7,7 @@ import requests
 from flask import Blueprint, request, Response, jsonify, send_file
 
 from constants import MAIN_DIR
-from data_mapper.movie_mapper import map_movie
+from data_mapper.media_mapper import map_media
 from db_loader import db
 from sql_models.media_model import Media
 
@@ -19,9 +19,9 @@ def get():
     # parameters
     limit = request.args.get('limit')
     page = request.args.get('page')
-    ordering = request.args.get('ordering')
+    order = request.args.get('order')
 
-    print(f'{limit =}', f'{ordering =}', f'{page =}')
+    print(f'{limit =}', f'{order =}', f'{page =}')
 
     # setup query
     query = (
@@ -30,7 +30,7 @@ def get():
     )
 
     # order result
-    match ordering:
+    match order:
         case 'release_date':
             query = query.order_by(Media.created_at)
         case 'name':
@@ -55,9 +55,9 @@ def get():
 
     # get query and map
     media = query.all()
-    # mapped_media = [map_media(mov) for mov in media]
+    mapped_media = [map_media(mov) for mov in media]
 
-    return media
+    return mapped_media
 
 # @bp.route("/get_image")
 # def get_image():
