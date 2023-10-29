@@ -9,7 +9,7 @@ function test(){
 
 const url = new URL(`${curr_api}/movie/get`)
 
-url.searchParams.set('limit','5')
+url.searchParams.set('limit','30')
 url.searchParams.set('page','0')
 url.searchParams.set('order','name')
 
@@ -29,11 +29,15 @@ onMounted(()=>{
 </script>
 
 <template>
-  <div class="test">
+
+
+  <div class="movie_container_wrapper">
     <div v-for="mov in movies" :key="mov['id']">
       <MediaMaster :data="mov"></MediaMaster>
     </div>
   </div>
+
+
 </template>
 
 <style scoped>
@@ -42,5 +46,14 @@ onMounted(()=>{
   display: flex;
   flex-flow: row wrap;
   gap: 10px;
+}
+.movie_container_wrapper {
+  /*outline: 1px solid red;*/
+  width: 80%;
+  margin: auto;
+  gap: 10px;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 }
 </style>

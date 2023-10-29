@@ -9,24 +9,27 @@ const curr_api = inject("curr_api");
 
 <template>
 
-<!--  <div class="media_poster_wrapper">-->
+  <div class="media_poster_wrapper">
     <img v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`" class="poster" alt="poster" draggable="false">
     <media-review class="review" :data="data"></media-review>
-<!--  </div>-->
+  </div>
 
 </template>
 
 <style scoped>
 .media_poster_wrapper {
-  outline: 3px solid red;
+  /*outline: 3px solid red;*/
+  position: relative;
 }
 .poster {
-  object-fit: scale-down;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
 }
 
 .review {
-  /*position: absolute;*/
-  /*right: 0;*/
-  /*bottom: 0;*/
+  position: absolute;
+  /*right: 5px;*/
+  bottom: -10px;
 }
 </style>
