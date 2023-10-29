@@ -1,5 +1,6 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
+import MediaReview from "@/components/MediaContainer/sub_components/MediaReview.vue";
 
 let props = defineProps(["data"]);
 const curr_api = inject("curr_api");
@@ -7,9 +8,25 @@ const curr_api = inject("curr_api");
 </script>
 
 <template>
-  <img v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`" class="poster" alt="poster" draggable="false">
+
+<!--  <div class="media_poster_wrapper">-->
+    <img v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`" class="poster" alt="poster" draggable="false">
+    <media-review class="review" :data="data"></media-review>
+<!--  </div>-->
+
 </template>
 
 <style scoped>
+.media_poster_wrapper {
+  outline: 3px solid red;
+}
+.poster {
+  object-fit: scale-down;
+}
 
+.review {
+  /*position: absolute;*/
+  /*right: 0;*/
+  /*bottom: 0;*/
+}
 </style>

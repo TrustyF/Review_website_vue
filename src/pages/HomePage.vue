@@ -4,7 +4,7 @@ import MediaMaster from "@/components/MediaContainer/MediaMaster.vue";
 
 const curr_api = inject("curr_api");
 
-let movie = ref({})
+let movies = ref({})
 function test(){
 
 const url = new URL(`${curr_api}/movie/get`)
@@ -17,7 +17,7 @@ fetch(url)
   .then(response => response.json())
   .then(data => {
     console.log(data);
-    movie.value = data[0]
+    movies.value = data
   })
 
 }
@@ -29,10 +29,18 @@ onMounted(()=>{
 </script>
 
 <template>
-  <div>
-    <MediaMaster :data="movie"></MediaMaster>
+  <div class="test">
+    <div v-for="mov in movies" :key="mov['id']">
+      <MediaMaster :data="mov"></MediaMaster>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.test {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 10px;
+}
 </style>
