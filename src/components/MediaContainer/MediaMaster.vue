@@ -20,14 +20,14 @@ const curr_api = inject("curr_api");
 
 <style scoped>
 .wrapper {
-  outline: 1px solid green;
+  /*outline: 1px solid green;*/
 
-  max-width: 150px;
+  width: 150px;
 
   position: relative;
   color: white;
 
-  /*border-radius: 8px;*/
+  border-radius: 8px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
 
   background-color: #2b2a34;

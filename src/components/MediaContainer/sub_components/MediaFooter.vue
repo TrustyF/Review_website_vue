@@ -9,18 +9,19 @@ const curr_api = inject("curr_api");
 <template>
   <div class="footer_wrapper">
     <h1>{{ data['name'] }}</h1>
-    <h2>{{ new Date(data['release_date'] * 1000).getFullYear() }}</h2>
+    <h2>{{ new Date(data['release_date']).getFullYear() }}</h2>
   </div>
 </template>
 
 <style scoped>
 .footer_wrapper {
   /*outline: 1px solid rebeccapurple;*/
-  padding: 5px;
+  padding: 5px 7px 5px 7px;
+  margin-top: 10px;
 }
 
 h1 {
-  font-size: 0.9em;
+  font-size: 0.8em;
   font-weight: bold;
 }
 
