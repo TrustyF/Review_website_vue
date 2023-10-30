@@ -9,8 +9,8 @@ function test(){
 
 const url = new URL(`${curr_api}/movie/get`)
 
-url.searchParams.set('limit','30')
-url.searchParams.set('page','0')
+url.searchParams.set('limit','50')
+url.searchParams.set('page','1')
 url.searchParams.set('order','name')
 
 fetch(url)
@@ -50,7 +50,7 @@ onMounted(()=>{
 .movie_container_wrapper {
   /*outline: 1px solid red;*/
   width: 80%;
-  margin: auto;
+  margin: 30px auto 0 auto;
   gap: 10px;
 
   display: grid;

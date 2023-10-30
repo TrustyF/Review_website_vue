@@ -18,10 +18,13 @@ const curr_api = inject("curr_api");
 
 <style scoped>
 .media_poster_wrapper {
-  /*outline: 3px solid red;*/
+  /*outline: 1px solid red;*/
   position: relative;
+  min-height: 225px;
+
 }
 .poster {
+  height: 100%;
   width: 100%;
   object-fit: cover;
   border-radius: 8px 8px 0 0;
