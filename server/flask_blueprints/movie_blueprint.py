@@ -55,7 +55,7 @@ def get():
 
     # get query and map
     media = query.all()
-    mapped_media = [map_media(mov) for mov in media]
+    mapped_media = map_media(media, media_type='movie')
 
     return mapped_media
 
