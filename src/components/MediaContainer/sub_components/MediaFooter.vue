@@ -16,13 +16,16 @@ const curr_api = inject("curr_api");
 <style scoped>
 .footer_wrapper {
   /*outline: 1px solid rebeccapurple;*/
-  padding: 5px 7px 5px 7px;
-  margin-top: 10px;
+  padding: 7px;
+  margin-top: 13px;
 }
 
 h1 {
-  font-size: 0.8em;
+  font-size: 0.9em;
   font-weight: bold;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 h2 {
