@@ -11,7 +11,7 @@ from data_mapper.media_mapper import map_media
 from db_loader import db
 from sql_models.media_model import Media
 
-bp = Blueprint('movie', __name__)
+bp = Blueprint('media', __name__)
 
 
 @bp.route("/get")
@@ -20,13 +20,14 @@ def get():
     limit = request.args.get('limit')
     page = request.args.get('page')
     order = request.args.get('order')
+    media_type = request.args.get('type')
 
-    print(f'{limit =}', f'{order =}', f'{page =}')
+    print(f'{limit =}', f'{order =}', f'{page =}', f'{media_type =}')
 
     # setup query
     query = (
         db.session.query(Media)
-        .filter_by(media_type='movie')
+        .filter_by(media_type=media_type)
     )
 
     # order result
@@ -35,6 +36,8 @@ def get():
             query = query.order_by(Media.created_at)
         case 'name':
             query = query.order_by(Media.name)
+        case 'rating':
+            query = query.order_by(Media.user_rating.desc())
 
         #     query = query.join(Card).order_by(Card.card_price.desc())
         #     query = query.join(CardTemplate).order_by(UserCard.storage_id, CARD_TYPE_PRIORITY, CardTemplate.name)
@@ -50,12 +53,12 @@ def get():
 
     # limiting
     if limit is not None:
-        # query = query.offset(int(card_limit) * int(card_page))
+        query = query.offset(int(limit) * int(page))
         query = query.limit(int(limit))
 
     # get query and map
     media = query.all()
-    mapped_media = map_media(media, media_type='movie')
+    mapped_media = map_media(media, media_type=media_type)
 
     return mapped_media
 
