@@ -17,7 +17,7 @@ const curr_api = inject("curr_api");
   outline: 1px solid blue;
   /*margin: 30px 30px 0 30px;*/
   display: flex;
-  height: 50%;
+  /*height: 50%;*/
 }
 .poster {
   object-fit: cover;

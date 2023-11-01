@@ -76,7 +76,7 @@ onMounted(() => {
 
 .media_container_wrapper {
   outline: 1px solid red;
-  width: 80%;
+  /*width: 80%;*/
   margin: 30px auto 0 auto;
   gap: 20px;
 
