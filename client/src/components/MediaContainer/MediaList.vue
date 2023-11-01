@@ -77,8 +77,10 @@ onMounted(() => {
 .media_container_wrapper {
   outline: 1px solid red;
   /*width: 80%;*/
-  margin: 30px auto 0 auto;
+  margin: 90px 30px 0 30px;
   gap: 20px;
+  justify-items: center;
+  /*align-items: center;*/
 
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
