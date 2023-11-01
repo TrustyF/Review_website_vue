@@ -17,4 +17,9 @@ import CreditsFooter from "@/components/General/CreditsFooter.vue";
 </template>
 
 <style scoped>
+.main {
+  outline: 1px solid green;
+  max-width: 1000px;
+  margin: auto;
+}
 </style>
