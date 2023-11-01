@@ -10,6 +10,7 @@ const curr_api = inject("curr_api");
 const selected_media = inject("selected_media");
 
 function emit_selected_media(media) {
+  console.log('selecting media ' + media['name'])
   selected_media.value = media
 }
 </script>

@@ -1,5 +1,7 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
+import MediaReview from "@/components/MediaContainer/sub_components/MediaReview.vue";
+import ExpandedHeaderRating from "@/components/MediaExpanded/sub_components/ExpandedHeaderRating.vue";
 
 let props = defineProps(["data"]);
 
@@ -16,8 +18,8 @@ function convert_seconds_to_time(f_seconds) {
     <div class="description_wrapper">
 
       <div class="description_title_wrapper">
-        <h1 class="description_title">{{ data['name'] }}</h1>
 
+        <div class="description_title">{{ data['name'] }}</div>
         <div class="description_genres_list">
           <div class="genre_tag" v-for="genre in data['genres']" :key="genre['id']">{{ genre['name'] }}</div>
         </div>
@@ -28,7 +30,10 @@ function convert_seconds_to_time(f_seconds) {
           data['release_date'].substring(0, 4) + ' • ' +
           convert_seconds_to_time(data['runtime'])
         }}</h2>
+
       <p class="description">{{ data['overview'] }}</p>
+
+      <expanded-header-rating :data="data"></expanded-header-rating>
 
     </div>
 
@@ -38,15 +43,13 @@ function convert_seconds_to_time(f_seconds) {
 <style scoped>
 
 .header_wrapper {
-  outline: 1px solid red;
-  /*margin: 30px 30px 0 30px;*/
+  /*outline: 2px solid orange;*/
   display: flex;
-  height: 50%;
 }
 
 .description_wrapper {
-  outline: 2px solid orange;
-  padding: 10px;
+  /*outline: 2px solid orange;*/
+  padding: 5px 0 0 20px;
   display: flex;
   flex-flow: column;
   gap: 10px;
@@ -59,8 +62,10 @@ function convert_seconds_to_time(f_seconds) {
 
 
 .description_title {
+  /*outline: 1px solid orange;*/
   font-weight: bold;
   font-size: 1.5em;
+  text-shadow: 1px 1px 3px black;
 }
 
 .description_subtitle {
@@ -69,15 +74,18 @@ function convert_seconds_to_time(f_seconds) {
 }
 
 .description {
+  /*outline: 1px solid green;*/
   font-size: 0.8em;
   line-height: 1.2em;
+  height: 300px;
+  overflow: scroll;
 }
 .description_genres_list {
-  /*outline: 2px solid green;*/
+  /*outline: 1px solid green;*/
   margin-top: 5px;
   display: flex;
-  flex-flow: row;
-  gap: 5px;
+  flex-flow: row wrap;
+  gap: 10px;
 }
 .genre_tag {
   padding: 5px;
@@ -85,6 +93,7 @@ function convert_seconds_to_time(f_seconds) {
   /*color: black;*/
   border-radius: 5px;
   font-size: 0.8em;
-  outline: 1px white solid;
+  outline: 1.5px grey solid;
+  box-shadow: 2px 2px 5px #000000;
 }
 </style>

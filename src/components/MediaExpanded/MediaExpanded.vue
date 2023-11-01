@@ -14,38 +14,41 @@ const selected_media = inject("selected_media");
 <template>
   <div class="media_expanded_wrapper" v-if="selected_media!==undefined">
 
+    <div class="right">
 
-    <img :src="`https://image.tmdb.org/t/p/w500${selected_media['poster_path']}`" class="poster" alt="poster"
-         draggable="false">
+      <img :src="`https://image.tmdb.org/t/p/w500${selected_media['poster_path']}`" class="poster" alt="poster"
+           draggable="false">
+      <expanded-header :data="selected_media"></expanded-header>
 
-
-<!--    <div class="right">-->
-<!--      <expanded-header :data="selected_media"></expanded-header>-->
-<!--      <expanded-footer :data="selected_media"></expanded-footer>-->
-<!--    </div>-->
+    </div>
+<!--    <expanded-footer :data="selected_media"></expanded-footer>-->
 
   </div>
 </template>
 
 <style scoped>
 .media_expanded_wrapper {
-  outline: 3px solid green;
+  /*outline: 3px solid green;*/
   height: 100%;
   width: 100%;
-  /*bottom: 0;*/
-  background: rgba(0, 0, 0, 1);
+
   z-index: 2;
   /*display: flex;*/
+  /*flex-flow: column wrap;*/
 }
+
 .right {
   height: 100%;
-  width: 100%;
+  /*width: 100%;*/
   display: flex;
-  flex-flow: column nowrap;
+  flex-flow: row nowrap;
 }
+
 .poster {
   height: 100%;
-  outline: 1px solid red;
+  /*outline: 1px solid red;*/
+  border-radius: 10px;
   object-fit: contain;
+  box-shadow: 3px 3px 2px #131215;
 }
 </style>

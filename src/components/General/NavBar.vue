@@ -42,7 +42,7 @@ nav {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 100;
+  z-index: 5;
   transition: top 0.2s linear;
   height: 70px;
   font-size: 1.2em;

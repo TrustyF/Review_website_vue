@@ -14,12 +14,8 @@ const curr_api = inject("curr_api");
 <template>
 
   <div class="media_review_wrapper">
+
     <tag-box :score="data['user_rating']" :tag_img="gold_star"></tag-box>
-    <!--      <rating-circle :score="data['user_rating']"></rating-circle>-->
-
-    <tag-box v-if="data['user_rating'] + 2 < data['scaled_public_rating']" :tag_img="arrow_down"></tag-box>
-
-
     <rating-circle :score="data['scaled_public_rating']"></rating-circle>
 
   </div>
