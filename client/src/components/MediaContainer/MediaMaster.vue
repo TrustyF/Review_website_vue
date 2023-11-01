@@ -5,13 +5,18 @@ import MediaFooter from "@/components/MediaContainer/sub_components/MediaFooter.
 import MediaReview from "@/components/MediaContainer/sub_components/MediaReview.vue";
 
 let props = defineProps(["data"]);
-const curr_api = inject("curr_api");
 
+const curr_api = inject("curr_api");
+const selected_media = inject("selected_media");
+
+function emit_selected_media(media) {
+  selected_media.value = media
+}
 </script>
 
 <template>
 
-  <div class="wrapper">
+  <div class="media_master_wrapper" @click="emit_selected_media(data)">
     <media-poster :data="data"></media-poster>
     <media-footer :data="data"></media-footer>
   </div>
@@ -19,7 +24,7 @@ const curr_api = inject("curr_api");
 </template>
 
 <style scoped>
-.wrapper {
+.media_master_wrapper {
   /*outline: 1px solid green;*/
 
   width: 150px;
