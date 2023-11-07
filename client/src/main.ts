@@ -7,7 +7,7 @@ import VueLazyLoad from "vue-lazyload";
 const local_api = "http://localhost:5000"
 const server_api = "https://trustyfox.pythonanywhere.com"
 const devMode = import.meta.env.DEV
-// let devMode = false
+// const devMode = false
 const editMode = ref(false)
 const sessionSeed = Math.random()
 const mediaRanges = ref(undefined)

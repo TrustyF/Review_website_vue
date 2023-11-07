@@ -5,6 +5,11 @@ import NavBar from "@/components/General/NavBar.vue";
 import '@/assets/styles/globals.css'
 import '@/assets/styles/dark.css'
 import CreditsFooter from "@/components/General/CreditsFooter.vue";
+import {provide, ref} from "vue";
+
+const selected_media = ref(undefined)
+
+provide('selected_media', selected_media)
 
 </script>
 

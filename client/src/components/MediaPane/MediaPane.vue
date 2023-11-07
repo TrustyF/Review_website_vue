@@ -44,7 +44,7 @@ watch(selected_media, (oldV, newV) => {
 
   <div class="media_pane_wrapper hidden" id="media_pane" >
     <div class="feed" v-click-out-side="close">
-      <media-expanded :data="selected_media"></media-expanded>
+      <media-expanded :data="selected_media" v-if="selected_media!==undefined"></media-expanded>
     </div>
   </div>
 
