@@ -63,7 +63,7 @@ class Media(db.Model):
     name: str = db.Column(db.String(255), nullable=False)
     release_date: datetime.date = db.Column(db.Date)
     overview: str = db.Column(db.String(1000))
-    poster_path: str = db.Column(db.String(100))
+    poster_path: str = db.Column(db.String(200))
 
     media_type: str = db.Column(db.String(50), nullable=False)
     media_medium: str = db.Column(db.String(50))
