@@ -10,7 +10,8 @@ const curr_api = inject("curr_api");
 <template>
 
   <div class="media_poster_wrapper">
-    <img v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`" class="poster" alt="poster" draggable="false">
+<!--    <img v-lazy="`https://image.tmdb.org/t/p/w500${data['poster_path']}`" class="poster" alt="poster" draggable="false">-->
+    <img v-lazy="data['poster_path']" class="poster" alt="poster" draggable="false">
     <media-review class="review" :data="data"></media-review>
   </div>
 

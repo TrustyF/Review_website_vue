@@ -1,6 +1,8 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
 import MediaMaster from "./MediaMaster.vue";
+import MediaExpanded from "@/components/MediaExpanded/MediaExpanded.vue";
+import MediaExpandedMobile from "@/components/MediaExpandedMobile/MediaExpandedMobile.vue";
 
 
 let props = defineProps(["media_type"]);
@@ -18,6 +20,7 @@ let is_all_media_loaded = ref(false)
 function get_media() {
 
   const url = new URL(`${curr_api}/media/get`)
+  console.log(`${curr_api}/media/get`)
 
   url.searchParams.set('limit', String(media_limit.value))
   url.searchParams.set('page', String(media_page.value))
@@ -29,7 +32,7 @@ function get_media() {
       .then(response => response.json())
       .then(data => {
 
-        if (data.length < 1){
+        if (data.length < 1) {
           return
         }
 
@@ -55,6 +58,10 @@ function scroll_media_loader() {
   }
 }
 
+function isMobile() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 onMounted(() => {
   get_media()
   addEventListener("scroll", () => scroll_media_loader())
@@ -64,9 +71,15 @@ onMounted(() => {
 
 <template>
 
-  <div class="media_container_wrapper" id="media_container">
+  <div class="media_container_wrapper" id="media_container" v-if="!isMobile()">
     <div v-for="med in media" :key="med['id']">
-      <MediaMaster :data="med"></MediaMaster>
+      <MediaMaster  :data="med"></MediaMaster>
+    </div>
+  </div>
+
+  <div class="media_container_wrapper_mobile" id="media_container" v-else>
+    <div class="list_box_element" v-for="med in media" :key="med['id']">
+      <media-expanded-mobile :data="med"></media-expanded-mobile>
     </div>
   </div>
 
@@ -84,5 +97,19 @@ onMounted(() => {
 
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+}
+.list_box_element {
+  height: 100px;
+  padding: 7px;
+  border-radius: 5px;
+  background-color: #1c1b23;
+}
+.media_container_wrapper_mobile {
+  /*outline: 1px solid greenyellow;*/
+  margin: 90px 30px 0 30px;
+  gap: 10px;
+  justify-items: center;
+  display: flex;
+  flex-flow: column nowrap;
 }
 </style>

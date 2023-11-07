@@ -1,7 +1,7 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
-import ExpandedHeader from "@/components/MediaExpanded/sub_components/ExpandedHeader.vue";
-import ExpandedFooter from "@/components/MediaExpanded/sub_components/ExpandedFooter.vue";
+import ExpandedFooterMobile from "@/components/MediaExpandedMobile/sub_components/ExpandedFooterMobile.vue";
+import ExpandedHeaderMobile from "@/components/MediaExpandedMobile/sub_components/ExpandedHeaderMobile.vue";
 
 let props = defineProps(["data"]);
 const curr_api = inject("curr_api");
@@ -17,7 +17,7 @@ const selected_media = inject("selected_media");
     <div class="right">
 
       <img :src="data['poster_path']" class="poster" alt="poster" draggable="false">
-      <expanded-header :data="data"></expanded-header>
+      <expanded-header-mobile :data="data"></expanded-header-mobile>
 
     </div>
 
@@ -26,7 +26,7 @@ const selected_media = inject("selected_media");
 
 <style scoped>
 .media_expanded_wrapper {
-  outline: 3px solid green;
+  outline: 1px solid green;
   height: 100%;
   width: 100%;
 
