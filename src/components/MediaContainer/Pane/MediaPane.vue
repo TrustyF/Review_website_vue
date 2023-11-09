@@ -1,7 +1,8 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
-import MediaExpanded from "@/components/MediaContainer/Expanded/MediaExpanded.vue";
+import MediaExpanded from "@/components/MediaContainer/Master/Expanded/MediaExpanded.vue";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
+import x_button from '@/assets/ui/x_button.png'
 
 let props = defineProps(["test"]);
 const curr_api = inject("curr_api");
@@ -42,8 +43,9 @@ watch(selected_media, (oldV, newV) => {
 
 <template>
 
-  <div class="media_pane_wrapper hidden" id="media_pane" >
+  <div class="media_pane_wrapper hidden" id="media_pane">
     <div class="feed" v-click-out-side="close">
+      <img :src="x_button" alt="close_button" class="close_button" @click="close">
       <media-expanded :data="selected_media" v-if="selected_media!==undefined"></media-expanded>
     </div>
   </div>
@@ -58,7 +60,7 @@ watch(selected_media, (oldV, newV) => {
   width: 100%;
   height: 100%;
   z-index: 50;
-  background-color: rgba(0,0,0,0.9);
+  background-color: rgba(0, 0, 0, 0.9);
 
   transition: 200ms ease-in-out;
 }
@@ -68,10 +70,9 @@ watch(selected_media, (oldV, newV) => {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   height: 40%;
-  min-height: 300px;
+  /*min-height: 300px;*/
   position: absolute;
   inset: 25px;
-  /*outline: 1px greenyellow solid;*/
   max-width: 1000px;
   margin: auto;
   padding: 15px;
@@ -79,10 +80,26 @@ watch(selected_media, (oldV, newV) => {
   background: #1c1b23;
   outline: 2px solid #464646;
 }
+.close_button {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 25px;
+  height: 25px;
+  filter: invert() opacity(50%);
+  cursor: pointer;
+}
 
 .hidden {
   /*transform: translate(0, 20%);*/
   opacity: 0;
   visibility: hidden;
+}
+
+@media only screen and (max-width: 500px) {
+  .feed {
+    height: 95%;
+    padding: 25px;
+  }
 }
 </style>

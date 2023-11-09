@@ -1,23 +1,26 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
-import ExpandedHeader from "@/components/MediaContainer/Expanded/sub_components/ExpandedHeader.vue";
-import ExpandedFooter from "@/components/MediaContainer/Expanded/sub_components/ExpandedFooter.vue";
+import CollapsedHeader from "./sub_components/CollapsedHeader.vue";
 
 let props = defineProps(["data"]);
 const curr_api = inject("curr_api");
 
 const selected_media = inject("selected_media");
 
+function emit_selected_media(media) {
+  console.log('selecting media ' + media['name'])
+  selected_media.value = media
+}
 
 </script>
 
 <template>
-  <div class="media_expanded_wrapper">
+  <div class="media_expanded_wrapper" @click="emit_selected_media(data)">
 
     <div class="right">
 
       <img :src="data['poster_path']" class="poster" alt="poster" draggable="false">
-      <expanded-header :data="data"></expanded-header>
+      <collapsed-header :data="data"></collapsed-header>
 
     </div>
 
@@ -26,7 +29,7 @@ const selected_media = inject("selected_media");
 
 <style scoped>
 .media_expanded_wrapper {
-  outline: 1px solid green;
+  /*outline: 1px solid green;*/
   height: 100%;
   width: 100%;
 
@@ -36,14 +39,17 @@ const selected_media = inject("selected_media");
 }
 
 .right {
+  /*outline: 1px solid green;*/
+
   height: 100%;
   /*width: 100%;*/
+  min-width: 300px;
   display: flex;
   flex-flow: row nowrap;
 }
 
 .poster {
-  height: 100%;
+  max-height: 150px;
   /*outline: 1px solid red;*/
   border-radius: 10px;
   object-fit: contain;

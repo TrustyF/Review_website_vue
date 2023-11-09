@@ -1,7 +1,7 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
-import MediaReview from "@/components/MediaContainer/Master/sub_components/MediaReview.vue";
-import ExpandedHeaderRating from "@/components/MediaContainer/Expanded/sub_components/ExpandedHeaderRating.vue";
+import MediaReview from "@/components/MediaContainer/Master/Base/sub_components/MediaReview.vue";
+import ExpandedHeaderRating from "@/components/MediaContainer/Master/Expanded/sub_components/ExpandedHeaderRating.vue";
 
 let props = defineProps(["data"]);
 
@@ -66,7 +66,7 @@ function convert_seconds_to_time(f_seconds) {
 
 .description_title {
   /*outline: 1px solid orange;*/
-  height: 21px;
+  /*height: 21px;*/
   font-weight: bold;
   font-size: 1.5em;
   text-shadow: 1px 1px 3px black;
@@ -83,7 +83,7 @@ function convert_seconds_to_time(f_seconds) {
 }
 
 .description {
-  outline: 1px solid green;
+  /*outline: 1px solid green;*/
   font-size: 0.8em;
   line-height: 1.3em;
   /*height: 300px;*/
@@ -107,5 +107,15 @@ function convert_seconds_to_time(f_seconds) {
   font-size: 0.8em;
   outline: 1.5px grey solid;
   box-shadow: 2px 2px 5px #000000;
+}
+
+@media only screen and (max-width: 500px) {
+  .description_wrapper {
+    /*outline: 2px solid orange;*/
+    padding: 10px;
+    display: flex;
+    flex-flow: column;
+    gap: 10px;
+  }
 }
 </style>

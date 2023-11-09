@@ -48,7 +48,7 @@ onMounted(() => {
 
 <style scoped>
 .navbar {
-  /*outline: 1px solid red;*/
+  outline: 1px solid red;
   /*background-color: rgba(0, 0, 0, 1);*/
   display: flex;
   align-items: center;
@@ -87,9 +87,8 @@ nav ul li {
 }
 
 .wrapper {
-  /*outline: 1px solid blue;*/
   display: flex;
-  flex-flow: row;
+  flex-flow: row nowrap;
   align-items: center;
   width: 80%;
   margin: auto;
@@ -109,4 +108,5 @@ nav ul li {
   font-weight: bold;
   text-decoration: underline;
 }
+
 </style>
