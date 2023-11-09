@@ -1,9 +1,6 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
 import MediaMaster from "./MediaMaster.vue";
-import MediaExpanded from "@/components/MediaExpanded/MediaExpanded.vue";
-import MediaExpandedMobile from "@/components/MediaExpandedMobile/MediaExpandedMobile.vue";
-
 
 let props = defineProps(["media_type"]);
 const curr_api = inject("curr_api");
@@ -79,7 +76,7 @@ onMounted(() => {
 
   <div class="media_container_wrapper_mobile" id="media_container" v-else>
     <div class="list_box_element" v-for="med in media" :key="med['id']">
-      <media-expanded-mobile :data="med"></media-expanded-mobile>
+<!--      <media-expanded-mobile :data="med"></media-expanded-mobile>-->
     </div>
   </div>
 

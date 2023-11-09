@@ -1,6 +1,6 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
-import MediaExpanded from "@/components/MediaExpanded/MediaExpanded.vue";
+import MediaExpanded from "@/components/MediaContainer/Expanded/MediaExpanded.vue";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 
 let props = defineProps(["test"]);

@@ -1,7 +1,7 @@
 <script setup>
 import {ref, onMounted, inject, provide} from 'vue'
-import MediaList from "@/components/MediaContainer/MediaList.vue";
-import MediaPane from "@/components/MediaPane/MediaPane.vue";
+import MediaList from "@/components/MediaContainer/Master/MediaList.vue";
+import MediaPane from "@/components/MediaContainer/Pane/MediaPane.vue";
 
 </script>
 

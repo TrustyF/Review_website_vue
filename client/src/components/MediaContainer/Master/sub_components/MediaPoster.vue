@@ -1,6 +1,6 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
-import MediaReview from "@/components/MediaContainer/sub_components/MediaReview.vue";
+import MediaReview from "@/components/MediaContainer/Master/sub_components/MediaReview.vue";
 
 let props = defineProps(["data"]);
 const curr_api = inject("curr_api");
