@@ -1,8 +1,8 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
-import MediaPoster from "@/components/MediaContainer/Master/sub_components/MediaPoster.vue";
-import MediaFooter from "@/components/MediaContainer/Master/sub_components/MediaFooter.vue";
-import MediaReview from "@/components/MediaContainer/Master/sub_components/MediaReview.vue";
+import MediaPoster from "@/components/MediaContainer/Master/Base/sub_components/MediaPoster.vue";
+import MediaFooter from "@/components/MediaContainer/Master/Base/sub_components/MediaFooter.vue";
+import MediaReview from "@/components/MediaContainer/Master/Base/sub_components/MediaReview.vue";
 
 let props = defineProps(["data"]);
 

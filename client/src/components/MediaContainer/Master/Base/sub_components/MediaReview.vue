@@ -19,7 +19,7 @@ const curr_api = inject("curr_api");
 
     <tag-box :score="data['user_rating']" :tag_img="blue_star"></tag-box>
     <tag-box :score="Math.round(data['scaled_public_rating'] * 10) / 10" :tag_img="gold_star"></tag-box>
-    <rating-circle :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
+<!--    <rating-circle :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>-->
 
   </div>
 

@@ -1,6 +1,7 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
-import MediaMaster from "./MediaMaster.vue";
+import MediaMaster from "../Master/Base/MediaMaster.vue";
+import MediaCollapsed from "@/components/MediaContainer/Master/Collapsed/MediaCollapsed.vue";
 
 let props = defineProps(["media_type"]);
 const curr_api = inject("curr_api");
@@ -56,7 +57,8 @@ function scroll_media_loader() {
 }
 
 function isMobile() {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  console.log(document.body.clientWidth)
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || document.body.clientWidth < 500;
 }
 
 onMounted(() => {
@@ -76,7 +78,7 @@ onMounted(() => {
 
   <div class="media_container_wrapper_mobile" id="media_container" v-else>
     <div class="list_box_element" v-for="med in media" :key="med['id']">
-<!--      <media-expanded-mobile :data="med"></media-expanded-mobile>-->
+      <media-collapsed :data="med"></media-collapsed>
     </div>
   </div>
 
@@ -96,14 +98,14 @@ onMounted(() => {
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
 .list_box_element {
-  height: 100px;
+  /*height: 100px;*/
   padding: 7px;
   border-radius: 5px;
   background-color: #1c1b23;
 }
 .media_container_wrapper_mobile {
   /*outline: 1px solid greenyellow;*/
-  margin: 90px 30px 0 30px;
+  margin: 90px 10px 0 10px;
   gap: 10px;
   justify-items: center;
   display: flex;
