@@ -23,19 +23,20 @@ function get_rating_color(rating){
 </script>
 
 <template>
-  <div class="rating_circle_wrapper">
 
-    <div class="progress-bar" :style="
+    <div class="rating_circle_wrapper">
+
+      <div class="progress-bar" :style="
     `background:
       radial-gradient(closest-side, #2b2a34 80%, transparent 85%),
       conic-gradient(${get_rating_color(score)} ${score * 10}%, ${'#595579'} 0);`
     ">
 
-      <h1>{{ Math.round(score * 10) }}</h1>
-      <h1 class="small_text">%</h1>
-    </div>
+        <h1>{{ Math.round(score * 10) }}</h1>
+        <h1 class="small_text">%</h1>
+      </div>
 
-  </div>
+    </div>
 </template>
 
 <style scoped>

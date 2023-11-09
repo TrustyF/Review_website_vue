@@ -4,6 +4,8 @@ import RatingCircle from "@/components/MediaHelperComponents/RatingCircle.vue";
 import TagBox from "@/components/MediaHelperComponents/TagBox.vue";
 
 import gold_star from '@/assets/ui/gold_star.png'
+import blue_star from '@/assets/ui/blue_star.png'
+
 import arrow_down from '@/assets/ui/arrow_down_single.png'
 
 let props = defineProps(["data"]);
@@ -15,8 +17,9 @@ const curr_api = inject("curr_api");
 
   <div class="media_review_wrapper">
 
-    <tag-box :score="data['user_rating']" :tag_img="gold_star"></tag-box>
-    <rating-circle :score="data['scaled_public_rating']"></rating-circle>
+    <tag-box :score="data['user_rating']" :tag_img="blue_star"></tag-box>
+    <tag-box :score="Math.round(data['scaled_public_rating'] * 10) / 10" :tag_img="gold_star"></tag-box>
+    <rating-circle :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
 
   </div>
 
