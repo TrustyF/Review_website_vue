@@ -35,7 +35,7 @@ const curr_api = inject("curr_api");
   /*outline: 1px solid red;*/
   display: flex;
   flex-flow: row nowrap;
-  gap: 10px;
+  gap: 5px;
 }
 
 h1 {
@@ -44,15 +44,15 @@ h1 {
 }
 
 .gold_star {
-  width: 15px;
-  height: 15px;
+  width: 10px;
+  height: 10px;
 }
 
 .my_rating {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 }
 
 .rating_box {
@@ -61,13 +61,13 @@ h1 {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  padding: 4px 6px 4px 6px;
+  padding: 3px 5px 3px 5px;
   box-shadow: 2px 2px 5px #000000;
   background-color: #353244;
 }
 
 .rating {
-  font-size: 0.8em;
+  font-size: 0.7em;
   /*font-weight: bold;*/
   transform: translate(0, 0.5px);
 }

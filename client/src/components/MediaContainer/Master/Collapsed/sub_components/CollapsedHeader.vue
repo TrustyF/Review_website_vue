@@ -1,7 +1,5 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
-import CollapsedHeaderRating
-  from "@/components/MediaContainer/Master/Collapsed/sub_components/CollapsedHeaderRating.vue";
 
 let props = defineProps(["data"]);
 
@@ -33,11 +31,8 @@ function convert_seconds_to_time(f_seconds) {
         </div>
       </div>
 
-      <div class="collapsed_rating_wrapper">
-        <collapsed-header-rating :data="data"></collapsed-header-rating>
-      </div>
 
-      <!--      <p class="description">{{ data['overview'] }}</p>-->
+      <p class="description">{{ data['overview'] }}</p>
 
     </div>
 
@@ -53,6 +48,7 @@ function convert_seconds_to_time(f_seconds) {
 
 .description_wrapper {
   /*outline: 2px solid orange;*/
+  position: relative;
   padding: 5px 0 0 20px;
   display: flex;
   flex-flow: column;
@@ -89,6 +85,7 @@ function convert_seconds_to_time(f_seconds) {
   /*outline: 1px solid green;*/
   font-size: 0.8em;
   line-height: 1.3em;
+  margin-bottom: 13px;
   /*height: 300px;*/
 
   overflow: scroll;
@@ -111,9 +108,6 @@ function convert_seconds_to_time(f_seconds) {
   outline: 1.5px grey solid;
   box-shadow: 2px 2px 5px #000000;
 }
-.collapsed_rating_wrapper {
-  /*outline: 1px solid red;*/
-  margin-top: auto;
-}
+
 
 </style>

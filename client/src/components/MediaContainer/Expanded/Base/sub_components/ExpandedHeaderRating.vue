@@ -1,7 +1,6 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
-import gold_star from '@/assets/ui/gold_star.png'
-import blue_star from '@/assets/ui/blue_star.png'
+
 
 let props = defineProps(["data"]);
 const curr_api = inject("curr_api");
