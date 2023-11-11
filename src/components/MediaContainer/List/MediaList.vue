@@ -14,6 +14,7 @@ let media_order = ref('rating')
 
 let is_loading_more_media = ref(false)
 let is_all_media_loaded = ref(false)
+let is_mobile = ref(false)
 
 function get_media() {
 
@@ -34,7 +35,9 @@ function get_media() {
           return
         }
 
-        media.value = media.value.concat(data)
+        data.forEach(entry =>{
+          media.value.push(entry)
+        })
         console.log(media.value)
         is_loading_more_media.value = false
         scroll_media_loader()
@@ -56,23 +59,25 @@ function scroll_media_loader() {
   }
 }
 
-function isMobile() {
+function check_mobile() {
   console.log(document.body.clientWidth)
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || document.body.clientWidth < 500;
+  is_mobile.value = document.body.clientWidth < 500;
 }
 
 onMounted(() => {
   get_media()
+  check_mobile()
   addEventListener("scroll", () => scroll_media_loader())
+  addEventListener("resize", () => check_mobile())
 })
 
 </script>
 
 <template>
 
-  <div class="media_container_wrapper" id="media_container" v-if="!isMobile()">
+  <div class="media_container_wrapper" id="media_container" v-if="!is_mobile">
     <div v-for="med in media" :key="med['id']">
-      <MediaMaster  :data="med"></MediaMaster>
+      <MediaMaster :data="med"></MediaMaster>
     </div>
   </div>
 
@@ -97,14 +102,9 @@ onMounted(() => {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
-.list_box_element {
-  /*height: 100px;*/
-  padding: 7px;
-  border-radius: 5px;
-  background-color: #1c1b23;
-}
+
 .media_container_wrapper_mobile {
-  /*outline: 1px solid greenyellow;*/
+  outline: 1px solid greenyellow;
   margin: 90px 10px 0 10px;
   gap: 10px;
   justify-items: center;
