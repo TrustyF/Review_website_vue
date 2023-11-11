@@ -109,7 +109,12 @@ function emit_close() {
   max-width: 30%;
   border-radius: 10px;
   object-fit: cover;
-  box-shadow: 3px 3px 2px #131215;
+  box-shadow: 5px 0 2px #131215;
+}
+.header {
+  display: flex;
+  flex-flow: column;
+  gap: 3px;
 }
 
 .info {
@@ -189,15 +194,25 @@ function emit_close() {
   /*object-fit: scale-down;*/
 }
 
-
 .description {
   /*outline: 1px solid green;*/
   font-size: 0.8em;
   line-height: 1.3em;
-  /*height: 300px;*/
+  overflow-y: scroll;
+  max-height: 100px;
 
-  overflow: scroll;
+  -ms-overflow-style: scrollbar; /* IE and Edge */
+  scrollbar-width: thin; /* Firefox */
 }
 
+.description::-webkit-scrollbar {
+  width: 0.2em;
+}
+.description::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+.description::-webkit-scrollbar-thumb {
+  background-color: #41404d;
+}
 
 </style>

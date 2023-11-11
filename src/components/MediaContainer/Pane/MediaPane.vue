@@ -2,6 +2,7 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import MediaExpanded from "@/components/MediaContainer/Expanded/Base/MediaExpanded.vue";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 
 let props = defineProps(["test"]);
 const curr_api = inject("curr_api");
@@ -9,14 +10,15 @@ const curr_api = inject("curr_api");
 const selected_media = inject("selected_media");
 let is_open = ref(false)
 
-
 async function close() {
   if (is_open.value === true) {
     let pane = document.getElementById('media_pane')
+    let main = document.getElementById('main')
 
     pane.classList.add('hidden')
+    enableBodyScroll(main)
 
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await new Promise(resolve => setTimeout(resolve, 100));
     selected_media.value = undefined
     await new Promise(resolve => setTimeout(resolve, 10));
     is_open.value = false
@@ -27,10 +29,14 @@ async function open() {
   console.log(is_open.value)
   if (is_open.value === false) {
     let pane = document.getElementById('media_pane')
+    let main = document.getElementById('main')
 
     pane.classList.remove('hidden')
-    await new Promise(resolve => setTimeout(resolve, 200));
+    disableBodyScroll(main)
+
+    await new Promise(resolve => setTimeout(resolve, 100));
     is_open.value = true
+
   }
 }
 
@@ -49,6 +55,8 @@ watch(selected_media, (oldV, newV) => {
 
 <style scoped>
 .base {
+  /*margin: 10px;*/
+  /*outline: 1px solid red;*/
   inset: 0;
   z-index: 10;
   position: fixed;

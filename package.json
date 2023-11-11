@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@mahdikhashan/vue3-click-outside": "^0.1.2",
+    "body-scroll-lock": "^4.0.0-beta.0",
     "vue": "^3.3.4",
     "vue-collapsed": "^1.1.3",
     "vue-lazyload": "^3.0.0",
