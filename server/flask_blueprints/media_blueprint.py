@@ -17,8 +17,8 @@ bp = Blueprint('media', __name__)
 @bp.route("/get")
 def get():
     # parameters
-    limit = request.args.get('limit')
-    page = request.args.get('page')
+    limit = request.args.get('limit', type=int)
+    page = request.args.get('page', type=int)
     order = request.args.get('order')
     media_type = request.args.get('type')
 
@@ -33,28 +33,18 @@ def get():
     # order result
     match order:
         case 'release_date':
-            query = query.order_by(Media.created_at)
+            query = query.order_by(Media.created_at, Media.id)
         case 'name':
-            query = query.order_by(Media.name)
+            query = query.order_by(Media.name, Media.id)
         case 'rating':
-            query = query.order_by(Media.user_rating.desc())
+            query = query.order_by(Media.user_rating.desc(), Media.id)
 
-        #     query = query.join(Card).order_by(Card.card_price.desc())
-        #     query = query.join(CardTemplate).order_by(UserCard.storage_id, CARD_TYPE_PRIORITY, CardTemplate.name)
-
-    # order direction
-    # match direction:
-    #     case 'asc':
-    #         query = query.asc()
-    #     case 'desc':
-    #         query = query.desc()
-    #     case _:
-    #         pass
+    #     query = query.join(Card).order_by(Card.card_price.desc())
+    #     query = query.join(CardTemplate).order_by(UserCard.storage_id, CARD_TYPE_PRIORITY, CardTemplate.name)
 
     # limiting
     if limit is not None:
-        query = query.offset(int(limit) * int(page))
-        query = query.limit(int(limit))
+        query = query.limit(limit).offset(page * limit)
 
     # get query and map
     media = query.all()
