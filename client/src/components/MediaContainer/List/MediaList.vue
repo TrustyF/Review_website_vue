@@ -92,20 +92,13 @@ onMounted(() => {
 <style scoped>
 
 .media_container_wrapper {
-  outline: 1px solid red;
-  /*width: 80%;*/
-  margin: 90px 30px 0 30px;
   gap: 20px;
   justify-items: center;
-  /*align-items: center;*/
-
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
 
 .media_container_wrapper_mobile {
-  outline: 1px solid greenyellow;
-  margin: 90px 10px 0 10px;
   gap: 10px;
   justify-items: center;
   display: flex;

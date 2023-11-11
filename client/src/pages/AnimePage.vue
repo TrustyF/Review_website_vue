@@ -6,6 +6,5 @@ import MediaPane from "@/components/MediaContainer/Pane/MediaPane.vue";
 </script>
 
 <template>
-  <media-pane></media-pane>
   <media-list media_type="anime"></media-list>
 </template>

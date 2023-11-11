@@ -6,10 +6,6 @@ import {inject, onMounted, ref} from 'vue'
 let editMode = inject('editMode')
 let prev_scroll = ref(0)
 
-function activate_edit_mode() {
-  editMode.value = !editMode.value
-}
-
 function get_scroll_direction(event) {
   const nav = document.getElementById('navbar')
 
@@ -40,26 +36,18 @@ onMounted(() => {
       <h1>•</h1>
       <RouterLink active-class="active" class="link" to="/games">Games</RouterLink>
     </div>
-    <div class="edit_button" @click="activate_edit_mode"></div>
   </nav>
-
-
 </template>
 
 <style scoped>
 .navbar {
-  outline: 1px solid red;
-  /*background-color: rgba(0, 0, 0, 1);*/
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  /*outline: 1px solid red;*/
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 5;
 
-  height: 70px;
   font-size: 1.2em;
 
   transition: 250ms;
@@ -78,21 +66,16 @@ nav ul li {
   color: white;
 }
 
-.edit_button {
-  position: absolute;
-  right: 0;
-  width: 50px;
-  height: 100%;
-  /*outline: 1px solid red;*/
-}
 
 .wrapper {
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row wrap;
   align-items: center;
-  width: 80%;
+  max-width: 1000px;
   margin: auto;
   gap: 20px;
+  padding: 10px;
+  /*outline: 1px solid greenyellow;*/
 }
 
 .link {
