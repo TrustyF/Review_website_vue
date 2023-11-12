@@ -97,6 +97,7 @@ function emit_close() {
   height: 25px;
   filter: invert() opacity(50%);
   cursor: pointer;
+  z-index: 50;
 }
 
 .content {
@@ -118,7 +119,6 @@ function emit_close() {
 }
 
 .info {
-  width: 100%;
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
@@ -199,7 +199,7 @@ function emit_close() {
   font-size: 0.8em;
   line-height: 1.3em;
   overflow-y: scroll;
-  max-height: 100px;
+  max-height: 200px;
 
   -ms-overflow-style: scrollbar; /* IE and Edge */
   scrollbar-width: thin; /* Firefox */
@@ -214,5 +214,27 @@ function emit_close() {
 .description::-webkit-scrollbar-thumb {
   background-color: #41404d;
 }
-
+@media only screen and (max-width: 647px) {
+  .media_expanded_wrapper {
+    /*height: 400px;*/
+    max-height: 96vh;
+  }
+  .content {
+    flex-flow: column;
+  }
+  .info {
+    /*z-index: 20;*/
+    /*margin-left: 10%;*/
+  }
+  .poster {
+    max-width: 50%;
+    margin: 20px 0 0 20px;
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*position: absolute;*/
+    /*left: 0;*/
+    object-fit: cover;
+    box-shadow: 5px 5px 2px #131215;
+  }
+}
 </style>

@@ -79,7 +79,8 @@ nav ul li {
 }
 
 .link {
-  font-weight: lighter;
+  /*font-weight: lighter;*/
+  font-weight: 300;
 }
 
 .link, link:visited {
