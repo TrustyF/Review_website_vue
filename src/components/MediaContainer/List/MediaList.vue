@@ -7,6 +7,7 @@ let props = defineProps(["media_type"]);
 const curr_api = inject("curr_api");
 
 let media = ref([])
+let media_grouped = ref([])
 
 let media_limit = ref(30)
 let media_page = ref(0)
@@ -38,7 +39,16 @@ function get_media() {
         data.forEach(entry =>{
           media.value.push(entry)
         })
-        console.log(media.value)
+
+        media_grouped.value = media.value.reduce((r, e, index) => {
+          if (!r[e['user_rating']]) r[e['user_rating']] = [e]
+          else r[e['user_rating']].push(e)
+          return r;
+        }, {})
+
+        console.log(media_grouped.value)
+
+
         is_loading_more_media.value = false
         scroll_media_loader()
       })
@@ -60,7 +70,7 @@ function scroll_media_loader() {
 }
 
 function check_mobile() {
-  console.log(document.body.clientWidth)
+  // console.log(document.body.clientWidth)
   is_mobile.value = document.body.clientWidth < 500;
 }
 
@@ -75,9 +85,12 @@ onMounted(() => {
 
 <template>
 
-  <div class="media_container_wrapper" id="media_container" v-if="!is_mobile">
-    <div v-for="med in media" :key="med['id']">
-      <MediaMaster :data="med"></MediaMaster>
+  <div v-if="!is_mobile" id="media_container">
+    <div class="media_container_wrapper" v-for="rating in Object.keys(media_grouped).reverse()" :key="rating" >
+      {{ rating }}
+      <div v-for="med in media_grouped[rating]" :key="med['id']">
+        <MediaMaster :data="med"></MediaMaster>
+      </div>
     </div>
   </div>
 

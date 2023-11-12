@@ -5,7 +5,9 @@ let props = defineProps(["score", "old_score","text_size"]);
 const curr_api = inject("curr_api");
 
 function get_rating_color(rating){
-
+  // if (rating >= 9){
+  //   return '#00d0ff'
+  // }
   if (rating >= 7){
     return '#32cb1a'
   }
