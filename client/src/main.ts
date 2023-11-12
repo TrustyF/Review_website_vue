@@ -4,7 +4,7 @@ import App from './App.vue'
 // import Popper from "vue3-popper";
 import VueLazyLoad from "vue-lazyload";
 
-const local_api = "http://localhost:5000"
+const local_api = "http://192.168.1.11:5000"
 const server_api = "https://trustyfox.pythonanywhere.com"
 const devMode = import.meta.env.DEV
 // const devMode = false

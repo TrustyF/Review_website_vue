@@ -1,7 +1,7 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
 
-let props = defineProps(["score", "old_score"]);
+let props = defineProps(["score", "old_score","text_size"]);
 const curr_api = inject("curr_api");
 
 function get_rating_color(rating){
@@ -32,8 +32,8 @@ function get_rating_color(rating){
       conic-gradient(${get_rating_color(score)} ${score * 10}%, ${'#595579'} 0);`
     ">
 
-        <h1>{{ Math.round(score * 10) }}</h1>
-        <h1 class="small_text">%</h1>
+        <h1 :style="`font-size: ${0.5 * text_size}em`">{{ Math.round(score * 10) }}</h1>
+        <h1 :style="`font-size: ${0.3 * text_size}em`" class="small_text">%</h1>
       </div>
 
     </div>
@@ -44,9 +44,9 @@ function get_rating_color(rating){
 .rating_circle_wrapper {
   /*outline: 1px solid red;*/
   display: flex;
-  height: 100%;
-  aspect-ratio: 1/1;
-  margin: 3px;
+  /*height: 100%;*/
+  /*width: 100%;*/
+  /*margin: 3px;*/
 
 }
 
@@ -64,14 +64,15 @@ function get_rating_color(rating){
 h1 {
   /*position: absolute;*/
   color: white;
-  font-weight: bold;
-  font-size: 0.8em;
-  text-align: center;
-  transform: translate(0.5px, 1px);
+  font-weight: 500;
+  font-size: 0.5em;
+  height: 0.8em;
+  /*text-align: center;*/
+  transform: translate(0.5px, 0);
 }
 
 .small_text {
-  font-size: 0.5em;
+  font-size: 0.3em;
   /*color: grey;*/
 }
 </style>

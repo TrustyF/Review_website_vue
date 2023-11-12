@@ -55,8 +55,13 @@ table {
     border-spacing: 0;
 }
 
+@font-face {
+    font-family: 'main_font';
+    src: url("@/assets/styles/BAHNSCHRIFT.TTF");
+}
+
 html {
-    font-family: Bahnschrift, sans-serif;
+    font-family: main_font, sans-serif;
     font-weight: lighter;
     min-height: 100%;
     width: 100%;
