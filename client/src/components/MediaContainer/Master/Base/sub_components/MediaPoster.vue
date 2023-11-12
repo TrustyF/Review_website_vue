@@ -2,7 +2,7 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import gold_star from '@/assets/ui/gold_star.png'
 import blue_star from '@/assets/ui/blue_star.png'
-import RatingCircle from "@/components/MediaHelperComponents/RatingCircle.vue";
+import RatingCircle from "@/components/MediaContainer/MediaHelperComponents/RatingCircle.vue";
 
 let props = defineProps(["data"]);
 const curr_api = inject("curr_api");
@@ -99,7 +99,7 @@ const curr_api = inject("curr_api");
 .rating_box {
   border-radius: 5px;
 
-  box-shadow: 1px 1px 2px #000000, inset 1px 1px 0 #464646;
+  box-shadow: 1px 1px 1px #000000;
   background-color: #2b2a34;
 
   padding: 4px 5px 4px 5px;

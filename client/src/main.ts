@@ -5,7 +5,7 @@ import App from './App.vue'
 import VueLazyLoad from "vue-lazyload";
 
 const local_api = "http://192.168.1.11:5000"
-const server_api = "https://trustyfox.pythonanywhere.com"
+const server_api = "http://review-trustyfox.pythonanywhere.com/"
 const devMode = import.meta.env.DEV
 // const devMode = false
 const editMode = ref(false)

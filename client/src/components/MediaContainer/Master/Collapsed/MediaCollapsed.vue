@@ -1,7 +1,7 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
 import CollapsedHeader from "./sub_components/CollapsedHeader.vue";
-import RatingCircle from "@/components/MediaHelperComponents/RatingCircle.vue";
+import RatingCircle from "@/components/MediaContainer/MediaHelperComponents/RatingCircle.vue";
 
 
 let props = defineProps(["data"]);
