@@ -5,19 +5,25 @@ import {inject, onMounted, ref} from 'vue'
 
 let editMode = inject('editMode')
 let prev_scroll = ref(0)
+let nav
 
 function get_scroll_direction(event) {
-  const nav = document.getElementById('navbar')
 
-  if (prev_scroll.value > window.scrollY) {
+  if (window.scrollY === 0){
     nav.classList.remove('hidden')
-  } else if (prev_scroll.value < window.scrollY) {
-    nav.classList.add('hidden')
   }
-  prev_scroll.value = window.scrollY;
+  else if ((prev_scroll.value - 400) > (window.scrollY)) {
+    nav.classList.remove('hidden')
+    prev_scroll.value = window.scrollY;
+
+  } else if ((prev_scroll.value) < window.scrollY) {
+    nav.classList.add('hidden')
+    prev_scroll.value = window.scrollY;
+  }
 }
 
 onMounted(() => {
+  nav = document.getElementById('navbar')
   addEventListener('scroll', event => get_scroll_direction())
 })
 </script>
@@ -46,7 +52,7 @@ onMounted(() => {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 5;
+  z-index: 50;
 
   font-size: 1.2em;
 
