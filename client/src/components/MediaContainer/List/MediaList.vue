@@ -2,6 +2,7 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import MediaMaster from "../Master/Base/MediaMaster.vue";
 import MediaCollapsed from "@/components/MediaContainer/Master/Collapsed/MediaCollapsed.vue";
+import blue_star from '@/assets/ui/blue_star.png'
 
 let props = defineProps(["media_type"]);
 const curr_api = inject("curr_api");
@@ -36,7 +37,7 @@ function get_media() {
           return
         }
 
-        data.forEach(entry =>{
+        data.forEach(entry => {
           media.value.push(entry)
         })
 
@@ -86,19 +87,44 @@ onMounted(() => {
 <template>
 
   <div v-if="!is_mobile" id="media_container">
-    <div class="media_container_wrapper" v-for="rating in Object.keys(media_grouped).reverse()" :key="rating" >
-      {{ rating }}
-      <div v-for="med in media_grouped[rating]" :key="med['id']">
-        <MediaMaster :data="med"></MediaMaster>
+    <div class="rating_box"  v-for="rating in Object.keys(media_grouped).reverse()" :key="rating">
+
+      <div class="rating_separator">
+        <h1 style="height: 0.8em;font-weight: 500;font-size: 1.5em"> {{ rating }} </h1>
+        <img :src="blue_star" alt="blue_star" style="width: 20px">
       </div>
+
+      <div class="media_container_wrapper">
+        <div v-for="med in media_grouped[rating]" :key="med['id']">
+          <MediaMaster :data="med"></MediaMaster>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <div class="media_container_wrapper_mobile" id="media_container" v-else>
-    <div class="list_box_element" v-for="med in media" :key="med['id']">
-      <media-collapsed :data="med"></media-collapsed>
+  <div v-else id="media_container">
+    <div class="rating_box"  v-for="rating in Object.keys(media_grouped).reverse()" :key="rating">
+
+      <div class="rating_separator_mobile">
+        <h1 style="height: 0.8em;font-weight: 500;font-size: 1em"> {{ rating }} </h1>
+        <img :src="blue_star" alt="blue_star" style="width: 10px">
+      </div>
+
+      <div class="media_container_wrapper_mobile">
+        <div v-for="med in media_grouped[rating]" :key="med['id']">
+                <media-collapsed :data="med"></media-collapsed>
+        </div>
+      </div>
+
     </div>
   </div>
+
+<!--  <div class="media_container_wrapper_mobile" id="media_container" v-else>-->
+<!--    <div v-for="med in media" :key="med['id']">-->
+<!--      <media-collapsed :data="med"></media-collapsed>-->
+<!--    </div>-->
+<!--  </div>-->
 
 </template>
 
@@ -110,7 +136,38 @@ onMounted(() => {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
+.rating_box {
+  position: relative;
+}
 
+.rating_separator {
+  /*outline: 1px solid red;*/
+  width: fit-content;
+  padding: 10px;
+  margin: 15px 0 15px 0;
+  background-color: #2d2d41;
+  border-radius: 8px;
+  position: sticky;
+  top: 10px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.rating_separator_mobile {
+  /*outline: 1px solid red;*/
+  width: fit-content;
+  padding: 7px;
+  margin: 5px 0 5px 0;
+  background-color: #2d2d41;
+  border-radius: 8px;
+  position: sticky;
+  top: 10px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
 .media_container_wrapper_mobile {
   gap: 10px;
   justify-items: center;

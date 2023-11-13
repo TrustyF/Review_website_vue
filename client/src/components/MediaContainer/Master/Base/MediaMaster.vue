@@ -42,5 +42,6 @@ function emit_selected_media(media) {
 
   display: flex;
   flex-flow: column nowrap;
+  /*outline: 0.1em #5b5b5b solid;*/
 }
 </style>

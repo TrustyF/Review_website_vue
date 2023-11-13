@@ -46,6 +46,7 @@ function emit_selected_media(media) {
   padding: 7px;
   border-radius: 10px;
   background-color: #1c1b23;
+  /*outline: 0.05em #5b5b5b solid;*/
 }
 
 .content {

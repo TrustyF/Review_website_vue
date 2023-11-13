@@ -119,7 +119,7 @@ function convert_seconds_to_time(f_seconds) {
   /*color: black;*/
   border-radius: 5px;
   font-size: 0.5em;
-  outline: 1.5px grey solid;
+  outline: 0.1em grey solid;
 }
 
 
