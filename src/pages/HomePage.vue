@@ -7,7 +7,7 @@ const curr_api = inject("curr_api");
 </script>
 
 <template>
-  <div></div>
+  <div>test</div>
 </template>
 
 <style scoped>

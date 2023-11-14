@@ -58,7 +58,7 @@ watch(selected_media, (oldV, newV) => {
   /*margin: 10px;*/
   /*outline: 1px solid red;*/
   inset: 0;
-  z-index: 10;
+  z-index: 50;
   position: fixed;
   background: rgba(0, 0, 0, 0.9);
   transition: 100ms ease-in-out;

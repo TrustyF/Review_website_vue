@@ -6,13 +6,14 @@ import blue_star from '@/assets/ui/blue_star.png'
 
 let props = defineProps(["media_type"]);
 const curr_api = inject("curr_api");
+const session_seed = inject("session_seed");
 
 let media = ref([])
 let media_grouped = ref([])
 
-let media_limit = ref(30)
+let media_limit = ref(5)
 let media_page = ref(0)
-let media_order = ref('rating')
+let media_order = ref(undefined)
 
 let is_loading_more_media = ref(false)
 let is_all_media_loaded = ref(false)
@@ -26,6 +27,8 @@ function get_media() {
   url.searchParams.set('limit', String(media_limit.value))
   url.searchParams.set('page', String(media_page.value))
   url.searchParams.set('order', media_order.value)
+  url.searchParams.set('session_seed', String(session_seed))
+
   console.log(props['media_type'])
   url.searchParams.set('type', props['media_type'])
 
@@ -90,8 +93,8 @@ onMounted(() => {
     <div class="rating_box"  v-for="rating in Object.keys(media_grouped).reverse()" :key="rating">
 
       <div class="rating_separator">
-        <h1 style="height: 0.8em;font-weight: 500;font-size: 1.5em"> {{ rating }} </h1>
-        <img :src="blue_star" alt="blue_star" style="width: 20px">
+        <h1 style="height: 0.8em;font-weight: 500;font-size: 1em"> {{ rating }} </h1>
+        <img :src="blue_star" alt="blue_star" style="width: 15px">
       </div>
 
       <div class="media_container_wrapper">
@@ -120,21 +123,25 @@ onMounted(() => {
     </div>
   </div>
 
-<!--  <div class="media_container_wrapper_mobile" id="media_container" v-else>-->
-<!--    <div v-for="med in media" :key="med['id']">-->
-<!--      <media-collapsed :data="med"></media-collapsed>-->
-<!--    </div>-->
-<!--  </div>-->
-
 </template>
 
 <style scoped>
 
 .media_container_wrapper {
   gap: 20px;
+  margin: 0 10px 0 10px;
   justify-items: center;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+
+  display: flex;
+  flex-flow: row wrap;
+  /*display: grid;*/
+  /*grid-template-columns: repeat(auto-fit, minmax(min(100%/2, max(64px, 100%/10)), 1fr));*/
+}
+.media_container_wrapper_mobile {
+  gap: 10px;
+  justify-items: center;
+  display: flex;
+  flex-flow: column nowrap;
 }
 .rating_box {
   position: relative;
@@ -144,7 +151,7 @@ onMounted(() => {
   /*outline: 1px solid red;*/
   width: fit-content;
   padding: 10px;
-  margin: 15px 0 15px 0;
+  margin: 50px 0 15px 0;
   background-color: #2d2d41;
   border-radius: 8px;
   position: sticky;
@@ -152,13 +159,13 @@ onMounted(() => {
   z-index: 10;
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 3px;
 }
 .rating_separator_mobile {
   /*outline: 1px solid red;*/
   width: fit-content;
   padding: 7px;
-  margin: 5px 0 5px 0;
+  margin: 35px 0 5px 0;
   background-color: #2d2d41;
   border-radius: 8px;
   position: sticky;
@@ -168,10 +175,5 @@ onMounted(() => {
   align-items: center;
   gap: 3px;
 }
-.media_container_wrapper_mobile {
-  gap: 10px;
-  justify-items: center;
-  display: flex;
-  flex-flow: column nowrap;
-}
+
 </style>

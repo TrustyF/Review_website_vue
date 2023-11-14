@@ -47,7 +47,7 @@ const curr_api = inject("curr_api");
 .media_poster_wrapper {
   /*outline: 1px solid red;*/
   position: relative;
-  min-height: 225px;
+  /*min-height: 225px;*/
 }
 
 .poster {
@@ -66,7 +66,6 @@ const curr_api = inject("curr_api");
   top: 0;
   height: 100%;
   width: 100%;
-
 }
 
 .rating_circle {
@@ -75,7 +74,6 @@ const curr_api = inject("curr_api");
 }
 
 .ratings_wrapper {
-
   position: absolute;
   display: flex;
   flex-flow: row nowrap;
