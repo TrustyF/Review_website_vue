@@ -4,6 +4,7 @@ import HomePage from "../pages/HomePage.vue"
 import MoviePage from "../pages/MoviePage.vue"
 import MangaPage from "../pages/MangaPage.vue"
 import SeriesPage from "../pages/SeriesPage.vue"
+import ShortsPage from "../pages/ShortsPage.vue"
 import AnimePage from "../pages/AnimePage.vue"
 import GamePage from "../pages/GamePage.vue"
 import MoviePickerPage from "../pages/MoviePickerPage.vue";
@@ -31,6 +32,11 @@ const router = createRouter({
       path: "/series",
       name: "series",
       component: SeriesPage
+    },
+    {
+      path: "/shorts",
+      name: "shorts",
+      component: ShortsPage
     },
     {
       path: "/anime",

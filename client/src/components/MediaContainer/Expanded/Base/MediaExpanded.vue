@@ -1,7 +1,7 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
 import ExpandedHeaderRating from "@/components/MediaContainer/Expanded/Base/sub_components/ExpandedHeaderRating.vue";
-import x_button from '@/assets/ui/x_button.png'
+import x_button from '@/assets/ui/thin_x_button.png'
 import gold_star from '@/assets/ui/gold_star.png'
 import blue_star from '@/assets/ui/blue_star.png'
 
@@ -95,7 +95,7 @@ function emit_close() {
   top: 10px;
   width: 25px;
   height: 25px;
-  filter: invert() opacity(50%);
+  filter: invert() opacity(40%);
   cursor: pointer;
   z-index: 50;
 }
@@ -215,24 +215,30 @@ function emit_close() {
   background-color: #41404d;
 }
 @media only screen and (max-width: 647px) {
+  .title {
+    font-size: 1.2em;
+  }
+  .subtitle {
+    font-size: 0.8em;
+  }
+  .genre_tag {
+    font-size: 0.8em;
+  }
+  .rating_tag {
+    font-size: 0.8em;
+  }
+
   .media_expanded_wrapper {
-    /*height: 400px;*/
     max-height: 96vh;
   }
   .content {
     flex-flow: column;
   }
   .info {
-    /*z-index: 20;*/
-    /*margin-left: 10%;*/
   }
   .poster {
     max-width: 50%;
     margin: 20px 0 0 20px;
-    /*width: 100%;*/
-    /*height: 100%;*/
-    /*position: absolute;*/
-    /*left: 0;*/
     object-fit: cover;
     box-shadow: 5px 5px 2px #131215;
   }

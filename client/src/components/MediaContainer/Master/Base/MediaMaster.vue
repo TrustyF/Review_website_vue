@@ -26,8 +26,7 @@ function emit_selected_media(media) {
 <style scoped>
 .media_master_wrapper {
   /*outline: 1px solid green;*/
-
-  width: 150px;
+  max-width: 150px;
 
   position: relative;
   color: white;
