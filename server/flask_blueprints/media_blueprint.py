@@ -5,6 +5,7 @@ from pprint import pprint
 import requests
 
 from flask import Blueprint, request, Response, jsonify, send_file
+from sqlalchemy.sql.expression import func
 
 from constants import MAIN_DIR
 from data_mapper.media_mapper import map_media
@@ -21,8 +22,9 @@ def get():
     page = request.args.get('page', type=int)
     order = request.args.get('order')
     media_type = request.args.get('type')
+    session_seed = request.args.get('session_seed', type=int)
 
-    print(f'{limit =}', f'{order =}', f'{page =}', f'{media_type =}')
+    print(f'{limit =}', f'{order =}', f'{page =}', f'{media_type =}', f'{session_seed =}')
 
     # setup query
     query = (
@@ -33,11 +35,18 @@ def get():
     # order result
     match order:
         case 'release_date':
-            query = query.order_by(Media.created_at, Media.id)
+            query = query.order_by(Media.user_rating.desc(),
+                                   Media.release_date.desc(),
+                                   func.rand(session_seed),
+                                   Media.id)
         case 'name':
-            query = query.order_by(Media.name, Media.id)
-        case 'rating':
-            query = query.order_by(Media.user_rating.desc(), Media.id)
+            query = query.order_by(Media.user_rating.desc(),
+                                   Media.name, func.rand(session_seed),
+                                   Media.id)
+        case _:
+            query = query.order_by(Media.user_rating.desc(),
+                                   func.rand(session_seed),
+                                   Media.id)
 
     #     query = query.join(Card).order_by(Card.card_price.desc())
     #     query = query.join(CardTemplate).order_by(UserCard.storage_id, CARD_TYPE_PRIORITY, CardTemplate.name)
