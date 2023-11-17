@@ -7,11 +7,24 @@ let props = defineProps(["data"]);
 
 const curr_api = inject("curr_api");
 const selected_media = inject("selected_media");
-let container_width = ref('150px')
+const edit_media = inject("edit_media");
+const edit_mode = inject("edit_mode");
 
-function fit_container_to_media(){
-  if (props['data']['media_type'] === 'short'){
+let container_width = ref('150px')
+let container_height = ref('225px')
+
+function fit_container_to_media() {
+  if (props['data']['media_type'] === 'short') {
     container_width.value = "320px"
+    container_height.value = "165px"
+  }
+  if (props['data']['media_type'] === 'game') {
+    container_width.value = "150px"
+    container_height.value = "200px"
+  }
+  if (props['data']['media_type'] === 'manga') {
+    container_width.value = "150px"
+    container_height.value = "215px"
   }
 }
 
@@ -20,14 +33,24 @@ function emit_selected_media(media) {
   selected_media.value = media
 }
 
-onMounted(()=>{
+function emit_edit_media(media) {
+  console.log('edit media ' + media['name'])
+  edit_media.value = media
+}
+
+onMounted(() => {
   fit_container_to_media()
 })
 </script>
 
 <template>
 
-  <div class="media_master_wrapper" id="media_container" @click="emit_selected_media(data)">
+  <div class="media_master_wrapper" id="media_container" @click.stop="emit_selected_media(data)">
+
+    <button v-if="edit_mode" class="edit_button" @click.stop="emit_edit_media(data)">edit</button>
+
+    <img v-lazy="`${curr_api}/media/get_image?id=${data['id']}`" class="poster" alt="poster" draggable="false">
+
     <media-poster :data="data"></media-poster>
     <media-footer :data="data"></media-footer>
   </div>
@@ -50,5 +73,14 @@ onMounted(()=>{
 
   display: flex;
   flex-flow: column nowrap;
+}
+.edit_button {
+  position: absolute;
+}
+.poster {
+  height: v-bind(container_height);
+
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
 }
 </style>

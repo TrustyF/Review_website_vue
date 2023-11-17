@@ -128,12 +128,13 @@ onMounted(() => {
 <style scoped>
 
 .media_container_wrapper {
+  /*outline: 2px solid red;*/
   gap: 20px;
   /*margin: 0 10px 0 10px;*/
-  justify-items: center;
+  /*justify-items: center;*/
 
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 }
 .media_container_wrapper_mobile {
   gap: 10px;

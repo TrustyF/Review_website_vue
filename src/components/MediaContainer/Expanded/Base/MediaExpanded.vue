@@ -28,7 +28,7 @@ function emit_close() {
 
     <div class="content">
 
-      <img :src="data['poster_path']" class="poster" alt="poster" draggable="false">
+      <img :src="`${curr_api}/media/get_image?id=${data['id']}`" class="poster" alt="poster" draggable="false">
 
       <div class="info">
         <div class="header">
@@ -38,8 +38,8 @@ function emit_close() {
           <div class="subtitle_wrapper">
             <h2 class="subtitle">{{ data['release_date'].substring(0, 4) }}</h2>
             <h2 class="subtitle" v-if="data['runtime']>0">{{ ' • ' + conv_sec_to_time(data['runtime']) }}</h2>
-            <h2 class="subtitle" v-if="data['seasons']>0">{{ ' • ' + data['seasons'] + ' seasons' }} </h2>
-            <h2 class="subtitle" v-if="data['episodes']>0">{{ ' • ' + data['episodes'] + ' episodes' }} </h2>
+            <h2 class="subtitle" v-if="data['seasons']>0">{{ ' • ' + `${data['seasons']} ${data['seasons'] > 1 ? 'seasons' : 'season'}` }} </h2>
+            <h2 class="subtitle" v-if="data['episodes']>0">{{ ' • ' + Math.round(data['episodes'] / data['seasons']) + ' episodes' }} </h2>
           </div>
 
         </div>
@@ -76,11 +76,8 @@ function emit_close() {
 
 <style scoped>
 .media_expanded_wrapper {
-  position: absolute;
+  position: relative;
   max-width: 1000px;
-
-  margin: 20px;
-  /*padding: 20px;*/
 
   border-radius: 10px;
   outline: 2px solid #464646;
