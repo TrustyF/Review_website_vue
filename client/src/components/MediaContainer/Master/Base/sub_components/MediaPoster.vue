@@ -13,7 +13,6 @@ const curr_api = inject("curr_api");
 
   <div class="media_poster_wrapper">
 
-    <img v-lazy="data['poster_path']" class="poster" alt="poster" draggable="false">
 
     <div class="poster_gradient"></div>
 
@@ -45,18 +44,12 @@ const curr_api = inject("curr_api");
 
 <style scoped>
 .media_poster_wrapper {
-  outline: 1px solid red;
   width: 100%;
   height: 100%;
   position: relative;
   display: flex;
 }
 
-.poster {
-  width: 100%;
-  object-fit: cover;
-  border-radius: 8px 8px 0 0;
-}
 
 .poster_gradient {
   content: "";

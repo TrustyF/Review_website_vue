@@ -7,16 +7,22 @@ import '@/assets/styles/dark.css'
 import CreditsFooter from "@/components/General/CreditsFooter.vue";
 import {onMounted, provide, ref} from "vue";
 import MediaPane from "@/components/MediaContainer/Pane/MediaPane.vue";
+import EditPane from "@/components/MediaContainer/Pane/EditPane.vue";
 
 const selected_media = ref(undefined)
+const edit_media = ref(undefined)
+const edit_mode = ref(true)
 
 provide('selected_media', selected_media)
+provide('edit_media', edit_media)
+provide('edit_mode', edit_mode)
 
 </script>
 <template>
   <NavBar/>
   <div class="main" id="main">
     <media-pane></media-pane>
+    <edit-pane></edit-pane>
     <RouterView/>
     <CreditsFooter/>
   </div>
@@ -30,7 +36,7 @@ provide('selected_media', selected_media)
   padding: 0 10px 0 10px;
 }
 
-@media only screen and (max-width: 647px) {
+@media only screen and (max-width: 724px) {
   .main {
     margin: 110px auto 0 auto;
   }

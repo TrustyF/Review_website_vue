@@ -1,25 +1,25 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
-import MediaExpanded from "@/components/MediaContainer/Expanded/Base/MediaExpanded.vue";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
-import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
+import {disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks} from 'body-scroll-lock';
+import EditMaster from "@/components/MediaContainer/Editor/EditMaster.vue";
 
 let props = defineProps(["test"]);
 const curr_api = inject("curr_api");
 
-const selected_media = inject("selected_media");
+const edit_media = inject("edit_media");
 let is_open = ref(false)
 
 async function close() {
   if (is_open.value === true) {
-    let pane = document.getElementById('media_pane')
+    let pane = document.getElementById('edit_pane')
     let main = document.getElementById('main')
 
     pane.classList.add('hidden')
     enableBodyScroll(main)
 
     await new Promise(resolve => setTimeout(resolve, 100));
-    selected_media.value = undefined
+    edit_media.value = undefined
     await new Promise(resolve => setTimeout(resolve, 10));
     is_open.value = false
   }
@@ -28,7 +28,7 @@ async function close() {
 async function open() {
   console.log(is_open.value)
   if (is_open.value === false) {
-    let pane = document.getElementById('media_pane')
+    let pane = document.getElementById('edit_pane')
     let main = document.getElementById('main')
 
     pane.classList.remove('hidden')
@@ -40,16 +40,18 @@ async function open() {
   }
 }
 
-watch(selected_media, (oldV, newV) => {
+watch(edit_media, (oldV, newV) => {
   open()
 })
-
+onMounted(() => {
+  open()
+})
 </script>
 
 <template>
-  <div class="base hidden" id="media_pane">
+  <div class="base hidden" id="edit_pane">
     <div class="background" @click="close"></div>
-    <media-expanded :data="selected_media" @closed="close" v-if="selected_media!==undefined"></media-expanded>
+    <edit-master v-if="edit_media!==undefined"></edit-master>
   </div>
 </template>
 
@@ -59,7 +61,7 @@ watch(selected_media, (oldV, newV) => {
   padding: 10px;
   z-index: 50;
   position: fixed;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.9);
   transition: 100ms ease-in-out;
   display: grid;
   align-items: center;
