@@ -45,13 +45,14 @@ const curr_api = inject("curr_api");
 
 <style scoped>
 .media_poster_wrapper {
-  /*outline: 1px solid red;*/
+  outline: 1px solid red;
+  width: 100%;
+  height: 100%;
   position: relative;
-  /*min-height: 225px;*/
+  display: flex;
 }
 
 .poster {
-  height: 100%;
   width: 100%;
   object-fit: cover;
   border-radius: 8px 8px 0 0;

@@ -129,13 +129,11 @@ onMounted(() => {
 
 .media_container_wrapper {
   gap: 20px;
-  margin: 0 10px 0 10px;
+  /*margin: 0 10px 0 10px;*/
   justify-items: center;
 
-  display: flex;
-  flex-flow: row wrap;
-  /*display: grid;*/
-  /*grid-template-columns: repeat(auto-fit, minmax(min(100%/2, max(64px, 100%/10)), 1fr));*/
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
 .media_container_wrapper_mobile {
   gap: 10px;
