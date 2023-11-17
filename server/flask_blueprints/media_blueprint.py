@@ -61,20 +61,23 @@ def get():
 
     return mapped_media
 
-# @bp.route("/get_image")
-# def get_image():
-#     card_id = request.args.get('id')
-#     file_path = os.path.join(MAIN_DIR, "assets", "card_images_cached", f"{card_id}.jpg")
-#
-#     if not os.path.exists(file_path):
-#         response = requests.get(f'https://images.ygoprodeck.com/images/cards_small/{card_id}.jpg')
-#
-#         with open(file_path, 'wb') as outfile:
-#             outfile.write(response.content)
-#
-#     return send_file(file_path, mimetype='image/jpg')
-#
-#
+
+@bp.route("/get_image")
+def get_image():
+    media_id = request.args.get('id')
+    file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches", f"{media_id}.jpg")
+
+    # download locally if it doesn't exist
+    if not os.path.exists(file_path):
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
+        matched_media = db.session.query(Media).filter_by(id=media_id).one()
+        response = requests.get(matched_media.poster_path)
+
+        with open(file_path, 'wb') as outfile:
+            outfile.write(response.content)
+
+    return send_file(file_path, mimetype='image/jpg')
+
 # @bp.route("/add_by_name")
 # def add_by_name():
 #     card_name = request.args.get('name')
