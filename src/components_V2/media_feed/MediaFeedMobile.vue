@@ -87,7 +87,7 @@ onMounted(() => {
     <div class="rating_box" v-for="rating in Object.keys(media_grouped).reverse()" :key="rating">
 
       <div class="rating_separator">
-        <h1 style="height: 0.8em;font-weight: 500;font-size: 1em"> {{ rating }} </h1>
+        <h1 style="font-weight: 500;font-size: 1em"> {{ rating }} </h1>
         <img :src="blue_star" alt="blue_star" style="width: 15px">
       </div>
 
@@ -108,7 +108,7 @@ onMounted(() => {
 <style scoped>
 
 .media_container_wrapper {
-  gap: 20px;
+  gap: 10px;
   justify-items: center;
   display: flex;
   flex-flow: column nowrap;
@@ -119,21 +119,6 @@ onMounted(() => {
 }
 
 .rating_separator {
-  /*outline: 1px solid red;*/
-  width: fit-content;
-  padding: 10px;
-  margin: 50px 0 15px 0;
-  background-color: #2d2d41;
-  border-radius: 8px;
-  position: sticky;
-  top: 10px;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.rating_separator_mobile {
   /*outline: 1px solid red;*/
   width: fit-content;
   padding: 7px;

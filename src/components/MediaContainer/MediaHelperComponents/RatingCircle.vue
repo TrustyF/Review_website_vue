@@ -67,12 +67,11 @@ function get_rating_color(rating) {
 h1 {
   color: white;
   font-weight: 500;
-  /*height: calc(v-bind(text_size) * 0.003em);*/
   font-size: calc(v-bind(text_size) * 0.0033em);
 }
 
 .small_text {
-  /*font-size: 0.3em;*/
+  font-size: calc(v-bind(text_size) * 0.002em);
   /*color: grey;*/
 }
 </style>
