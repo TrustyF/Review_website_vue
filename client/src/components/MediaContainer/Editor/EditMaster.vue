@@ -7,6 +7,21 @@ let props = defineProps(["test"]);
 const curr_api = inject("curr_api");
 const edit_media = inject("edit_media");
 
+const extra_posters = ref([])
+
+async function get_extra_posters() {
+  const url = new URL(`${curr_api}/media/get_extra_posters`)
+  url.searchParams.set('id', edit_media['id'])
+  url.searchParams.set('type', edit_media['type'])
+
+  let result = await fetch(url).then(response => response.json())
+  console.log(result)
+  extra_posters.value = result
+}
+
+onMounted(() => {
+  get_extra_posters()
+})
 </script>
 
 <template>
@@ -15,6 +30,11 @@ const edit_media = inject("edit_media");
     <div class="poster_pane">
       <div class="preview">
         <media-master :data="edit_media"></media-master>
+      </div>
+      <div class="extra_posters">
+        <div class="extra_poster" v-for="poster in extra_posters" :key="poster['id']">
+          <img :src="poster" alt="extra_poster">
+        </div>
       </div>
     </div>
 
@@ -34,15 +54,12 @@ const edit_media = inject("edit_media");
   background-color: #131215;
   position: relative;
   z-index: 50;
-
+  display: flex;
+  flex-flow: column nowrap;
 }
 
 .poster_pane {
   outline: 1px solid red;
-  height: 100%;
-  width: 150px;
-  display: flex;
-  flex-flow: column wrap;
 }
 
 .details_pane {

@@ -5,6 +5,7 @@ import MediaCollapsed from "@/components/MediaContainer/Master/Collapsed/MediaCo
 import blue_star from '@/assets/ui/blue_star.png'
 
 let props = defineProps(["media_type"]);
+
 const curr_api = inject("curr_api");
 const session_seed = inject("session_seed");
 

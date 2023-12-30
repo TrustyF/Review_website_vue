@@ -33,11 +33,6 @@ function emit_selected_media(media) {
   selected_media.value = media
 }
 
-function emit_edit_media(media) {
-  console.log('edit media ' + media['name'])
-  edit_media.value = media
-}
-
 onMounted(() => {
   fit_container_to_media()
 })
@@ -46,8 +41,6 @@ onMounted(() => {
 <template>
 
   <div class="media_master_wrapper" id="media_container" @click.stop="emit_selected_media(data)">
-
-    <button v-if="edit_mode" class="edit_button" @click.stop="emit_edit_media(data)">edit</button>
 
     <img v-lazy="`${curr_api}/media/get_image?id=${data['id']}`" class="poster" alt="poster" draggable="false">
 
