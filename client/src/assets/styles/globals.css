@@ -55,9 +55,14 @@ table {
     border-spacing: 0;
 }
 
+/*@font-face {*/
+/*    font-family: 'main_font';*/
+/*    src: url("@/assets/styles/BAHNSCHRIFT_fixed.zip");*/
+/*}*/
+
 @font-face {
     font-family: 'main_font';
-    src: url("@/assets/styles/BAHNSCHRIFT.TTF");
+    src: url("@/assets/styles/bahnschrift_fixed/Bahnschrift.ttf") format('truetype');
 }
 
 html {

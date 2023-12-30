@@ -87,7 +87,7 @@ onMounted(() => {
     <div class="rating_box" v-for="rating in Object.keys(media_grouped).reverse()" :key="rating">
 
       <div class="rating_separator">
-        <h1 style="height: 0.8em;font-weight: 500;font-size: 1em"> {{ rating }} </h1>
+        <h1 style="font-weight: 500;font-size: 1em"> {{ rating }} </h1>
         <img :src="blue_star" alt="blue_star" style="width: 15px">
       </div>
 
