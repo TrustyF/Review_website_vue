@@ -28,7 +28,7 @@ function convert_seconds_to_time(f_seconds) {
     </div>
 
 
-    <div class="description_title_wrapper">
+    <div class="description_title_wrapper" v-if="data['genres']">
       <div class="description_genres_list">
         <div class="genre_tag" v-for="genre in data['genres']" :key="genre['id']">{{ genre['name'] }}</div>
       </div>

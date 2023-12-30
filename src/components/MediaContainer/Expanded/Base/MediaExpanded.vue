@@ -81,6 +81,7 @@ function emit_close() {
 
   border-radius: 10px;
   outline: 2px solid #464646;
+  margin: auto;
 
   background: #1c1b23;
   z-index: 50;

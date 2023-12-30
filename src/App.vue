@@ -21,8 +21,6 @@ provide('edit_mode', edit_mode)
 <template>
   <NavBar/>
   <div class="main" id="main">
-    <media-pane></media-pane>
-    <edit-pane></edit-pane>
     <RouterView/>
     <CreditsFooter/>
   </div>

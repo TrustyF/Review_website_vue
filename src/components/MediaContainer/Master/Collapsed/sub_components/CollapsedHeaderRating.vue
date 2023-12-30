@@ -19,7 +19,7 @@ const curr_api = inject("curr_api");
       </div>
     </div>
 
-    <div class="my_rating">
+    <div class="my_rating" v-if="data['scaled_public_rating']">
       <!--      <h1> Public rating:</h1>-->
       <div class="rating_box">
         <h2 class="rating"> {{ Math.round(data['scaled_public_rating'] * 10) / 10 }}</h2>
@@ -28,7 +28,8 @@ const curr_api = inject("curr_api");
     </div>
 
 
-    <rating-circle class="rating_circle" :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
+    <rating-circle class="rating_circle" v-if="data['scaled_public_rating'] && data['user_rating']"
+                   :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
 
   </div>
 </template>
