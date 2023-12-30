@@ -1,6 +1,7 @@
 <script setup>
 import {ref, onMounted, inject, provide} from 'vue'
-import YoutubeContainer from "@/components_V2/media_container/youtube_container/YoutubeContainer.vue";
+import MovieContainer from "@/components_V2/media_container/movie_container/MovieContainer.vue";
+
 import MovieContainerMobile from "@/components_V2/media_container/movie_container/MovieContainerMobile.vue";
 import MediaFeed from "@/components_V2/media_feed/MediaFeed.vue";
 import MediaFeedMobile from "@/components_V2/media_feed/MediaFeedMobile.vue";
@@ -20,14 +21,14 @@ onMounted(() => {
 <template>
   <media-feed v-if="!is_mobile"
               :media_type="'short'"
-              :media_container="YoutubeContainer"
-              :media_size="[320,180]"
-              :media_scale="1"
+              :media_container="MovieContainer"
+              :media_size="[480,240]"
+              :media_scale="0.75"
   ></media-feed>
   <media-feed-mobile v-else
                      :media_type="'short'"
                      :media_container="MovieContainerMobile"
-                     :media_size="[320,180]"
-                     :media_scale="1"
+                     :media_size="[480,240]"
+                     :media_scale="0.4"
   ></media-feed-mobile>
 </template>

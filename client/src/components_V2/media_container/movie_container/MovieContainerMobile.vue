@@ -12,6 +12,7 @@ const poster_size = computed(() => [
   props['container_size'][0] * props['container_scale'],
   props['container_size'][1] * props['container_scale']
 ])
+const min_size = computed(() => Math.min(poster_size.value[0],poster_size.value[1]))
 
 function convert_seconds_to_time(f_seconds) {
   let minutes = f_seconds % 60
@@ -52,13 +53,18 @@ function convert_seconds_to_time(f_seconds) {
           <img :src="blue_star" alt="gold_star" class="gold_star">
         </div>
 
-        <div class="rating_box">
+        <div class="rating_box" v-if="data['scaled_public_rating']>0">
           <h2 class="rating"> {{ Math.round(data['scaled_public_rating'] * 10) / 10 }}</h2>
           <img :src="gold_star" alt="gold_star" class="gold_star">
         </div>
 
-        <rating-circle class="rating_circle" :text_size="0.7"
+        <rating-circle class="rating_circle" :text_size="(220)" v-if="data['scaled_public_rating']>0"
                        :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
+      </div>
+
+      <div class="tags_wrapper">
+        <img class="tag" v-for="tag in data['tags']" :key="tag['id']"
+             v-lazy="`public/tags/icons/${tag['tier']}/${tag['image_path']}`">
       </div>
 
     </div>
@@ -74,12 +80,15 @@ function convert_seconds_to_time(f_seconds) {
   justify-items: center;
   align-items: center;
   border-radius: 8px;
+
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  background-color: #25222a;
+  padding: 5px;
 }
 
 .poster {
   width: v-bind(poster_size [0] + 'px');
   height: v-bind(poster_size [1] + 'px');
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
 
   border-radius: 8px;
   object-fit: cover;
@@ -170,7 +179,16 @@ function convert_seconds_to_time(f_seconds) {
 
 .rating {
   font-size: 0.8em;
-  height: 0.85em;
   font-weight: 500;
+}
+
+.tags_wrapper {
+  display: flex;
+  flex-flow: row;
+  gap: 5px;
+  /*margin-top: 10px;*/
+}
+.tag {
+  width: calc(v-bind(min_size) * 0.27px);
 }
 </style>

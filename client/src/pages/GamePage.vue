@@ -28,6 +28,6 @@ onMounted(() => {
                      :media_type="'game'"
                      :media_container="MovieContainerMobile"
                      :media_size="[264,352]"
-                     :media_scale="0.2"
+                     :media_scale="0.5"
   ></media-feed-mobile>
 </template>

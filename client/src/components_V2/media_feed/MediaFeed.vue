@@ -2,7 +2,7 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import blue_star from '/src/assets/ui/blue_star.png'
 
-let props = defineProps(["media_type", "media_container","media_scale","media_size"]);
+let props = defineProps(["media_type", "media_container", "media_scale", "media_size"]);
 
 const curr_api = inject("curr_api");
 const session_seed = inject("session_seed");
@@ -15,10 +15,10 @@ let media_grouped = ref([])
 let media_limit = ref(5)
 let media_page = ref(0)
 let media_order = ref(undefined)
+let feed_container = ref()
 
-let is_loading_more_media = ref(false)
-let is_all_media_loaded = ref(false)
-let is_mobile = ref(false)
+let is_page_loaded = ref(false)
+let is_page_loading = ref(true)
 
 async function get_media() {
 
@@ -35,55 +35,60 @@ async function get_media() {
 
   // skip if no data returned
   if (result.length < 1) {
+    console.log('page finished loading')
     return
   }
 
   // concat result to media
   result.forEach(entry => media.value.push(entry))
-  // group media
+  // group media by rating
   media_grouped.value = media.value.reduce((r, e, index) => {
     if (!r[e['user_rating']]) r[e['user_rating']] = [e]
     else r[e['user_rating']].push(e)
     return r;
   }, {})
 
+  console.log('grouped movies',media_grouped.value)
+
   // cleanup
-  is_loading_more_media.value = false
-  scroll_media_loader()
+  is_page_loading.value = false
+  handleInfiniteScroll()
 
 }
 
-function scroll_media_loader() {
-  let rect = document.getElementById('media_container').getBoundingClientRect()
+const handleInfiniteScroll = () => {
+  if (is_page_loading.value) {
+    console.log('page busy loading, skipping')
+    return;
+  }
+  let container = feed_container.value
+  if (container === null) {
+    return
+  }
 
-  if (rect.bottom <= (window.innerHeight + (window.innerHeight / 2)) &&
-      !is_loading_more_media.value &&
-      !is_all_media_loaded.value) {
+  let container_bot = container.getBoundingClientRect()
 
-    console.log('loading more media')
-    is_loading_more_media.value = true
+  const endOfPage = (window.innerHeight + 400) >= container_bot.bottom;
+
+  if (endOfPage && !is_page_loading.value && !is_page_loaded.value) {
+    is_page_loading.value = true
     media_page.value += 1
     get_media()
+    console.log('loading more', media_page.value)
   }
-}
 
-function check_mobile() {
-  // console.log(document.body.clientWidth)
-  is_mobile.value = document.body.clientWidth < 500;
-}
+};
 
 onMounted(() => {
   get_media()
-  check_mobile()
-  addEventListener("scroll", () => scroll_media_loader())
-  addEventListener("resize", () => check_mobile())
+  addEventListener("scroll", () => handleInfiniteScroll())
 })
 
 </script>
 
 <template>
 
-  <div id="media_container">
+  <div ref="feed_container">
     <div class="rating_box" v-for="rating in Object.keys(media_grouped).reverse()" :key="rating">
 
       <div class="rating_separator">
@@ -119,7 +124,6 @@ onMounted(() => {
 }
 
 .rating_separator {
-  /*outline: 1px solid red;*/
   width: fit-content;
   padding: 10px;
   margin: 50px 0 15px 0;
@@ -128,21 +132,6 @@ onMounted(() => {
   position: sticky;
   top: 10px;
   z-index: 10;
-  display: flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.rating_separator_mobile {
-  /*outline: 1px solid red;*/
-  width: fit-content;
-  padding: 7px;
-  margin: 35px 0 5px 0;
-  background-color: #2d2d41;
-  border-radius: 8px;
-  position: sticky;
-  top: 10px;
-  z-index: 5;
   display: flex;
   align-items: center;
   gap: 3px;
