@@ -7,7 +7,7 @@ import requests
 from flask import Blueprint, request, Response, jsonify, send_file
 from sqlalchemy.sql.expression import func
 
-from constants import MAIN_DIR
+from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY
 from data_mapper.media_mapper import map_media
 from db_loader import db
 from sql_models.media_model import Media
@@ -77,6 +77,31 @@ def get_image():
             outfile.write(response.content)
 
     return send_file(file_path, mimetype='image/jpg')
+
+
+@bp.route("/get_extra_posters")
+def search_extra_posters():
+    media_id = request.args.get('id')
+    media_type = request.args.get('type')
+
+    print(f'extra posters {media_id=} {media_type=}')
+
+    req = f'https://api.themoviedb.org/3/find/{media_id}?external_source=imdb_id'
+    headers = {
+        "accept": "application/json",
+        "Authorization": 'Bearer ' + TMDB_ACCESS_TOKEN
+    }
+
+    response = requests.get(req, headers=headers).json()
+    simple_data = response[f'{media_type}_results'][0]
+
+    extra_request = f'https://api.themoviedb.org/3/{media_type}/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
+                    f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
+    full_data = requests.get(extra_request).json()
+
+    posters = [x['file_path'] for x in full_data['images']['posters']]
+
+    return posters
 
 # @bp.route("/add_by_name")
 # def add_by_name():
