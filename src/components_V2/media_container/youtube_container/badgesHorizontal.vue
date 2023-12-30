@@ -21,12 +21,12 @@ const curr_api = inject("curr_api");
         <img :src="blue_star" alt="gold_star" class="gold_star">
       </div>
 
-      <div class="rating_box">
+      <div class="rating_box" v-if="data['scaled_public_rating']>0">
         <h2 class="rating"> {{ Math.round(data['scaled_public_rating'] * 10) / 10 }}</h2>
         <img :src="gold_star" alt="gold_star" class="gold_star">
       </div>
 
-      <rating-circle class="rating_circle" :text_size="(Math.max(bounds[0],bounds[1]))"
+      <rating-circle class="rating_circle" :text_size="(bounds[1]) * 0.005" v-if="data['scaled_public_rating']"
                      :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
 
     </div>
@@ -44,7 +44,6 @@ const curr_api = inject("curr_api");
   display: flex;
 
   /*font-family: monospace monospace;*/
-
 }
 
 .poster_gradient {
@@ -58,7 +57,7 @@ const curr_api = inject("curr_api");
 }
 
 .rating_circle {
-  height: calc(max(v-bind(bounds[0]),v-bind(bounds[1])) * 0.14px)
+  height: calc(v-bind(bounds[1]) * 0.2px)
 }
 
 .badges_bar {
@@ -83,8 +82,8 @@ const curr_api = inject("curr_api");
 }
 
 .gold_star {
-  width: calc(v-bind(bounds[0]) * 0.07px);;
-  height: calc(v-bind(bounds[0]) * 0.07px);;
+  width: calc(v-bind(bounds[1]) * 0.07px);;
+  height: calc(v-bind(bounds[1]) * 0.07px);;
   /*height: 15px;*/
 }
 
@@ -107,7 +106,8 @@ const curr_api = inject("curr_api");
 
 .rating {
   /*font-size: 0.9em;*/
-  font-size: calc(v-bind(bounds[0]) * 0.005em);
+  font-size: calc(v-bind(bounds[1]) * 0.005em);
+  height: calc(v-bind(bounds[1]) * 0.0045em);
   font-weight: 500;
 }
 

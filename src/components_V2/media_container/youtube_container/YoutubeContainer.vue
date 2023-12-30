@@ -1,6 +1,6 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed, provide} from "vue";
-import Badges from "@/components_V2/media_container/movie_container/badges.vue";
+import BadgesHorizontal from "@/components_V2/media_container/youtube_container/badgesHorizontal.vue";
 
 let props = defineProps(["data", "container_scale", "container_size"]);
 let emits = defineEmits(["media_data"]);
@@ -10,10 +10,16 @@ const poster_size = computed(() => [
   props['container_size'][0] * props['container_scale'],
   props['container_size'][1] * props['container_scale']
 ])
+
 function convert_seconds_to_time(f_seconds) {
   let minutes = f_seconds % 60
   let hours = (f_seconds - minutes) / 60
-  return hours + 'h ' + minutes;
+
+  if (hours < 1) {
+    return minutes + 'min'
+  } else {
+    return hours + 'h ' + minutes;
+  }
 }
 
 </script>
@@ -23,7 +29,7 @@ function convert_seconds_to_time(f_seconds) {
 
     <img class="poster" alt="poster" v-lazy="`${curr_api}/media/get_image?id=${data['id']}`"/>
 
-    <badges :data="data" :bounds="poster_size"></badges>
+    <badges-horizontal :data="data" :bounds="poster_size"></badges-horizontal>
 
     <div class="footer_wrapper">
       <p class="title" :title="data['name']">{{ data['name'] }}</p>
@@ -32,7 +38,7 @@ function convert_seconds_to_time(f_seconds) {
         <h2 class="date" v-if="data['runtime']>0">•</h2>
         <h2 class="date" v-if="data['runtime']>0">{{ convert_seconds_to_time(data['runtime']) }}</h2>
         <h2 class="date" v-if="data['seasons']>0">•</h2>
-        <h2 class="date" v-if="data['seasons']>0">{{data['seasons'] + ' s' }} </h2>
+        <h2 class="date" v-if="data['seasons']>0">{{ data['seasons'] + ' s' }} </h2>
         <h2 class="date" v-if="data['episodes']>0">{{ data['episodes'] + ' ep' }} </h2>
       </div>
     </div>
@@ -62,25 +68,27 @@ function convert_seconds_to_time(f_seconds) {
 
 .footer_wrapper {
   padding: 12px;
-  margin-top: calc(v-bind(poster_size[0]) * 0.05px);
+  margin-top: calc(v-bind(poster_size [1]) * 0.01px);
 }
 
 .title {
   /*font-size: 1.1em;*/
-  font-size: calc(v-bind(poster_size[0]) * 0.005em);
+  font-size: calc(v-bind(poster_size [1]) * 0.005em);
   line-height: normal;
   font-weight: 500;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
+
 .secondary_info {
   display: flex;
   gap: 5px;
 }
+
 .date {
   /*margin-top: 5px;*/
-  font-size: calc(v-bind(poster_size[0]) * 0.004em);
+  font-size: calc(v-bind(poster_size [1]) * 0.004em);
   color: rgba(255, 255, 255, 0.5);
 }
 </style>

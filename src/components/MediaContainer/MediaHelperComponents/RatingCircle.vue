@@ -33,8 +33,8 @@ function get_rating_color(rating) {
 
 
       <div class="text">
-        <h1 :style="`font-size: ${1 * text_size}em`">{{ Math.round(score * 10) }}</h1>
-        <h1 :style="`font-size: ${0.7 * text_size}em`" class="small_text">%</h1>
+        <h1>{{ Math.round(score * 10) }}</h1>
+        <h1 class="small_text">%</h1>
       </div>
 
     </div>
@@ -57,15 +57,18 @@ function get_rating_color(rating) {
   justify-content: center;
   align-items: center;
 }
+
 .text {
   display: flex;
   justify-content: center;
   /*align-items: center;*/
 }
+
 h1 {
   color: white;
   font-weight: 500;
-  height: 0.85em;
+  /*height: calc(v-bind(text_size) * 0.003em);*/
+  font-size: calc(v-bind(text_size) * 0.0033em);
 }
 
 .small_text {
