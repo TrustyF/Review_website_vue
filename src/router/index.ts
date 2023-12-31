@@ -7,7 +7,6 @@ import SeriesPage from "../pages/SeriesPage.vue"
 import ShortsPage from "../pages/ShortsPage.vue"
 import AnimePage from "../pages/AnimePage.vue"
 import GamePage from "../pages/GamePage.vue"
-import MoviePickerPage from "../pages/MoviePickerPage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,11 +16,6 @@ const router = createRouter({
       name: "home",
       component: HomePage,
       // redirect: '/movie_picker'
-    },
-    {
-      path: "/movie_picker",
-      name: "movie picker",
-      component: MoviePickerPage
     },
     {
       path: "/movies",
