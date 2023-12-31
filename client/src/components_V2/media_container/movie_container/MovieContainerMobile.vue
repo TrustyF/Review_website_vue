@@ -3,7 +3,8 @@ import {inject, onMounted, watch, ref, computed, provide} from "vue";
 import gold_star from '@/assets/ui/gold_star.png'
 import blue_star from '@/assets/ui/blue_star.png'
 import RatingCircle from "@/components/MediaContainer/MediaHelperComponents/RatingCircle.vue";
-import BadgeTooltip from "@/components_V2/media_container/movie_container/badgeTooltip.vue";
+import BadgeTooltip from "@/components_V2/media_container/movie_container/badgeExpanded.vue";
+import Badge from "@/components_V2/media_container/movie_container/badge.vue";
 
 let props = defineProps(["data", "container_scale", "container_size"]);
 let emits = defineEmits(["media_data"]);
@@ -13,7 +14,7 @@ const poster_size = computed(() => [
   props['container_size'][0] * props['container_scale'],
   props['container_size'][1] * props['container_scale']
 ])
-const min_size = computed(() => Math.min(poster_size.value[0],poster_size.value[1]))
+const min_size = computed(() => Math.min(poster_size.value[0], poster_size.value[1]))
 
 function convert_seconds_to_time(f_seconds) {
   let minutes = f_seconds % 60
@@ -69,7 +70,9 @@ function convert_seconds_to_time(f_seconds) {
 
       <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null">
         <div v-for="tag in data['tags']" :key="tag['id']">
-          <badge-tooltip class="tag" :data="tag" :text_size="0.6" :text_limit="60"></badge-tooltip>
+          <!--          <badge-tooltip class="tag" :data="tag" :text_size="0.6"></badge-tooltip>-->
+          <badge :data="tag" :min_size="200"></badge>
+
         </div>
       </div>
 
@@ -92,12 +95,15 @@ function convert_seconds_to_time(f_seconds) {
   padding: 5px;
 
 }
+
 .poster_wrapper {
   position: relative;
   display: flex;
   flex-flow: column nowrap;
-  align-items: center;
+  align-items: flex-start;
+  margin-bottom: auto;
 }
+
 .poster {
   position: relative;
   width: v-bind(poster_size [0] + 'px');
@@ -106,6 +112,7 @@ function convert_seconds_to_time(f_seconds) {
   border-radius: 8px;
   object-fit: cover;
 }
+
 .poster_gradient {
   content: "";
   position: absolute;
@@ -116,9 +123,10 @@ function convert_seconds_to_time(f_seconds) {
   width: v-bind(poster_size [0] + 'px');
   height: v-bind(poster_size [1] + 'px');
 }
+
 /* Footer*/
 .footer_wrapper {
-  padding: 10px 0 10px 20px;
+  padding: 10px 10px 10px 15px;
   display: flex;
   flex-flow: column nowrap;
   gap: 7px;
@@ -173,11 +181,11 @@ function convert_seconds_to_time(f_seconds) {
   flex-flow: row nowrap;
   position: relative;
 
-  justify-content: flex-start;
   align-items: center;
   gap: 5px;
-  transform: translate(0,-50%);
+  transform: translate(0, -50%);
   margin-bottom: -15px;
+  margin-left: 5px;
 }
 
 .gold_star {
@@ -210,7 +218,7 @@ function convert_seconds_to_time(f_seconds) {
 .tags_wrapper {
   display: flex;
   flex-flow: row wrap;
-  gap: 5px;
+  gap: 10px;
 }
 
 .tag {

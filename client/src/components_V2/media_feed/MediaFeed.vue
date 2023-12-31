@@ -128,6 +128,7 @@ onMounted(() => {
   padding: 10px;
   margin: 50px 0 15px 0;
   background-color: #2d2d41;
+  box-shadow: 0 0 5px #000000;
   border-radius: 8px;
   position: sticky;
   top: 10px;

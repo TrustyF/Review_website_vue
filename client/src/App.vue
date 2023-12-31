@@ -8,6 +8,7 @@ import CreditsFooter from "@/components/General/CreditsFooter.vue";
 import {onMounted, provide, ref} from "vue";
 import MediaPane from "@/components/MediaContainer/Pane/MediaPane.vue";
 import EditPane from "@/components/MediaContainer/Pane/EditPane.vue";
+import TooltipBadge from "@/components_V2/tooltip/tooltipBadge.vue";
 
 const selected_media = ref(undefined)
 const edit_media = ref(undefined)
@@ -19,6 +20,8 @@ provide('edit_mode', edit_mode)
 
 </script>
 <template>
+  <tooltip-badge></tooltip-badge>
+
   <NavBar/>
   <div class="main" id="main">
     <RouterView/>

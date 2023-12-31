@@ -61,7 +61,7 @@ const curr_api = inject("curr_api");
 .rating_box {
   border-radius: 5px;
 
-  box-shadow: 1px 1px 1px #000000;
+  box-shadow: 1px 1px 1px #000000,inset 1px 1px 0 #424052;
   background-color: #2b2a34;
 
   padding: 4px 5px 4px 5px;
