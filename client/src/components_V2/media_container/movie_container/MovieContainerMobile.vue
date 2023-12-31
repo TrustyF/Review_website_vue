@@ -3,6 +3,7 @@ import {inject, onMounted, watch, ref, computed, provide} from "vue";
 import gold_star from '@/assets/ui/gold_star.png'
 import blue_star from '@/assets/ui/blue_star.png'
 import RatingCircle from "@/components/MediaContainer/MediaHelperComponents/RatingCircle.vue";
+import BadgeTooltip from "@/components_V2/media_container/movie_container/badgeTooltip.vue";
 
 let props = defineProps(["data", "container_scale", "container_size"]);
 let emits = defineEmits(["media_data"]);
@@ -25,7 +26,25 @@ function convert_seconds_to_time(f_seconds) {
 <template>
   <div class="movie_container_wrapper" @click="emits('media_data',data)">
 
-    <img class="poster" alt="poster" v-lazy="`${curr_api}/media/get_image?id=${data['id']}`"/>
+    <div class="poster_wrapper">
+      <img class="poster" alt="poster" v-lazy="`${curr_api}/media/get_image?id=${data['id']}`"/>
+      <div class="poster_gradient"></div>
+
+      <div class="badges">
+        <div class="rating_box">
+          <h2 class="rating"> {{ data['user_rating'] }}</h2>
+          <img :src="blue_star" alt="gold_star" class="gold_star">
+        </div>
+
+        <div class="rating_box" v-if="data['scaled_public_rating']>0">
+          <h2 class="rating"> {{ Math.round(data['scaled_public_rating'] * 10) / 10 }}</h2>
+          <img :src="gold_star" alt="gold_star" class="gold_star">
+        </div>
+
+        <rating-circle class="rating_circle" :text_size="(220)" v-if="data['scaled_public_rating']>0"
+                       :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
+      </div>
+    </div>
 
     <div class="footer_wrapper">
 
@@ -47,24 +66,11 @@ function convert_seconds_to_time(f_seconds) {
         </div>
       </div>
 
-      <div class="badges">
-        <div class="rating_box">
-          <h2 class="rating"> {{ data['user_rating'] }}</h2>
-          <img :src="blue_star" alt="gold_star" class="gold_star">
+
+      <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null">
+        <div v-for="tag in data['tags']" :key="tag['id']">
+          <badge-tooltip class="tag" :data="tag" :text_size="0.6" :text_limit="60"></badge-tooltip>
         </div>
-
-        <div class="rating_box" v-if="data['scaled_public_rating']>0">
-          <h2 class="rating"> {{ Math.round(data['scaled_public_rating'] * 10) / 10 }}</h2>
-          <img :src="gold_star" alt="gold_star" class="gold_star">
-        </div>
-
-        <rating-circle class="rating_circle" :text_size="(220)" v-if="data['scaled_public_rating']>0"
-                       :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
-      </div>
-
-      <div class="tags_wrapper">
-        <img class="tag" v-for="tag in data['tags']" :key="tag['id']"
-             v-lazy="`public/tags/icons/${tag['tier']}/${tag['image_path']}`">
       </div>
 
     </div>
@@ -84,19 +90,35 @@ function convert_seconds_to_time(f_seconds) {
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
   background-color: #25222a;
   padding: 5px;
-}
 
+}
+.poster_wrapper {
+  position: relative;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
 .poster {
+  position: relative;
   width: v-bind(poster_size [0] + 'px');
   height: v-bind(poster_size [1] + 'px');
 
   border-radius: 8px;
   object-fit: cover;
 }
-
+.poster_gradient {
+  content: "";
+  position: absolute;
+  border-radius: 8px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 90%, rgba(0, 0, 0, 0.5) 100%);
+  left: 0;
+  top: 0;
+  width: v-bind(poster_size [0] + 'px');
+  height: v-bind(poster_size [1] + 'px');
+}
 /* Footer*/
 .footer_wrapper {
-  padding: 0 0 0 20px;
+  padding: 10px 0 10px 20px;
   display: flex;
   flex-flow: column nowrap;
   gap: 7px;
@@ -148,11 +170,14 @@ function convert_seconds_to_time(f_seconds) {
 
 .badges {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
+  position: relative;
 
   justify-content: flex-start;
   align-items: center;
   gap: 5px;
+  transform: translate(0,-50%);
+  margin-bottom: -15px;
 }
 
 .gold_star {
@@ -184,11 +209,14 @@ function convert_seconds_to_time(f_seconds) {
 
 .tags_wrapper {
   display: flex;
-  flex-flow: row;
+  flex-flow: row wrap;
   gap: 5px;
-  /*margin-top: 10px;*/
 }
+
 .tag {
-  width: calc(v-bind(min_size) * 0.27px);
+  /*height: calc(v-bind(min_size) * 0.3px);*/
+  position: relative;
+  opacity: 100%;
+  visibility: visible;
 }
 </style>

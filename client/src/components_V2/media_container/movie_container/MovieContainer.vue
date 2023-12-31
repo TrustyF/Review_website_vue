@@ -1,7 +1,7 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed, provide} from "vue";
-import Badges from "@/components_V2/media_container/movie_container/badges.vue";
-import Pin from "@/components_V2/media_container/movie_container/pin.vue";
+import Rating from "@/components_V2/media_container/movie_container/rating.vue";
+import Badge from "@/components_V2/media_container/movie_container/badge.vue";
 
 let props = defineProps(["data", "container_scale", "container_size"]);
 let emits = defineEmits(["media_data"]);
@@ -29,7 +29,7 @@ function convert_seconds_to_time(f_seconds) {
     <img class="poster" alt="poster" v-lazy="`${curr_api}/media/get_image?id=${data['id']}`"/>
     <div class="poster_gradient"></div>
 
-    <badges class="badges" :data="data" :max_size="min_size"></badges>
+    <Rating class="ratings" :data="data" :max_size="min_size"></Rating>
 
     <div class="footer_wrapper">
 
@@ -46,7 +46,7 @@ function convert_seconds_to_time(f_seconds) {
 
       <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null">
         <div v-for="tag in data['tags']" :key="tag['id']">
-          <pin :data="tag" :min_size="min_size"></pin>
+          <badge :data="tag" :min_size="min_size"></badge>
         </div>
       </div>
 
@@ -92,7 +92,7 @@ function convert_seconds_to_time(f_seconds) {
   width: v-bind(poster_size [0] + 'px');
   height: v-bind(poster_size [1] + 'px');
 }
-.badges {
+.ratings {
   position: absolute;
   margin-left: 5px;
   left: 0;
