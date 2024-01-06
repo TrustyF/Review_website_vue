@@ -26,11 +26,14 @@ const tooltip_hover = inject("tooltip_badge_hover");
   position: absolute;
   left: 0;
   top  : 0;
-  z-index: 10;
+  z-index: 1000;
 
   opacity: 0;
   visibility: hidden;
-  transition: 50ms opacity;
+  /*transition: 50ms opacity;*/
+
+  pointer-events: none;
+  user-select: none;
 }
 
 .visible {

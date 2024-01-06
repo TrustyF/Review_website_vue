@@ -71,7 +71,7 @@ function convert_seconds_to_time(f_seconds) {
       <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null">
         <div v-for="tag in data['tags']" :key="tag['id']">
           <!--          <badge-tooltip class="tag" :data="tag" :text_size="0.6"></badge-tooltip>-->
-          <badge :data="tag" :min_size="200"></badge>
+          <badge :data="tag" :min_size="170" :show_title="true"></badge>
 
         </div>
       </div>

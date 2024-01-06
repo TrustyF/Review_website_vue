@@ -11,7 +11,7 @@ const poster_size = computed(() => [
   props['container_size'][0] * props['container_scale'],
   props['container_size'][1] * props['container_scale']
 ])
-const min_size = computed(() => Math.min(poster_size.value[0],poster_size.value[1]))
+const min_size = computed(() => Math.min(poster_size.value[0], poster_size.value[1]))
 
 function convert_seconds_to_time(f_seconds) {
   let minutes = f_seconds % 60
@@ -46,7 +46,7 @@ function convert_seconds_to_time(f_seconds) {
 
       <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null">
         <div v-for="tag in data['tags']" :key="tag['id']">
-          <badge :data="tag" :min_size="min_size"></badge>
+          <badge :data="tag" :min_size="min_size" :show_title="true"></badge>
         </div>
       </div>
 
@@ -63,7 +63,7 @@ function convert_seconds_to_time(f_seconds) {
   flex-flow: column nowrap;
 
   width: v-bind(poster_size [0] + 'px');
-  min-height: v-bind(poster_size[1] + 'px');
+  min-height: v-bind(poster_size [1] + 'px');
   height: fit-content;
 
   background-color: #25222a;
@@ -93,12 +93,13 @@ function convert_seconds_to_time(f_seconds) {
   width: v-bind(poster_size [0] + 'px');
   height: v-bind(poster_size [1] + 'px');
 }
+
 .ratings {
   position: absolute;
   margin-left: 5px;
   left: 0;
   top: 0;
-  transform: translate(0,v-bind(poster_size[1] + 'px')) translate(0,-50%);
+  transform: translate(0, v-bind(poster_size [1] + 'px')) translate(0, -50%);
 }
 
 .footer_wrapper {
@@ -129,11 +130,32 @@ function convert_seconds_to_time(f_seconds) {
 
 .tags_wrapper {
   /*outline: 1px solid red;*/
-  position: relative;
+  width: v-bind(poster_size [0] + 'px');
+  position: absolute;
+
+  left: 0;
+  top: 0;
+
   display: flex;
-  flex-flow: row;
+  flex-flow: column wrap;
   gap: 5px;
-  margin-top: 10px;
+
+  padding: 5px;
+  transform: translate(-10px, 0);
+  visibility: hidden;
+  opacity: 0;
+  z-index: 20;
+
+  transition: 400ms ease-in-out;
+  transition-delay: 700ms;
+}
+
+.movie_container_wrapper:hover .tags_wrapper {
+  visibility: visible;
+  opacity: 100%;
+  transform: translate(0, 0);
+  transition-delay: 0ms;
+  transition: 100ms;
 }
 
 </style>
