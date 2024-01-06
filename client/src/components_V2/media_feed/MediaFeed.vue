@@ -96,6 +96,11 @@ onMounted(() => {
         <img :src="blue_star" alt="blue_star" style="width: 15px">
       </div>
 
+<!--      todo add filters-->
+      <div class="filter_wrapper">
+
+      </div>
+
       <div class="media_container_wrapper">
         <component v-for="med in media_grouped[rating]"
                    :key="med['id']"

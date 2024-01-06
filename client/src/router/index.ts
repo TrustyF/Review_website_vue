@@ -14,8 +14,8 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: HomePage,
-      // redirect: '/movie_picker'
+      redirect:'/movies'
+      // component: HomePage,
     },
     {
       path: "/movies",

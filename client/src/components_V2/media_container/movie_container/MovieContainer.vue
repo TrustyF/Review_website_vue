@@ -146,7 +146,7 @@ function convert_seconds_to_time(f_seconds) {
   opacity: 0;
   z-index: 20;
 
-  transition: 400ms ease-in-out;
+  transition: 400ms;
   transition-delay: 700ms;
 }
 
@@ -155,7 +155,7 @@ function convert_seconds_to_time(f_seconds) {
   opacity: 100%;
   transform: translate(0, 0);
   transition-delay: 0ms;
-  transition: 100ms;
+  transition: 50ms;
 }
 
 </style>
