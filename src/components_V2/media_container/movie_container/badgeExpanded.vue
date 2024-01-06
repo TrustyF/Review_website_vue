@@ -47,7 +47,7 @@ function add_line_break_v2(content){
   border-radius: calc(v-bind(text_size) * 50px);
   background-color: #2b2a34;
 
-  z-index: 30;
+  z-index: 300;
 
   display: flex;
   flex-flow: row nowrap;

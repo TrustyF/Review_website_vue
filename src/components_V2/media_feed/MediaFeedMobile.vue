@@ -1,8 +1,8 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed} from "vue";
+import {inject, onMounted, watch, ref, computed, onUnmounted} from "vue";
 import blue_star from '/src/assets/ui/blue_star.png'
 
-let props = defineProps(["media_type", "media_container","media_scale","media_size"]);
+let props = defineProps(["media_type", "media_container", "media_scale", "media_size"]);
 
 const curr_api = inject("curr_api");
 const session_seed = inject("session_seed");
@@ -54,7 +54,10 @@ async function get_media() {
 }
 
 function scroll_media_loader() {
-  let rect = document.getElementById('media_container').getBoundingClientRect()
+  let elem = document.getElementById('media_container')
+  if (elem === null) return
+
+  let rect = elem.getBoundingClientRect()
 
   if (rect.bottom <= (window.innerHeight + (window.innerHeight / 2)) &&
       !is_loading_more_media.value &&
@@ -75,8 +78,13 @@ function check_mobile() {
 onMounted(() => {
   get_media()
   check_mobile()
-  addEventListener("scroll", () => scroll_media_loader())
-  addEventListener("resize", () => check_mobile())
+  window.addEventListener("scroll", () => scroll_media_loader())
+  window.addEventListener("resize", () => check_mobile())
+})
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", () => scroll_media_loader())
+  window.removeEventListener("resize", () => check_mobile())
 })
 
 </script>
