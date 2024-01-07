@@ -10,7 +10,7 @@ from sqlalchemy.sql.expression import func
 from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY
 from data_mapper.media_mapper import map_media
 from db_loader import db
-from sql_models.media_model import Media, Genre, Theme, Tag
+from sql_models.media_model import Media, Genre, Theme, Tag, media_genre_association
 
 bp = Blueprint('media', __name__)
 
@@ -18,6 +18,9 @@ bp = Blueprint('media', __name__)
 @bp.route("/get")
 def get():
     # parameters
+    genre_filter = request.args.get('genres', type=list)
+    tag_filter = request.args.get('tags', type=list)
+
     limit = request.args.get('limit', type=int)
     page = request.args.get('page', type=int)
     order = request.args.get('order')
@@ -110,9 +113,12 @@ def get_filters():
 
     print(f'getting filters for {media_type=}')
 
-    genres = db.session.query(Genre).all()
-    themes = db.session.query(Theme).all()
-    tags = db.session.query(Tag).all()
+    genres = (db.session.query(Genre).join(Media.genres)
+              .filter(Media.media_type == media_type).distinct().all())
+    themes = (db.session.query(Theme).join(Media.themes)
+              .filter(Media.media_type == media_type).distinct().all())
+    tags = (db.session.query(Tag).join(Media.tags)
+            .filter(Media.media_type == media_type).distinct().all())
 
     result = {
         'genres': genres,
