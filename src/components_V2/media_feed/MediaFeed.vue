@@ -1,6 +1,7 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
 import blue_star from '/src/assets/ui/blue_star.png'
+import FilterContainer from "@/components_V2/media_filters/filterContainer.vue";
 
 let props = defineProps(["media_type", "media_container", "media_scale", "media_size"]);
 
@@ -88,17 +89,16 @@ onMounted(() => {
 
 <template>
 
+  <div class="filter_wrapper">
+    <filter-container :media_type="media_type"></filter-container>
+  </div>
+
   <div ref="feed_container">
     <div class="rating_box" v-for="rating in Object.keys(media_grouped).reverse()" :key="rating">
 
       <div class="rating_separator">
         <h1 style="font-weight: 500;font-size: 1em"> {{ rating }} </h1>
         <img :src="blue_star" alt="blue_star" style="width: 15px">
-      </div>
-
-<!--      todo add filters-->
-      <div class="filter_wrapper">
-
       </div>
 
       <div class="media_container_wrapper">
@@ -122,6 +122,10 @@ onMounted(() => {
 
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(v-bind(element_width), 1fr));
+}
+
+.filter_wrapper {
+  position: absolute;
 }
 
 .rating_box {
