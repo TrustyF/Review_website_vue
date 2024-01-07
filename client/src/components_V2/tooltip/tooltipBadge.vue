@@ -21,7 +21,7 @@ const tooltip_hover = inject("tooltip_badge_hover");
 <style scoped>
 .tooltip_wrapper {
   max-width: 300px;
-  transform: translate(v-bind(tooltip_pos [0] + 'px'),v-bind(tooltip_pos [1] + 'px')) translate(-50%,-150%);
+  transform: translate(v-bind(tooltip_pos [0] + 'px'),v-bind(tooltip_pos [1] + 'px')) translate(-50%,-150%) translate(0,-20px);
 
   position: absolute;
   left: 0;
@@ -30,13 +30,14 @@ const tooltip_hover = inject("tooltip_badge_hover");
 
   opacity: 0;
   visibility: hidden;
-  /*transition: 50ms opacity;*/
+  transition: 200ms;
 
   pointer-events: none;
   user-select: none;
 }
 
 .visible {
+  transform: translate(v-bind(tooltip_pos [0] + 'px'),v-bind(tooltip_pos [1] + 'px')) translate(-50%,-150%);
   opacity: 100%;
   visibility: visible;
 }

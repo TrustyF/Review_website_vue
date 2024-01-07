@@ -19,13 +19,13 @@ onMounted(() => {
 
 <template>
   <media-feed v-if="!is_mobile"
-              :media_type="'movie'"
+              media_type="movie"
               :media_container="MovieContainer"
               :media_size="[500,750]"
               :media_scale="0.35"
   ></media-feed>
   <media-feed-mobile v-else
-                     :media_type="'movie'"
+                     media_type="movie"
                      :media_container="MovieContainerMobile"
                      :media_size="[500,750]"
                      :media_scale="0.19"
