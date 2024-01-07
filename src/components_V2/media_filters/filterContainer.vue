@@ -34,7 +34,8 @@ onMounted(() => {
   <div class="filter_wrapper">
 
     <filter-dropdown :data="genres" title="Genres"></filter-dropdown>
-    <filter-dropdown :data="themes" title="Themes"></filter-dropdown>
+    <filter-dropdown v-if="themes!==undefined && themes.length>0"
+                     :data="themes" title="Themes"></filter-dropdown>
     <filter-dropdown :data="tags" title="Tags"></filter-dropdown>
 
   </div>
