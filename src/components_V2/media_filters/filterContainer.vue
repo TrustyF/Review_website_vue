@@ -3,7 +3,7 @@ import {inject, onMounted, watch, ref, computed} from "vue";
 import FilterDropdown from "@/components_V2/media_filters/filterDropdown.vue";
 
 let props = defineProps(["media_type"]);
-let emits = defineEmits(["test"]);
+let emits = defineEmits(["filter"]);
 const curr_api = inject("curr_api");
 
 let genres = ref()
@@ -25,6 +25,10 @@ async function fetch_filters() {
 
 }
 
+function emit_filter(title, event) {
+  emits('filter', [title, event[0], event[1]])
+}
+
 onMounted(() => {
   fetch_filters()
 })
@@ -33,10 +37,10 @@ onMounted(() => {
 <template>
   <div class="filter_wrapper">
 
-    <filter-dropdown :data="genres" title="Genres"></filter-dropdown>
-    <filter-dropdown v-if="themes!==undefined && themes.length>0"
+    <filter-dropdown @id="emit_filter('genre',$event)" :data="genres" title="Genres"></filter-dropdown>
+    <filter-dropdown @id="emit_filter('theme',$event)" v-if="themes!==undefined && themes.length>0"
                      :data="themes" title="Themes"></filter-dropdown>
-    <filter-dropdown :data="tags" title="Tags"></filter-dropdown>
+    <filter-dropdown @id="emit_filter('tag',$event)" :data="tags" title="Tags"></filter-dropdown>
 
   </div>
 </template>
@@ -44,7 +48,7 @@ onMounted(() => {
 <style scoped>
 .filter_wrapper {
   display: flex;
-  width: 500px;
+  /*width: 500px;*/
   height: 500px;
   background-color: black;
 
