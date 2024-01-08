@@ -18,14 +18,15 @@ bp = Blueprint('media', __name__)
 @bp.route("/get")
 def get():
     # parameters
-    genre_filter = request.args.get('genres', type=list)
-    tag_filter = request.args.get('tags', type=list)
-
     limit = request.args.get('limit', type=int)
     page = request.args.get('page', type=int)
     order = request.args.get('order')
     media_type = request.args.get('type')
     session_seed = request.args.get('session_seed', type=int)
+
+    genres = request.form.getlist('genres', type=int)
+
+    print(f'{genres=}')
 
     print(f'{limit =}', f'{order =}', f'{page =}', f'{media_type =}', f'{session_seed =}')
 
