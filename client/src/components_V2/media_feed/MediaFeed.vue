@@ -16,6 +16,8 @@ let media_grouped = ref([])
 let media_limit = ref(5)
 let media_page = ref(0)
 let media_order = ref(undefined)
+let media_filters = ref([])
+
 let feed_container = ref()
 
 let is_page_loaded = ref(false)
@@ -29,8 +31,11 @@ async function get_media() {
   url.searchParams.set('page', String(media_page.value))
   url.searchParams.set('order', media_order.value)
   url.searchParams.set('session_seed', String(session_seed))
-
   url.searchParams.set('type', props['media_type'])
+
+  url.searchParams.set('genres', format_filters_request('genre', media_filters.value))
+  url.searchParams.set('themes', format_filters_request('theme', media_filters.value))
+  url.searchParams.set('tags', format_filters_request('tag', media_filters.value))
 
   const result = await fetch(url).then(response => response.json())
 
@@ -49,12 +54,36 @@ async function get_media() {
     return r;
   }, {})
 
-  console.log('grouped movies',media_grouped.value)
+  console.log('grouped movies', media_grouped.value)
 
   // cleanup
   is_page_loading.value = false
   handleInfiniteScroll()
 
+}
+
+function handle_filter(event) {
+  let filter = [event[0], event[1]]
+
+  if (media_filters.value.map(x => JSON.stringify(x)).includes(JSON.stringify(filter))) {
+    let index = media_filters.value.indexOf(filter)
+    media_filters.value.splice(index, 1)
+  } else {
+    media_filters.value.push(filter)
+  }
+
+  get_media()
+}
+
+function format_filters_request(title, filters) {
+  let output = []
+  filters.forEach((x) => {
+    if (x[0] === title) {
+      output.push(x[1])
+    }
+  })
+  console.log(output)
+  return JSON.stringify(output)
 }
 
 const handleInfiniteScroll = () => {
@@ -90,7 +119,7 @@ onMounted(() => {
 <template>
 
   <div class="filter_wrapper">
-    <filter-container :media_type="media_type"></filter-container>
+    <filter-container @filter="handle_filter" :media_type="media_type"></filter-container>
   </div>
 
   <div ref="feed_container">
