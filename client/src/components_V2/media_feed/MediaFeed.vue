@@ -16,7 +16,7 @@ let media_grouped = ref([])
 let media_limit = ref(5)
 let media_page = ref(0)
 let media_order = ref(undefined)
-let media_filters = ref([])
+let media_filters = ref({})
 
 let feed_container = ref()
 
@@ -26,18 +26,24 @@ let is_page_loading = ref(true)
 async function get_media() {
 
   const url = new URL(`${curr_api}/media/get`)
+  const params = {
+    'limit': media_limit.value,
+    'page': media_page.value,
+    'order': media_order.value,
+    'session_seed': session_seed,
+    'type': props['media_type'],
+    'genres': media_filters.value['genres'],
+    'themes': media_filters.value['themes'],
+    'tags': media_filters.value['tags'],
+  }
 
-  url.searchParams.set('limit', String(media_limit.value))
-  url.searchParams.set('page', String(media_page.value))
-  url.searchParams.set('order', media_order.value)
-  url.searchParams.set('session_seed', String(session_seed))
-  url.searchParams.set('type', props['media_type'])
-
-  url.searchParams.set('genres', format_filters_request('genre', media_filters.value))
-  url.searchParams.set('themes', format_filters_request('theme', media_filters.value))
-  url.searchParams.set('tags', format_filters_request('tag', media_filters.value))
-
-  const result = await fetch(url).then(response => response.json())
+  const result = await fetch(url,
+      {
+        method: 'POST',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(params)
+      })
+      .then(response => response.json())
 
   // skip if no data returned
   if (result.length < 1) {
@@ -63,27 +69,9 @@ async function get_media() {
 }
 
 function handle_filter(event) {
-  let filter = [event[0], event[1]]
-
-  if (media_filters.value.map(x => JSON.stringify(x)).includes(JSON.stringify(filter))) {
-    let index = media_filters.value.indexOf(filter)
-    media_filters.value.splice(index, 1)
-  } else {
-    media_filters.value.push(filter)
-  }
-
-  get_media()
-}
-
-function format_filters_request(title, filters) {
-  let output = []
-  filters.forEach((x) => {
-    if (x[0] === title) {
-      output.push(x[1])
-    }
-  })
-  console.log(output)
-  return JSON.stringify(output)
+  console.log('event', event)
+  media_filters.value = event
+  clean_load_media()
 }
 
 const handleInfiniteScroll = () => {
@@ -108,6 +96,14 @@ const handleInfiniteScroll = () => {
   }
 
 };
+
+function clean_load_media() {
+  media_page.value = 0
+  media.value = []
+  media_grouped.value = []
+  is_page_loaded.value = false
+  get_media()
+}
 
 onMounted(() => {
   get_media()
@@ -154,7 +150,7 @@ onMounted(() => {
 }
 
 .filter_wrapper {
-  position: absolute;
+  position: relative;
 }
 
 .rating_box {
