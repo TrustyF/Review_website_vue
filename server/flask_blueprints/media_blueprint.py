@@ -42,11 +42,9 @@ def get():
     if genres:
         query = query.outerjoin(Media.genres).filter(Genre.id.in_(genres))
     if themes:
-        pass
+        query = query.outerjoin(Media.themes).filter(Theme.id.in_(themes))
     if tags:
-        query = (query.outerjoin(Media.tags)
-                 .filter(Tag.id.in_(tags))
-                 )
+        query = query.outerjoin(Media.tags).filter(Tag.id.in_(tags))
 
     # order result
     match order:
