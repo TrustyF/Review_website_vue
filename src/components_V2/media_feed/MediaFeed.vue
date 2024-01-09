@@ -60,7 +60,7 @@ async function get_media() {
     return r;
   }, {})
 
-  console.log('grouped movies', media_grouped.value)
+  // console.log('grouped movies', media_grouped.value)
 
   // cleanup
   is_page_loading.value = false
@@ -70,7 +70,7 @@ async function get_media() {
 
 function handle_filter(event) {
   console.log('event', event)
-  media_filters.value = event
+  media_filters.value[event[0]] = event[1]
   clean_load_media()
 }
 

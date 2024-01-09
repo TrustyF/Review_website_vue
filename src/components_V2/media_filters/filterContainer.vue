@@ -27,10 +27,10 @@ async function fetch_filters() {
 
 function emit_filter(title, event) {
 
-  let obj = {}
-  obj[title] = event
+  // let obj = {}
+  // obj[title] = event
 
-  emits('filter', obj)
+  emits('filter', [title,event])
 }
 
 onMounted(() => {
