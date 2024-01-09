@@ -6,6 +6,8 @@ let props = defineProps(["data", "title"]);
 let emits = defineEmits(["id"]);
 const curr_api = inject("curr_api");
 
+let checked_ids = []
+
 function clear_checkboxes() {
   let checkboxes = document.getElementsByClassName('checkbox')
   Array.from(checkboxes).forEach((elem) => {
@@ -13,6 +15,9 @@ function clear_checkboxes() {
       elem.checked = false
     }
   })
+  checked_ids = []
+  emits('id', checked_ids)
+
 }
 
 function toggle_checkbox(id) {
@@ -20,12 +25,14 @@ function toggle_checkbox(id) {
 
   if (checkbox.checked) {
     checkbox.checked = false
-    emits('id', [id,false])
+    let index = checked_ids.indexOf(id)
+    checked_ids.splice(index,1)
   } else {
     checkbox.checked = true
-    emits('id', [id,true])
-
+    checked_ids.push(id)
   }
+  emits('id', checked_ids)
+
 }
 
 </script>

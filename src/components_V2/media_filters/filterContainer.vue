@@ -26,7 +26,11 @@ async function fetch_filters() {
 }
 
 function emit_filter(title, event) {
-  emits('filter', [title, event[0], event[1]])
+
+  let obj = {}
+  obj[title] = event
+
+  emits('filter', obj)
 }
 
 onMounted(() => {
@@ -37,10 +41,10 @@ onMounted(() => {
 <template>
   <div class="filter_wrapper">
 
-    <filter-dropdown @id="emit_filter('genre',$event)" :data="genres" title="Genres"></filter-dropdown>
-    <filter-dropdown @id="emit_filter('theme',$event)" v-if="themes!==undefined && themes.length>0"
+    <filter-dropdown @id="emit_filter('genres',$event)" :data="genres" title="Genres"></filter-dropdown>
+    <filter-dropdown @id="emit_filter('themes',$event)" v-if="themes!==undefined && themes.length>0"
                      :data="themes" title="Themes"></filter-dropdown>
-    <filter-dropdown @id="emit_filter('tag',$event)" :data="tags" title="Tags"></filter-dropdown>
+    <filter-dropdown @id="emit_filter('tags',$event)" :data="tags" title="Tags"></filter-dropdown>
 
   </div>
 </template>
