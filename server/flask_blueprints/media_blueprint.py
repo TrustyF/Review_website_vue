@@ -5,6 +5,8 @@ from pprint import pprint
 import requests
 
 from flask import Blueprint, request, Response, jsonify, send_file
+from sqlalchemy import not_
+from sqlalchemy.orm import contains_eager
 from sqlalchemy.sql.expression import func
 
 from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY
@@ -15,20 +17,20 @@ from sql_models.media_model import Media, Genre, Theme, Tag, media_genre_associa
 bp = Blueprint('media', __name__)
 
 
-@bp.route("/get")
+@bp.route("/get", methods=['POST'])
 def get():
     # parameters
-    limit = request.args.get('limit', type=int)
-    page = request.args.get('page', type=int)
-    order = request.args.get('order')
-    media_type = request.args.get('type')
-    session_seed = request.args.get('session_seed', type=int)
+    data = request.get_json()
+    print(data)
+    limit = data.get('limit')
+    page = data.get('page')
+    order = data.get('order')
+    media_type = data.get('type')
+    session_seed = data.get('session_seed')
 
-    genres = request.form.getlist('genres', type=int)
-
-    print(f'{genres=}')
-
-    print(f'{limit =}', f'{order =}', f'{page =}', f'{media_type =}', f'{session_seed =}')
+    genres = data.get('genres')
+    themes = data.get('themes')
+    tags = data.get('tags')
 
     # setup query
     query = (
@@ -36,24 +38,28 @@ def get():
         .filter_by(media_type=media_type)
     )
 
+    # apply filters
+    if genres:
+        query = query.outerjoin(Media.genres).filter(Genre.id.in_(genres))
+    if themes:
+        pass
+    if tags:
+        query = (query.outerjoin(Media.tags)
+                 .filter(Tag.id.in_(tags))
+                 )
+
     # order result
     match order:
         case 'release_date':
             query = query.order_by(Media.user_rating.desc(),
                                    Media.release_date.desc(),
-                                   func.rand(session_seed),
-                                   Media.id)
+                                   func.rand(session_seed))
         case 'name':
             query = query.order_by(Media.user_rating.desc(),
-                                   Media.name, func.rand(session_seed),
-                                   Media.id)
+                                   Media.name, func.rand(session_seed))
         case _:
             query = query.order_by(Media.user_rating.desc(),
-                                   func.rand(session_seed),
-                                   Media.id)
-
-    #     query = query.join(Card).order_by(Card.card_price.desc())
-    #     query = query.join(CardTemplate).order_by(UserCard.storage_id, CARD_TYPE_PRIORITY, CardTemplate.name)
+                                   func.rand(session_seed))
 
     # limiting
     if limit is not None:
@@ -115,16 +121,21 @@ def get_filters():
     print(f'getting filters for {media_type=}')
 
     genres = (db.session.query(Genre).join(Media.genres)
-              .filter(Media.media_type == media_type).distinct().all())
+              .filter(Media.media_type == media_type))
+
     themes = (db.session.query(Theme).join(Media.themes)
-              .filter(Media.media_type == media_type).distinct().all())
-    tags = (db.session.query(Tag).join(Media.tags)
-            .filter(Media.media_type == media_type).distinct().all())
+              .filter(Media.media_type == media_type))
+
+    tags = (db.session.query(Tag)
+            .join(Media.tags)
+            .filter(Media.media_type == media_type)
+            .order_by(Tag.image_path)
+            )
 
     result = {
-        'genres': genres,
-        'themes': themes,
-        'tags': tags,
+        'genres': genres.all(),
+        'themes': themes.all(),
+        'tags': tags.all(),
     }
 
     return result, 200

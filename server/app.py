@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from constants import MAIN_DIR
 from db_loader import db
 from migrate import insert_in_db
+import logging
 
 # check if using locally
 dev_mode = os.path.exists(os.path.join(MAIN_DIR, 'devmode.txt'))
@@ -43,7 +44,8 @@ def test():
 with app.app_context():
     db.init_app(app)
 
-    # db.create_all()
+    logging.disable(logging.WARNING)
+
     # db.session.commit()
     # db.session.close()
     #
