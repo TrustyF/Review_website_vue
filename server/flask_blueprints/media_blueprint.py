@@ -5,14 +5,14 @@ from pprint import pprint
 import requests
 
 from flask import Blueprint, request, Response, jsonify, send_file
-from sqlalchemy import not_
+from sqlalchemy import not_, and_, or_
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.sql.expression import func
 
 from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY
 from data_mapper.media_mapper import map_media
 from db_loader import db
-from sql_models.media_model import Media, Genre, Theme, Tag, media_genre_association
+from sql_models.media_model import Media, Genre, Theme, Tag, media_genre_association, media_tag_association
 
 bp = Blueprint('media', __name__)
 
@@ -40,11 +40,15 @@ def get():
 
     # apply filters
     if genres:
-        query = query.outerjoin(Media.genres).filter(Genre.id.in_(genres))
+        query = query.join(Media.genres).filter(Genre.id.in_(genres))
     if themes:
-        query = query.outerjoin(Media.themes).filter(Theme.id.in_(themes))
+        query = query.join(Media.themes).filter(Theme.id.in_(themes))
     if tags:
-        query = query.outerjoin(Media.tags).filter(Tag.id.in_(tags))
+        test = [media_tag_association.c.tag_id == t for t in tags]
+        query = (query.outerjoin(media_tag_association, Media.id == media_tag_association.c.media_id)
+                 .filter(and_(*test)))
+
+        print(len(query.all()))
 
     # order result
     match order:
