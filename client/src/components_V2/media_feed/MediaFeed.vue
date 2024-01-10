@@ -23,7 +23,7 @@ let feed_container = ref()
 let is_page_loaded = ref(false)
 let is_page_loading = ref(true)
 
-async function get_media() {
+async function get_media(override) {
 
   const url = new URL(`${curr_api}/media/get`)
   const params = {
@@ -36,6 +36,7 @@ async function get_media() {
     'themes': media_filters.value['themes'],
     'tags': media_filters.value['tags'],
   }
+  console.log('fetching')
 
   const result = await fetch(url,
       {
@@ -51,8 +52,13 @@ async function get_media() {
     return
   }
 
-  // concat result to media
-  result.forEach(entry => media.value.push(entry))
+  if (override) {
+    media.value = result
+  } else {
+    // concat result to media
+    result.forEach(entry => media.value.push(entry))
+  }
+
   // group media by rating
   media_grouped.value = media.value.reduce((r, e, index) => {
     if (!r[e['user_rating']]) r[e['user_rating']] = [e]
@@ -98,11 +104,10 @@ const handleInfiniteScroll = () => {
 };
 
 function clean_load_media() {
+  console.log('clean load')
   media_page.value = 0
-  media.value = []
-  media_grouped.value = []
   is_page_loaded.value = false
-  get_media()
+  get_media(true)
 }
 
 onMounted(() => {
