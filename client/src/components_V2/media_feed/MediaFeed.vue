@@ -1,5 +1,5 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed} from "vue";
+import {inject, onMounted, watch, provide, ref, computed} from "vue";
 import blue_star from '/src/assets/ui/blue_star.png'
 import FilterContainer from "@/components_V2/media_filters/filterContainer.vue";
 
@@ -35,6 +35,8 @@ async function get_media(override) {
     'genres': media_filters.value['genres'],
     'themes': media_filters.value['themes'],
     'tags': media_filters.value['tags'],
+    'ratings': media_filters.value['ratings'],
+    'public_ratings': media_filters.value['public_ratings'],
   }
   console.log('fetching')
 
@@ -46,13 +48,15 @@ async function get_media(override) {
       })
       .then(response => response.json())
 
-  // skip if no data returned
+  // mark page loaded if no data returned
   if (result.length < 1) {
     console.log('page finished loading')
-    return
+    is_page_loading.value = false
+    is_page_loaded.value = true
   }
 
   if (override) {
+    console.log('overriding')
     media.value = result
   } else {
     // concat result to media
@@ -65,8 +69,6 @@ async function get_media(override) {
     else r[e['user_rating']].push(e)
     return r;
   }, {})
-
-  // console.log('grouped movies', media_grouped.value)
 
   // cleanup
   is_page_loading.value = false
@@ -118,7 +120,8 @@ onMounted(() => {
 </script>
 
 <template>
-
+<!--  <p style="position: fixed;left: 0;z-index: 1000;background-color: black">{{`is_page_loaded=${is_page_loaded}`}}</p>-->
+<!--  <p style="position: fixed;left: 0;top: 100px;z-index: 1000;background-color: black">{{`is_page_loading=${is_page_loading}`}}</p>-->
   <div class="filter_wrapper">
     <filter-container @filter="handle_filter" :media_type="media_type"></filter-container>
   </div>
