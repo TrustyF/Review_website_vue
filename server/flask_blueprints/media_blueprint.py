@@ -31,6 +31,8 @@ def get():
     genres = data.get('genres')
     themes = data.get('themes')
     tags = data.get('tags')
+    ratings = data.get('ratings')
+    public_ratings = data.get('public_ratings')
 
     # setup query
     query = (
@@ -40,15 +42,21 @@ def get():
 
     # apply filters
     if genres:
-        query = query.join(Media.genres).filter(Genre.id.in_(genres))
+        query = (query.join(Media.genres).filter(Genre.id.in_(genres))
+                 .group_by(Media.id).having(func.count(Media.id) == len(genres)))
     if themes:
-        query = query.join(Media.themes).filter(Theme.id.in_(themes))
+        query = (query.join(Media.themes).filter(Theme.id.in_(themes))
+                 .group_by(Media.id).having(func.count(Media.id) == len(themes)))
     if tags:
-        test = [media_tag_association.c.tag_id == t for t in tags]
-        query = (query.outerjoin(media_tag_association, Media.id == media_tag_association.c.media_id)
-                 .filter(and_(*test)))
+        query = (query.join(Media.tags).filter(Tag.id.in_(tags))
+                 .group_by(Media.id).having(func.count(Media.id) == len(tags)))
 
-        print(len(query.all()))
+    if ratings:
+        query = query.filter(Media.user_rating.in_(ratings))
+    if public_ratings:
+        query = query.filter(Media.public_rating.in_(public_ratings))
+
+    print(len(query.all()))
 
     # order result
     match order:
