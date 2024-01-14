@@ -8,6 +8,7 @@ from flask import Blueprint, request, Response, jsonify, send_file
 from sqlalchemy import not_, and_, or_
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.sql.expression import func
+from datetime import datetime
 
 from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY
 from data_mapper.media_mapper import map_media
@@ -33,6 +34,8 @@ def get():
     tags = data.get('tags')
     ratings = data.get('ratings')
     public_ratings = data.get('public_ratings')
+    release_dates = data.get('release_dates')
+    runtimes = data.get('runtimes')
 
     # setup query
     query = (
@@ -52,9 +55,16 @@ def get():
                  .group_by(Media.id).having(func.count(Media.id) == len(tags)))
 
     if ratings:
-        query = query.filter(Media.user_rating.in_(ratings))
+        query = query.filter(Media.user_rating >= ratings[0],
+                             Media.user_rating <= ratings[1])
     if public_ratings:
-        query = query.filter(Media.public_rating.in_(public_ratings))
+        query = query.filter(Media.public_rating >= public_ratings[0],
+                             Media.public_rating <= public_ratings[1])
+    if release_dates:
+        query = query.filter(Media.release_date >= datetime(day=1, month=1, year=int(release_dates[0])),
+                             Media.release_date <= datetime(day=1, month=1, year=int(release_dates[1])))
+    if runtimes:
+        query = query.filter(Media.runtime >= int(runtimes[0]), Media.runtime <= int(runtimes[1]))
 
     print(len(query.all()))
 
