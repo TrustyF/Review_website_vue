@@ -2,13 +2,20 @@
 import {inject, onMounted, watch, provide, ref, computed} from "vue";
 import blue_star from '/src/assets/ui/blue_star.png'
 import FilterContainer from "@/components_V2/media_filters/filterContainer.vue";
+import MovieContainer from "@/components_V2/media_container/movie_container/MovieContainer.vue";
+import MovieContainerMobile from "@/components_V2/media_container/movie_container/MovieContainerMobile.vue";
 
-let props = defineProps(["media_type", "media_container", "media_scale", "media_size"]);
+let props = defineProps(["media_type", "media_scales", "media_sizes"]);
 
 const curr_api = inject("curr_api");
 const session_seed = inject("session_seed");
+const is_mobile = inject("is_mobile");
 
-const element_width = computed(() => String(props['media_size'][0] * props['media_scale']) + 'px')
+let media_scale = computed(() => is_mobile.value ? props['media_scales'][1] : props['media_scales'][0])
+let media_size = computed(() => is_mobile.value ? props['media_sizes'][1] : props['media_sizes'][0])
+let media_container = computed(() => is_mobile.value ? MovieContainerMobile : MovieContainer)
+
+const element_width = computed(() => String(media_size.value[0] * media_scale.value) + 'px')
 
 let media = ref([])
 let media_grouped = ref([])
@@ -18,10 +25,12 @@ let media_page = ref(0)
 let media_order = ref(undefined)
 let media_filters = ref({})
 
+
 let feed_container = ref()
 
 let is_page_loaded = ref(false)
 let is_page_loading = ref(true)
+
 
 async function get_media(override) {
 
@@ -122,8 +131,9 @@ onMounted(() => {
 </script>
 
 <template>
-<!--  <p style="position: fixed;left: 0;z-index: 1000;background-color: black">{{`is_page_loaded=${is_page_loaded}`}}</p>-->
-<!--  <p style="position: fixed;left: 0;top: 100px;z-index: 1000;background-color: black">{{`is_page_loading=${is_page_loading}`}}</p>-->
+  <!--  <p style="position: fixed;left: 0;z-index: 1000;background-color: black">{{`is_page_loaded=${is_page_loaded}`}}</p>-->
+  <!--  <p style="position: fixed;left: 0;top: 100px;z-index: 1000;background-color: black">{{`is_page_loading=${is_page_loading}`}}</p>-->
+
   <div class="filter_wrapper">
     <filter-container @filter="handle_filter" :media_type="media_type"></filter-container>
   </div>
@@ -154,7 +164,6 @@ onMounted(() => {
 
 .media_container_wrapper {
   gap: 20px;
-
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(v-bind(element_width), 1fr));
 }
@@ -180,6 +189,30 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 3px;
+}
+
+@media only screen and (max-width: 500px) {
+  .media_container_wrapper {
+    gap: 10px;
+    justify-items: center;
+    display: flex;
+    flex-flow: column nowrap;
+  }
+
+  .rating_separator {
+    /*outline: 1px solid red;*/
+    width: fit-content;
+    padding: 7px;
+    margin: 35px 0 5px 0;
+    background-color: #2d2d41;
+    border-radius: 8px;
+    position: sticky;
+    top: 10px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
 }
 
 </style>

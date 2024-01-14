@@ -20,27 +20,49 @@ let is_loading_more_media = ref(false)
 let is_all_media_loaded = ref(false)
 let is_mobile = ref(false)
 
-async function get_media() {
+async function get_media(override) {
 
   const url = new URL(`${curr_api}/media/get`)
+  const params = {
+    'limit': media_limit.value,
+    'page': media_page.value,
+    'order': media_order.value,
+    'session_seed': session_seed,
+    'type': props['media_type'],
+    'genres': media_filters.value['genres'],
+    'themes': media_filters.value['themes'],
+    'tags': media_filters.value['tags'],
+    'ratings': media_filters.value['ratings'],
+    'public_ratings': media_filters.value['public_ratings'],
+    'release_dates': media_filters.value['release_dates'],
+    'runtimes': media_filters.value['runtimes'],
+  }
+  console.log('fetching')
 
-  url.searchParams.set('limit', String(media_limit.value))
-  url.searchParams.set('page', String(media_page.value))
-  url.searchParams.set('order', media_order.value)
-  url.searchParams.set('session_seed', String(session_seed))
+  const result = await fetch(url,
+      {
+        method: 'POST',
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(params)
+      })
+      .then(response => response.json())
 
-  url.searchParams.set('type', props['media_type'])
-
-  const result = await fetch(url).then(response => response.json())
-
-  // skip if no data returned
+  // mark page loaded if no data returned
   if (result.length < 1) {
-    return
+    console.log('page finished loading')
+    is_page_loading.value = false
+    is_page_loaded.value = true
   }
 
-  // concat result to media
-  result.forEach(entry => media.value.push(entry))
-  // group media
+  if (override) {
+    console.log('overriding')
+    media.value = result
+  } else {
+    // concat result to media
+    result.forEach(entry => media.value.push(entry))
+  }
+
+  // group media by rating
   media_grouped.value = media.value.reduce((r, e, index) => {
     if (!r[e['user_rating']]) r[e['user_rating']] = [e]
     else r[e['user_rating']].push(e)
@@ -48,8 +70,8 @@ async function get_media() {
   }, {})
 
   // cleanup
-  is_loading_more_media.value = false
-  scroll_media_loader()
+  is_page_loading.value = false
+  handleInfiniteScroll()
 
 }
 

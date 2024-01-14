@@ -69,7 +69,7 @@ function toggle_checkbox(id) {
   flex-flow: column nowrap;
   gap: 5px;
   /*outline: 1px solid red;*/
-  max-height: 100%;
+  max-height: 400px;
 }
 
 .filter_list {
