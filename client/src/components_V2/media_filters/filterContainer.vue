@@ -65,10 +65,10 @@ onMounted(() => {
   display: flex;
   flex-flow: column wrap;
   align-content: flex-start;
+  align-items: flex-start;
+  justify-content: center;
   outline: 1px solid orange;
   padding: 10px;
-  /*width: 500px;*/
-  height: 500px;
   gap: 20px;
   background-color: black;
 

@@ -48,7 +48,7 @@ function convert_seconds_to_time(f_seconds) {
         <label v-else class="label" for="range_min">{{ min_range }}</label>
 
         <input v-model="min_range" class="slider" type="range" id="range_min"
-               :min="min_max[0]" :max="min_max[1]" step="1" @change="emit_ranges">
+               :min="min_max[0]" :max="min_max[1]" :step="time ? 15 : 1" @change="emit_ranges">
       </div>
       <div class="range_box">
 
@@ -56,7 +56,7 @@ function convert_seconds_to_time(f_seconds) {
         <label v-else class="label" for="range_max">{{ max_range }}</label>
 
         <input v-model="max_range" class="slider" type="range" id="range_max"
-               :min="min_max[0]" :max="min_max[1]" step="1" @change="emit_ranges">
+               :min="min_max[0]" :max="min_max[1]" :step="time ? 15 : 1" @change="emit_ranges">
       </div>
 
     </div>
@@ -97,6 +97,7 @@ function convert_seconds_to_time(f_seconds) {
 .label {
   text-align: center;
   width: 3em;
+  font-size: 0.8em;
 }
 
 .slider {

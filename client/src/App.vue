@@ -13,10 +13,22 @@ import TooltipBadge from "@/components_V2/tooltip/tooltipBadge.vue";
 const selected_media = ref(undefined)
 const edit_media = ref(undefined)
 const edit_mode = ref(true)
+let is_mobile = ref(false)
 
 provide('selected_media', selected_media)
 provide('edit_media', edit_media)
 provide('edit_mode', edit_mode)
+provide('is_mobile', is_mobile)
+
+function check_mobile() {
+  is_mobile.value = document.body.clientWidth < 500;
+  console.log('is mobile',is_mobile.value)
+}
+
+onMounted(()=>{
+  check_mobile()
+  addEventListener("resize", () => check_mobile())
+})
 
 </script>
 <template>
