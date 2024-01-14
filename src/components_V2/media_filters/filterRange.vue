@@ -2,52 +2,61 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import Badge from "@/components_V2/media_container/movie_container/badge.vue";
 
-let props = defineProps(["data", "title"]);
-let emits = defineEmits(["id"]);
+let props = defineProps(["data", "title", "time"]);
+let emits = defineEmits(["values"]);
 const curr_api = inject("curr_api");
 
 let checked_ids = []
+let min_max = computed(() => [props['data'][0], props['data'][1]])
+let min_range = ref(props['data'][0])
+let max_range = ref(props['data'][1])
 
-function clear_checkboxes() {
-  let checkboxes = document.getElementsByClassName('checkbox')
-  Array.from(checkboxes).forEach((elem) => {
-    if (elem.id.includes(props['title'])) {
-      elem.checked = false
-    }
-  })
-  checked_ids = []
-  emits('id', checked_ids)
-
+function clear_ranges() {
+  min_range.value = props['data'][0]
+  max_range.value = props['data'][1]
+  emit_ranges()
 }
 
-function toggle_checkbox(id) {
-  let checkbox = document.getElementById(`checkbox${id}${props['title']}`)
-
-  if (checkbox.checked) {
-    checkbox.checked = false
-    let index = checked_ids.indexOf(id)
-    checked_ids.splice(index,1)
-  } else {
-    checkbox.checked = true
-    checked_ids.push(id)
-  }
-  emits('id', checked_ids)
-
+function emit_ranges() {
+  emits('values', [min_range.value, max_range.value])
 }
 
+function convert_seconds_to_time(f_seconds) {
+  let minutes = f_seconds % 60
+  let hours = (f_seconds - minutes) / 60
+
+  if (hours < 1) return minutes + ' min'
+  return hours + 'h ' + minutes;
+}
 </script>
 
 <template>
   <div class="filter_wrapper">
-    <h1>{{ title }}</h1>
-    <button @click="clear_checkboxes">Clear</button>
+
+
+    <div class="title">
+      <h1>{{ title }}</h1>
+      <img src="/src/assets/ui/rewind.png" style="filter: brightness(1000%)" class="clear" alt="clear"
+           @click="clear_ranges">
+    </div>
+    <div style="border-bottom: 1px solid white;margin-top: 2px"></div>
 
     <div class="filter_list">
+      <div class="range_box">
 
-      <div class="filter_box" v-for="range in data" :key="range">
-        <input class="range" :id="`range${range}${title}`" type="range"
-        min="ra">
+        <label v-if="time" class="label" for="range_min">{{ convert_seconds_to_time(min_range) }}</label>
+        <label v-else class="label" for="range_min">{{ min_range }}</label>
 
+        <input v-model="min_range" class="slider" type="range" id="range_min"
+               :min="min_max[0]" :max="min_max[1]" step="1" @change="emit_ranges">
+      </div>
+      <div class="range_box">
+
+        <label v-if="time" class="label" for="range_max">{{ convert_seconds_to_time(max_range) }}</label>
+        <label v-else class="label" for="range_max">{{ max_range }}</label>
+
+        <input v-model="max_range" class="slider" type="range" id="range_max"
+               :min="min_max[0]" :max="min_max[1]" step="1" @change="emit_ranges">
       </div>
 
     </div>
@@ -61,34 +70,42 @@ function toggle_checkbox(id) {
   flex-flow: column;
   gap: 5px;
   /*outline: 1px solid red;*/
-  padding: 10px;
-  border: 1px solid #969696;
+  max-height: 100%;
 }
 
 .filter_list {
-  overflow-y: scroll;
   display: flex;
   flex-flow: column;
 }
 
-.filter_box {
-  position: relative;
+.title {
   display: flex;
-  flex-flow: row;
-
+  flex-flow: row nowrap;
+  justify-content: space-between;
   align-items: center;
   gap: 5px;
-  padding: 5px 0 5px 0;
 }
 
-.filter_image {
-  height: 30px;
+.range_box {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
-.checkbox_click_box {
-  /*outline: 1px solid greenyellow;*/
-  position: absolute;
-  width: 100%;
-  height: 100%;
+.label {
+  text-align: center;
+  width: 3em;
+}
+
+.slider {
+  /*width: 100%;*/
+}
+
+.clear {
+  height: 1em;
+  filter: invert();
+  cursor: pointer;
 }
 </style>
