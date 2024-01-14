@@ -26,7 +26,7 @@ function toggle_checkbox(id) {
   if (checkbox.checked) {
     checkbox.checked = false
     let index = checked_ids.indexOf(id)
-    checked_ids.splice(index,1)
+    checked_ids.splice(index, 1)
   } else {
     checkbox.checked = true
     checked_ids.push(id)
@@ -39,8 +39,12 @@ function toggle_checkbox(id) {
 
 <template>
   <div class="filter_wrapper">
-    <h1>{{ title }}</h1>
-    <button @click="clear_checkboxes">Clear</button>
+
+    <div class="title">
+      <h1>{{ title }}</h1>
+      <img src="/src/assets/ui/rewind.png" style="filter: brightness(1000%)" class="clear" alt="clear" @click="clear_checkboxes">
+    </div>
+    <div style="border-bottom: 1px solid white;margin-top: 2px"></div>
 
     <div class="filter_list">
 
@@ -49,7 +53,7 @@ function toggle_checkbox(id) {
 
         <badge v-if="filter['image_path']!==undefined" :data="filter" :min_size="170"
                :show_title="true"></badge>
-        <label v-else>{{ filter['name'] }}</label>
+        <label class="label" v-else>{{ filter['name'] }}</label>
         <div class="checkbox_click_box" @click="toggle_checkbox(filter['id'])"></div>
 
       </div>
@@ -62,31 +66,46 @@ function toggle_checkbox(id) {
 .filter_wrapper {
   position: relative;
   display: flex;
-  flex-flow: column;
+  flex-flow: column nowrap;
   gap: 5px;
   /*outline: 1px solid red;*/
-  padding: 10px;
-  border: 1px solid #969696;
+  max-height: 100%;
 }
 
 .filter_list {
   overflow-y: scroll;
+  overflow-x: hidden;
   display: flex;
-  flex-flow: column;
+  flex-flow: column nowrap;
 }
 
 .filter_box {
   position: relative;
   display: flex;
   flex-flow: row;
-
   align-items: center;
   gap: 5px;
-  padding: 5px 0 5px 0;
+  padding: 5px;
 }
 
-.filter_image {
-  height: 30px;
+.title{
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+}
+.clear {
+  height: 1em;
+  filter: invert();
+  cursor: pointer;
+}
+.label {
+  font-size: 0.8em;
+  max-width: 10em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .checkbox_click_box {

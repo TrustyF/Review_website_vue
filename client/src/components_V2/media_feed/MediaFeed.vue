@@ -13,7 +13,7 @@ const element_width = computed(() => String(props['media_size'][0] * props['medi
 let media = ref([])
 let media_grouped = ref([])
 
-let media_limit = ref(5)
+let media_limit = ref(20)
 let media_page = ref(0)
 let media_order = ref(undefined)
 let media_filters = ref({})
@@ -37,6 +37,8 @@ async function get_media(override) {
     'tags': media_filters.value['tags'],
     'ratings': media_filters.value['ratings'],
     'public_ratings': media_filters.value['public_ratings'],
+    'release_dates': media_filters.value['release_dates'],
+    'runtimes': media_filters.value['runtimes'],
   }
   console.log('fetching')
 
