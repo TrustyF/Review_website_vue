@@ -9,6 +9,7 @@ from sqlalchemy import not_, and_, or_
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.sql.expression import func
 from datetime import datetime
+from math import ceil, floor
 
 from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY
 from data_mapper.media_mapper import map_media
@@ -37,6 +38,8 @@ def get():
     release_dates = data.get('release_dates')
     runtimes = data.get('runtimes')
 
+    search = data.get('search')
+
     # setup query
     query = (
         db.session.query(Media)
@@ -44,6 +47,22 @@ def get():
     )
 
     # apply filters
+    if search:
+        if len(query.filter(Media.name.ilike(f'{search}%')).all()) > 0:
+            query = query.filter(Media.name.ilike(f'{search}%'))
+
+        elif len(query.filter(Media.name.ilike(f'%{search}%')).all()) > 0:
+            query = query.filter(Media.name.ilike(f'%{search}%'))
+
+        elif len(query.join(Media.genres).filter(Genre.name.ilike(f'%{search}%')).all()) > 0:
+            query = query.join(Media.genres).filter(Genre.name.ilike(f'%{search}%'))
+
+        elif len(query.join(Media.tags).filter(Tag.name.ilike(f'%{search}%')).all()) > 0:
+            query = query.join(Media.tags).filter(Tag.name.ilike(f'%{search}%'))
+
+        else:
+            query = query.filter(Media.overview.ilike(f'%{search}%'))
+
     if genres:
         query = (query.join(Media.genres).filter(Genre.id.in_(genres))
                  .group_by(Media.id).having(func.count(Media.id) == len(genres)))
@@ -58,8 +77,14 @@ def get():
         query = query.filter(Media.user_rating >= ratings[0],
                              Media.user_rating <= ratings[1])
     if public_ratings:
-        query = query.filter(Media.public_rating >= public_ratings[0],
-                             Media.public_rating <= public_ratings[1])
+        query = query.filter(
+            or_(
+                and_(Media.public_rating >= public_ratings[0],
+                     Media.public_rating <= public_ratings[1]),
+                Media.public_rating.is_(None)
+            )
+        )
+
     if release_dates:
         query = query.filter(Media.release_date >= datetime(day=1, month=1, year=int(release_dates[0])),
                              Media.release_date <= datetime(day=1, month=1, year=int(release_dates[1])))
@@ -152,10 +177,29 @@ def get_filters():
             .order_by(Tag.image_path)
             )
 
+    ratings = db.session.query(func.max(Media.user_rating).label('max'),
+                               func.min(Media.user_rating).label('min')).filter(Media.media_type == media_type).one()
+
+    public_ratings = db.session.query(func.max(Media.public_rating).label('max'),
+                                      func.min(Media.public_rating).label('min')).filter(
+        Media.media_type == media_type, Media.public_rating != 0).one()
+
+    release_dates = db.session.query(func.max(Media.release_date).label('max'),
+                                     func.min(Media.release_date).label('min')).filter(
+        Media.media_type == media_type).one()
+
+    runtimes = db.session.query(func.max(Media.runtime).label('max'),
+                                func.min(Media.runtime).label('min')).filter(
+        Media.media_type == media_type).one_or_none()
+
     result = {
         'genres': genres.all(),
         'themes': themes.all(),
         'tags': tags.all(),
+        'user_ratings': [ratings.min, ratings.max],
+        'public_ratings': [floor(public_ratings.min), ceil(public_ratings.max)],
+        'release_dates': [release_dates.min.year, release_dates.max.year],
+        'runtimes': [0, ceil(runtimes.max / 15) * 15] if runtimes.max else None,
     }
 
     return result, 200

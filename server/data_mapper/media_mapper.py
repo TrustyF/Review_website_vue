@@ -41,9 +41,13 @@ def map_media(medias, media_type):
 
         mapped['release_date'] = entry.release_date.isoformat() if entry.release_date else None
 
-        mapped['scaled_public_rating'] = remap_value(entry.public_rating, pub_rating_min,
+        # remap public rating to match my rating better, unless the min max range is too small, default to unmapped
+        mapped['scaled_public_rating'] = remap_value(entry.public_rating,
+                                                     pub_rating_min,
                                                      pub_rating_max,
-                                                     user_rating_min, user_rating_max) if entry.public_rating else None
+                                                     user_rating_min,
+                                                     user_rating_max) \
+            if (pub_rating_min <= 5 if pub_rating_min is not None else False) else entry.public_rating
 
         mapped['genres'] = jsonify(entry.genres).json if entry.genres else None
         mapped['themes'] = jsonify(entry.themes).json if entry.themes else None
