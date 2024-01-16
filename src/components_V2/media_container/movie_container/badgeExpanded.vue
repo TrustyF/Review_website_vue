@@ -30,7 +30,7 @@ function add_line_break_v2(content){
       <h1 class="description">{{ add_line_break_v2(data['overview']) }}</h1>
     </div>
 
-    <div class="tag_tooltip_arrow"></div>
+<!--    <div class="tag_tooltip_arrow"></div>-->
 
   </div>
   <div v-else class="tag_tooltip">no data</div>

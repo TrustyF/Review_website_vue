@@ -4,6 +4,7 @@ import logo from '@/assets/ui/logo.png'
 import {inject, onMounted, ref} from 'vue'
 
 let editMode = inject('editMode')
+let is_visible_navbar = inject('is_visible_navbar')
 let prev_scroll = ref(0)
 let nav
 
@@ -11,14 +12,17 @@ function get_scroll_direction(event) {
 
   if (window.scrollY === 0){
     nav.classList.remove('hidden')
+    is_visible_navbar.value = false
   }
   else if ((prev_scroll.value - 400) > (window.scrollY)) {
     nav.classList.remove('hidden')
     prev_scroll.value = window.scrollY;
+    is_visible_navbar.value = false
 
   } else if ((prev_scroll.value) < window.scrollY) {
     nav.classList.add('hidden')
     prev_scroll.value = window.scrollY;
+    is_visible_navbar.value = true
   }
 }
 
@@ -53,7 +57,7 @@ onMounted(() => {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 50;
+  z-index: 500;
 
   font-size: 1.2em;
 
