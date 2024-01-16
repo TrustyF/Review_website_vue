@@ -52,6 +52,6 @@ function throttle_search(text) {
   border: 2px solid grey;
   color: white;
   border-radius: 10px;
-  /*padding: 5px;*/
+  padding: 0 0 0 10px;
 }
 </style>
