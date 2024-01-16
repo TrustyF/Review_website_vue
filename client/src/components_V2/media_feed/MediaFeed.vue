@@ -4,6 +4,7 @@ import blue_star from '/src/assets/ui/blue_star.png'
 import FilterContainer from "@/components_V2/media_filters/filterContainer.vue";
 import MovieContainer from "@/components_V2/media_container/movie_container/MovieContainer.vue";
 import MovieContainerMobile from "@/components_V2/media_container/movie_container/MovieContainerMobile.vue";
+import FilterSearch from "@/components_V2/media_filters/filterSearch.vue";
 
 let props = defineProps(["media_type", "media_scales", "media_sizes"]);
 
@@ -25,8 +26,8 @@ let media_page = ref(0)
 let media_order = ref(undefined)
 let media_filters = ref({})
 
-
 let feed_container = ref()
+let filter_container = ref()
 
 let is_page_loaded = ref(false)
 let is_page_loading = ref(true)
@@ -48,6 +49,7 @@ async function get_media(override) {
     'public_ratings': media_filters.value['public_ratings'],
     'release_dates': media_filters.value['release_dates'],
     'runtimes': media_filters.value['runtimes'],
+    'search': media_filters.value['search'],
   }
   console.log('fetching')
 
@@ -123,6 +125,10 @@ function clean_load_media() {
   get_media(true)
 }
 
+function show_filters_box() {
+
+}
+
 onMounted(() => {
   get_media()
   addEventListener("scroll", () => handleInfiniteScroll())
@@ -134,11 +140,24 @@ onMounted(() => {
   <!--  <p style="position: fixed;left: 0;z-index: 1000;background-color: black">{{`is_page_loaded=${is_page_loaded}`}}</p>-->
   <!--  <p style="position: fixed;left: 0;top: 100px;z-index: 1000;background-color: black">{{`is_page_loading=${is_page_loading}`}}</p>-->
 
-  <div class="filter_wrapper">
-    <filter-container @filter="handle_filter" :media_type="media_type"></filter-container>
-  </div>
+  <div class="feed_container2" ref="feed_container">
 
-  <div ref="feed_container">
+    <div ref="filter_container" class="filters_top_container">
+
+      <div class="filters_box">
+        <img alt="filters" class="filter_button" src="src/assets/ui/filter_button.png">
+        <filter-search @filter="handle_filter(['search',$event])"></filter-search>
+      </div>
+
+      <div class="filter_wrapper">
+        <div class="overflow_filter">
+          <filter-container @filter="handle_filter" :media_type="media_type"></filter-container>
+        </div>
+        <div class="filter_wrapper_arrow"></div>
+      </div>
+
+    </div>
+
     <div class="rating_box" v-for="rating in Object.keys(media_grouped).reverse()" :key="rating">
 
       <div class="rating_separator">
@@ -161,25 +180,89 @@ onMounted(() => {
 </template>
 
 <style scoped>
-
+.feed_container2 {
+  margin-top: 50px;
+}
 .media_container_wrapper {
   gap: 20px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(v-bind(element_width), 1fr));
 }
 
+.filters_top_container {
+  position: sticky;
+  z-index: 10;
+  top: 10px;
+  /*width: 90%;*/
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+
+.filters_box {
+  position: absolute;
+  height: 40px;
+
+  display: flex;
+  flex-flow: row nowrap;
+
+  justify-content: center;
+  /*align-items: center;*/
+  align-content: flex-start;
+
+  gap: 10px;
+}
+
+.filter_button {
+  height: auto;
+  width: 20px;
+  background-color: #d7d7c5;
+  padding: 10px;
+  border-radius: 30%;
+  filter: invert();
+  box-shadow: 1px 1px 5px white;
+  cursor: pointer;
+  z-index: 10;
+  object-fit: cover;
+}
+
 .filter_wrapper {
-  position: relative;
+  position: absolute;
+
+  outline: 1px solid red;
+
+  background-color: #2c2c40;
+  padding: 20px;
+  margin-top: 80px;
+  border-radius: 20px;
+  filter: drop-shadow(0px 0px 5px black) drop-shadow(0px 0px 10px black);
+  max-height: 80vh;
+}
+
+.overflow_filter {
+  overflow-y: scroll;
+}
+
+.filter_wrapper_arrow {
+  content: "";
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  margin-left: -20px;
+  border-width: 20px;
+  border-style: solid;
+  border-color: transparent transparent #2c2c40 transparent;
 }
 
 .rating_box {
   position: relative;
+  margin: 0 0 80px 0;
 }
 
 .rating_separator {
   width: fit-content;
   padding: 10px;
-  margin: 50px 0 15px 0;
+  margin: 0 0 15px 0;
   background-color: #2d2d41;
   box-shadow: 0 0 5px #000000;
   border-radius: 8px;

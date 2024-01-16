@@ -6,8 +6,6 @@ import '@/assets/styles/globals.css'
 import '@/assets/styles/dark.css'
 import CreditsFooter from "@/components/General/CreditsFooter.vue";
 import {onMounted, provide, ref} from "vue";
-import MediaPane from "@/components/MediaContainer/Pane/MediaPane.vue";
-import EditPane from "@/components/MediaContainer/Pane/EditPane.vue";
 import TooltipBadge from "@/components_V2/tooltip/tooltipBadge.vue";
 
 const selected_media = ref(undefined)
@@ -45,7 +43,7 @@ onMounted(()=>{
 .main {
   /*outline: 1px solid red;*/
   max-width: 1000px;
-  margin: 75px auto 0 auto;
+  margin: 60px auto 0 auto;
   padding: 0 10px 0 10px;
 }
 

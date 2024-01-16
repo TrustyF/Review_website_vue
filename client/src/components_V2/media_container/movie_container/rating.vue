@@ -2,7 +2,7 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import gold_star from '@/assets/ui/gold_star.png'
 import blue_star from '@/assets/ui/blue_star.png'
-import RatingCircle from "@/components/MediaContainer/MediaHelperComponents/RatingCircle.vue";
+import RatingCircle from "@/components_V2/media_container/movie_container/RatingCircle.vue";
 
 let props = defineProps(["data", "max_size"]);
 const curr_api = inject("curr_api");
