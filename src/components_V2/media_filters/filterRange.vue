@@ -2,11 +2,10 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import Badge from "@/components_V2/media_container/movie_container/badge.vue";
 
-let props = defineProps(["data", "title", "time"]);
+let props = defineProps(["data", "title", "step", "time"]);
 let emits = defineEmits(["values"]);
 const curr_api = inject("curr_api");
 
-let checked_ids = []
 let min_max = computed(() => [props['data'][0], props['data'][1]])
 let min_range = ref(props['data'][0])
 let max_range = ref(props['data'][1])
@@ -31,7 +30,7 @@ function convert_seconds_to_time(f_seconds) {
 </script>
 
 <template>
-  <div class="filter_wrapper">
+  <div class="filter_wrapper" v-if="data !== undefined">
 
 
     <div class="title">
@@ -48,7 +47,7 @@ function convert_seconds_to_time(f_seconds) {
         <label v-else class="label" for="range_min">{{ min_range }}</label>
 
         <input v-model="min_range" class="slider" type="range" id="range_min"
-               :min="min_max[0]" :max="min_max[1]" :step="time ? 15 : 1" @change="emit_ranges">
+               :min="min_max[0]" :max="min_max[1]" :step="step" @change="emit_ranges">
       </div>
       <div class="range_box">
 
@@ -56,7 +55,7 @@ function convert_seconds_to_time(f_seconds) {
         <label v-else class="label" for="range_max">{{ max_range }}</label>
 
         <input v-model="max_range" class="slider" type="range" id="range_max"
-               :min="min_max[0]" :max="min_max[1]" :step="time ? 15 : 1" @change="emit_ranges">
+               :min="min_max[0]" :max="min_max[1]" :step="step" @change="emit_ranges">
       </div>
 
     </div>
@@ -69,7 +68,7 @@ function convert_seconds_to_time(f_seconds) {
   display: flex;
   flex-flow: column;
   gap: 5px;
-  /*outline: 1px solid red;*/
+
   max-height: 100%;
 }
 

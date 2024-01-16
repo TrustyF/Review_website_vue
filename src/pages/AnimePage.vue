@@ -6,8 +6,8 @@ import MediaFeed from "@/components_V2/media_feed/MediaFeed.vue";
 
 <template>
   <media-feed :media_type="'anime'"
-              :media_size="[[500,750],[500,750]]"
-              :media_scale="[0.35,0.2]"
+              :media_sizes="[[500,750],[500,750]]"
+              :media_scales="[0.35,0.2]"
   ></media-feed>
 
 </template>

@@ -38,7 +38,7 @@ function toggle_checkbox(id) {
 </script>
 
 <template>
-  <div class="filter_wrapper">
+  <div class="filter_wrapper" v-if="data !== undefined">
 
     <div class="title">
       <h1>{{ title }}</h1>
@@ -70,6 +70,11 @@ function toggle_checkbox(id) {
   gap: 5px;
   /*outline: 1px solid red;*/
   max-height: 400px;
+  /*border: 1px solid white;*/
+  padding: 20px;
+  background-color: #131215;
+  filter: drop-shadow(1px 1px 3px black);
+  border-radius: 10px;
 }
 
 .filter_list {

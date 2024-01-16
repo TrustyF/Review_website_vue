@@ -62,7 +62,6 @@ function add_line_break_v2(content){
 }
 
 .tag_tooltip:after {
-  /*outline: 1px solid red;*/
   content: "";
   height: 100%;
   padding: 0 calc(v-bind(text_size) * 15px) 0 0;

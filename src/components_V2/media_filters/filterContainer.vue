@@ -7,13 +7,13 @@ let props = defineProps(["media_type"]);
 let emits = defineEmits(["filter"]);
 const curr_api = inject("curr_api");
 
-let genres = ref()
-let themes = ref()
-let tags = ref()
-let ratings = [1, 9]
-let public_ratings = [1, 9]
-let release_date = [1900, 2024]
-let runtime = [0, 250]
+let genres = ref(null)
+let themes = ref(null)
+let tags = ref(null)
+let user_ratings = ref(null)
+let public_ratings = ref(null)
+let release_dates = ref(null)
+let runtimes = ref(null)
 
 async function fetch_filters() {
 
@@ -28,6 +28,10 @@ async function fetch_filters() {
   tags.value = result['tags']
   tags.value.sort((a, b) => a['tier'] > b['tier'])
 
+  user_ratings.value = result['user_ratings']
+  public_ratings.value = result['public_ratings']
+  release_dates.value = result['release_dates']
+  runtimes.value = result['runtimes']
 }
 
 function emit_filter(title, event) {
@@ -42,36 +46,64 @@ onMounted(() => {
 <template>
   <div class="filter_container_wrapper">
 
-    <filter-dropdown @id="emit_filter('tags',$event)" :data="tags" title="Tags"></filter-dropdown>
+    <div class="genres_box">
 
-    <filter-dropdown @id="emit_filter('genres',$event)" :data="genres" title="Genres"></filter-dropdown>
-    <filter-dropdown @id="emit_filter('themes',$event)" v-if="themes!==undefined && themes.length>0"
-                     :data="themes" title="Themes"></filter-dropdown>
+      <filter-dropdown v-if="tags !== null"
+                       @id="emit_filter('tags',$event)"
+                       :data="tags" title="Tags"></filter-dropdown>
+      <filter-dropdown v-if="genres !== null"
+                       @id="emit_filter('genres',$event)"
+                       :data="genres" title="Genres"></filter-dropdown>
+      <filter-dropdown v-if="themes!==null && themes.length>0"
+                       @id="emit_filter('themes',$event)"
+                       :data="themes" title="Themes"></filter-dropdown>
 
-    <filter-range @values="emit_filter('ratings',$event)" :data="ratings" title="Ratings"></filter-range>
-    <filter-range @values="emit_filter('public_ratings',$event)" :data="public_ratings"
-                  title="Public ratings"></filter-range>
+    </div>
 
-    <filter-range @values="emit_filter('release_dates',$event)" :data="release_date"
-                  title="Release date"></filter-range>
+    <div class="ranges_box">
+      <filter-range v-if="user_ratings !== null"
+                    @values="emit_filter('ratings',$event)"
+                    :data="user_ratings" title="My rating"></filter-range>
+      <filter-range v-if="public_ratings !== null"
+                    @values="emit_filter('public_ratings',$event)"
+                    :data="public_ratings"
+                    title="Public rating" :step="1"></filter-range>
+      <filter-range v-if="release_dates !== null"
+                    @values="emit_filter('release_dates',$event)"
+                    :data="release_dates"
+                    title="Release date"></filter-range>
+      <filter-range v-if="runtimes !== null"
+                    @values="emit_filter('runtimes',$event)"
+                    :data="runtimes"
+                    title="Runtime" :time="true" :step="15"></filter-range>
+    </div>
 
-    <filter-range @values="emit_filter('runtimes',$event)" :data="runtime"
-                  title="Runtime" :time="true"></filter-range>
   </div>
 </template>
 
 <style scoped>
 .filter_container_wrapper {
   display: flex;
-  flex-flow: column wrap;
-  align-content: flex-start;
+  flex-flow: row wrap;
   align-items: flex-start;
-  justify-content: center;
-  outline: 1px solid orange;
+  align-content: flex-start;
+  /*justify-content: center;*/
   padding: 10px;
   gap: 20px;
-  background-color: black;
+}
+.genres_box {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 20px;
 
-  z-index: 100;
+}
+.ranges_box {
+  display: flex;
+  flex-flow: column wrap;
+  gap: 20px;
+  padding: 20px;
+  background-color: #131215;
+  border-radius: 10px;
+  filter: drop-shadow(1px 1px 3px black);
 }
 </style>

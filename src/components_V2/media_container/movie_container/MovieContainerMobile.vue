@@ -2,7 +2,7 @@
 import {inject, onMounted, watch, ref, computed, provide} from "vue";
 import gold_star from '@/assets/ui/gold_star.png'
 import blue_star from '@/assets/ui/blue_star.png'
-import RatingCircle from "@/components/MediaContainer/MediaHelperComponents/RatingCircle.vue";
+import RatingCircle from "@/components_V2/media_container/movie_container/RatingCircle.vue";
 import BadgeTooltip from "@/components_V2/media_container/movie_container/badgeExpanded.vue";
 import Badge from "@/components_V2/media_container/movie_container/badge.vue";
 
@@ -101,7 +101,7 @@ function convert_seconds_to_time(f_seconds) {
   display: flex;
   flex-flow: column nowrap;
   align-items: flex-start;
-  margin-bottom: auto;
+  /*margin-bottom: auto;*/
 }
 
 .poster {
