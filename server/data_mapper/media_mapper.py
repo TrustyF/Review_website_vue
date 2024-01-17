@@ -9,6 +9,9 @@ from flask import jsonify
 
 
 def remap_value(value, old_min, old_max, new_min, new_max):
+    if None in (value, old_min, old_max, new_min, new_max):
+        return 0
+
     if value < old_min:
         return value
     if value > old_max:
@@ -20,18 +23,15 @@ def remap_value(value, old_min, old_max, new_min, new_max):
     return new_value
 
 
-def map_media(medias, media_type):
+def map_media(medias):
     mapped_medias = []
 
     pub_rating_min = (db.session.query(func.min(Media.public_rating))
-                      .where(Media.media_type == media_type)
                       .where(Media.public_rating > 0)
                       .scalar())
     pub_rating_max = (db.session.query(func.max(Media.public_rating))
-                      .where(Media.media_type == media_type)
                       .scalar())
     user_rating_min = (db.session.query(func.min(Media.user_rating))
-                       .where(Media.media_type == media_type)
                        .scalar())
     user_rating_max = 10
 

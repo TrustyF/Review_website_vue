@@ -54,6 +54,7 @@ with app.app_context():
     # mov = db.session.query(Tag).first()
     # print(mov.media)
 
-    from flask_blueprints import media_blueprint
+    from flask_blueprints import media_blueprint, tag_blueprint
 
     app.register_blueprint(media_blueprint.bp, url_prefix='/media')
+    app.register_blueprint(tag_blueprint.bp, url_prefix='/tag')

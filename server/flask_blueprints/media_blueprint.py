@@ -41,17 +41,14 @@ def get():
     search = data.get('search')
 
     # setup query
-    query = (
-        db.session.query(Media)
-        .filter_by(media_type=media_type)
-    )
+    query = db.session.query(Media)
+
+    if media_type:
+        query = query.filter_by(media_type=media_type)
 
     # apply filters
     if search:
-        if len(query.filter(Media.name.ilike(f'{search}%')).all()) > 0:
-            query = query.filter(Media.name.ilike(f'{search}%'))
-
-        elif len(query.filter(Media.name.ilike(f'%{search}%')).all()) > 0:
+        if len(query.filter(Media.name.ilike(f'%{search}%')).all()) > 0:
             query = query.filter(Media.name.ilike(f'%{search}%'))
 
         elif len(query.join(Media.genres).filter(Genre.name.ilike(f'%{search}%')).all()) > 0:
@@ -112,9 +109,25 @@ def get():
 
     # get query and map
     media = query.all()
-    mapped_media = map_media(media, media_type=media_type)
+    mapped_media = map_media(media)
 
     return mapped_media, 200
+
+
+@bp.route("/update", methods=['POST'])
+def update():
+    # parameters
+    data = request.get_json()
+    print('update', data)
+
+    media_id = data.get('id')
+    del data['id']
+
+    db.session.query(Media).filter_by(id=media_id).update(data)
+    db.session.commit()
+    db.session.close()
+
+    return [], 200
 
 
 @bp.route("/get_image")
@@ -165,41 +178,54 @@ def get_filters():
 
     print(f'getting filters for {media_type=}')
 
-    genres = (db.session.query(Genre).join(Media.genres)
-              .filter(Media.media_type == media_type))
+    genres = db.session.query(Genre).join(Media.genres)
 
-    themes = (db.session.query(Theme).join(Media.themes)
-              .filter(Media.media_type == media_type))
+    themes = db.session.query(Theme).join(Media.themes)
 
     tags = (db.session.query(Tag)
             .join(Media.tags)
-            .filter(Media.media_type == media_type)
-            .order_by(Tag.image_path)
-            )
+            .order_by(Tag.image_path))
 
-    ratings = db.session.query(func.max(Media.user_rating).label('max'),
-                               func.min(Media.user_rating).label('min')).filter(Media.media_type == media_type).one()
+    ratings = (db.session.query(func.max(Media.user_rating).label('max'),
+                                func.min(Media.user_rating).label('min'))
+               .filter(Media.user_rating.is_not(None)))
 
     public_ratings = db.session.query(func.max(Media.public_rating).label('max'),
                                       func.min(Media.public_rating).label('min')).filter(
-        Media.media_type == media_type, Media.public_rating != 0).one()
+        Media.public_rating != 0, Media.public_rating.is_not(None))
 
-    release_dates = db.session.query(func.max(Media.release_date).label('max'),
-                                     func.min(Media.release_date).label('min')).filter(
-        Media.media_type == media_type).one()
+    release_dates = (db.session.query(func.max(Media.release_date).label('max'),
+                                      func.min(Media.release_date).label('min'))
+                     .filter(Media.release_date.is_not(None)))
 
-    runtimes = db.session.query(func.max(Media.runtime).label('max'),
-                                func.min(Media.runtime).label('min')).filter(
-        Media.media_type == media_type).one_or_none()
+    runtimes = (db.session.query(func.max(Media.runtime).label('max'),
+                                 func.min(Media.runtime).label('min'))
+                .filter(Media.runtime.is_not(None)))
+
+    if media_type:
+        genres = genres.filter(Media.media_type == media_type)
+        themes = themes.filter(Media.media_type == media_type)
+        tags = tags.filter(Media.media_type == media_type)
+        ratings = ratings.filter(Media.media_type == media_type)
+        public_ratings = public_ratings.filter(Media.media_type == media_type)
+        release_dates = release_dates.filter(Media.media_type == media_type)
+        runtimes = runtimes.filter(Media.media_type == media_type)
+
+    ratings = ratings.one()
+    public_ratings = public_ratings.one()
+    release_dates = release_dates.one()
+    runtimes = runtimes.one()
+
+    # print(ratings, public_ratings, release_dates, runtimes)
 
     result = {
         'genres': genres.all(),
         'themes': themes.all(),
         'tags': tags.all(),
-        'user_ratings': [ratings.min, ratings.max],
-        'public_ratings': [floor(public_ratings.min), ceil(public_ratings.max)],
+        'user_ratings': [ratings.min or 0, ratings.max or 0],
+        'public_ratings': [floor(public_ratings.min or 0), ceil(public_ratings.max or 0)],
         'release_dates': [release_dates.min.year, release_dates.max.year],
-        'runtimes': [0, ceil(runtimes.max / 15) * 15] if runtimes.max else None,
+        'runtimes': [0, ceil(runtimes.max / 15) * 15] if runtimes.max else [0, 0],
     }
 
     return result, 200
