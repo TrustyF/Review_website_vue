@@ -1,7 +1,7 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed, provide} from "vue";
-import Rating from "@/components_V2/media_container/movie_container/rating.vue";
-import Badge from "@/components_V2/media_container/movie_container/badge.vue";
+import Rating from "@/components/media_container/movie_container/sub_components/rating.vue";
+import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
 
 let props = defineProps(["data", "container_scale", "container_size"]);
 let emits = defineEmits(["media_data"]);
@@ -26,17 +26,17 @@ function convert_seconds_to_time(f_seconds) {
 <template>
   <div class="movie_container_wrapper" @click="emits('media_data',data)">
 
-    <img class="poster" alt="poster" v-lazy="`${curr_api}/media/get_image?id=${data['id']}`"/>
+    <img v-if="data['id']!==undefined" class="poster" alt="poster" v-lazy="`${curr_api}/media/get_image?id=${data['id']}`"/>
     <div class="poster_gradient"></div>
 
-    <Rating class="ratings" :data="data" :max_size="min_size"></Rating>
+    <Rating v-if="data!==undefined" class="ratings" :data="data" :max_size="min_size"></Rating>
 
     <div class="footer_wrapper">
 
-      <p class="title" :title="data['name']">{{ data['name'] }}</p>
+      <p v-if="data['name']!==undefined" class="title" :title="data['name']">{{ data['name'] }}</p>
 
       <div class="secondary_info">
-        <h2 class="date">{{ data['release_date'].substring(0, 4) }}</h2>
+        <h2 class="date" v-if="data['release_date']!==undefined"> {{ data['release_date'].substring(0, 4) }}</h2>
         <h2 class="date" v-if="data['runtime']>0">•</h2>
         <h2 class="date" v-if="data['runtime']>0">{{ convert_seconds_to_time(data['runtime']) }}</h2>
         <h2 class="date" v-if="data['seasons']>0">•</h2>
@@ -58,6 +58,7 @@ function convert_seconds_to_time(f_seconds) {
 <style scoped>
 .movie_container_wrapper {
   /*outline: 1px solid red;*/
+  cursor: pointer;
   position: relative;
   display: flex;
   flex-flow: column nowrap;

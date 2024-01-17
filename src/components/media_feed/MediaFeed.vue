@@ -1,9 +1,9 @@
 <script setup>
 import {inject, onMounted, watch, provide, ref, computed} from "vue";
 import blue_star from '/src/assets/ui/blue_star.png'
-import MovieContainer from "@/components_V2/media_container/movie_container/MovieContainer.vue";
-import MovieContainerMobile from "@/components_V2/media_container/movie_container/MovieContainerMobile.vue";
-import MediaFeedFilterBar from "@/components_V2/media_feed/MediaFeedFilterBar.vue";
+import MovieContainer from "@/components/media_container/movie_container/MovieContainer.vue";
+import MovieContainerMobile from "@/components/media_container/movie_container/MovieContainerMobile.vue";
+import MediaFeedFilterBar from "@/components/media_feed/MediaFeedFilterBar.vue";
 
 let props = defineProps(["media_type", "media_scales", "media_sizes"]);
 
@@ -49,7 +49,6 @@ async function get_media(override) {
     'runtimes': media_filters.value['runtimes'],
     'search': media_filters.value['search'],
   }
-  console.log('fetching')
 
   const result = await fetch(url,
       {
@@ -61,13 +60,11 @@ async function get_media(override) {
 
   // mark page loaded if no data returned
   if (result.length < 1) {
-    console.log('page finished loading')
     is_page_loading.value = false
     is_page_loaded.value = true
   }
 
   if (override) {
-    console.log('overriding')
     media.value = result
   } else {
     // concat result to media
@@ -95,7 +92,6 @@ function handle_filter(event) {
 
 const handleInfiniteScroll = () => {
   if (is_page_loading.value) {
-    console.log('page busy loading, skipping')
     return;
   }
   let container = feed_container.value
@@ -111,13 +107,12 @@ const handleInfiniteScroll = () => {
     is_page_loading.value = true
     media_page.value += 1
     get_media()
-    console.log('loading more', media_page.value)
+    // console.log('loading more', media_page.value)
   }
 
 };
 
 function clean_load_media() {
-  console.log('clean load')
   media_page.value = 0
   is_page_loaded.value = false
   get_media(true)
@@ -153,15 +148,19 @@ onMounted(() => {
                    :container_size="media_size"
                    :container_scale="media_scale"></component>
       </div>
-
     </div>
+
+    <div v-if="media.length < 1" class="empty_result">No result</div>
+
   </div>
 
 </template>
 
 <style scoped>
 .top_feed_container {
+  min-height: 100px;
 }
+
 .media_container_wrapper {
   gap: 20px;
   display: grid;
@@ -176,7 +175,7 @@ onMounted(() => {
 .rating_separator {
   width: fit-content;
   padding: 10px;
-  margin: 0 0 15px 0;
+  margin: 0 0 25px 0;
   background-color: #2d2d41;
   box-shadow: 0 0 5px #000000;
   border-radius: 8px;
@@ -186,6 +185,13 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 3px;
+}
+
+.empty_result {
+  position: relative;
+  text-align: center;
+  margin-top: 100px;
+  padding-bottom: 100px;
 }
 
 @media only screen and (max-width: 500px) {

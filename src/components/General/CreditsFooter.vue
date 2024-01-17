@@ -11,7 +11,7 @@
   width: 80%;
   margin: auto;
   text-align: center;
-  font-size: 0.7em;
-  font-weight: lighter;
+  font-size: 0.8em;
+  color: #464646;
 }
 </style>

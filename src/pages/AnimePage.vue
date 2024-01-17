@@ -1,6 +1,6 @@
 <script setup>
 import {ref, onMounted, inject, provide} from 'vue'
-import MediaFeed from "@/components_V2/media_feed/MediaFeed.vue";
+import MediaFeed from "@/components/media_feed/MediaFeed.vue";
 
 </script>
 

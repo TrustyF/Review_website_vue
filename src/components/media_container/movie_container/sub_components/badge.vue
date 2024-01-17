@@ -1,6 +1,6 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
-import BadgeTooltip from "@/components_V2/media_container/movie_container/badgeExpanded.vue";
+import BadgeTooltip from "@/components/media_container/movie_container/sub_components/badgeExpanded.vue";
 
 let props = defineProps(["data", "min_size","show_title"]);
 let emits = defineEmits(["test"]);

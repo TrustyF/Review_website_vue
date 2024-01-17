@@ -1,6 +1,6 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
-import Badge from "@/components_V2/media_container/movie_container/badge.vue";
+import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
 
 let props = defineProps(["data", "title"]);
 let emits = defineEmits(["id"]);
