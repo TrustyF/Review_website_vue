@@ -132,14 +132,19 @@ def update():
 
 @bp.route("/get_image")
 def get_image():
-    media_id = request.args.get('id')
-    file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches", f"{media_id}.jpg")
 
-    # download locally if it doesn't exist
+    media_id = request.args.get('id')
+    media_path = request.args.get('path')
+
+    print(f'getting image {media_id=} {media_path=}')
+
+    image_id = media_path.split('/')[-1]
+    file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches", image_id)
+
+    # # download locally if it doesn't exist
     if not os.path.exists(file_path):
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
-        matched_media = db.session.query(Media).filter_by(id=media_id).one()
-        response = requests.get(matched_media.poster_path)
+        response = requests.get(media_path)
 
         with open(file_path, 'wb') as outfile:
             outfile.write(response.content)
@@ -149,25 +154,31 @@ def get_image():
 
 @bp.route("/get_extra_posters")
 def search_extra_posters():
-    media_id = request.args.get('id')
+    media_name = request.args.get('name')
+    media_external_id = request.args.get('external_id')
     media_type = request.args.get('type')
 
-    print(f'extra posters {media_id=} {media_type=}')
+    print(f'extra posters {media_name=} {media_type=}')
+    posters = []
 
-    req = f'https://api.themoviedb.org/3/find/{media_id}?external_source=imdb_id'
-    headers = {
-        "accept": "application/json",
-        "Authorization": 'Bearer ' + TMDB_ACCESS_TOKEN
-    }
+    if media_type == 'movie':
+        # name_formatted = media_name.replace(' ', '%20')
+        #
+        # req = f'https://api.themoviedb.org/3/search/{media_type}?query={name_formatted}&include_adult=true&page=1'
+        # headers = {"accept": "application/json", "Authorization": 'Bearer ' + TMDB_ACCESS_TOKEN}
+        #
+        # response = requests.get(req, headers=headers).json()
+        # simple_data = response['results'][0]
+        #
+        # extra_request = f'https://api.themoviedb.org/3/{media_type}/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
+        #                 f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
 
-    response = requests.get(req, headers=headers).json()
-    simple_data = response[f'{media_type}_results'][0]
+        extra_request = f'https://api.themoviedb.org/3/{media_type}/{media_external_id}?api_key={TMDB_API_KEY}' \
+                        f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
 
-    extra_request = f'https://api.themoviedb.org/3/{media_type}/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
-                    f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
-    full_data = requests.get(extra_request).json()
-
-    posters = [x['file_path'] for x in full_data['images']['posters']]
+        full_data = requests.get(extra_request).json()
+        tmdb_link = 'https://image.tmdb.org/t/p/w500'
+        posters = [tmdb_link + x['file_path'] for x in full_data['images']['posters']]
 
     return posters
 
