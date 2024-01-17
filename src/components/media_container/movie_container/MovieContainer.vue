@@ -5,8 +5,10 @@ import Badge from "@/components/media_container/movie_container/sub_components/b
 
 let props = defineProps(["data", "container_scale", "container_size"]);
 let emits = defineEmits(["media_data"]);
+
 const curr_api = inject("curr_api");
 
+const image_path = computed(() => `${curr_api}/media/get_image?path=${props.data['poster_path']}&id=${props.data['id']}`)
 const poster_size = computed(() => [
   props['container_size'][0] * props['container_scale'],
   props['container_size'][1] * props['container_scale']
@@ -26,7 +28,7 @@ function convert_seconds_to_time(f_seconds) {
 <template>
   <div class="movie_container_wrapper" @click="emits('media_data',data)">
 
-    <img v-if="data['id']!==undefined" class="poster" alt="poster" v-lazy="`${curr_api}/media/get_image?id=${data['id']}`"/>
+    <img v-if="data['id']!==undefined" class="poster" alt="poster" v-lazy="image_path"/>
     <div class="poster_gradient"></div>
 
     <Rating v-if="data!==undefined" class="ratings" :data="data" :max_size="min_size"></Rating>
