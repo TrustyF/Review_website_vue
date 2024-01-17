@@ -1,6 +1,6 @@
 <script setup>
 import {inject, onMounted, watch, ref, provide, computed} from "vue";
-import BadgeExpanded from "../media_container/movie_container/badgeExpanded.vue";
+import BadgeExpanded from "../media_container/movie_container/sub_components/badgeExpanded.vue";
 
 // let props = defineProps(["position", "data"]);
 // let emits = defineEmits(["test"]);
@@ -12,7 +12,9 @@ const tooltip_pos = inject("tooltip_badge_pos");
 const tooltip_data = inject("tooltip_badge_data");
 const tooltip_hover = inject("tooltip_badge_hover");
 
-function position_tooltip(){
+async function position_tooltip() {
+  // hack to give time to the element to update it's size
+  await setTimeout(()=>{},0.1)
 
   // position tooltip
   let style = tooltip_container.value.style
@@ -20,11 +22,18 @@ function position_tooltip(){
 
   style.left = `${tooltip_pos.value[0] - (box.width / 2)}px`
   style.top = `${tooltip_pos.value[1] - 100}px`
+  // style.transform = `translate(
+  // ${tooltip_pos.value[0] - (box.width / 2)}px
+  // ,${tooltip_pos.value[1] - 100}px
+  // )`
 }
 
-onMounted(()=>{
-  const resizer = new ResizeObserver(position_tooltip)
-  resizer.observe(tooltip_container.value)
+watch(tooltip_data, (newV, oldV) => {
+  position_tooltip()
+})
+onMounted(() => {
+  // const resizer = new ResizeObserver(position_tooltip)
+  // resizer.observe(tooltip_container.value)
 })
 </script>
 

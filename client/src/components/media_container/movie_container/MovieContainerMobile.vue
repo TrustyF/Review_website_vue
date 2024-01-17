@@ -2,9 +2,9 @@
 import {inject, onMounted, watch, ref, computed, provide} from "vue";
 import gold_star from '@/assets/ui/gold_star.png'
 import blue_star from '@/assets/ui/blue_star.png'
-import RatingCircle from "@/components_V2/media_container/movie_container/RatingCircle.vue";
-import BadgeTooltip from "@/components_V2/media_container/movie_container/badgeExpanded.vue";
-import Badge from "@/components_V2/media_container/movie_container/badge.vue";
+import RatingCircle from "@/components/media_container/movie_container/sub_components/RatingCircle.vue";
+import BadgeTooltip from "@/components/media_container/movie_container/sub_components/badgeExpanded.vue";
+import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
 
 let props = defineProps(["data", "container_scale", "container_size"]);
 let emits = defineEmits(["media_data"]);

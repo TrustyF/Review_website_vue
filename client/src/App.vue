@@ -6,7 +6,7 @@ import '@/assets/styles/globals.css'
 import '@/assets/styles/dark.css'
 import CreditsFooter from "@/components/General/CreditsFooter.vue";
 import {onMounted, provide, ref, watch} from "vue";
-import TooltipBadge from "@/components_V2/tooltip/tooltipBadge.vue";
+import TooltipBadge from "@/components/tooltip/tooltipBadge.vue";
 
 const selected_media = ref(undefined)
 const edit_media = ref(undefined)
@@ -22,7 +22,6 @@ provide('is_visible_navbar', is_visible_navbar)
 
 function check_mobile() {
   is_mobile.value = document.body.clientWidth < 500;
-  console.log('is mobile', is_mobile.value)
 }
 
 onMounted(() => {
@@ -52,6 +51,7 @@ watch(is_visible_navbar, (oldVal, newVal) => {
 
 <style scoped>
 .main {
+  margin: 0 auto 0 auto;
   max-width: 1000px;
   padding: 0 10px 0 10px;
   transition: transform 250ms;
