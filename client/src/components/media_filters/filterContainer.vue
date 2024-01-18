@@ -2,6 +2,7 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import FilterDropdown from "@/components/media_filters/filterDropdown.vue";
 import FilterRange from "@/components/media_filters/filterRange.vue";
+import FilterRadio from "@/components/media_filters/filterRadio.vue";
 
 let props = defineProps(["media_type"]);
 let emits = defineEmits(["filter"]);
@@ -14,6 +15,13 @@ let user_ratings = ref([0, 0])
 let public_ratings = ref([0, 0])
 let release_dates = ref([0, 0])
 let runtimes = ref([0, 0])
+let orders = ref([
+  {'id': 1, 'name': 'Name', 'value': 'name'},
+  {'id': 0, 'name': 'Release date', 'value': 'release_date'},
+  {'id': 2, 'name': 'Public rating', 'value': 'public_rating'},
+  {'id': 3, 'name': 'Runtime', 'value': 'runtime'},
+  {'id': 4, 'name': 'Date added', 'value': 'date_added'},
+])
 
 async function fetch_filters() {
 
@@ -57,6 +65,10 @@ onMounted(() => {
       <filter-dropdown v-if="themes!==null && themes.length>0"
                        @id="emit_filter('themes',$event)"
                        :data="themes" title="Themes"></filter-dropdown>
+
+      <filter-radio v-if="orders!==null && orders.length>0"
+                    @value="emit_filter('order',$event)"
+                    :data="orders" title="Sort by"></filter-radio>
 
     </div>
 

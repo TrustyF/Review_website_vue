@@ -6,6 +6,7 @@ import RatingCircle from "@/components/media_container/movie_container/sub_compo
 import BadgeTooltip from "@/components/media_container/movie_container/sub_components/badgeExpanded.vue";
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
 
+const image_path = computed(() => `${curr_api}/media/get_image?path=${props.data['poster_path']}&id=${props.data['id']}`)
 let props = defineProps(["data", "container_scale", "container_size"]);
 let emits = defineEmits(["media_data"]);
 const curr_api = inject("curr_api");
@@ -28,7 +29,7 @@ function convert_seconds_to_time(f_seconds) {
   <div class="movie_container_wrapper" @click="emits('media_data',data)">
 
     <div class="poster_wrapper">
-      <img class="poster" alt="poster" v-lazy="`${curr_api}/media/get_image?id=${data['id']}`"/>
+      <img v-if="data['id']!==undefined" class="poster" alt="poster" v-lazy="image_path"/>
       <div class="poster_gradient"></div>
 
       <div class="badges">

@@ -7,6 +7,8 @@ let props = defineProps(["test"]);
 let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
 
+let search_type = ref('movie')
+
 let search_media = ref()
 let selected_media = ref({})
 let extra_posters = ref([])
@@ -33,6 +35,7 @@ let form_bindings = ref([
 let form_changes = ref({})
 
 let updated = ref(false)
+let added = ref(false)
 
 async function get_media(text) {
 
@@ -42,6 +45,9 @@ async function get_media(text) {
     'page': 0,
     'session_seed': 1,
     'search': text,
+    'order': 'date_added',
+    'user_rating_sort_override': true,
+    'random_sort_override': true,
   }
 
   search_media.value = await fetch(url,
@@ -52,6 +58,16 @@ async function get_media(text) {
       })
       .then(response => response.json())
 
+}
+
+async function find_media(text) {
+
+  const url = new URL(`${curr_api}/media/find`)
+  url.searchParams.set('name', text)
+  url.searchParams.set('type', search_type.value)
+
+  search_media.value = await fetch(url).then(response => response.json())
+  console.log(search_media.value)
 }
 
 async function update_media() {
@@ -72,6 +88,18 @@ async function update_media() {
   updated.value = result.ok
 }
 
+async function add_media() {
+  const url = new URL(`${curr_api}/media/add`)
+
+  const result = await fetch(url, {
+    method: 'POST',
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(selected_media.value)
+  }).then(response => response.json())
+
+  added.value = result.ok
+}
+
 async function get_extra_posters() {
 
   const url = new URL(`${curr_api}/media/get_extra_posters`)
@@ -88,15 +116,16 @@ function handleMediaEmit(event) {
   form_changes.value = {'id': event['id']}
   get_extra_posters()
   updated.value = false
+  added.value = false
 }
 
-function switch_poster(event){
+function switch_poster(event) {
   form_changes.value['poster_path'] = event
   selected_media.value['poster_path'] = event
 }
 
 onMounted(() => {
-  get_media('drag')
+  get_media()
 })
 </script>
 
@@ -104,7 +133,13 @@ onMounted(() => {
   <div class="edit_page_wrapper">
 
     <div class="search_area">
-      <filter-search @filter="get_media($event)"></filter-search>
+
+      <div class="search_bars">
+        <h1>Library</h1>
+        <filter-search @filter="get_media($event)"></filter-search>
+        <h1>Find</h1>
+        <filter-search @filter="find_media($event)"></filter-search>
+      </div>
 
       <div class="search_result">
         <movie-container v-for="med in search_media"
@@ -143,7 +178,8 @@ onMounted(() => {
 
         <div style="display: flex;align-items: center;gap:10px">
           <button style="width: 100px" @click="update_media">Update</button>
-          <img class="update_logo" alt="success update" v-if="updated"
+          <button style="width: 100px" @click="add_media">Add</button>
+          <img class="update_logo" alt="success update" v-if="updated || added"
                src="src/assets/ui/success-green-check-mark-icon.svg">
         </div>
 
@@ -175,6 +211,11 @@ onMounted(() => {
   gap: 15px;
 }
 
+.search_bars {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
 .preview_area {
   padding: 20px;
   display: flex;
@@ -185,14 +226,14 @@ onMounted(() => {
 .form_area {
   display: flex;
   flex-flow: column wrap;
-  gap: 15px;
+  gap: 10px;
   justify-content: space-between;
 }
 
 .form_box {
-  display: flex;
+  display: grid;
   gap: 5px;
-  align-items: center;
+  /*align-items: center;*/
 }
 
 .extra_posters {

@@ -22,7 +22,6 @@ let media_grouped = ref([])
 
 let media_limit = ref(20)
 let media_page = ref(0)
-let media_order = ref(undefined)
 let media_filters = ref({})
 
 let feed_container = ref()
@@ -37,7 +36,6 @@ async function get_media(override) {
   const params = {
     'limit': media_limit.value,
     'page': media_page.value,
-    'order': media_order.value,
     'session_seed': session_seed,
     'type': props['media_type'],
     'genres': media_filters.value['genres'],
@@ -48,6 +46,7 @@ async function get_media(override) {
     'release_dates': media_filters.value['release_dates'],
     'runtimes': media_filters.value['runtimes'],
     'search': media_filters.value['search'],
+    'order': media_filters.value['order'],
   }
 
   const result = await fetch(url,
@@ -87,6 +86,7 @@ async function get_media(override) {
 function handle_filter(event) {
   console.log('event', event)
   media_filters.value[event[0]] = event[1]
+  console.log('handle filters', media_filters.value)
   clean_load_media()
 }
 
