@@ -1,9 +1,9 @@
 import datetime
-import pprint
+from pprint import pprint
 import time
 
 from db_loader import db
-from sql_models.media_model import Media
+from sql_models.media_model import Media, Genre
 from sqlalchemy import func
 from flask import jsonify
 
@@ -54,5 +54,34 @@ def map_media(medias):
         mapped['tags'] = jsonify(entry.tags).json if entry.tags else None
 
         mapped_medias.append(mapped)
+
+    return mapped_medias
+
+
+def map_from_tmdb(medias, media_type):
+    mapped_medias = []
+
+    for entry in medias:
+        content_rating = [x for x in entry['releases']['countries']
+                          if x['iso_3166_1'] == 'US'
+                          or x['iso_3166_1'] == 'JP']
+
+        mapping = {
+            'name': entry.get('title'),
+            'release_date': entry.get('release_date'),
+            'overview': entry.get('overview'),
+            'poster_path': ('https://image.tmdb.org/t/p/w500' + entry.get('poster_path'))
+            if entry.get('poster_path') else None,
+            'media_type': media_type,
+            'user_rating': 0,
+            'public_rating': entry.get('vote_average'),
+            'external_id': entry.get('imdb_id'),
+            'runtime': entry.get('runtime'),
+            # 'content_rating': entry['releases']['countries'].get('certification')
+            'content_rating': content_rating[0].get('certification') if len(content_rating) > 0 else None
+        }
+
+        media_object = Media(**mapping)
+        mapped_medias.append(media_object)
 
     return mapped_medias

@@ -12,7 +12,7 @@ from datetime import datetime
 from math import ceil, floor
 
 from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY
-from data_mapper.media_mapper import map_media
+from data_mapper.media_mapper import map_media, map_from_tmdb
 from db_loader import db
 from sql_models.media_model import Media, Genre, Theme, Tag, media_genre_association, media_tag_association
 
@@ -40,15 +40,22 @@ def get():
 
     search = data.get('search')
 
+    user_rating_sort_override = data.get('user_rating_sort_override')
+    random_sort_override = data.get('random_sort_override')
+
     # setup query
-    query = db.session.query(Media)
+    query = db.session.query(Media).filter(
+        or_(Media.is_deleted == 0, Media.is_deleted == None))  # noqa
 
     if media_type:
         query = query.filter_by(media_type=media_type)
 
     # apply filters
     if search:
-        if len(query.filter(Media.name.ilike(f'%{search}%')).all()) > 0:
+        if len(query.filter(Media.name.ilike(f'{search}')).all()) > 0:
+            query = query.filter(Media.name.ilike(f'{search}'))
+
+        elif len(query.filter(Media.name.ilike(f'%{search}%')).all()) > 0:
             query = query.filter(Media.name.ilike(f'%{search}%'))
 
         elif len(query.join(Media.genres).filter(Genre.name.ilike(f'%{search}%')).all()) > 0:
@@ -91,17 +98,24 @@ def get():
     print(len(query.all()))
 
     # order result
-    match order:
-        case 'release_date':
-            query = query.order_by(Media.user_rating.desc(),
-                                   Media.release_date.desc(),
-                                   func.rand(session_seed))
-        case 'name':
-            query = query.order_by(Media.user_rating.desc(),
-                                   Media.name, func.rand(session_seed))
-        case _:
-            query = query.order_by(Media.user_rating.desc(),
-                                   func.rand(session_seed))
+    selected_ordering = None
+    rating_ordering = Media.user_rating.desc() if not user_rating_sort_override else None
+    rand_ordering = func.rand(session_seed) if not random_sort_override else None
+
+    if order:
+        match order:
+            case 'release_date':
+                selected_ordering = Media.release_date.desc()
+            case 'name':
+                selected_ordering = Media.name
+            case 'public_rating':
+                selected_ordering = Media.public_rating.desc()
+            case 'runtime':
+                selected_ordering = Media.runtime.desc()
+            case 'date_added':
+                selected_ordering = Media.created_at.desc()
+
+    query = query.order_by(rating_ordering, selected_ordering, rand_ordering)
 
     # limiting
     if limit is not None:
@@ -112,6 +126,51 @@ def get():
     mapped_media = map_media(media)
 
     return mapped_media, 200
+
+
+@bp.route("/find", methods=['GET'])
+def find():
+    media_name = request.args.get('name')
+    media_type = request.args.get('type')
+
+    print(f'searching {media_name=} {media_type=}')
+
+    id_request = requests.get(
+        f'https://api.themoviedb.org/3/search/{media_type}?query={media_name}&page=1', headers={
+            "accept": "application/json",
+            "Authorization": f"Bearer {TMDB_ACCESS_TOKEN}"}).json()
+
+    found_ids = [x['id'] for x in id_request['results'][:5]]
+    # print(found_ids)
+
+    full_medias = []
+    for media_id in found_ids:
+        full_info = requests.get(
+            f'https://api.themoviedb.org/3/{media_type}/{media_id}?api_key={TMDB_API_KEY}'
+            f'&language=en-US&append_to_response=releases').json()
+
+        full_medias.append(full_info)
+
+    mapped_media = []
+    if len(full_medias) > 0:
+        mapped_media = map_from_tmdb(full_medias, media_type)
+
+    # print(mapped_media)
+    return mapped_media, 200
+
+
+@bp.route("/add", methods=['POST'])
+def add():
+    data = request.get_json()
+    print('add', data['name'])
+
+    media_object = Media(**data)
+
+    db.session.add(media_object)
+    db.session.commit()
+    db.session.close()
+
+    return json.dumps({'ok': True}), 200, {'ContentType': 'application/json'}
 
 
 @bp.route("/update", methods=['POST'])
@@ -127,16 +186,18 @@ def update():
     db.session.commit()
     db.session.close()
 
-    return [], 200
+    return json.dumps({'ok': True}), 200, {'ContentType': 'application/json'}
 
 
 @bp.route("/get_image")
 def get_image():
-
     media_id = request.args.get('id')
     media_path = request.args.get('path')
 
-    print(f'getting image {media_id=} {media_path=}')
+    # print(f'getting image {media_id=} {media_path=}')
+
+    if media_path == 'null':
+        return [], 404
 
     image_id = media_path.split('/')[-1]
     file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches", image_id)
@@ -158,29 +219,30 @@ def search_extra_posters():
     media_external_id = request.args.get('external_id')
     media_type = request.args.get('type')
 
-    print(f'extra posters {media_name=} {media_type=}')
+    print(f'extra posters {media_name=} {media_type=} {media_external_id=}')
     posters = []
 
-    if media_type == 'movie':
-        # name_formatted = media_name.replace(' ', '%20')
-        #
-        # req = f'https://api.themoviedb.org/3/search/{media_type}?query={name_formatted}&include_adult=true&page=1'
-        # headers = {"accept": "application/json", "Authorization": 'Bearer ' + TMDB_ACCESS_TOKEN}
-        #
-        # response = requests.get(req, headers=headers).json()
-        # simple_data = response['results'][0]
-        #
-        # extra_request = f'https://api.themoviedb.org/3/{media_type}/{simple_data["id"]}?api_key={TMDB_API_KEY}' \
-        #                 f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
+    if media_type in ['movie', 'tv']:
+        main_request = requests.get(
+            f'https://api.themoviedb.org/3/find/{media_external_id}?external_source=imdb_id', headers={
+                "accept": "application/json",
+                "Authorization": f"Bearer {TMDB_ACCESS_TOKEN}"
+            }
+        ).json()
+        found_media = main_request[f'{media_type}_results'][0]
+        extra_request = requests.get(
+            f'https://api.themoviedb.org/3/{media_type}/{found_media["id"]}?api_key={TMDB_API_KEY}'
+            f'&language=en-US&append_to_response=credits,images&include_image_language=en,null').json()
 
-        extra_request = f'https://api.themoviedb.org/3/{media_type}/{media_external_id}?api_key={TMDB_API_KEY}' \
-                        f'&language=en-US&append_to_response=credits,images&include_image_language=en,null'
-
-        full_data = requests.get(extra_request).json()
         tmdb_link = 'https://image.tmdb.org/t/p/w500'
-        posters = [tmdb_link + x['file_path'] for x in full_data['images']['posters']]
+        posters = [tmdb_link + x['file_path'] for x in extra_request['images']['posters']]
 
-    return posters
+    if media_type in ['manga']:
+        pass
+        # mangadex_link = 'https://image.tmdb.org/t/p/w500'
+        # posters = [mangadex_link + x['file_path'] for x in extra_request['images']['posters']]
+
+    return posters, 200
 
 
 @bp.route("/get_filters")

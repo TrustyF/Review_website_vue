@@ -1,3 +1,5 @@
+import requests
+
 from sql_models.media_model import Media, Genre, Theme, Tag
 from db_loader import db
 import json
@@ -121,3 +123,10 @@ def insert_in_db():
 
         db.session.commit()
     db.session.close()
+
+
+def update_existing_from_tmdb():
+    movie_obj = db.session.query(Media).filter(Media.media_type == 'movie').first()
+
+    found_movie = requests.get(f"http://192.168.1.11:5000/media/find",
+                               params={'name': movie_obj.name, 'type': 'movie'})
