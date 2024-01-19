@@ -2,6 +2,7 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import FilterSearch from "@/components/media_filters/filterSearch.vue";
 import MovieContainer from "@/components/media_container/movie_container/MovieContainer.vue";
+import TagPicker from "@/components/tag_picker/TagPicker.vue";
 
 let props = defineProps(["test"]);
 let emits = defineEmits(["test"]);
@@ -212,7 +213,9 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="tags_area"></div>
+    <div class="tags_area">
+      <tag-picker :media_type="search_type"></tag-picker>
+    </div>
 
   </div>
 </template>
