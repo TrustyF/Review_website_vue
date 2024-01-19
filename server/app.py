@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 from constants import MAIN_DIR
 from db_loader import db
-from migrate import insert_in_db
+from migrate import insert_in_db, update_existing_from_tmdb
 import logging
 
 # check if using locally
@@ -46,13 +46,7 @@ with app.app_context():
 
     logging.disable(logging.WARNING)
 
-    # db.session.commit()
-    # db.session.close()
-    #
-    # insert_in_db()
-
-    # mov = db.session.query(Tag).first()
-    # print(mov.media)
+    update_existing_from_tmdb()
 
     from flask_blueprints import media_blueprint, tag_blueprint
 
