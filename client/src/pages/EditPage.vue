@@ -134,13 +134,30 @@ onMounted(() => {
 
     <div class="search_area">
 
-      <div class="search_bars">
-        <h1>Library</h1>
-        <filter-search @filter="get_media($event)"></filter-search>
-        <h1>Find</h1>
-        <filter-search @filter="find_media($event)"></filter-search>
-      </div>
+      <div style="display: flex;gap: 15px">
+        <div class="search_bars">
+          <div style="display: flex;gap: 10px">
+            <h1>Library</h1>
+            <filter-search @filter="get_media($event)"></filter-search>
+          </div>
+          <div style="display: flex;gap: 10px">
+            <h1>Find</h1>
+            <filter-search @filter="find_media($event)"></filter-search>
+          </div>
+        </div>
 
+        <div class="media_type_selector">
+          <label for="media_types" style="margin-right: 10px">Media type</label>
+          <select v-model="search_type" id="media_types">
+            <option value="movie">movie</option>
+            <option value="tv">tv</option>
+            <option value="short">short</option>
+            <option value="anime">anime</option>
+            <option value="manga">manga</option>
+            <option value="game">game</option>
+          </select>
+        </div>
+      </div>
       <div class="search_result">
         <movie-container v-for="med in search_media"
                          :key="med['id']"
@@ -150,6 +167,7 @@ onMounted(() => {
                          @media_data="handleMediaEmit"
         ></movie-container>
       </div>
+      
     </div>
 
     <div class="preview_area">
@@ -194,6 +212,8 @@ onMounted(() => {
       </div>
     </div>
 
+    <div class="tags_area"></div>
+
   </div>
 </template>
 
@@ -207,13 +227,14 @@ onMounted(() => {
 .search_area {
   padding: 20px;
   display: flex;
-  flex-flow: column;
+  flex-flow: column wrap;
   gap: 15px;
 }
 
 .search_bars {
-  display: grid;
-  grid-template-rows: 1fr;
+  display: flex;
+  flex-flow: column;
+  gap: 10px;
 }
 
 .preview_area {

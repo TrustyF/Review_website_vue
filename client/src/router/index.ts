@@ -9,7 +9,6 @@ import AnimePage from "../pages/AnimePage.vue"
 import GamePage from "../pages/GamePage.vue"
 import EditPage from "../pages/EditPage.vue"
 import AllPage from "../pages/AllPage.vue"
-import AddPage from "../pages/AddPage.vue"
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,11 +58,6 @@ const router = createRouter({
             path: "/edit",
             name: "edit",
             component: EditPage
-        },
-        {
-            path: "/add",
-            name: "add",
-            component: AddPage
         },
     ]
 })

@@ -48,7 +48,6 @@ onMounted(() => {
       <RouterLink active-class="active" class="link" to="/games">Games</RouterLink>
       <h1>•</h1>
       <RouterLink v-if="editMode" active-class="active" class="link" to="/edit">Edit</RouterLink>
-      <RouterLink v-if="editMode" active-class="active" class="link" to="/add">Add</RouterLink>
     </div>
   </nav>
 </template>
