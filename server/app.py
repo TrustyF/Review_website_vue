@@ -1,15 +1,11 @@
 import os
-from pprint import pprint
 
 from flask import Flask
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
-from sql_models.media_model import Media, Genre, Theme, Tag
 from dotenv import load_dotenv
 
 from constants import MAIN_DIR
 from db_loader import db
-from migrate import insert_in_db, update_existing_from_tmdb
 import logging
 
 # check if using locally
@@ -46,7 +42,7 @@ with app.app_context():
 
     logging.disable(logging.WARNING)
 
-    update_existing_from_tmdb()
+    # update_existing_from_tmdb()
 
     from flask_blueprints import media_blueprint, tag_blueprint
 

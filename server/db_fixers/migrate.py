@@ -1,3 +1,5 @@
+import datetime
+
 import requests
 
 from constants import TMDB_ACCESS_TOKEN
@@ -129,20 +131,26 @@ def insert_in_db():
 def update_existing_from_tmdb():
     print('updating')
 
-    all_media = db.session.query(Media).filter(Media.media_type == 'movie').all()
+    all_media = db.session.query(Media).filter(Media.updated_at == None).all()
 
+    print(len(all_media))
     for media_obj in all_media:
+
+        if media_obj.media_type not in ['tv','anime']:
+            continue
 
         main_request = requests.get(
             f'https://api.themoviedb.org/3/find/{media_obj.external_id}?external_source=imdb_id', headers={
                 "accept": "application/json",
                 "Authorization": f"Bearer {TMDB_ACCESS_TOKEN}"}).json()
 
-        found_media = main_request[f'{media_obj.media_type}_results'][0] if len(main_request[f'{media_obj.media_type}_results'])>0 else None
+        found_media = main_request[f'tv_results'][0] if len(
+            main_request[f'tv_results']) > 0 else None
+
         if found_media is None:
             continue
 
-        print('attempting to update ', media_obj.name, ' to ', found_media['title'])
+        print('attempting to update ', media_obj.name, ' to ', found_media.get('title') or found_media['name'])
 
         db.session.query(Media).filter(Media.id == media_obj.id).update({'external_id': found_media['id']})
 
