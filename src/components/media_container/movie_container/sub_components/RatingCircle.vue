@@ -8,7 +8,7 @@ function get_rating_color(rating) {
   // if (rating >= 9){
   //   return '#00d0ff'
   // }
-  if (rating >= 7) {
+  if (rating >= 6.5) {
     return '#32cb1a'
   } else if (rating >= 5) {
     return '#e1c50f'
