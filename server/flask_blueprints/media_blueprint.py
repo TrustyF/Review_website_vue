@@ -203,9 +203,22 @@ def update():
     print('update', data)
 
     media_id = data.get('id')
-    del data['id']
+    media_tags = data.get('tags')
 
-    db.session.query(Media).filter_by(id=media_id).update(data)
+    for to_delete in ['id', 'tags']:
+        del data[to_delete]
+
+    query = db.session.query(Media).filter_by(id=media_id)
+
+    # update data
+    if data:
+        query.update(data)
+
+    # update tags
+    if media_tags:
+        tag_objects = [db.session.query(Tag).filter(Tag.id == x).one() for x in media_tags]
+        query.one().tags = tag_objects
+
     db.session.commit()
     db.session.close()
 

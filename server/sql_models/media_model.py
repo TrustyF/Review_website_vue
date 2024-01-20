@@ -4,18 +4,18 @@ from dataclasses import dataclass
 from db_loader import db
 
 media_genre_association = db.Table('media_genre_assoc', db.Model.metadata,
-                                   db.Column('media_id', db.Integer, db.ForeignKey('medias.id')),
-                                   db.Column('genre_id', db.Integer, db.ForeignKey('genres.id'))
+                                   db.Column('media_id', db.Integer, db.ForeignKey('medias.id', ondelete='CASCADE')),
+                                   db.Column('genre_id', db.Integer, db.ForeignKey('genres.id', ondelete='CASCADE'))
                                    )
 
 media_theme_association = db.Table('media_theme_assoc', db.Model.metadata,
-                                   db.Column('media_id', db.Integer, db.ForeignKey('medias.id')),
-                                   db.Column('theme_id', db.Integer, db.ForeignKey('themes.id'))
+                                   db.Column('media_id', db.Integer, db.ForeignKey('medias.id', ondelete='CASCADE')),
+                                   db.Column('theme_id', db.Integer, db.ForeignKey('themes.id', ondelete='CASCADE'))
                                    )
 
 media_tag_association = db.Table('media_tag_assoc', db.Model.metadata,
-                                 db.Column('media_id', db.Integer, db.ForeignKey('medias.id')),
-                                 db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'))
+                                 db.Column('media_id', db.Integer, db.ForeignKey('medias.id', ondelete='CASCADE')),
+                                 db.Column('tag_id', db.Integer, db.ForeignKey('tags.id', ondelete='CASCADE'))
                                  )
 
 
