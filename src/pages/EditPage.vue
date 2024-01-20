@@ -125,9 +125,14 @@ function switch_poster(event) {
   selected_media.value['poster_path'] = event
 }
 
+function update_tags(event) {
+  form_changes.value['tags'] = event.map((x) => x.id)
+}
+
 onMounted(() => {
   get_media()
 })
+
 </script>
 
 <template>
@@ -168,7 +173,7 @@ onMounted(() => {
                          @media_data="handleMediaEmit"
         ></movie-container>
       </div>
-      
+
     </div>
 
     <div class="preview_area">
@@ -214,7 +219,7 @@ onMounted(() => {
     </div>
 
     <div class="tags_area">
-      <tag-picker :media_type="search_type"></tag-picker>
+      <tag-picker @tags="update_tags" :media_type="search_type" :media_ref="selected_media"></tag-picker>
     </div>
 
   </div>

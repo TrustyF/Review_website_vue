@@ -27,8 +27,8 @@ function convert_seconds_to_time(f_seconds) {
 
 <template>
   <div class="movie_container_wrapper" @click="emits('media_data',data)">
-    <p>{{ data['content_rating'] }}</p>
-    <p>{{ data['external_id'] }}</p>
+<!--    <p>{{ data['content_rating'] }}</p>-->
+<!--    <p>{{ data['external_id'] }}</p>-->
 
     <img v-if="data['id']!==undefined" class="poster" alt="poster" v-lazy="image_path"/>
     <div class="poster_gradient"></div>

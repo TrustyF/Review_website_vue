@@ -14,18 +14,18 @@ const tooltip_hover = inject("tooltip_badge_hover");
 
 async function position_tooltip() {
   // hack to give time to the element to update it's size
-  await setTimeout(()=>{},0.1)
+  await setTimeout(() => {
+  }, 0.1)
 
   // position tooltip
   let style = tooltip_container.value.style
   let box = tooltip_container.value.getBoundingClientRect()
 
-  style.left = `${tooltip_pos.value[0] - (box.width / 2)}px`
-  style.top = `${tooltip_pos.value[1] - 100}px`
-  // style.transform = `translate(
-  // ${tooltip_pos.value[0] - (box.width / 2)}px
-  // ,${tooltip_pos.value[1] - 100}px
-  // )`
+  let tooltip_x = tooltip_pos.value[0] - (box.width / 2)
+  let tooltip_y = tooltip_pos.value[1] - 100
+
+  style.top = `${tooltip_y}px`
+  style.left = `${Math.max(0, tooltip_x)}px`
 }
 
 watch(tooltip_data, (newV, oldV) => {
@@ -51,6 +51,7 @@ onMounted(() => {
   position: absolute;
   left: 0;
   top: 0;
+  /*right: 0;*/
   z-index: 1000;
   margin: 0 10px 0 10px;
 
