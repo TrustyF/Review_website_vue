@@ -8,11 +8,11 @@ from flask import Blueprint, request, Response, jsonify, send_file
 from sqlalchemy import not_, and_, or_
 from sqlalchemy.orm import contains_eager
 from sqlalchemy.sql.expression import func
-from datetime import datetime
+from datetime import datetime, timedelta
 from math import ceil, floor
 
-from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY
-from data_mapper.media_mapper import map_media, map_from_tmdb, map_from_mangadex
+from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY, IGDB_CLIENT_ID, IGDB_CLIENT_SECRET
+from data_mapper.media_mapper import map_media, map_from_tmdb, map_from_mangadex, map_from_igdb
 from db_loader import db
 from sql_models.media_model import Media, Genre, Theme, Tag, media_genre_association, media_tag_association
 
@@ -194,6 +194,71 @@ def find():
         # pprint(all_found)
         return all_found
 
+    def request_igdb():  # noqa
+
+        def handle_access_token(f_source):
+
+            def request_access_token():
+                # get token
+                token_request = f'https://id.twitch.tv/oauth2/token'
+                token_params = {
+                    'client_id': IGDB_CLIENT_ID,
+                    'client_secret': IGDB_CLIENT_SECRET,
+                    'grant_type': 'client_credentials'
+                }
+                token_response = requests.post(token_request, params=token_params).json()
+                token_response['date_added'] = datetime.now().isoformat()
+                print('requesting new token')
+
+                return token_response
+
+            def make_new_token():
+                print('making new token')
+                f_token = request_access_token()
+
+                with open(file_path, 'w') as outfile:
+                    json.dump(f_token, outfile, indent=1)
+
+                return f_token
+
+            token_path = os.path.join(MAIN_DIR, 'tokens')
+            file_path = os.path.join(token_path, (f_source + '.json'))
+
+            # no file
+            if not os.path.isfile(file_path):
+                return make_new_token()
+
+            # get old token
+            with open(file_path, 'r') as infile:
+                old_token = json.load(infile)
+
+            # check if outdated
+            token_date_added = datetime.fromisoformat(old_token['date_added'])
+            token_time_diff = abs((token_date_added - datetime.now()))
+
+            if token_time_diff.total_seconds() > old_token['expires_in']:
+                # refresh token
+                return make_new_token()
+            else:
+                # return current token
+                print('token time left',
+                      timedelta(seconds=old_token['expires_in'] - token_time_diff.total_seconds()))
+                return old_token
+
+        token = handle_access_token('igdb_token')
+
+        title_request = f'https://api.igdb.com/v4/games'
+        title_data = f'search "{media_name}"; limit 5;' \
+                     f' fields name,release_dates.y,genres.name,themes.name,total_rating' \
+                     f',category,url,summary,cover.url;'
+        title_headers = {
+            'Client-ID': IGDB_CLIENT_ID,
+            'Authorization': f"{token['token_type']} {token['access_token']}",
+        }
+        title_response = requests.post(title_request, data=title_data, headers=title_headers).json()
+
+        return title_response
+
     if media_type in ['movie', 'tv', 'anime']:
         full_medias = request_tmdb()
 
@@ -210,8 +275,16 @@ def find():
 
             return mapped_media, 200
 
-    else:
-        return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
+    elif media_type in ['game']:
+        full_medias = request_igdb()
+
+        if len(full_medias) > 0:
+            mapped_media = map_from_igdb(full_medias, media_type)
+
+            return mapped_media, 200
+
+    print('returning not found')
+    return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
 
 
 @bp.route("/add", methods=['POST'])

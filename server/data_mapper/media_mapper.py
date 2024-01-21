@@ -162,3 +162,28 @@ def map_from_mangadex(medias, media_type):
 
     # pprint(mapped_medias[0])
     return mapped_medias
+
+
+def map_from_igdb(medias, media_type):
+    mapped_medias = []
+
+    with open('temp.json', 'w') as outfile:
+        json.dump(medias[0], outfile)
+
+    for media in medias:
+        mapping = {
+            'name': media.get('name'),
+            'release_date': f"{media.get('release_dates')[0].get('y')}-01-01" if media.get(
+                'release_dates') else None,
+            'overview': media.get('summary'),
+            'poster_path': 'https:' + media.get('cover').get('url') if media.get('cover') else None,
+            'media_type': media_type,
+            'user_rating': 0,
+            'public_rating': media.get('total_rating') / 10 if media.get('total_rating') else None,
+            'external_id': media.get('id'),
+            'content_rating': media.get('contentRating')
+        }
+
+        mapped_medias.append(Media(**mapping))
+
+    return mapped_medias
