@@ -23,14 +23,23 @@ function convert_seconds_to_time(f_seconds) {
   return hours + 'h ' + minutes;
 }
 
+function get_year_from_release_date(string) {
+
+  if (typeof string === 'string') {
+    return string.substring(0, 4)
+  } else {
+    return undefined
+  }
+}
+
 </script>
 
 <template>
   <div class="movie_container_wrapper" @click="emits('media_data',data)">
-<!--    <p>{{ data['content_rating'] }}</p>-->
-<!--    <p>{{ data['external_id'] }}</p>-->
+    <!--    <p>{{ data['content_rating'] }}</p>-->
+    <!--    <p>{{ data['external_id'] }}</p>-->
 
-    <img v-if="data['external_id']!==undefined" class="poster" alt="poster" v-lazy="image_path"/>
+    <img v-if="data['external_id']!==undefined && data['poster_path']!==undefined" class="poster" alt="poster" v-lazy="image_path"/>
     <div class="poster_gradient"></div>
 
     <Rating v-if="data!==undefined" class="ratings" :data="data" :max_size="min_size"></Rating>
@@ -40,7 +49,7 @@ function convert_seconds_to_time(f_seconds) {
       <p v-if="data['name']!==undefined" class="title" :title="data['name']">{{ data['name'] }}</p>
 
       <div class="secondary_info">
-        <h2 class="date" v-if="data['release_date']!==undefined"> {{ data['release_date'].substring(0, 4) }}</h2>
+        <h2 class="date" v-if="data['release_date']!==undefined"> {{ get_year_from_release_date(data['release_date']) }}</h2>
         <h2 class="date" v-if="data['runtime']>0">•</h2>
         <h2 class="date" v-if="data['runtime']>0">{{ convert_seconds_to_time(data['runtime']) }}</h2>
         <h2 class="date" v-if="data['seasons']>0">•</h2>

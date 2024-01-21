@@ -8,7 +8,7 @@ let props = defineProps(["test"]);
 let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
 
-let search_type = ref('movie')
+let search_type = ref()
 
 let search_media = ref()
 let selected_media = ref({})
@@ -143,13 +143,13 @@ onMounted(() => {
 
       <div style="display: flex;gap: 15px">
         <div class="search_bars">
-          <div style="display: flex;gap: 10px">
+          <div style="display: flex;align-items: center;gap: 10px">
             <h1>Library</h1>
-            <filter-search @filter="get_media($event)"></filter-search>
+            <filter-search style="height: 30px" @filter="get_media($event)"></filter-search>
           </div>
-          <div style="display: flex;gap: 10px">
+          <div style="display: flex;align-items: center;gap: 10px">
             <h1>Find</h1>
-            <filter-search @filter="find_media($event)"></filter-search>
+            <filter-search style="height: 30px" @filter="find_media($event)"></filter-search>
           </div>
         </div>
 
@@ -167,7 +167,7 @@ onMounted(() => {
       </div>
       <div class="search_result">
         <movie-container v-for="med in search_media"
-                         :key="med['external_id']"
+                         :key="search_type + med['external_id'] + med['id']"
                          :data="med"
                          :container_size="[500,750]"
                          :container_scale="0.20"
