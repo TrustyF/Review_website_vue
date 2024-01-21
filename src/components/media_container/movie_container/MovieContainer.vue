@@ -30,7 +30,7 @@ function convert_seconds_to_time(f_seconds) {
 <!--    <p>{{ data['content_rating'] }}</p>-->
 <!--    <p>{{ data['external_id'] }}</p>-->
 
-    <img v-if="data['id']!==undefined" class="poster" alt="poster" v-lazy="image_path"/>
+    <img v-if="data['external_id']!==undefined" class="poster" alt="poster" v-lazy="image_path"/>
     <div class="poster_gradient"></div>
 
     <Rating v-if="data!==undefined" class="ratings" :data="data" :max_size="min_size"></Rating>
