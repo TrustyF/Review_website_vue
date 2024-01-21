@@ -1,4 +1,5 @@
 import datetime
+import json
 from pprint import pprint
 import time
 
@@ -51,7 +52,7 @@ def map_media(medias, media_type):
                                                      pub_rating_max,
                                                      user_rating_min,
                                                      user_rating_max) \
-            if (pub_rating_min <= 6 if pub_rating_min is not None else False) else entry.public_rating
+            if (pub_rating_min <= 7 if pub_rating_min is not None else False) else entry.public_rating
 
         mapped['genres'] = jsonify(entry.genres).json if entry.genres else None
         mapped['themes'] = jsonify(entry.themes).json if entry.themes else None
@@ -133,4 +134,31 @@ def map_from_tmdb(medias, media_type, search_category):
 
         mapped_medias.append(Media(**mapping))
 
+    # pprint(mapped_medias[0])
+    return mapped_medias
+
+
+def map_from_mangadex(medias, media_type):
+    mapped_medias = []
+
+    # with open('temp.json', 'w') as outfile:
+    #     json.dump(medias[0], outfile)
+
+    for media in medias:
+        attrib = media.get('attributes')
+        mapping = {
+            'name': attrib.get('title').get('en'),
+            'release_date': f"{attrib.get('year')}-01-01",
+            'overview': attrib.get('description').get('en'),
+            'poster_path': media.get('poster_path'),
+            'media_type': media_type,
+            'user_rating': 0,
+            'public_rating': media.get('vote_average'),
+            'external_id': media.get('id'),
+            'content_rating': attrib.get('contentRating')
+        }
+
+        mapped_medias.append(Media(**mapping))
+
+    # pprint(mapped_medias[0])
     return mapped_medias

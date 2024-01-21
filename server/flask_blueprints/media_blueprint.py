@@ -12,7 +12,7 @@ from datetime import datetime
 from math import ceil, floor
 
 from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY
-from data_mapper.media_mapper import map_media, map_from_tmdb
+from data_mapper.media_mapper import map_media, map_from_tmdb, map_from_mangadex
 from db_loader import db
 from sql_models.media_model import Media, Genre, Theme, Tag, media_genre_association, media_tag_association
 
@@ -149,9 +149,7 @@ def find():
 
     print(f'searching {media_name=} {media_type=}')
 
-    full_medias = []
     mapped_media = []
-
     search_category = get_search_category_from_type(media_type)
 
     def request_tmdb():
@@ -173,13 +171,47 @@ def find():
 
         return all_found
 
+    def request_mangadex():
+
+        def find_in_relationships(data, key, value):
+            for my_dict in data:
+                if my_dict.get(key) == value:
+                    return my_dict
+
+        media_request = requests.get(f"https://api.mangadex.org/manga?title={media_name}"
+                                     f"&limit=5&includes[]=cover_art&includes[]=chapter").json()
+        all_found = media_request['data']
+
+        for media in all_found:
+            path = (f"https://uploads.mangadex.org/covers/{media['id']}"
+                    f"/{find_in_relationships(media['relationships'], 'type', 'cover_art')['attributes']['fileName']}"
+                    f".512.jpg")
+            statistics = requests.get(f'https://api.mangadex.org/statistics/manga/{media["id"]}').json()
+
+            media['poster_path'] = path
+            media['vote_average'] = statistics['statistics'][media['id']]['rating']['bayesian']
+
+        # pprint(all_found)
+        return all_found
+
     if media_type in ['movie', 'tv', 'anime']:
         full_medias = request_tmdb()
 
-    if len(full_medias) > 0:
-        mapped_media = map_from_tmdb(full_medias, media_type, search_category)
+        if len(full_medias) > 0:
+            mapped_media = map_from_tmdb(full_medias, media_type, search_category)
 
-    return mapped_media, 200
+            return mapped_media, 200
+
+    elif media_type in ['manga']:
+        full_medias = request_mangadex()
+
+        if len(full_medias) > 0:
+            mapped_media = map_from_mangadex(full_medias, media_type)
+
+            return mapped_media, 200
+
+    else:
+        return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
 
 
 @bp.route("/add", methods=['POST'])
@@ -206,7 +238,8 @@ def update():
     media_tags = data.get('tags')
 
     for to_delete in ['id', 'tags']:
-        del data[to_delete]
+        if to_delete in data.keys():
+            del data[to_delete]
 
     query = db.session.query(Media).filter_by(id=media_id)
 
@@ -269,14 +302,31 @@ def search_extra_posters():
 
         return concat_posters
 
+    def request_mangadex_posters():
+        extra_request = requests.get(f'https://api.mangadex.org/cover?limit=100&manga%5B%5D={media_external_id}').json()
+
+        aggregated_links = []
+        for entry in extra_request['data']:
+
+            if entry['attributes']['volume'] is None:
+                continue
+
+            path = (f"https://uploads.mangadex.org/covers/{media_external_id}"
+                    f"/{entry['attributes']['fileName']}"
+                    f".512.jpg")
+            aggregated_links.append([path, entry['attributes']['volume']])
+
+        sorted_links = sorted(aggregated_links, key=lambda x: float(x[1]))
+        clean_links = [x[0] for x in sorted_links]
+
+        return clean_links
+
     posters = []
     if media_type in ['movie', 'tv', 'anime']:
         posters = request_tmdb_posters()
 
     if media_type in ['manga']:
-        pass
-        # mangadex_link = 'https://image.tmdb.org/t/p/w500'
-        # posters = [mangadex_link + x['file_path'] for x in extra_request['images']['posters']]
+        posters = request_mangadex_posters()
 
     return posters, 200
 
