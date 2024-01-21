@@ -42,6 +42,7 @@ async function get_media(text) {
 
   const url = new URL(`${curr_api}/media/get`)
   const params = {
+    'type': search_type.value,
     'limit': 5,
     'page': 0,
     'session_seed': 1,
@@ -154,7 +155,7 @@ onMounted(() => {
 
         <div class="media_type_selector">
           <label for="media_types" style="margin-right: 10px">Media type</label>
-          <select v-model="search_type" id="media_types">
+          <select v-model="search_type" id="media_types" @change="get_media()">
             <option value="movie">movie</option>
             <option value="tv">tv</option>
             <option value="short">short</option>
@@ -166,7 +167,7 @@ onMounted(() => {
       </div>
       <div class="search_result">
         <movie-container v-for="med in search_media"
-                         :key="med['id']"
+                         :key="med['external_id']"
                          :data="med"
                          :container_size="[500,750]"
                          :container_scale="0.20"
