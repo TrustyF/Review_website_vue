@@ -57,7 +57,7 @@ onMounted(() => {
 
   opacity: 0;
   visibility: hidden;
-  transition: 200ms;
+  transition: opacity 200ms;
 
   pointer-events: none;
   user-select: none;
