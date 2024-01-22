@@ -38,14 +38,25 @@ let form_changes = ref({})
 let updated = ref(false)
 let added = ref(false)
 
+let content_ratings = ref()
+
 let container_size = computed(() => {
   if (search_type.value === 'short') {
-    return [480*2,240*2]
+    return [480 * 2, 240 * 2]
   } else {
     return [500, 750]
   }
 })
 
+async function fetch_filters() {
+
+  const url = new URL(`${curr_api}/media/get_filters`)
+  url.searchParams.set('type', search_type.value !== undefined ? search_type.value : '')
+
+  const result = await fetch(url).then(response => response.json())
+
+  content_ratings.value = result['content_ratings']
+}
 
 async function get_media(text) {
 
@@ -141,9 +152,10 @@ function update_tags(event) {
 
 onMounted(() => {
   get_media()
+  fetch_filters()
 })
 
-watch(selected_media,(newV)=>{
+watch(selected_media, (newV) => {
   search_type.value = selected_media.value['media_type']
   get_media()
 })
@@ -159,11 +171,11 @@ watch(selected_media,(newV)=>{
         <div class="search_bars">
           <div style="display: flex;align-items: center;gap: 10px">
             <h1>Library</h1>
-            <filter-search style="height: 30px" @filter="get_media($event)"></filter-search>
+            <filter-search style="height: 30px" @filter="get_media($event)" :auto_search="false"></filter-search>
           </div>
           <div style="display: flex;align-items: center;gap: 10px">
             <h1>Find</h1>
-            <filter-search style="height: 30px" @filter="find_media($event)"></filter-search>
+            <filter-search style="height: 30px" @filter="find_media($event)" :auto_search="false"></filter-search>
           </div>
         </div>
 
@@ -200,20 +212,41 @@ watch(selected_media,(newV)=>{
 
       <div class="form_area">
 
-        <div class="form_group" v-for="group in form_bindings" :key="group">
-          <div class="form_box" v-for="(key) in Object.keys(group)" :key="key">
-            <label :for="key">{{ key }}</label>
+        <label for="form_name">Name</label>
+        <input id="form_name" v-model="selected_media['name']" type="text"
+               @change="form_changes['name']=$event.target.value">
 
-            <input v-if="group[key]!=='checkbox'"
-                   v-model="selected_media[key]"
-                   :type="group[key]"
-                   @change="form_changes[key]=$event.target.value">
-            <input v-else
-                   v-model="selected_media[key]"
-                   type="checkbox"
-                   @change="form_changes[key]=$event.target.checked">
-          </div>
-        </div>
+        <label for="form_user_rating">Rating</label>
+        <input id="form_user_rating" v-model="selected_media['user_rating']" type="number"
+               @change="form_changes['user_rating']=$event.target.value">
+
+        <label for="form_user_dropped">dropped</label>
+        <input id="form_user_dropped" v-model="selected_media['is_dropped']" type="checkbox"
+               @change="form_changes['is_dropped']=$event.target.value">
+
+        <label for="form_user_deleted">deleted</label>
+        <input id="form_user_deleted" v-model="selected_media['is_deleted']" type="checkbox"
+               @change="form_changes['is_deleted']=$event.target.value">
+
+        <select v-model="selected_media['content_rating']" id="media_types"
+                @change="form_changes['content_rating']=$event.target.value">
+          <option v-for="c in content_ratings" :key="c" :value="c">{{c}}</option>
+        </select>
+
+        <!--        <div class="form_group" v-for="group in form_bindings" :key="group">-->
+        <!--          <div class="form_box" v-for="(key) in Object.keys(group)" :key="key">-->
+        <!--            <label :for="key">{{ key }}</label>-->
+
+        <!--            <input v-if="group[key]!=='checkbox'"-->
+        <!--                   v-model="selected_media[key]"-->
+        <!--                   :type="group[key]"-->
+        <!--                   @change="form_changes[key]=$event.target.value">-->
+        <!--            <input v-else-->
+        <!--                   v-model="selected_media[key]"-->
+        <!--                   type="checkbox"-->
+        <!--                   @change="form_changes[key]=$event.target.checked">-->
+        <!--          </div>-->
+        <!--        </div>-->
 
         <div style="display: flex;align-items: center;gap:10px">
           <button style="width: 100px" @click="update_media">Update</button>
@@ -271,7 +304,7 @@ watch(selected_media,(newV)=>{
   display: flex;
   flex-flow: column wrap;
   gap: 10px;
-  justify-content: space-between;
+  /*justify-content: space-between;*/
 }
 
 .form_box {

@@ -1,13 +1,10 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
 
-let props = defineProps(["box_size", "box_data"]);
+let props = defineProps(["b_width","b_height", "box_data"]);
 let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
 
-let box_scale = 0.45
-let tier_box_height = computed(() => props['box_size'][1] * box_scale + 'px')
-let tier_box_width = computed(() => props['box_size'][0] * box_scale + 'px')
 
 </script>
 
@@ -26,16 +23,17 @@ let tier_box_width = computed(() => props['box_size'][0] * box_scale + 'px')
 
 <style scoped>
 .tier_box {
-  outline: 1px solid orange;
+  position: relative;
+  /*outline: 1px solid orange;*/
 
   list-style: none;
   color: white;
   text-decoration: none;
 
-  height: v-bind(tier_box_height);
-  width: v-bind(tier_box_width);
+  height: v-bind(b_height);
+  width: v-bind(b_width);
 
-  clip-path: inset(0% 0% 0% 0% round 5%);
+  filter: drop-shadow(5px 5px 6px black);
 }
 
 .tier_box_wrapper {
@@ -48,6 +46,7 @@ let tier_box_width = computed(() => props['box_size'][0] * box_scale + 'px')
   width: 100%;
 
   background-color: #2b2a34;
+  clip-path: inset(0% 0% 0% 0% round 5%);
 }
 
 .box_content {

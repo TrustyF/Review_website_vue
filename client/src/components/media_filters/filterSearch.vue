@@ -1,6 +1,7 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
 
+let props = defineProps(["auto_search"]);
 let emits = defineEmits(["filter"]);
 
 let is_typing = ref(false)
@@ -14,6 +15,11 @@ function emit_filter(event) {
 }
 
 function throttle_search(text) {
+
+  if (props['auto_search'] === false) {
+    return;
+  }
+
   last_typed.value = text
   clearTimeout(debounce_id)
 
@@ -21,14 +27,14 @@ function throttle_search(text) {
     emit_filter(last_typed.value)
   }, 200)
 
-  // if (is_typing.value) return
+  if (is_typing.value) return
 
-  // is_typing.value = true
-  // emit_filter(text)
+  is_typing.value = true
+  emit_filter(text)
 
-  // throttle_id = setTimeout(() => {
-  //   is_typing.value = false
-  // }, 500)
+  throttle_id = setTimeout(() => {
+    is_typing.value = false
+  }, 500)
 }
 
 </script>
