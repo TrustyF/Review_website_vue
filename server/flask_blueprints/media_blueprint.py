@@ -295,6 +295,9 @@ def find():
         if len(full_medias) > 0:
             mapped_media = map_from_youtube(full_medias, media_type)
 
+            # with open('temp.json', 'w') as outfile:
+            #     json.dump(mapped_media[0], outfile)
+
             return mapped_media, 200
 
     print('returning not found')
@@ -483,6 +486,8 @@ def get_filters():
                                  func.min(Media.runtime).label('min'))
                 .filter(Media.runtime.is_not(None)))
 
+    content_ratings = db.session.query(Media.content_rating).filter(Media.content_rating.is_not(None))
+
     if media_type:
         genres = genres.filter(Media.media_type == media_type)
         themes = themes.filter(Media.media_type == media_type)
@@ -491,11 +496,14 @@ def get_filters():
         public_ratings = public_ratings.filter(Media.media_type == media_type)
         release_dates = release_dates.filter(Media.media_type == media_type)
         runtimes = runtimes.filter(Media.media_type == media_type)
+        content_ratings = content_ratings.filter(Media.media_type == media_type)
 
     ratings = ratings.one()
     public_ratings = public_ratings.one()
     release_dates = release_dates.one()
     runtimes = runtimes.one()
+    # todo add content rating model
+    content_ratings = content_ratings.distinct().all()
 
     # print(ratings, public_ratings, release_dates, runtimes)
 
@@ -507,6 +515,7 @@ def get_filters():
         'public_ratings': [floor(public_ratings.min or 0), ceil(public_ratings.max or 0)],
         'release_dates': [release_dates.min.year, release_dates.max.year],
         'runtimes': [0, ceil(runtimes.max / 15) * 15] if runtimes.max else [0, 0],
+        # 'content_ratings': [{'id': i, 'name': tuple(x)[0]} for i, x in enumerate(content_ratings)],
     }
 
     return result, 200

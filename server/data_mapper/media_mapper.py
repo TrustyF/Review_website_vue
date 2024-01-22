@@ -123,9 +123,6 @@ def map_from_tmdb(medias, media_type, search_category):
         }
         return tv_mapping
 
-    with open('temp.json', 'w') as outfile:
-        json.dump(medias[0], outfile)
-
     mapped_medias = []
     for media in medias:
 
@@ -145,9 +142,6 @@ def map_from_tmdb(medias, media_type, search_category):
 def map_from_mangadex(medias, media_type):
     mapped_medias = []
 
-    # with open('temp.json', 'w') as outfile:
-    #     json.dump(medias[0], outfile)
-
     for media in medias:
         attrib = media.get('attributes')
         mapping = {
@@ -165,15 +159,11 @@ def map_from_mangadex(medias, media_type):
 
         mapped_medias.append(Media(**mapping))
 
-    # pprint(mapped_medias[0])
     return mapped_medias
 
 
 def map_from_igdb(medias, media_type):
     mapped_medias = []
-
-    with open('temp.json', 'w') as outfile:
-        json.dump(medias[0], outfile)
 
     for media in medias:
         mapping = {
@@ -249,9 +239,6 @@ def map_from_youtube(medias, media_type):
 
     mapped_medias = []
 
-    # with open('temp.json', 'w') as outfile:
-    #     json.dump(medias, outfile)
-
     for media in medias:
         mapping = {
             'name': media.get('title'),
@@ -268,7 +255,5 @@ def map_from_youtube(medias, media_type):
         }
 
         mapped_medias.append(Media(**mapping))
-
-    # pprint(mapped_medias[0])
 
     return mapped_medias
