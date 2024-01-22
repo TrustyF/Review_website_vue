@@ -81,6 +81,7 @@ def map_from_tmdb(medias, media_type, search_category):
             'user_rating': 0,
             'public_rating': entry.get('vote_average'),
             'external_id': entry.get('id'),
+            'external_link': 'https://www.imdb.com/title/' + entry.get('external_ids').get('imdb_id'),
             'runtime': entry.get('runtime'),
             'content_rating': content_rating
         }
@@ -115,14 +116,17 @@ def map_from_tmdb(medias, media_type, search_category):
             'user_rating': 0,
             'public_rating': entry.get('vote_average'),
             'external_id': entry.get('id'),
+            'external_link': 'https://www.imdb.com/title/' + entry.get('external_ids').get('imdb_id'),
             'content_rating': get_content_rating(),
             'episodes': entry.get('number_of_episodes'),
             'seasons': entry.get('number_of_seasons'),
         }
         return tv_mapping
 
-    mapped_medias = []
+    with open('temp.json', 'w') as outfile:
+        json.dump(medias[0], outfile)
 
+    mapped_medias = []
     for media in medias:
 
         mapping = {}
@@ -155,6 +159,7 @@ def map_from_mangadex(medias, media_type):
             'user_rating': 0,
             'public_rating': media.get('vote_average'),
             'external_id': media.get('id'),
+            'external_link': 'https://mangadex.org/title/' + media.get('id'),
             'content_rating': attrib.get('contentRating')
         }
 
@@ -176,14 +181,94 @@ def map_from_igdb(medias, media_type):
             'release_date': f"{media.get('release_dates')[0].get('y')}-01-01" if media.get(
                 'release_dates') else None,
             'overview': media.get('summary'),
-            'poster_path': 'https:' + media.get('cover').get('url') if media.get('cover') else None,
+            'poster_path': 'https:' + media.get('cover').get('url').replace('t_thumb', 't_1080p') if media.get(
+                'cover') else None,
             'media_type': media_type,
             'user_rating': 0,
             'public_rating': media.get('total_rating') / 10 if media.get('total_rating') else None,
             'external_id': media.get('id'),
+            'external_link': media.get('url'),
             'content_rating': media.get('contentRating')
         }
 
         mapped_medias.append(Media(**mapping))
+
+    return mapped_medias
+
+
+def map_from_youtube(medias, media_type):
+    def convert_text_to_date(text):
+
+        if text is None:
+            return None
+
+        text = text.lower()
+
+        if 'streamed' in text:
+            text = text.replace('streamed', '')
+
+        date = datetime.datetime.now().date()
+        day = date.day
+        month = date.month
+        year = date.year
+
+        if 'hour' in text:
+            return f'{year}-{month}-{day}'
+
+        if 'day' in text:
+            number = text.split('day')[0]
+            return f'{year}-{month}-{day - int(number)}'
+
+        if 'month' in text:
+            number = text.split('month')[0]
+            return f'{year}-{month - int(number)}-{day}'
+
+        if 'year' in text:
+            number = text.split('year')[0]
+            return f'{year - int(number)}-{month}-{day}'
+
+    def convert_text_to_runtime(text):
+
+        total_time_min = 0.0
+
+        for elem in text.split(','):
+
+            if 'hour' in elem:
+                number = elem.split('hour')[0]
+                total_time_min += 60 * int(number)
+
+            if 'minute' in elem:
+                number = elem.split('minute')[0]
+                total_time_min += int(number)
+
+            if 'second' in elem:
+                number = elem.split('second')[0]
+                total_time_min += int(number) / 60
+
+        return int(total_time_min)
+
+    mapped_medias = []
+
+    # with open('temp.json', 'w') as outfile:
+    #     json.dump(medias, outfile)
+
+    for media in medias:
+        mapping = {
+            'name': media.get('title'),
+            'release_date': convert_text_to_date(media.get('publishedTime')),
+            'overview': media.get('summary'),
+            'poster_path': f'https://img.youtube.com/vi/{media.get("id")}/maxresdefault.jpg',
+            'media_type': media_type,
+            'user_rating': 0,
+            'public_rating': media.get('total_rating') / 10 if media.get('total_rating') else None,
+            'external_id': media.get('id'),
+            'external_link': media.get('link'),
+            'runtime': convert_text_to_runtime(media.get('accessibility').get('duration')),
+            # 'content_rating': media.get('contentRating')
+        }
+
+        mapped_medias.append(Media(**mapping))
+
+    # pprint(mapped_medias[0])
 
     return mapped_medias
