@@ -143,6 +143,11 @@ onMounted(() => {
   get_media()
 })
 
+watch(selected_media,(newV)=>{
+  search_type.value = selected_media.value['media_type']
+  get_media()
+})
+
 </script>
 
 <template>

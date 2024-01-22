@@ -7,9 +7,9 @@
 <style scoped>
 .wrapper {
   /*outline: 1px solid red;*/
-  padding: 10px;
+  padding: 20px;
   width: 80%;
-  margin: auto;
+  margin: 0 auto 0 auto;
   text-align: center;
   font-size: 0.8em;
   color: #464646;

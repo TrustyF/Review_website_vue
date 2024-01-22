@@ -23,13 +23,26 @@ function convert_seconds_to_time(f_seconds) {
   return hours + 'h ' + minutes + 'm';
 }
 
+function get_year_from_release_date(string) {
+
+  if (typeof string === 'string') {
+    return string.substring(0, 4)
+  } else {
+    return undefined
+  }
+}
+
+function open_link_new_tab(path) {
+  window.open(path, '_blank');
+}
+
 </script>
 
 <template>
-  <div class="movie_container_wrapper" @click="emits('media_data',data)">
+  <div class="movie_mobile_container_wrapper">
 
     <div class="poster_wrapper">
-      <img v-if="data['id']!==undefined" class="poster" alt="poster" v-lazy="image_path"/>
+      <img @click="open_link_new_tab(data['external_link'])" class="poster" alt="poster" v-lazy="image_path"/>
       <div class="poster_gradient"></div>
 
       <div class="badges">
@@ -53,7 +66,9 @@ function convert_seconds_to_time(f_seconds) {
       <div class="header">
         <div class="title">{{ data['name'] }}</div>
         <div class="secondary_info">
-          <h2 class="date">{{ data['release_date'].substring(0, 4) }}</h2>
+          <h2 class="date" v-if="data['release_date']!==undefined"> {{
+              get_year_from_release_date(data['release_date'])
+            }}</h2>
           <h2 class="date" v-if="data['runtime']>0">{{ ' • ' + convert_seconds_to_time(data['runtime']) }}</h2>
           <h2 class="date" v-if="data['seasons']>0">{{ ' • ' + data['seasons'] + ' seasons' }} </h2>
           <h2 class="date" v-if="data['episodes']>0">{{ ' • ' + data['episodes'] + ' episodes' }} </h2>
@@ -84,7 +99,8 @@ function convert_seconds_to_time(f_seconds) {
 </template>
 
 <style scoped>
-.movie_container_wrapper {
+.movie_mobile_container_wrapper {
+  cursor: pointer;
   display: flex;
   flex-flow: row nowrap;
   justify-items: center;
@@ -94,7 +110,6 @@ function convert_seconds_to_time(f_seconds) {
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
   background-color: #25222a;
   padding: 5px;
-
 }
 
 .poster_wrapper {
@@ -116,6 +131,7 @@ function convert_seconds_to_time(f_seconds) {
 
 .poster_gradient {
   content: "";
+  pointer-events: none;
   position: absolute;
   border-radius: 8px;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 90%, rgba(0, 0, 0, 0.5) 100%);

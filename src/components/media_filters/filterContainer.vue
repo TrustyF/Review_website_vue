@@ -11,6 +11,8 @@ const curr_api = inject("curr_api");
 let genres = ref(null)
 let themes = ref(null)
 let tags = ref(null)
+let content_ratings = ref(null)
+
 let user_ratings = ref([0, 0])
 let public_ratings = ref([0, 0])
 let release_dates = ref([0, 0])
@@ -40,6 +42,7 @@ async function fetch_filters() {
   public_ratings.value = result['public_ratings']
   release_dates.value = result['release_dates']
   runtimes.value = result['runtimes']
+  // content_ratings.value = result['content_ratings']
 }
 
 function emit_filter(title, event) {
@@ -56,6 +59,10 @@ onMounted(() => {
 
     <div class="genres_box">
 
+      <filter-radio v-if="orders!==null && orders.length>0"
+                    @value="emit_filter('order',$event)"
+                    :data="orders" title="Sort by"></filter-radio>
+
       <filter-dropdown v-if="tags !== null && tags.length>0"
                        @id="emit_filter('tags',$event)"
                        :data="tags" title="Tags"></filter-dropdown>
@@ -65,10 +72,9 @@ onMounted(() => {
       <filter-dropdown v-if="themes!==null && themes.length>0"
                        @id="emit_filter('themes',$event)"
                        :data="themes" title="Themes"></filter-dropdown>
-
-      <filter-radio v-if="orders!==null && orders.length>0"
-                    @value="emit_filter('order',$event)"
-                    :data="orders" title="Sort by"></filter-radio>
+      <filter-dropdown v-if="content_ratings!==null && content_ratings.length>0"
+                       @id="emit_filter('content_ratings',$event)"
+                       :data="content_ratings" title="Content rating"></filter-dropdown>
 
     </div>
 

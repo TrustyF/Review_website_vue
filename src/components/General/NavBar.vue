@@ -40,7 +40,7 @@ onMounted(() => {
       <h1>|</h1>
       <RouterLink active-class="active" class="link" to="/movies">Movies</RouterLink>
       <RouterLink active-class="active" class="link" to="/series">Series</RouterLink>
-      <RouterLink active-class="active" class="link" to="/shorts">Shorts</RouterLink>
+      <RouterLink active-class="active" class="link" to="/shorts">Short films</RouterLink>
       <h1>•</h1>
       <RouterLink active-class="active" class="link" to="/anime">Anime</RouterLink>
       <RouterLink active-class="active" class="link" to="/manga">Manga</RouterLink>

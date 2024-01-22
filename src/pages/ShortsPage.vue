@@ -1,12 +1,30 @@
 <script setup>
 import {ref, onMounted, inject, provide} from 'vue'
-import MediaFeed from "@/components/media_feed/MediaFeed.vue";
+import TierFeed from "@/components/Tierlists/TierFeed.vue";
 
+import riot_games_img from "/tier_list_images/riot_games.jpg"
+import youtube_short_films_img from "/tier_list_images/youtube_short_films.jpg"
+import youtube_animations_img from "/tier_list_images/youtube_animations.jpg"
+
+let tier_lists = [
+  {
+    'name': 'Riot games media',
+    'image': riot_games_img,
+    'link':'/shorts/riot_games_media'
+  },
+  {
+    'name': 'Youtube short films',
+    'image': youtube_short_films_img,
+    'link':'/shorts/yt_short_films'
+  },
+  {
+    'name': 'Youtube animations',
+    'image': youtube_animations_img,
+    'link':'/shorts/yt_animations'
+  },
+]
 </script>
 
 <template>
-  <media-feed :media_type="'short'"
-              :media_sizes="[[480,240],[480,240]]"
-              :media_scales="[0.75,0.4]"
-  ></media-feed>
+  <tier-feed :box_size="[700,500]" :data="tier_lists"></tier-feed>
 </template>

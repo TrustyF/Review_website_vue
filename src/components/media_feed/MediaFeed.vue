@@ -162,9 +162,11 @@ onMounted(() => {
 }
 
 .media_container_wrapper {
-  gap: 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(v-bind(element_width), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(v-bind(element_width), 0fr));
+  grid-gap: 20px;
+  justify-items: center;
+  justify-content: center;
 }
 
 .rating_box {
