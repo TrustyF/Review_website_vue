@@ -4,6 +4,8 @@ import FilterContainer from "../media_filters/filterContainer.vue";
 import FilterSearch from "../media_filters/filterSearch.vue";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 
+import filter_image from "@/assets/ui/filter_button.png"
+
 let props = defineProps(["media_type"]);
 let emits = defineEmits(["filter"]);
 const curr_api = inject("curr_api");
@@ -58,7 +60,7 @@ onMounted(() => {
 
     <div class="filters_box">
       <img alt="filters" @click="toggle_filters_box" class="filter_button"
-           src="src/assets/ui/filter_button.png">
+           :src="filter_image">
       <filter-search @filter="emit_filter(['search',$event])"></filter-search>
     </div>
 

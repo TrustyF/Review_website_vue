@@ -51,8 +51,12 @@ watch(is_visible_navbar, (oldVal, newVal) => {
 
 <style scoped>
 .main {
+  /*outline: 1px solid red;*/
+
   margin: 0 auto 0 auto;
   max-width: 1000px;
+  min-height: 80vh;
+
   padding: 0 10px 0 10px;
   transition: transform 250ms;
   transition-delay: 250ms;

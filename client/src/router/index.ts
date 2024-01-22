@@ -9,6 +9,7 @@ import AnimePage from "../pages/AnimePage.vue"
 import GamePage from "../pages/GamePage.vue"
 import EditPage from "../pages/EditPage.vue"
 import AllPage from "../pages/AllPage.vue"
+import RiotPage from "../pages/sub_pages/shorts/RiotPage.vue"
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
             path: "/shorts",
             name: "shorts",
             component: ShortsPage
+        },
+        {
+            path: "/shorts/riot_games_media",
+            name: "riot games media",
+            component: RiotPage
         },
         {
             path: "/anime",
