@@ -38,6 +38,15 @@ let form_changes = ref({})
 let updated = ref(false)
 let added = ref(false)
 
+let container_size = computed(() => {
+  if (search_type.value === 'short') {
+    return [480*2,240*2]
+  } else {
+    return [500, 750]
+  }
+})
+
+
 async function get_media(text) {
 
   const url = new URL(`${curr_api}/media/get`)
@@ -169,7 +178,7 @@ onMounted(() => {
         <movie-container v-for="med in search_media"
                          :key="search_type + med['external_id'] + med['id']"
                          :data="med"
-                         :container_size="[500,750]"
+                         :container_size="container_size"
                          :container_scale="0.20"
                          @media_data="handleMediaEmit"
         ></movie-container>
@@ -179,7 +188,7 @@ onMounted(() => {
 
     <div class="preview_area">
       <movie-container :data="selected_media"
-                       :container_size="[500,750]"
+                       :container_size="container_size"
                        :container_scale="0.35"
                        @media_data="handleMediaEmit"
       ></movie-container>

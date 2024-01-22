@@ -137,14 +137,14 @@ watch(props, (newV) => {
       <div style="display: flex;flex-flow: column">
         <div class="tag_constructor" @dragover="allowDrop" @dragleave="remove_dragged_badge_from_constructor"
              @drop="add_dragged_badge_to_constructor">
-          <badge @dragstart="drag(tag)" :data="tag" v-for="tag in constructed_badges" :key="tag.id" :min_size="200"
+          <badge @dragstart="drag(tag)" :data="tag" v-for="tag in constructed_badges" :key="'constructor'+tag.id" :min_size="200"
                  :show_title="true"></badge>
         </div>
         <button @click="emit">Push to media</button>
       </div>
 
       <div class="tag_editor" @dragover="allowDrop" @drop="add_dragged_badge_to_editor">
-        <badge :data="temp_tag" :min_size="200" :show_title="true"></badge>
+        <badge :data="temp_tag" key="tag_editor_badge" :min_size="200" :show_title="true"></badge>
         <div class="editor_form">
 
           <div class="form_box" v-for="key in Object.keys(temp_tag)" :key="key">
@@ -168,7 +168,7 @@ watch(props, (newV) => {
 
       <div class="badges_wrapper">
         <div style="display:flex;flex-flow: row wrap;gap: 2px;" v-for="tier in available_badges" :key="tier.id">
-          <badge @dragstart="drag(badge)" :data="badge" v-for="badge in tier" :key="badge.id"
+          <badge @dragstart="drag(badge)" :data="badge" v-for="badge in tier" :key="'available'+badge.id"
                  :min_size="200"></badge>
         </div>
       </div>
