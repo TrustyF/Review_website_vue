@@ -47,11 +47,12 @@ watch(is_visible_navbar, (oldVal, newVal) => {
     <RouterView/>
     <CreditsFooter/>
   </div>
+
 </template>
 
 <style scoped>
 .main {
-  /*outline: 1px solid red;*/
+  position: relative;
 
   margin: 0 auto 0 auto;
   max-width: 1000px;

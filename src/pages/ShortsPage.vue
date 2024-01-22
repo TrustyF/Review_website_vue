@@ -26,5 +26,5 @@ let tier_lists = [
 </script>
 
 <template>
-  <tier-feed :box_size="[700,500]" :data="tier_lists"></tier-feed>
+  <tier-feed :box_size="[700,500]" :box_scale="0.5" :data="tier_lists"></tier-feed>
 </template>
