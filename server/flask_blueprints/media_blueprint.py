@@ -2,6 +2,8 @@ import io
 import json
 import os.path
 from pprint import pprint
+
+import dateutil.parser
 import requests
 
 from flask import Blueprint, request, Response, jsonify, send_file
@@ -318,28 +320,40 @@ def add():
     data = request.get_json()
     print('add', data['name'])
 
-    # # cleanup
-    # del data['scaled_public_rating']
-    # filtered_data = {k: v for k, v in data.items() if v is not None}
-    #
-    # # make relationships
-    # for (i, key) in enumerate(['themes', 'genres', 'tags', 'content_ratings']):
-    #     print(i)
-    #     models = [Theme, Genre, Tag, ContentRating]
-    #
-    #     if key not in filtered_data:
-    #         continue
-    #
-    #     for entry in filtered_data[key]:
-    #         filtered_data[key] = [x for x in
-    #                               db.session.query(models[i]).filter_by(id=entry['id']).one()]
-    #
-    # pprint(filtered_data)
-    # media_obj = Media(**filtered_data)
-    #
-    # db.session.add(media_obj)
-    # db.session.commit()
-    # db.session.close()
+    exist_check = db.session.query(Media).filter(Media.external_id == data['external_id']).one_or_none()
+    if exist_check is not None:
+        return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
+
+    # filter
+    filtered_data = {}
+    for entry in data:
+        if data[entry] is None or data[entry] == []:
+            continue
+
+        if entry in ['scaled_public_rating', 'genres', 'tags', 'themes', 'content_ratings']:
+            continue
+
+        filtered_data[entry] = data[entry]
+
+    media_obj = Media(**filtered_data)
+
+    # make association
+    if data.get('genres') is not None:
+        media_obj.genres = [db.session.query(Genre).filter_by(id=x['id']).one() for x in data['genres']]
+
+    if data.get('themes') is not None:
+        media_obj.themes = [db.session.query(Theme).filter_by(id=x['id']).one() for x in data['themes']]
+
+    if data.get('tags') is not None:
+        media_obj.tags = [db.session.query(Tag).filter_by(id=x['id']).one() for x in data['tags']]
+
+    if data.get('content_ratings') is not None:
+        media_obj.content_ratings = [db.session.query(ContentRating).filter_by(id=x['id']).one() for x in
+                                     data['content_ratings']]
+
+    db.session.add(media_obj)
+    db.session.commit()
+    db.session.close()
 
     return json.dumps({'ok': True}), 200, {'ContentType': 'application/json'}
 
@@ -348,25 +362,29 @@ def add():
 def update():
     # parameters
     data = request.get_json()
-    print('update', data)
+    print('update', data['name'])
 
-    media_id = data.get('id')
-    media_tags = data.get('tags')
+    query = db.session.query(Media).filter_by(id=data['id'])
 
-    for to_delete in ['id', 'tags']:
-        if to_delete in data.keys():
-            del data[to_delete]
+    if query.one_or_none() is None:
+        return json.dumps({'ok': False}), 200, {'ContentType': 'application/json'}
 
-    query = db.session.query(Media).filter_by(id=media_id)
+    # update
+    query.update({
+        'name': data.get('name'),
+        'user_rating': data.get('user_rating'),
+        'is_dropped': data.get('is_dropped'),
+        'is_deleted': data.get('is_deleted'),
+    })
+    media_obj = query.one()
 
-    # update data
-    if data:
-        query.update(data)
+    # make association
+    if data.get('tags') is not None:
+        media_obj.tags = [db.session.query(Tag).filter_by(id=x['id']).one() for x in data['tags']]
 
-    # update tags
-    if media_tags:
-        tag_objects = [db.session.query(Tag).filter(Tag.id == x).one() for x in media_tags]
-        query.one().tags = tag_objects
+    if data.get('content_ratings') is not None:
+        media_obj.content_ratings = [db.session.query(ContentRating).filter_by(id=x['id']).one() for x in
+                                     data['content_ratings']]
 
     db.session.commit()
     db.session.close()
@@ -512,7 +530,7 @@ def get_filters():
                                  func.min(Media.runtime).label('min'))
                 .filter(Media.runtime.is_not(None)))
 
-    content_ratings = db.session.query(Media.content_ratings)
+    content_ratings = db.session.query(ContentRating).join(Media.content_ratings)
 
     if media_type:
         genres = genres.filter(Media.media_type == media_type)
@@ -528,9 +546,8 @@ def get_filters():
     public_ratings = public_ratings.one()
     release_dates = release_dates.one()
     runtimes = runtimes.one()
-    content_ratings = content_ratings.distinct()
 
-    print(content_ratings)
+    print(content_ratings.all())
 
     # print(ratings, public_ratings, release_dates, runtimes)
 
@@ -542,6 +559,7 @@ def get_filters():
         'public_ratings': [floor(public_ratings.min or 0), ceil(public_ratings.max or 0)],
         'release_dates': [release_dates.min.year, release_dates.max.year],
         'runtimes': [0, ceil(runtimes.max / 15) * 15] if runtimes.max else [0, 0],
+        'content_ratings': content_ratings.all()
         # 'content_ratings': [{'id': i, 'name': tuple(x)[0]} for i, x in enumerate(content_ratings)],
     }
 

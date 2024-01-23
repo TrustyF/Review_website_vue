@@ -50,7 +50,7 @@ def map_media(medias, media_type):
     for entry in medias:
         mapped = jsonify(entry).json
 
-        print(entry.name if entry is not None else entry)
+        # print(entry.name if entry is not None else entry)
 
         mapped['release_date'] = entry.release_date.isoformat() if entry.release_date is not None else None
 
@@ -83,32 +83,18 @@ def map_associations(table, array, media_type):
         if val == '':
             continue
 
+        exist_check = db.session.query(table).filter(table.name == val)
+
         # check if instance exists, create if not
-        if not db.session.query(table).filter(table.name == val).one_or_none():
+        if exist_check.one_or_none() is None:
             obj = table(name=val, origin=media_type)
             db.session.add(obj)
             db.session.commit()
-            # db.session.close()
 
-        obj = db.session.query(table).filter(table.name == val).one_or_none()
+        obj = exist_check.one()
         objects.append(obj)
 
     return objects
-
-
-def find_in_db_or_add(f_medias):
-    new_added = False
-
-    # add to db if missing
-    for entry in f_medias:
-        exist_check = db.session.query(Media).filter(Media.external_id == entry.external_id).one_or_none()
-
-        if exist_check is None:
-            db.session.add(entry)
-            new_added = True
-
-    if new_added:
-        db.session.commit()
 
 
 def map_from_tmdb(medias, media_type, search_category):
@@ -152,7 +138,7 @@ def map_from_tmdb(medias, media_type, search_category):
             'poster_path': ('https://image.tmdb.org/t/p/w500' + entry.get('poster_path'))
             if entry.get('poster_path') else None,
             'media_type': media_type,
-            'user_rating': 0,
+            'user_rating': None,
             'public_rating': entry.get('vote_average'),
             'external_id': entry.get('id'),
             'external_link': 'https://www.imdb.com/title/' + entry.get('external_ids').get('imdb_id')
@@ -162,8 +148,6 @@ def map_from_tmdb(medias, media_type, search_category):
             'runtime': entry.get('runtime'),
             'content_ratings': map_associations(ContentRating, get_content_rating(), media_type),
             'genres': map_associations(Genre, get_genres(), media_type),
-
-            'is_temporary': True,
         }
 
         return movie_mapping
@@ -217,7 +201,7 @@ def map_from_tmdb(medias, media_type, search_category):
             'poster_path': ('https://image.tmdb.org/t/p/w500' + entry.get('poster_path'))
             if entry.get('poster_path') else None,
             'media_type': media_type,
-            'user_rating': 0,
+            'user_rating': None,
             'public_rating': entry.get('vote_average'),
             'external_id': entry.get('id'),
             'external_link': 'https://www.imdb.com/title/' + entry.get('external_ids').get('imdb_id')
@@ -228,8 +212,6 @@ def map_from_tmdb(medias, media_type, search_category):
             'author': get_author(),
             'content_ratings': map_associations(ContentRating, get_content_rating(), media_type),
             'genres': map_associations(Genre, get_genres(), media_type),
-
-            'is_temporary': True,
         }
         return tv_mapping
 
@@ -246,7 +228,6 @@ def map_from_tmdb(medias, media_type, search_category):
         media_obj = Media(**mapping)
         mapped_medias.append(media_obj)
 
-    find_in_db_or_add(mapped_medias)
     return mapped_medias
 
 
@@ -279,20 +260,17 @@ def map_from_mangadex(medias, media_type):
             'overview': attrib.get('description').get('en'),
             'poster_path': media.get('poster_path'),
             'media_type': media_type,
-            'user_rating': 0,
+            'user_rating': None,
             'public_rating': media.get('vote_average'),
             'external_id': media.get('id'),
             'external_link': 'https://mangadex.org/title/' + media.get('id'),
             'author': get_author(media),
             'content_ratings': map_associations(ContentRating, [attrib.get('contentRating')], media_type),
             'genres': map_associations(Genre, get_genres(media), media_type),
-
-            'is_temporary': True,
         }
 
         mapped_medias.append(Media(**mapping))
 
-    find_in_db_or_add(mapped_medias)
     return mapped_medias
 
 
@@ -369,7 +347,7 @@ def map_from_igdb(medias, media_type):
             'poster_path': 'https:' + media.get('cover').get('url').replace('t_thumb', 't_1080p') if media.get(
                 'cover') else None,
             'media_type': media_type,
-            'user_rating': 0,
+            'user_rating': None,
             'public_rating': media.get('total_rating') / 10 if media.get('total_rating') else None,
             'external_id': media.get('id'),
             'external_link': media.get('url'),
@@ -377,13 +355,10 @@ def map_from_igdb(medias, media_type):
             'content_ratings': map_associations(ContentRating, get_content_rating(media), media_type),
             'genres': map_associations(Genre, get_genres(media), media_type),
             'themes': map_associations(Theme, get_themes(media), media_type),
-
-            'is_temporary': True,
         }
 
         mapped_medias.append(Media(**mapping))
 
-    find_in_db_or_add(mapped_medias)
     return mapped_medias
 
 
@@ -449,17 +424,14 @@ def map_from_youtube(medias, media_type):
             'overview': media.get('summary'),
             'poster_path': f'https://img.youtube.com/vi/{media.get("id")}/maxresdefault.jpg',
             'media_type': media_type,
-            'user_rating': 0,
+            'user_rating': None,
             'public_rating': media.get('public_rating') if media.get('public_rating') else None,
             'external_id': media.get('id'),
             'external_link': media.get('link'),
             'author': media.get('channel').get('name'),
             'runtime': convert_text_to_runtime(media.get('accessibility').get('duration')),
-
-            'is_temporary': True,
         }
 
         mapped_medias.append(Media(**mapping))
 
-    find_in_db_or_add(mapped_medias)
     return mapped_medias

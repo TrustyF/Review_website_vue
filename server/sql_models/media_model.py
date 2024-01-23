@@ -95,7 +95,6 @@ class Media(db.Model):
 
     is_dropped: bool = db.Column(db.Boolean)
     is_deleted: bool = db.Column(db.Boolean)
-    is_temporary: bool = db.Column(db.Boolean)
 
     created_at: datetime.datetime = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at: datetime.datetime = db.Column(db.DateTime, onupdate=datetime.datetime.utcnow)
@@ -112,5 +111,5 @@ class Media(db.Model):
     tags = db.relationship("Tag", secondary=media_tag_association)
     content_ratings = db.relationship("ContentRating", secondary=media_content_rating_association)
 
-    def __repr__(self):
-        return f"{self.name=}"
+    # def __repr__(self):
+    #     return f"{self.name=}"
