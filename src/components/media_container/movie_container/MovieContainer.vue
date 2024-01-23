@@ -51,16 +51,16 @@ function open_link_new_tab(path) {
 <template>
   <div class="movie_container_wrapper">
 
-<!--    <div style="position:absolute;background-color: #25222a;padding: 5px;font-size: 0.5em">-->
+    <div style="position:absolute;background-color: #25222a;padding: 5px;font-size: 0.5em">
 <!--      <p>{{ data['external_link'] }}</p>-->
-<!--      <p v-if="data['content_ratings']">content= {{ data['content_ratings'].map((elem)=>elem['name']) }}</p>-->
-<!--      <p v-if="data['genres']">genres= {{ data['genres'].map((elem)=>elem['name']) }}</p>-->
-<!--      <p v-if="data['themes']">themes= {{ data['themes'].map((elem)=>elem['name']) }}</p>-->
-<!--      <p v-if="data['tags']">tags= {{ data['tags'].map((elem)=>elem['name']) }}</p>-->
+      <p v-if="data['content_ratings']">content= {{ data['content_ratings'].map((elem)=>elem['name']) }}</p>
+      <p v-if="data['genres']">genres= {{ data['genres'].map((elem)=>elem['name']) }}</p>
+      <p v-if="data['themes']">themes= {{ data['themes'].map((elem)=>elem['name']) }}</p>
+      <p v-if="data['tags']">tags= {{ data['tags'].map((elem)=>elem['name']) }}</p>
 <!--      <p v-if="data['author']">author= {{ data['author'] }}</p>-->
 <!--      <p v-if="data['studio']">studio= {{ data['studio'] }}</p>-->
 <!--      <p>{{ image_path }}</p>-->
-<!--    </div>-->
+    </div>
 
     <img @click="open_link_new_tab(data['external_link'])" class="poster" alt="poster" v-lazy="image_path"/>
     <div class="poster_gradient"></div>
