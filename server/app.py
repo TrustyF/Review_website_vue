@@ -42,6 +42,8 @@ with app.app_context():
 
     logging.disable(logging.WARNING)
 
+    # db.create_all()
+
     # update_existing_from_tmdb()
 
     from flask_blueprints import media_blueprint, tag_blueprint

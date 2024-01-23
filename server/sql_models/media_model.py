@@ -18,6 +18,13 @@ media_tag_association = db.Table('media_tag_assoc', db.Model.metadata,
                                  db.Column('tag_id', db.Integer, db.ForeignKey('tags.id', ondelete='CASCADE'))
                                  )
 
+media_content_rating_association = db.Table('media_content_rating_assoc', db.Model.metadata,
+                                            db.Column('media_id', db.Integer,
+                                                      db.ForeignKey('medias.id', ondelete='CASCADE')),
+                                            db.Column('content_rating_id', db.Integer,
+                                                      db.ForeignKey('content_ratings.id', ondelete='CASCADE'))
+                                            )
+
 
 @dataclass
 class Genre(db.Model):
@@ -56,6 +63,18 @@ class Tag(db.Model):
 
 
 @dataclass
+class ContentRating(db.Model):
+    __tablename__ = "content_ratings"
+
+    id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name: str = db.Column(db.String(50), nullable=False, unique=True)
+    origin: str = db.Column(db.String(50), nullable=False)
+
+    media = db.relationship("Media", back_populates='content_ratings', lazy='dynamic',
+                            secondary=media_content_rating_association)
+
+
+@dataclass
 class Media(db.Model):
     __tablename__ = "medias"
 
@@ -65,6 +84,9 @@ class Media(db.Model):
     overview: str = db.Column(db.String(1000))
     poster_path: str = db.Column(db.String(200))
 
+    author: str = db.Column(db.String(200))
+    studio: str = db.Column(db.String(200))
+
     media_type: str = db.Column(db.String(50), nullable=False)
     media_medium: str = db.Column(db.String(50))
 
@@ -73,6 +95,8 @@ class Media(db.Model):
 
     is_dropped: bool = db.Column(db.Boolean)
     is_deleted: bool = db.Column(db.Boolean)
+    is_temporary: bool = db.Column(db.Boolean)
+
     created_at: datetime.datetime = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at: datetime.datetime = db.Column(db.DateTime, onupdate=datetime.datetime.utcnow)
 
@@ -82,8 +106,11 @@ class Media(db.Model):
     runtime: int = db.Column(db.Integer)
     episodes: int = db.Column(db.Integer)
     seasons: int = db.Column(db.Integer)
-    content_rating: str = db.Column(db.String(50))
 
     genres = db.relationship("Genre", secondary=media_genre_association)
     themes = db.relationship("Theme", secondary=media_theme_association)
     tags = db.relationship("Tag", secondary=media_tag_association)
+    content_ratings = db.relationship("ContentRating", secondary=media_content_rating_association)
+
+    def __repr__(self):
+        return f"{self.name=}"

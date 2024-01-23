@@ -16,7 +16,8 @@ from youtubesearchpython import VideosSearch
 from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY, IGDB_CLIENT_ID, IGDB_CLIENT_SECRET
 from data_mapper.media_mapper import map_media, map_from_tmdb, map_from_mangadex, map_from_igdb, map_from_youtube
 from db_loader import db
-from sql_models.media_model import Media, Genre, Theme, Tag, media_genre_association, media_tag_association
+from sql_models.media_model import Media, Genre, Theme, Tag, media_genre_association, media_tag_association, \
+    ContentRating
 
 bp = Blueprint('media', __name__)
 
@@ -196,11 +197,11 @@ def get():
 @bp.route("/find", methods=['GET'])
 def find():
     media_name = request.args.get('name')
+    media_id = request.args.get('id')
     media_type = request.args.get('type')
 
     print(f'searching {media_name=} {media_type=}')
 
-    mapped_media = []
     search_category = get_search_category_from_type(media_type)
 
     def request_tmdb():
@@ -216,7 +217,7 @@ def find():
         for media_id in found_ids:
             full_info = requests.get(
                 f'https://api.themoviedb.org/3/{search_category}/{media_id}?api_key={TMDB_API_KEY}'
-                f'&language=en-US&append_to_response=releases,content_ratings,external_ids').json()
+                f'&language=en-US&append_to_response=releases,content_ratings,credits,external_ids').json()
 
             all_found.append(full_info)
 
@@ -230,7 +231,8 @@ def find():
                     return my_dict
 
         media_request = requests.get(f"https://api.mangadex.org/manga?title={media_name}"
-                                     f"&limit=5&includes[]=cover_art&includes[]=chapter").json()
+                                     f"&limit=5&includes[]=cover_art&includes"
+                                     f"[]=chapter&includes[]=author").json()
         all_found = media_request['data']
 
         for media in all_found:
@@ -252,7 +254,8 @@ def find():
         title_request = f'https://api.igdb.com/v4/games'
         title_data = f'search "{media_name}"; limit 5;' \
                      f' fields name,release_dates.y,genres.name,themes.name,total_rating' \
-                     f',category,url,summary,cover.url;'
+                     f',category,url,summary,cover.url,involved_companies.developer,involved_companies.company.name' \
+                     f',age_ratings.rating,age_ratings.category;'
         title_headers = {
             'Client-ID': IGDB_CLIENT_ID,
             'Authorization': f"{token['token_type']} {token['access_token']}",
@@ -263,45 +266,51 @@ def find():
 
     def request_youtube():
         search = VideosSearch(media_name, limit=5).result()
-        return search.get('result')
+        result = search.get('result')
+
+        for video in result[:2]:
+            print(video['id'])
+            votes = requests.get(f'https://returnyoutubedislikeapi.com/votes?videoId={video["id"]}').json()
+            vote_rating = votes['likes'] / (votes['likes'] + votes['dislikes']) * 10
+
+            video['public_rating'] = vote_rating
+
+        return result
+
+    mapped_media = []
 
     if media_type in ['movie', 'tv', 'anime']:
         full_medias = request_tmdb()
 
         if len(full_medias) > 0:
             mapped_media = map_from_tmdb(full_medias, media_type, search_category)
-
-            return mapped_media, 200
+            mapped_media = map_media(mapped_media, media_type)
 
     elif media_type in ['manga']:
         full_medias = request_mangadex()
 
         if len(full_medias) > 0:
             mapped_media = map_from_mangadex(full_medias, media_type)
-
-            return mapped_media, 200
+            mapped_media = map_media(mapped_media, media_type)
 
     elif media_type in ['game']:
         full_medias = request_igdb()
 
         if len(full_medias) > 0:
             mapped_media = map_from_igdb(full_medias, media_type)
-
-            return mapped_media, 200
+            mapped_media = map_media(mapped_media, media_type)
 
     elif media_type in ['short']:
         full_medias = request_youtube()
 
         if len(full_medias) > 0:
             mapped_media = map_from_youtube(full_medias, media_type)
+            mapped_media = map_media(mapped_media, media_type)
 
-            # with open('temp.json', 'w') as outfile:
-            #     json.dump(mapped_media[0], outfile)
-
-            return mapped_media, 200
-
-    print('returning not found')
-    return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
+    if len(mapped_media) > 0:
+        return mapped_media, 200
+    else:
+        return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
 
 
 @bp.route("/add", methods=['POST'])
@@ -309,11 +318,28 @@ def add():
     data = request.get_json()
     print('add', data['name'])
 
-    media_object = Media(**data)
-
-    db.session.add(media_object)
-    db.session.commit()
-    db.session.close()
+    # # cleanup
+    # del data['scaled_public_rating']
+    # filtered_data = {k: v for k, v in data.items() if v is not None}
+    #
+    # # make relationships
+    # for (i, key) in enumerate(['themes', 'genres', 'tags', 'content_ratings']):
+    #     print(i)
+    #     models = [Theme, Genre, Tag, ContentRating]
+    #
+    #     if key not in filtered_data:
+    #         continue
+    #
+    #     for entry in filtered_data[key]:
+    #         filtered_data[key] = [x for x in
+    #                               db.session.query(models[i]).filter_by(id=entry['id']).one()]
+    #
+    # pprint(filtered_data)
+    # media_obj = Media(**filtered_data)
+    #
+    # db.session.add(media_obj)
+    # db.session.commit()
+    # db.session.close()
 
     return json.dumps({'ok': True}), 200, {'ContentType': 'application/json'}
 
@@ -486,7 +512,7 @@ def get_filters():
                                  func.min(Media.runtime).label('min'))
                 .filter(Media.runtime.is_not(None)))
 
-    content_ratings = db.session.query(Media.content_rating).filter(Media.content_rating.is_not(None))
+    content_ratings = db.session.query(Media.content_ratings)
 
     if media_type:
         genres = genres.filter(Media.media_type == media_type)
@@ -502,8 +528,9 @@ def get_filters():
     public_ratings = public_ratings.one()
     release_dates = release_dates.one()
     runtimes = runtimes.one()
-    # todo add content rating model
-    content_ratings = content_ratings.distinct().all()
+    content_ratings = content_ratings.distinct()
+
+    print(content_ratings)
 
     # print(ratings, public_ratings, release_dates, runtimes)
 
