@@ -33,16 +33,15 @@ let form_bindings = ref([
     'content_rating': 'text',
   }
 ])
-let form_changes = ref({})
 
-let updated = ref(false)
-let added = ref(false)
+let updated = ref('none')
+let added = ref('none')
 
 let content_ratings = ref()
 
 let container_size = computed(() => {
   if (search_type.value === 'short') {
-    return [480 * 2, 240 * 2]
+    return [1280/1.3, 720/1.3]
   } else {
     return [500, 750]
   }
@@ -94,23 +93,26 @@ async function find_media(text) {
 
 async function update_media() {
 
-  if (form_changes.value['id'] === undefined) return
-  if (Object.keys(form_changes.value).length < 2) return
-
-  form_changes.value['id'] = selected_media.value['id']
+  if (selected_media.value['id'] === undefined) return
 
   const url = new URL(`${curr_api}/media/update`)
 
   const result = await fetch(url, {
     method: 'POST',
     headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(form_changes.value)
+    body: JSON.stringify(selected_media.value)
   }).then(response => response.json())
 
-  updated.value = result.ok
+  updated.value = result.ok ? 'true' : 'false'
 }
 
 async function add_media() {
+
+  if (selected_media.value['user_rating'] === null){
+    added.value = 'false'
+    return
+  }
+
   const url = new URL(`${curr_api}/media/add`)
 
   const result = await fetch(url, {
@@ -119,7 +121,7 @@ async function add_media() {
     body: JSON.stringify(selected_media.value)
   }).then(response => response.json())
 
-  added.value = result.ok
+  added.value = result.ok ? 'true' : 'false'
 }
 
 async function get_extra_posters() {
@@ -134,15 +136,13 @@ async function get_extra_posters() {
 }
 
 function handleMediaEmit(event) {
-  selected_media.value = event
-  form_changes.value = {'id': event['id']}
+  selected_media.value = {...event}
   get_extra_posters()
-  updated.value = false
-  added.value = false
+  updated.value = 'none'
+  added.value = 'none'
 }
 
 function switch_poster(event) {
-  form_changes.value['poster_path'] = event
   selected_media.value['poster_path'] = event
 }
 
@@ -157,7 +157,6 @@ onMounted(() => {
 
 watch(selected_media, (newV) => {
   search_type.value = selected_media.value['media_type']
-  get_media()
 })
 
 </script>
@@ -212,50 +211,43 @@ watch(selected_media, (newV) => {
 
       <div class="form_area">
 
-        <label for="form_name">Name</label>
-        <input id="form_name" v-model="selected_media['name']" type="text"
-               @change="form_changes['name']=$event.target.value">
+        <div class="form_box">
+          <label for="form_name">Name</label>
+          <input id="form_name" v-model="selected_media['name']" type="text"
+                 @change="selected_media['name']=$event.target.value">
 
-        <label for="form_user_rating">Rating</label>
-        <input id="form_user_rating" v-model="selected_media['user_rating']" type="number"
-               @change="form_changes['user_rating']=$event.target.value">
+          <label for="form_user_rating">Rating</label>
+          <input id="form_user_rating" v-model="selected_media['user_rating']" type="number"
+                 @change="selected_media['user_rating']=Number($event.target.value)">
 
-        <label for="form_user_dropped">dropped</label>
-        <input id="form_user_dropped" v-model="selected_media['is_dropped']" type="checkbox"
-               @change="form_changes['is_dropped']=$event.target.value">
+          <label for="form_user_dropped">dropped</label>
+          <input id="form_user_dropped" v-model="selected_media['is_dropped']" type="checkbox"
+                 @change="selected_media['is_dropped']=$event.target.checked">
 
-        <label for="form_user_deleted">deleted</label>
-        <input id="form_user_deleted" v-model="selected_media['is_deleted']" type="checkbox"
-               @change="form_changes['is_deleted']=$event.target.value">
+          <label for="form_user_deleted">deleted</label>
+          <input id="form_user_deleted" v-model="selected_media['is_deleted']" type="checkbox"
+                 @change="selected_media['is_deleted']=$event.target.checked">
 
-        <select v-model="selected_media['content_rating']" id="media_types"
-                @change="form_changes['content_rating']=$event.target.value">
-          <option v-for="c in content_ratings" :key="c" :value="c">{{c}}</option>
-        </select>
-
-        <!--        <div class="form_group" v-for="group in form_bindings" :key="group">-->
-        <!--          <div class="form_box" v-for="(key) in Object.keys(group)" :key="key">-->
-        <!--            <label :for="key">{{ key }}</label>-->
-
-        <!--            <input v-if="group[key]!=='checkbox'"-->
-        <!--                   v-model="selected_media[key]"-->
-        <!--                   :type="group[key]"-->
-        <!--                   @change="form_changes[key]=$event.target.value">-->
-        <!--            <input v-else-->
-        <!--                   v-model="selected_media[key]"-->
-        <!--                   type="checkbox"-->
-        <!--                   @change="form_changes[key]=$event.target.checked">-->
-        <!--          </div>-->
-        <!--        </div>-->
+          <label for="form_media_types">Content rating</label>
+          <select v-model="selected_media['content_rating']" id="form_media_types"
+                  @change="selected_media['content_rating']=$event.target.value">
+            <option v-for="c in content_ratings" :key="c" :value="c">{{ c }}</option>
+          </select>
+        </div>
 
         <div style="display: flex;align-items: center;gap:10px">
           <button style="width: 100px" @click="update_media">Update</button>
-          <button style="width: 100px" @click="add_media">Add</button>
-          <img class="update_logo" alt="success update" v-if="updated || added"
+          <img class="update_logo" alt="failed update" v-if="updated === 'false'"
+               src="src/assets/ui/stop.png">
+          <img class="update_logo" alt="failed update" v-if="updated === 'true'"
                src="src/assets/ui/success-green-check-mark-icon.svg">
-        </div>
+          <button style="width: 100px" @click="add_media">Add</button>
+          <img class="update_logo" alt="failed update" v-if="added === 'false'"
+               src="src/assets/ui/stop.png">
+          <img class="update_logo" alt="failed update" v-if="added === 'true'"
+               src="src/assets/ui/success-green-check-mark-icon.svg">
 
-        <p style="font-size: 0.6em">{{ form_changes }}</p>
+        </div>
 
       </div>
 
@@ -304,13 +296,14 @@ watch(selected_media, (newV) => {
   display: flex;
   flex-flow: column wrap;
   gap: 10px;
-  /*justify-content: space-between;*/
+  justify-content: space-between;
 }
 
 .form_box {
-  display: grid;
-  gap: 5px;
-  /*align-items: center;*/
+  display: flex;
+  flex-flow: column;
+  gap: 10px;
+  align-items: flex-start;
 }
 
 .extra_posters {
@@ -330,7 +323,7 @@ watch(selected_media, (newV) => {
 
 .search_result {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row;
   gap: 10px;
 }
 

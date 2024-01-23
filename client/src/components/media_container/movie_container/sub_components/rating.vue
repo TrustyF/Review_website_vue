@@ -27,15 +27,13 @@ const curr_api = inject("curr_api");
       <img :src="gold_star" alt="gold_star" class="gold_star">
     </div>
 
-    <rating-circle class="rating_circle" v-if="data['scaled_public_rating']>0"
+
+    <rating-circle class="rating_circle" v-if="data['scaled_public_rating']>0 && data['user_rating']"
                    :text_size="max_size*1.5"
                    :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
 
-<!--    <rating-circle class="rating_circle" v-else-if="data['public_rating']>0"-->
-<!--                   :text_size="max_size*1.5"-->
-<!--                   :score="(data['user_rating'] + data['public_rating'])/2"></rating-circle>-->
 
-<!--        <div style="position:absolute;width: 100%"></div>-->
+        <div style="position:absolute;width: 100%"></div>
 
   </div>
 </template>
