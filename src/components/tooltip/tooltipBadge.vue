@@ -12,6 +12,18 @@ const tooltip_pos = inject("tooltip_badge_pos");
 const tooltip_data = inject("tooltip_badge_data");
 const tooltip_hover = inject("tooltip_badge_hover");
 
+const detail_popup_value = computed(()=>{
+  let tier = tooltip_data.value['tier']
+
+  if (tier === 'purple') return 'Caveat'
+  if (tier === 'green') return 'Positive'
+  if (tier === 'red') return 'Negative'
+  if (tier === 'gold') return 'Selling point'
+  if (tier === 'silver') return 'Gripe'
+
+  return undefined
+})
+
 async function position_tooltip() {
   // hack to give time to the element to update it's size
   await setTimeout(() => {
@@ -39,6 +51,13 @@ onMounted(() => {
 
 <template>
   <div ref="tooltip_container" :class="tooltip_hover ? 'tooltip_wrapper visible' : 'tooltip_wrapper'">
+
+<!--    <div :class="tooltip_hover ? 'badge_tooltip_details visible' : 'badge_tooltip_details'" v-if="detail_popup_value!==undefined">-->
+<!--      <p>{{detail_popup_value}}</p>-->
+<!--      <div class="tag_tooltip_arrow"></div>-->
+<!--    </div>-->
+
+
     <badge-expanded class="badge" :text_size="1" :data="tooltip_data"></badge-expanded>
   </div>
 </template>
@@ -55,8 +74,8 @@ onMounted(() => {
   z-index: 1000;
   margin: 0 10px 0 10px;
 
-  opacity: 0;
-  visibility: hidden;
+  /*opacity: 0;*/
+  /*visibility: hidden;*/
   transition: opacity 200ms;
 
   pointer-events: none;
@@ -66,6 +85,34 @@ onMounted(() => {
 .visible {
   opacity: 100%;
   visibility: visible;
+}
+.badge_tooltip_details {
+  /*width: 95%;*/
+  position: absolute;
+  padding: 10px;
+
+  text-align: center;
+
+  left: 50%;
+  transform: translate(-50%,-150%);
+
+  font-size: 0.8em;
+
+  box-shadow: 0 0 8px black,0 0 3px black;
+  text-shadow: 0 0 5px black,0 0 2px black,0 0 2px black;
+  border-radius: 50px;
+  background-color: #2b2a34;
+
+}
+.tag_tooltip_arrow {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #2b2a34 transparent transparent transparent;
 }
 
 .badge {

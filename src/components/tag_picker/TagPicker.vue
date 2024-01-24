@@ -31,6 +31,7 @@ async function get_tags() {
   let result = await fetch(url).then(response => response.json())
 
   available_badges.value = result.sort((a, b) => a['image_path'] > b['image_path'])
+  available_badges.value = result.sort((a, b) => a['count'] < b['count'])
   available_badges.value = Object.groupBy(result, ({tier}) => tier)
   console.log(result)
 }
@@ -137,7 +138,8 @@ watch(props, (newV) => {
       <div style="display: flex;flex-flow: column">
         <div class="tag_constructor" @dragover="allowDrop" @dragleave="remove_dragged_badge_from_constructor"
              @drop="add_dragged_badge_to_constructor">
-          <badge @dragstart="drag(tag)" :data="tag" v-for="tag in constructed_badges" :key="'constructor'+tag.id" :min_size="200"
+          <badge @dragstart="drag(tag)" :data="tag" v-for="tag in constructed_badges" :key="'constructor'+tag.id"
+                 :min_size="200"
                  :show_title="true"></badge>
         </div>
         <button @click="emit">Push to media</button>
@@ -147,14 +149,18 @@ watch(props, (newV) => {
         <badge :data="temp_tag" key="tag_editor_badge" :min_size="200" :show_title="true"></badge>
         <div class="editor_form">
 
-          <div class="form_box" v-for="key in Object.keys(temp_tag)" :key="key">
-            <label v-if="key!=='id'" :for="key">{{ key }}</label>
+          <div class="form_box">
 
-            <textarea v-if="key==='overview'" :id="key" v-model="temp_tag[key]" rows="5"></textarea>
-            <select v-else-if="key==='tier'" v-model="temp_tag[key]">
-              <option v-for="tier in tiers" :key="tier" :selected="tier.indexOf(temp_tag[key])+1">{{ tier }}</option>
+            <label for="tag_name">Name</label>
+            <input id="tag_name" v-model="temp_tag['name']">
+
+            <label for="tag_overview">Overview</label>
+            <textarea id="tag_overview" v-model="temp_tag['overview']"></textarea>
+
+            <label for="tag_tier">Tier</label>
+            <select id="tag_tier" v-model="temp_tag['tier']">
+              <option v-for="tier in tiers" :key="tier" :selected="tier.indexOf(temp_tag['tier'])+1">{{ tier }}</option>
             </select>
-            <input v-else-if="key!=='id'" :id="key" v-model="temp_tag[key]">
 
           </div>
 
@@ -168,8 +174,13 @@ watch(props, (newV) => {
 
       <div class="badges_wrapper">
         <div style="display:flex;flex-flow: row wrap;gap: 2px;" v-for="tier in available_badges" :key="tier.id">
-          <badge @dragstart="drag(badge)" :data="badge" v-for="badge in tier" :key="'available'+badge.id"
-                 :min_size="200"></badge>
+
+          <div v-for="badge in tier" :key="'available'+badge.id">
+            <div class="badge_count">{{ badge.count }}</div>
+            <badge @dragstart="drag(badge)" :data="badge"
+                   :min_size="200"></badge>
+          </div>
+
         </div>
       </div>
     </div>
@@ -178,7 +189,7 @@ watch(props, (newV) => {
       <div class="available_images">
         <div class="template_image" @click="switch_tag_image(img)" v-for="img in tag_images[temp_tag['tier']]"
              :key="img">
-          <img class="tag_template_image" :src="`/public/tags/icons/${temp_tag['tier']}/${img}`" alt="tag_template">
+          <img class="tag_template_image" :src="`/tags/icons/${temp_tag['tier']}/${img}`" alt="tag_template">
         </div>
       </div>
     </div>
@@ -222,6 +233,7 @@ watch(props, (newV) => {
 }
 
 .editor_buttons {
+  margin-top: auto;
   display: flex;
   gap: 10px;
 }
@@ -247,6 +259,17 @@ watch(props, (newV) => {
   width: 50%;
   /*height: 200px;*/
   /*overflow-y: scroll;*/
+}
+
+.badge_count {
+  position: absolute;
+  z-index: 10;
+  width: 10px;
+  height: 10px;
+  font-size: 7px;
+  /*border-radius: 50%;*/
+  /*text-align: center;*/
+  /*background-color: grey;*/
 }
 
 .bottom_area {
