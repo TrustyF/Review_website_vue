@@ -61,6 +61,10 @@ class Tag(db.Model):
 
     media = db.relationship("Media", back_populates='tags', lazy='dynamic', secondary=media_tag_association)
 
+    def __repr__(self):
+        return f'{self.name}'
+
+
 
 @dataclass
 class ContentRating(db.Model):

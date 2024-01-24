@@ -1,9 +1,12 @@
 import json
+from dataclasses import asdict
 
 import sqlalchemy.exc
 from flask import Blueprint, request, Response, jsonify, send_file
+from sqlalchemy import func
+
 from db_loader import db
-from sql_models.media_model import Tag
+from sql_models.media_model import Tag, Media
 
 bp = Blueprint('tag', __name__)
 
@@ -12,7 +15,16 @@ bp = Blueprint('tag', __name__)
 def get():
     all_tags = db.session.query(Tag).all()
 
-    return all_tags, 200
+    tag_counts = (
+        db.session.query(Tag, func.count(Media.id).label('count'))
+        .join(Tag.media)
+        .group_by(Tag)
+        .all()
+    )
+
+    serialized_tags = [{**asdict(tag), 'count': count} for tag, count in tag_counts]
+
+    return serialized_tags, 200
 
 
 @bp.route("/add", methods=['POST'])
@@ -40,7 +52,17 @@ def add():
 def update():
     data = request.get_json()
     tag_id = data['id']
+
+    # todo implement this
+    # new_values = {'name': 'Updated Name'}
+    # update_statement = (
+    #     update(Person)
+    #     .where(Person.id == new_person.id)
+    #     .values(**new_values)
+    # )
+
     del data['id']
+    del data['count']
 
     print(f'updating tag {data=}')
 
@@ -54,7 +76,6 @@ def update():
 
 @bp.route("/delete")
 def delete():
-
     tag_id = request.args.get('id')
 
     print(f'deleting tag {tag_id=}')
