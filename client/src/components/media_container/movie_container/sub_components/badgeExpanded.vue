@@ -1,9 +1,21 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
 
-let props = defineProps(["data","text_size","text_limit"]);
+let props = defineProps(["data", "text_size", "text_limit"]);
 let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
+
+const tier_details = computed(() => {
+  let tier = props['data']['tier']
+
+  if (tier === 'purple') return 'Caveat'
+  if (tier === 'green') return 'Positive'
+  if (tier === 'red') return 'Negative'
+  if (tier === 'gold') return 'Peak'
+  if (tier === 'silver') return 'Gripe'
+
+  return undefined
+})
 
 function add_line_breaks(content) {
   let replaced = content
@@ -15,7 +27,7 @@ function add_line_breaks(content) {
   return replaced
 }
 
-function add_line_break_v2(content){
+function add_line_break_v2(content) {
   return content
 }
 </script>
@@ -26,11 +38,17 @@ function add_line_break_v2(content){
     <img class="tag_preview" :src="`/tags/icons/${data['tier']}/${data['image_path']}`">
 
     <div class="tooltip_content">
-      <h1 class="title">{{ data['name'] }}</h1>
+
+      <div style="display:flex;gap: 7px;align-items: center">
+        <h1 class="title">{{ data['name'] }}</h1>
+        <h1 class="title_detail">{{ tier_details }}</h1>
+      </div>
+
       <h1 class="description">{{ add_line_break_v2(data['overview']) }}</h1>
+
     </div>
 
-<!--    <div class="tag_tooltip_arrow"></div>-->
+    <!--    <div class="tag_tooltip_arrow"></div>-->
 
   </div>
   <div v-else class="tag_tooltip">no data</div>
@@ -81,7 +99,8 @@ function add_line_break_v2(content){
 .tooltip_content {
   display: flex;
   flex-flow: column nowrap;
-  gap: calc(v-bind(text_size) * 4px);
+  align-items: flex-start;
+  gap: calc(v-bind(text_size) * 5px);
   padding: calc(v-bind(text_size) * 10px) 0 calc(v-bind(text_size) * 10px) 0;
 }
 
@@ -90,6 +109,18 @@ function add_line_break_v2(content){
   font-weight: 700;
   /*color: black;*/
   text-shadow: 1px 1px calc(v-bind(text_size) * 3px) black, 0 0 calc(v-bind(text_size) * 5px) black;
+}
+
+.title_detail {
+  font-size: calc(v-bind(text_size) * 0.6em);
+  border: 1px #696969 solid;
+  padding: 5px;
+  font-weight: 300;
+  color: #808080;
+  border-radius: calc(v-bind(text_size) * 0.5em);
+  margin-bottom: calc(v-bind(text_size) * -1px);
+  /*height:calc(v-bind(text_size) * 0.6em) ;*/
+  /*text-shadow: 1px 1px calc(v-bind(text_size) * 3px) black, 0 0 calc(v-bind(text_size) * 5px) black;*/
 }
 
 .description {
