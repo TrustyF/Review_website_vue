@@ -74,8 +74,8 @@ onMounted(() => {
   z-index: 1000;
   margin: 0 10px 0 10px;
 
-  /*opacity: 0;*/
-  /*visibility: hidden;*/
+  opacity: 0;
+  visibility: hidden;
   transition: opacity 200ms;
 
   pointer-events: none;

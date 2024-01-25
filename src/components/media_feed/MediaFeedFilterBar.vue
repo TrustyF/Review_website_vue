@@ -6,7 +6,7 @@ import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 
 import filter_image from "@/assets/ui/filter_button.png"
 
-let props = defineProps(["media_type"]);
+let props = defineProps(["media_type","tier_lists"]);
 let emits = defineEmits(["filter"]);
 const curr_api = inject("curr_api");
 
@@ -66,7 +66,7 @@ onMounted(() => {
 
     <div ref="filter_container" class="filter_wrapper" v-click-out-side="close_filters_box">
       <div class="overflow_filter">
-        <filter-container @filter="emit_filter" :media_type="media_type"></filter-container>
+        <filter-container @filter="emit_filter" :media_type="media_type" :tier_lists="tier_lists"></filter-container>
       </div>
       <div class="filter_wrapper_arrow"></div>
       <div class="filter_wrapper_arrow_border"></div>

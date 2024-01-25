@@ -33,7 +33,6 @@ async function get_tags() {
   available_badges.value = result.sort((a, b) => a['image_path'] > b['image_path'])
   available_badges.value = result.sort((a, b) => a['count'] < b['count'])
   available_badges.value = Object.groupBy(result, ({tier}) => tier)
-  console.log(result)
 }
 
 function map_images_from_folders() {
@@ -54,7 +53,6 @@ function allowDrop(event) {
 }
 
 function drag(data) {
-  console.log(data)
   dragged_badge.value = data
 }
 
@@ -64,7 +62,6 @@ function add_dragged_badge_to_constructor() {
 
 function remove_dragged_badge_from_constructor() {
   let index = constructed_badges.value.map((elem) => elem['id']).indexOf(dragged_badge.value['id'])
-  console.log(constructed_badges.value.map((elem) => elem['id']), dragged_badge.value['id'], index)
 
   if (index > -1) {
     constructed_badges.value.splice(index, 1)
