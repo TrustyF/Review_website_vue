@@ -1,11 +1,15 @@
 import datetime
+import pprint
 
+import dateutil.parser
 import requests
 
 from constants import TMDB_ACCESS_TOKEN
+from data_mapper.serializer import serialize_media
 from sql_models.media_model import Media, Genre, Theme, Tag
 from db_loader import db
 import json
+from app import app
 
 
 def insert_in_db():
@@ -136,7 +140,7 @@ def update_existing_from_tmdb():
     print(len(all_media))
     for media_obj in all_media:
 
-        if media_obj.media_type not in ['tv','anime']:
+        if media_obj.media_type not in ['tv', 'anime']:
             continue
 
         main_request = requests.get(
@@ -156,3 +160,34 @@ def update_existing_from_tmdb():
 
     db.session.commit()
     db.session.close()
+
+
+def update_all_records():
+    all_records = (db.session.query(Media).filter(
+        Media.media_type == 'tv',
+        Media.updated_at < dateutil.parser.parse('2024-01-24')).all())
+
+    for record in all_records:
+        # print(record.name)
+        find_media = requests.get(
+            f'http://127.0.0.1:5000/media/find?name={record.name}&type={record.media_type}').json()
+
+        try:
+            selected = find_media[0]
+        except KeyError:
+            continue
+
+        print(record.name, ' vs ', selected['name'])
+        # check if correct
+        if selected['name'] != record.name or selected['release_date'] != record.release_date:
+            print("!!! ", record.name, ' vs ', selected['name'])
+            continue
+
+        selected['id'] = record.id
+        selected['user_rating'] = record.user_rating
+        requests.post(f'http://127.0.0.1:5000/media/update', json=selected)
+
+
+if __name__ == '__main__':
+    with app.app_context():
+        update_all_records()

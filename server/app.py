@@ -42,11 +42,12 @@ with app.app_context():
 
     logging.disable(logging.WARNING)
 
-    # db.create_all()
+    from sql_models.media_model import *
 
-    # update_existing_from_tmdb()
+    db.create_all()
 
-    from flask_blueprints import media_blueprint, tag_blueprint
+    from flask_blueprints import media_blueprint, tag_blueprint, tier_list_blueprint
 
     app.register_blueprint(media_blueprint.bp, url_prefix='/media')
     app.register_blueprint(tag_blueprint.bp, url_prefix='/tag')
+    app.register_blueprint(tier_list_blueprint.bp, url_prefix='/tier_list')

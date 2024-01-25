@@ -1,75 +1,15 @@
 import datetime
 import dateutil.parser
+
 import json
 from pprint import pprint
 import time
 
+
 from db_loader import db
-from sql_models.media_model import Media, Genre, ContentRating, Theme
+from sql_models.media_model import Media, Genre, Theme
 from sqlalchemy import func
 from flask import jsonify
-
-
-def remap_value(value, old_min, old_max, new_min, new_max):
-    if None in (value, old_min, old_max, new_min, new_max):
-        return 0
-
-    if value < old_min:
-        return value
-    if value > old_max:
-        return value
-
-    old_range = (old_max - old_min)
-    new_range = (new_max - new_min)
-    new_value = (((value - old_min) * new_range) / old_range) + new_min
-    return new_value
-
-
-def write_temp(entry):
-    with open('temp.json', 'w') as outfile:
-        json.dump(entry, outfile)
-
-
-def map_media(medias, media_type):
-    mapped_medias = []
-
-    pub_rating_min = (db.session.query(func.min(Media.public_rating))
-                      .where(Media.media_type == media_type)
-                      .where(Media.public_rating > 0)
-                      .scalar())
-    pub_rating_max = (db.session.query(func.max(Media.public_rating))
-                      .where(Media.media_type == media_type)
-                      .scalar())
-    user_rating_min = (db.session.query(func.min(Media.user_rating))
-                       .where(Media.media_type == media_type)
-                       .scalar())
-
-    user_rating_max = 10
-
-    # insert queried values and associations
-    for entry in medias:
-        mapped = jsonify(entry).json
-
-        # print(entry.name if entry is not None else entry)
-
-        mapped['release_date'] = entry.release_date.isoformat() if entry.release_date is not None else None
-
-        # remap public rating to match my rating better, unless the min max range is too small, default to unmapped
-        mapped['scaled_public_rating'] = remap_value(entry.public_rating,
-                                                     pub_rating_min,
-                                                     pub_rating_max,
-                                                     user_rating_min,
-                                                     user_rating_max) \
-            if (pub_rating_min <= 7 if pub_rating_min is not None else False) else entry.public_rating
-
-        mapped['genres'] = jsonify(entry.genres).json if entry.genres else []
-        mapped['themes'] = jsonify(entry.themes).json if entry.themes else []
-        mapped['tags'] = jsonify(entry.tags).json if entry.tags else []
-        mapped['content_ratings'] = jsonify(entry.content_ratings).json if entry.content_ratings else None
-
-        mapped_medias.append(mapped)
-
-    return mapped_medias
 
 
 def map_associations(table, array, media_type):
@@ -97,7 +37,7 @@ def map_associations(table, array, media_type):
     return objects
 
 
-def map_from_tmdb(medias, media_type, search_category):
+def map_from_tmdb(medias, media_type):
     def mapping_tmdb_movie(entry):
 
         def get_content_rating():
@@ -106,7 +46,7 @@ def map_from_tmdb(medias, media_type, search_category):
                 for x in entry['releases']['countries']:
                     if x['iso_3166_1'] == 'US' or x['iso_3166_1'] == 'JP':
                         content_rating = x.get('certification')
-            return [content_rating]
+            return content_rating
 
         def get_genres():
             if 'genres' in entry:
@@ -132,6 +72,7 @@ def map_from_tmdb(medias, media_type, search_category):
 
         movie_mapping = {
             'name': entry.get('title'),
+            'external_name': entry.get('title'),
             'release_date': dateutil.parser.parse(entry.get('release_date')).date() if entry.get(
                 'release_date') else None,
             'overview': entry.get('overview'),
@@ -146,7 +87,7 @@ def map_from_tmdb(medias, media_type, search_category):
             'studio': get_studio(),
             'author': get_author(),
             'runtime': entry.get('runtime'),
-            'content_ratings': map_associations(ContentRating, get_content_rating(), media_type),
+            'content_rating': get_content_rating(),
             'genres': map_associations(Genre, get_genres(), media_type),
         }
 
@@ -169,7 +110,7 @@ def map_from_tmdb(medias, media_type, search_category):
             ratings = [[x['iso_3166_1'], x['rating']] for x in entry['content_ratings']['results']]
             sorted_ratings = sorted(ratings, key=sort_func)
 
-            return [sorted_ratings[0][1]]
+            return sorted_ratings[0][1]
 
         def get_genres():
             if 'genres' in entry:
@@ -195,6 +136,7 @@ def map_from_tmdb(medias, media_type, search_category):
 
         tv_mapping = {
             'name': entry.get('name'),
+            'external_name': entry.get('name'),
             'release_date': dateutil.parser.parse(entry.get('first_air_date')).date() if entry.get(
                 'first_air_date') else None,
             'overview': entry.get('overview'),
@@ -210,7 +152,7 @@ def map_from_tmdb(medias, media_type, search_category):
             'seasons': entry.get('number_of_seasons'),
             'studio': get_studio(),
             'author': get_author(),
-            'content_ratings': map_associations(ContentRating, get_content_rating(), media_type),
+            'content_rating': get_content_rating(),
             'genres': map_associations(Genre, get_genres(), media_type),
         }
         return tv_mapping
@@ -220,9 +162,9 @@ def map_from_tmdb(medias, media_type, search_category):
 
         mapping = {}
 
-        if search_category in ['movie']:
+        if media_type in ['movie']:
             mapping = mapping_tmdb_movie(media)
-        if search_category in ['tv']:
+        if media_type in ['tv']:
             mapping = mapping_tmdb_tv(media)
 
         media_obj = Media(**mapping)
@@ -256,6 +198,7 @@ def map_from_mangadex(medias, media_type):
         attrib = media.get('attributes')
         mapping = {
             'name': attrib.get('title').get('en'),
+            'external_name': attrib.get('title').get('en'),
             'release_date': dateutil.parser.parse(f"{attrib.get('year')}-01-01").date() if attrib.get('year') else None,
             'overview': attrib.get('description').get('en'),
             'poster_path': media.get('poster_path'),
@@ -265,7 +208,7 @@ def map_from_mangadex(medias, media_type):
             'external_id': media.get('id'),
             'external_link': 'https://mangadex.org/title/' + media.get('id'),
             'author': get_author(media),
-            'content_ratings': map_associations(ContentRating, [attrib.get('contentRating')], media_type),
+            'content_rating': attrib.get('contentRating'),
             'genres': map_associations(Genre, get_genres(media), media_type),
         }
 
@@ -332,14 +275,15 @@ def map_from_igdb(medias, media_type):
         for company in entry['age_ratings']:
 
             # if company.get('category') == 1:
-            #     return [esrb_rating_mapping.get(company.get('rating'))]
+            #     return esrb_rating_mapping.get(company.get('rating'))
 
             if company.get('category') == 2:
-                return [pegi_rating_mapping.get(company.get('rating'))]
+                return pegi_rating_mapping.get(company.get('rating'))
 
     for media in medias:
         mapping = {
             'name': media.get('name'),
+            'external_name': media.get('name'),
             'release_date': dateutil.parser.parse(f"{media.get('release_dates')[0].get('y')}-01-01").date() if
             media.get(
                 'release_dates')[0].get('y') else None,
@@ -352,7 +296,7 @@ def map_from_igdb(medias, media_type):
             'external_id': media.get('id'),
             'external_link': media.get('url'),
             'studio': get_studio(media),
-            'content_ratings': map_associations(ContentRating, get_content_rating(media), media_type),
+            'content_rating': get_content_rating(media),
             'genres': map_associations(Genre, get_genres(media), media_type),
             'themes': map_associations(Theme, get_themes(media), media_type),
         }
@@ -418,6 +362,7 @@ def map_from_youtube(medias, media_type):
     for media in medias:
         mapping = {
             'name': media.get('title'),
+            'external_name': media.get('title'),
             'release_date': dateutil.parser.parse(
                 convert_text_to_date(media.get('publishedTime'))).date() if convert_text_to_date(
                 media.get('publishedTime')) else None,

@@ -53,20 +53,15 @@ def update():
     data = request.get_json()
     tag_id = data['id']
 
-    # todo implement this
-    # new_values = {'name': 'Updated Name'}
-    # update_statement = (
-    #     update(Person)
-    #     .where(Person.id == new_person.id)
-    #     .values(**new_values)
-    # )
-
-    del data['id']
-    del data['count']
-
     print(f'updating tag {data=}')
 
-    db.session.query(Tag).filter(Tag.id == tag_id).update(data)
+    db.session.query(Tag).filter(Tag.id == tag_id).update({
+        'name': data['name'],
+        'overview': data['overview'],
+        'image_path': data['image_path'],
+        'tier': data['tier'],
+        'origin': data['origin'],
+    })
 
     db.session.commit()
     db.session.close()

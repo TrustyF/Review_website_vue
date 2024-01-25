@@ -1,5 +1,8 @@
 import datetime
 from dataclasses import dataclass
+from typing import List
+
+from sqlalchemy.orm import Mapped
 
 from db_loader import db
 
@@ -17,13 +20,12 @@ media_tag_association = db.Table('media_tag_assoc', db.Model.metadata,
                                  db.Column('media_id', db.Integer, db.ForeignKey('medias.id', ondelete='CASCADE')),
                                  db.Column('tag_id', db.Integer, db.ForeignKey('tags.id', ondelete='CASCADE'))
                                  )
-
-media_content_rating_association = db.Table('media_content_rating_assoc', db.Model.metadata,
-                                            db.Column('media_id', db.Integer,
-                                                      db.ForeignKey('medias.id', ondelete='CASCADE')),
-                                            db.Column('content_rating_id', db.Integer,
-                                                      db.ForeignKey('content_ratings.id', ondelete='CASCADE'))
-                                            )
+media_tier_list_association = db.Table('media_tier_list_assoc', db.Model.metadata,
+                                       db.Column('media_id', db.Integer,
+                                                 db.ForeignKey('medias.id', ondelete='CASCADE')),
+                                       db.Column('tier_list_id', db.Integer,
+                                                 db.ForeignKey('tier_lists.id', ondelete='CASCADE'))
+                                       )
 
 
 @dataclass
@@ -35,6 +37,14 @@ class Genre(db.Model):
     origin: str = db.Column(db.String(50), nullable=False)
 
     media = db.relationship("Media", back_populates='genres', lazy='dynamic', secondary=media_genre_association)
+
+
+@dataclass
+class ContentRating(db.Model):
+    __tablename__ = "content_rating"
+
+    id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name: str = db.Column(db.String(50), nullable=False, unique=True)
 
 
 @dataclass
@@ -65,17 +75,14 @@ class Tag(db.Model):
         return f'{self.name}'
 
 
-
 @dataclass
-class ContentRating(db.Model):
-    __tablename__ = "content_ratings"
+class TierList(db.Model):
+    __tablename__ = "tier_lists"
 
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name: str = db.Column(db.String(50), nullable=False, unique=True)
-    origin: str = db.Column(db.String(50), nullable=False)
 
-    media = db.relationship("Media", back_populates='content_ratings', lazy='dynamic',
-                            secondary=media_content_rating_association)
+    media = db.relationship("Media", back_populates='tier_lists', lazy='dynamic', secondary=media_tier_list_association)
 
 
 @dataclass
@@ -84,6 +91,7 @@ class Media(db.Model):
 
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name: str = db.Column(db.String(255), nullable=False)
+    external_name: str = db.Column(db.String(255))
     release_date: datetime.date = db.Column(db.Date)
     overview: str = db.Column(db.String(1000))
     poster_path: str = db.Column(db.String(200))
@@ -110,10 +118,10 @@ class Media(db.Model):
     episodes: int = db.Column(db.Integer)
     seasons: int = db.Column(db.Integer)
 
-    genres = db.relationship("Genre", secondary=media_genre_association)
-    themes = db.relationship("Theme", secondary=media_theme_association)
-    tags = db.relationship("Tag", secondary=media_tag_association)
-    content_ratings = db.relationship("ContentRating", secondary=media_content_rating_association)
+    # todo transition to content rating table
+    content_rating: str = db.Column(db.String(50))
 
-    # def __repr__(self):
-    #     return f"{self.name=}"
+    genres: Mapped[Genre] = db.relationship("Genre", secondary=media_genre_association)
+    themes: Mapped[Theme] = db.relationship("Theme", secondary=media_theme_association)
+    tags: Mapped[Tag] = db.relationship("Tag", secondary=media_tag_association)
+    tier_lists: Mapped[TierList] = db.relationship("TierList", secondary=media_tier_list_association)
