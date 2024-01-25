@@ -4,12 +4,15 @@ import blue_star from '/src/assets/ui/blue_star.png'
 import MovieContainer from "@/components/media_container/movie_container/MovieContainer.vue";
 import MovieContainerMobile from "@/components/media_container/movie_container/MovieContainerMobile.vue";
 import MediaFeedFilterBar from "@/components/media_feed/MediaFeedFilterBar.vue";
+import EditPage from "@/pages/EditPage.vue";
 
-let props = defineProps(["media_type", "media_scales", "media_sizes"]);
+let props = defineProps(["media_type", "tier_lists", "media_scales", "media_sizes"]);
 
 const curr_api = inject("curr_api");
 const session_seed = inject("session_seed");
 const is_mobile = inject("is_mobile");
+let selected_media = inject('selected_media')
+let edit_pane_open = inject('edit_pane_open')
 
 let media_scale = computed(() => is_mobile.value ? props['media_scales'][1] : props['media_scales'][0])
 let media_size = computed(() => is_mobile.value ? props['media_sizes'][1] : props['media_sizes'][0])
@@ -29,6 +32,7 @@ let feed_container = ref()
 let is_page_loaded = ref(false)
 let is_page_loading = ref(true)
 
+let page_scroll = ref(0)
 
 async function get_media(override) {
 
@@ -41,6 +45,7 @@ async function get_media(override) {
     'genres': media_filters.value['genres'],
     'themes': media_filters.value['themes'],
     'tags': media_filters.value['tags'],
+    'tier_lists': props['tier_lists'],
     'ratings': media_filters.value['ratings'],
     'public_ratings': media_filters.value['public_ratings'],
     'release_dates': media_filters.value['release_dates'],
@@ -56,6 +61,7 @@ async function get_media(override) {
         body: JSON.stringify(params)
       })
       .then(response => response.json())
+  // console.log(result)
 
   // mark page loaded if no data returned
   if (result.length < 1) {
@@ -112,11 +118,25 @@ const handleInfiniteScroll = () => {
 
 };
 
-function clean_load_media() {
+async function clean_load_media() {
+  media_limit.value = (media_page.value * media_limit.value) + media_limit.value
   media_page.value = 0
   is_page_loaded.value = false
-  get_media(true)
+  await get_media(true)
+  // window.scrollY = page_scroll.value
 }
+
+function emitted_media_to_edit_pane(event) {
+  selected_media.value = event
+  edit_pane_open.value = true
+}
+
+watch(edit_pane_open, (newV, oldV) => {
+  if (newV) page_scroll.value = window.scrollY
+  if (!newV) {
+    clean_load_media()
+  }
+})
 
 onMounted(() => {
   get_media()
@@ -131,7 +151,7 @@ onMounted(() => {
 
   <div class="top_feed_container" ref="feed_container">
 
-    <media-feed-filter-bar @filter="handle_filter" :media_type="media_type"></media-feed-filter-bar>
+    <media-feed-filter-bar @filter="handle_filter" :media_type="media_type" :tier_lists="tier_lists"></media-feed-filter-bar>
 
     <div class="rating_box" v-for="rating in Object.keys(media_grouped).reverse()" :key="rating">
 
@@ -146,7 +166,9 @@ onMounted(() => {
                    :is="media_container"
                    :data="med"
                    :container_size="media_size"
-                   :container_scale="media_scale"></component>
+                   :container_scale="media_scale"
+                   @media_data="emitted_media_to_edit_pane"
+        ></component>
       </div>
     </div>
 

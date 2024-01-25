@@ -4,7 +4,7 @@ import FilterDropdown from "@/components/media_filters/filterDropdown.vue";
 import FilterRange from "@/components/media_filters/filterRange.vue";
 import FilterRadio from "@/components/media_filters/filterRadio.vue";
 
-let props = defineProps(["media_type"]);
+let props = defineProps(["media_type","tier_lists"]);
 let emits = defineEmits(["filter"]);
 const curr_api = inject("curr_api");
 
@@ -28,9 +28,17 @@ let orders = ref([
 async function fetch_filters() {
 
   const url = new URL(`${curr_api}/media/get_filters`)
-  url.searchParams.set('type', props['media_type'] !== undefined ? props['media_type'] : '')
+  const params = {
+    'type':props['media_type'] !== undefined ? props['media_type'] : '',
+    'tier_lists':props['tier_lists'] !== undefined ? props['tier_lists'] : [],
+  }
 
-  const result = await fetch(url).then(response => response.json())
+  const result = await fetch(url, {
+  method: 'POST',
+  headers: {"Content-Type": "application/json"},
+  body: JSON.stringify(params)
+  }).then(response => response.json())
+
   console.log('filters', result)
 
   genres.value = result['genres']
@@ -42,7 +50,7 @@ async function fetch_filters() {
   public_ratings.value = result['public_ratings']
   release_dates.value = result['release_dates']
   runtimes.value = result['runtimes']
-  // content_ratings.value = result['content_ratings']
+  content_ratings.value = result['content_ratings']
 }
 
 function emit_filter(title, event) {

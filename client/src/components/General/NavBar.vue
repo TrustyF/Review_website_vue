@@ -14,12 +14,12 @@ function get_scroll_direction(event) {
     nav.classList.remove('hidden')
     is_visible_navbar.value = false
   }
-  else if ((prev_scroll.value - 400) > (window.scrollY)) {
+  else if ((prev_scroll.value) > (window.scrollY)) {
     nav.classList.remove('hidden')
     prev_scroll.value = window.scrollY;
     is_visible_navbar.value = false
 
-  } else if ((prev_scroll.value) < window.scrollY) {
+  } else if ((prev_scroll.value + 50) < window.scrollY) {
     nav.classList.add('hidden')
     prev_scroll.value = window.scrollY;
     is_visible_navbar.value = true
@@ -40,7 +40,7 @@ onMounted(() => {
       <h1>|</h1>
       <RouterLink active-class="active" class="link" to="/movies">Movies</RouterLink>
       <RouterLink active-class="active" class="link" to="/series">Series</RouterLink>
-      <RouterLink active-class="active" class="link" to="/shorts">Short films</RouterLink>
+      <RouterLink active-class="active" class="link" to="/shorts">Youtube</RouterLink>
       <h1>•</h1>
       <RouterLink active-class="active" class="link" to="/anime">Anime</RouterLink>
       <RouterLink active-class="active" class="link" to="/manga">Manga</RouterLink>

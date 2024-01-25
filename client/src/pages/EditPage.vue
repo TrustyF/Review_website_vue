@@ -1,47 +1,30 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed} from "vue";
+import {inject, onMounted, watch, ref, computed, onUnmounted} from "vue";
 import FilterSearch from "@/components/media_filters/filterSearch.vue";
 import MovieContainer from "@/components/media_container/movie_container/MovieContainer.vue";
-import TagPicker from "@/components/tag_picker/TagPicker.vue";
+import TagPicker from "@/components/editor_tools/TagPicker.vue";
+import TierListPicker from "@/components/editor_tools/TierListPicker.vue";
 
-let props = defineProps(["test"]);
-let emits = defineEmits(["test"]);
+// let props = defineProps(["test"]);
+// let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
+let selected_media = inject('selected_media')
+let edit_pane_open = inject('edit_pane_open')
 
-let search_type = ref()
+let search_type = ref('movie')
 
 let search_media = ref()
-let selected_media = ref({})
 let extra_posters = ref([])
-let form_bindings = ref([
-  {
-    'name': 'text',
-    'media_type': 'text',
-    'media_medium': 'text',
-  },
-  {
-    'user_rating': 'number',
-    // 'public_rating': 'number',
-  },
-  {
-    'is_dropped': 'checkbox',
-    'is_deleted': 'checkbox',
-  },
-  {
-    // 'episodes': 'number',
-    // 'seasons': 'number',
-    'content_rating': 'text',
-  }
-])
 
 let updated = ref('none')
 let added = ref('none')
+let hard_delete_count = ref(0)
 
 let content_ratings = ref()
 
 let container_size = computed(() => {
-  if (search_type.value === 'short') {
-    return [1280/1.3, 720/1.3]
+  if (search_type.value === 'youtube') {
+    return [1280 / 1.3, 720 / 1.3]
   } else {
     return [500, 750]
   }
@@ -88,7 +71,7 @@ async function find_media(text) {
   url.searchParams.set('type', search_type.value)
 
   search_media.value = await fetch(url).then(response => response.json())
-  console.log(search_media.value)
+  // console.log(search_media.value)
 }
 
 async function update_media() {
@@ -104,11 +87,29 @@ async function update_media() {
   }).then(response => response.json())
 
   updated.value = result.ok ? 'true' : 'false'
+  if (updated.value) edit_pane_open.value = false
+}
+
+async function hard_delete() {
+
+  if (selected_media.value['id'] === undefined) return
+  if (hard_delete_count.value < 2) {
+    hard_delete_count.value += 1
+    return
+  }
+  hard_delete_count.value = 0
+
+  const url = new URL(`${curr_api}/media/delete`)
+  url.searchParams.set('id', selected_media.value['id'])
+
+  const result = await fetch(url).then(response => response.json())
+  await get_media()
+  selected_media.value = {}
 }
 
 async function add_media() {
 
-  if (selected_media.value['user_rating'] === null){
+  if (selected_media.value['user_rating'] === null) {
     added.value = 'false'
     return
   }
@@ -125,6 +126,7 @@ async function add_media() {
 }
 
 async function get_extra_posters() {
+  console.log('getting extra posters')
 
   const url = new URL(`${curr_api}/media/get_extra_posters`)
 
@@ -135,43 +137,59 @@ async function get_extra_posters() {
   extra_posters.value = await fetch(url).then(response => response.json())
 }
 
-function handleMediaEmit(event) {
+function replace_from_search(event) {
+  delete event['id']
+  delete event['user_rating']
+  console.log(event)
+  selected_media.value = {...selected_media.value, ...event}
+  get_extra_posters()
+  updated.value = 'none'
+  added.value = 'none'
+}
+
+function insert_from_search(event) {
   selected_media.value = {...event}
   get_extra_posters()
   updated.value = 'none'
   added.value = 'none'
 }
 
+function close_edit_pane(e) {
+  if (e.keyCode === 27) edit_pane_open.value = false
+}
+
 function switch_poster(event) {
   selected_media.value['poster_path'] = event
 }
 
-function update_tags(event) {
-  form_changes.value['tags'] = event.map((x) => x.id)
-}
-
 onMounted(() => {
-  get_media()
+  // get_media()
   fetch_filters()
-})
-
-watch(selected_media, (newV) => {
   search_type.value = selected_media.value['media_type']
+  get_extra_posters()
+  updated.value = 'none'
+  added.value = 'none'
+  window.addEventListener('keydown', close_edit_pane)
 })
-
+onUnmounted(() => {
+  window.removeEventListener('keydown', close_edit_pane)
+})
 </script>
 
 <template>
   <div class="edit_page_wrapper">
 
+    <img @click="edit_pane_open=false" class="close_pane_button" alt="close_edit_pane"
+         src="/src/assets/ui/cross_button.png">
+
     <div class="search_area">
 
       <div style="display: flex;gap: 15px">
         <div class="search_bars">
-          <div style="display: flex;align-items: center;gap: 10px">
-            <h1>Library</h1>
-            <filter-search style="height: 30px" @filter="get_media($event)" :auto_search="false"></filter-search>
-          </div>
+          <!--          <div style="display: flex;align-items: center;gap: 10px">-->
+          <!--            <h1>Library</h1>-->
+          <!--            <filter-search style="height: 30px" @filter="get_media($event)" :auto_search="false"></filter-search>-->
+          <!--          </div>-->
           <div style="display: flex;align-items: center;gap: 10px">
             <h1>Find</h1>
             <filter-search style="height: 30px" @filter="find_media($event)" :auto_search="false"></filter-search>
@@ -180,11 +198,10 @@ watch(selected_media, (newV) => {
 
         <div class="media_type_selector">
           <label for="media_types" style="margin-right: 10px">Media type</label>
-          <select v-model="search_type" id="media_types" @change="get_media()">
+          <select v-model="search_type" id="media_types" @change="get_media();fetch_filters();">
             <option value="movie">movie</option>
             <option value="tv">tv</option>
-            <option value="short">short</option>
-            <option value="anime">anime</option>
+            <option value="youtube">youtube</option>
             <option value="manga">manga</option>
             <option value="game">game</option>
           </select>
@@ -196,18 +213,21 @@ watch(selected_media, (newV) => {
                          :data="med"
                          :container_size="container_size"
                          :container_scale="0.20"
-                         @media_data="handleMediaEmit"
+                         @media_data="replace_from_search"
         ></movie-container>
       </div>
 
     </div>
 
     <div class="preview_area">
-      <movie-container :data="selected_media"
-                       :container_size="container_size"
-                       :container_scale="0.35"
-                       @media_data="handleMediaEmit"
-      ></movie-container>
+
+      <div style="display:flex;flex-flow: column;gap: 20px;justify-content: space-between">
+        <movie-container :data="selected_media"
+                         :container_size="container_size"
+                         :container_scale="0.35"
+        ></movie-container>
+        <button @click="hard_delete">Hard delete</button>
+      </div>
 
       <div class="form_area">
 
@@ -233,7 +253,10 @@ watch(selected_media, (newV) => {
                   @change="selected_media['content_rating']=$event.target.value">
             <option v-for="c in content_ratings" :key="c" :value="c">{{ c }}</option>
           </select>
+
         </div>
+
+        <!--        <p>{{selected_media}}</p>-->
 
         <div style="display: flex;align-items: center;gap:10px">
           <button style="width: 100px" @click="update_media">Update</button>
@@ -251,15 +274,20 @@ watch(selected_media, (newV) => {
 
       </div>
 
+      <div class="tier_list_area">
+        <tier-list-picker @tier_lists="selected_media['tier_lists']=$event"></tier-list-picker>
+      </div>
+
       <div class="extra_posters">
         <div class="extra_poster" v-for="poster in extra_posters" :key="poster">
           <img :src="poster" alt="extra_poster" class="extra_poster_image" @click="switch_poster(poster)">
         </div>
       </div>
+
     </div>
 
     <div class="tags_area">
-      <tag-picker @tags="update_tags" :media_type="search_type" :media_ref="selected_media"></tag-picker>
+      <tag-picker :media_type="search_type" :media_ref="selected_media"></tag-picker>
     </div>
 
   </div>
@@ -267,9 +295,13 @@ watch(selected_media, (newV) => {
 
 <style scoped>
 .edit_page_wrapper {
+  border: 2px dotted #464646;
+  padding: 10px;
   display: flex;
   flex-flow: column nowrap;
   /*gap: 10px;*/
+  height: 100%;
+
 }
 
 .search_area {
@@ -299,6 +331,13 @@ watch(selected_media, (newV) => {
   justify-content: space-between;
 }
 
+.tier_list_area {
+  display: flex;
+  flex-flow: column wrap;
+  gap: 10px;
+  /*justify-content: space-between;*/
+}
+
 .form_box {
   display: flex;
   flex-flow: column;
@@ -307,6 +346,9 @@ watch(selected_media, (newV) => {
 }
 
 .extra_posters {
+  border: 2px dotted #464646;
+  min-width: 300px;
+
   display: flex;
   flex-flow: row wrap;
   gap: 5px;
@@ -329,5 +371,15 @@ watch(selected_media, (newV) => {
 
 .update_logo {
   height: 20px;
+}
+
+.close_pane_button {
+  cursor: pointer;
+  position: absolute;
+  filter: invert();
+  right: 40px;
+  top: 40px;
+  width: 40px;
+  object-fit: contain;
 }
 </style>

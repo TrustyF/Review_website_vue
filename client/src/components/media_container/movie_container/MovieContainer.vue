@@ -2,11 +2,14 @@
 import {inject, onMounted, watch, ref, computed, provide} from "vue";
 import Rating from "@/components/media_container/movie_container/sub_components/rating.vue";
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
-
+import {useRouter} from 'vue-router'
 let props = defineProps(["data", "container_scale", "container_size"]);
 let emits = defineEmits(["media_data"]);
 
+let edit_mode = inject('edit_mode')
+
 const curr_api = inject("curr_api");
+const router = useRouter()
 
 const image_path = computed(() => format_image_path(props['data']['poster_path'], props['data']['external_id']))
 const poster_size = computed(() => [
@@ -52,13 +55,14 @@ function open_link_new_tab(path) {
   <div class="movie_container_wrapper">
 
     <div style="position:absolute;background-color: #25222a;padding: 5px;font-size: 0.5em">
-<!--      <p>{{ data['external_link'] }}</p>-->
-      <p v-if="data['content_ratings']">content= {{ data['content_ratings'].map((elem)=>elem['name']) }}</p>
-      <p v-if="data['genres']">genres= {{ data['genres'].map((elem)=>elem['name']) }}</p>
-      <p v-if="data['themes']">themes= {{ data['themes'].map((elem)=>elem['name']) }}</p>
-      <p v-if="data['tags']">tags= {{ data['tags'].map((elem)=>elem['name']) }}</p>
+<!--      <p v-if="data['external_name']">external_name = {{ data['external_name'] }}</p>-->
+<!--      <p v-if="data['content_rating']">content= {{ data['content_rating'] }}</p>-->
+<!--      <p v-if="data['genres']">genres= {{ data['genres'].map((elem)=>elem['name']) }}</p>-->
+      <p v-if="data['tier_lists']">tier_lists= {{ data['tier_lists'].map((elem)=>elem['name']) }}</p>
+<!--      <p v-if="data['themes']">themes= {{ data['themes'].map((elem)=>elem['name']) }}</p>-->
+<!--      <p v-if="data['tags']">tags= {{ data['tags'].map((elem)=>elem['name']) }}</p>-->
 <!--      <p v-if="data['author']">author= {{ data['author'] }}</p>-->
-<!--      <p v-if="data['studio']">studio= {{ data['studio'] }}</p>-->
+<!--      <p v-if="data['release_date']">release_date= {{ data['release_date'] }}</p>-->
 <!--      <p>{{ image_path }}</p>-->
     </div>
 
