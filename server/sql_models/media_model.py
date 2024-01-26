@@ -45,6 +45,7 @@ class ContentRating(db.Model):
 
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name: str = db.Column(db.String(50), nullable=False, unique=True)
+    order: int = db.Column(db.Integer)
 
 
 @dataclass
@@ -118,8 +119,8 @@ class Media(db.Model):
     episodes: int = db.Column(db.Integer)
     seasons: int = db.Column(db.Integer)
 
-    # todo transition to content rating table
-    content_rating: str = db.Column(db.String(50))
+    content_rating_id = db.Column(db.Integer, db.ForeignKey('content_rating.id'))
+    content_rating = db.relationship("ContentRating")
 
     genres: Mapped[Genre] = db.relationship("Genre", secondary=media_genre_association)
     themes: Mapped[Theme] = db.relationship("Theme", secondary=media_theme_association)

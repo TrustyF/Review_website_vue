@@ -5,9 +5,8 @@ import json
 from pprint import pprint
 import time
 
-
 from db_loader import db
-from sql_models.media_model import Media, Genre, Theme
+from sql_models.media_model import Media, Genre, Theme, ContentRating
 from sqlalchemy import func
 from flask import jsonify
 
@@ -38,14 +37,67 @@ def map_associations(table, array, media_type):
 
 
 def map_from_tmdb(medias, media_type):
+    def get_movie_content_rating_conversion_table(pg_rating):
+        table = {
+            'G': ['U'],
+            'PG': ['TP', '7'],
+            'PG-13': ['-12', '12', '+12', '12+', 'PG13'],
+            'R': ['-16', '16', '15', '+15', '15+', 'PG15'],
+            'NC-17': ['-18', '18', '+18', '18+', 'R18'],
+        }
+        return table[pg_rating]
+
+    def get_tv_content_rating_conversion_table(pg_rating):
+        table = {
+            'TV-Y': [],
+            'TV-Y7': [],
+            'TV-G': ['TP', '7'],
+            'TV-PG': ['-12', '12', '+12', '12+', 'PG13'],
+            'TV-14': ['-16', '15', '+15', '15+', 'PG15'],
+            'TV-MA': ['-18', '18', '+18', '18+', 'R18'],
+        }
+        return table[pg_rating]
+
     def mapping_tmdb_movie(entry):
 
         def get_content_rating():
+            db_content_ratings = [x.name for x in db.session.query(ContentRating).join(Media.content_rating).filter(
+                Media.media_type == media_type).all()]
+
             content_rating = ''
             if 'releases' in entry:
-                for x in entry['releases']['countries']:
-                    if x['iso_3166_1'] == 'US' or x['iso_3166_1'] == 'JP':
-                        content_rating = x.get('certification')
+                grouped = [[y['iso_3166_1'], y['certification']] for y in entry['releases']['countries']]
+                # print(grouped)
+
+                all_ratings = [x[1] for x in grouped if x[1] != '']
+                us_grouped = [x for x in grouped if x[0] == 'US' if x[1] != '' and x[1] != 'NR']
+
+                if us_grouped:
+                    for i in us_grouped:
+                        if i[1]:
+                            print('us content')
+                            content_rating = i[1]
+                            break
+
+                else:
+                    for rating in db_content_ratings:
+                        equivalent = get_movie_content_rating_conversion_table(rating)
+
+                        if rating in all_ratings:
+                            print('other content')
+                            content_rating = rating
+                            break
+
+                        else:
+                            for eq in equivalent:
+                                if eq in all_ratings:
+                                    print('equivalent content', rating, eq)
+                                    content_rating = rating
+                                    break
+                            else:
+                                continue
+                            break
+
             return content_rating
 
         def get_genres():
@@ -87,7 +139,7 @@ def map_from_tmdb(medias, media_type):
             'studio': get_studio(),
             'author': get_author(),
             'runtime': entry.get('runtime'),
-            'content_rating': get_content_rating(),
+            'content_rating': db.session.query(ContentRating).filter_by(name=get_content_rating()).one_or_none(),
             'genres': map_associations(Genre, get_genres(), media_type),
         }
 
@@ -96,21 +148,45 @@ def map_from_tmdb(medias, media_type):
     def mapping_tmdb_tv(entry):
 
         def get_content_rating():
-            def sort_func(item):
-                if item[0] == 'US':
-                    return 0
-                elif item[0] == 'JS':
-                    return 1
+
+            db_content_ratings = [x.name for x in db.session.query(ContentRating).join(Media.content_rating).filter(
+                Media.media_type == media_type).all()]
+
+            content_rating = ''
+            if 'content_ratings' in entry:
+                grouped = [[y['iso_3166_1'], y['rating']] for y in entry['content_ratings']['results']]
+                print(grouped)
+
+                all_ratings = [x[1] for x in grouped if x[1] != '']
+                us_grouped = [x for x in grouped if x[0] == 'US' if x[1] != '']
+
+                if us_grouped:
+                    for i in us_grouped:
+                        if i[1]:
+                            print('us content')
+                            content_rating = i[1]
+                            break
+
                 else:
-                    return 2
+                    for rating in db_content_ratings:
+                        equivalent = get_tv_content_rating_conversion_table(rating)
 
-            if len(entry.get('content_ratings').get('results')) < 1:
-                return
+                        if rating in all_ratings:
+                            print('other content')
+                            content_rating = rating
+                            break
 
-            ratings = [[x['iso_3166_1'], x['rating']] for x in entry['content_ratings']['results']]
-            sorted_ratings = sorted(ratings, key=sort_func)
+                        else:
+                            for eq in equivalent:
+                                if eq in all_ratings:
+                                    print('equivalent content', rating, eq)
+                                    content_rating = rating
+                                    break
+                            else:
+                                continue
+                            break
 
-            return sorted_ratings[0][1]
+            return content_rating
 
         def get_genres():
             if 'genres' in entry:
@@ -152,7 +228,7 @@ def map_from_tmdb(medias, media_type):
             'seasons': entry.get('number_of_seasons'),
             'studio': get_studio(),
             'author': get_author(),
-            'content_rating': get_content_rating(),
+            'content_rating': db.session.query(ContentRating).filter_by(name=get_content_rating()).one_or_none(),
             'genres': map_associations(Genre, get_genres(), media_type),
         }
         return tv_mapping
@@ -208,7 +284,7 @@ def map_from_mangadex(medias, media_type):
             'external_id': media.get('id'),
             'external_link': 'https://mangadex.org/title/' + media.get('id'),
             'author': get_author(media),
-            'content_rating': attrib.get('contentRating'),
+            'content_rating': db.session.query(ContentRating).filter_by(name=attrib.get('contentRating')).one_or_none(),
             'genres': map_associations(Genre, get_genres(media), media_type),
         }
 
@@ -285,8 +361,8 @@ def map_from_igdb(medias, media_type):
             'name': media.get('name'),
             'external_name': media.get('name'),
             'release_date': dateutil.parser.parse(f"{media.get('release_dates')[0].get('y')}-01-01").date() if
-            media.get(
-                'release_dates')[0].get('y') else None,
+            media.get('release_dates') and len(media.get('release_dates')) > 0 and media.get('release_dates')[0].get(
+                'y') else None,
             'overview': media.get('summary'),
             'poster_path': 'https:' + media.get('cover').get('url').replace('t_thumb', 't_1080p') if media.get(
                 'cover') else None,
@@ -296,7 +372,7 @@ def map_from_igdb(medias, media_type):
             'external_id': media.get('id'),
             'external_link': media.get('url'),
             'studio': get_studio(media),
-            'content_rating': get_content_rating(media),
+            'content_rating': db.session.query(ContentRating).filter_by(name=get_content_rating(media)).one_or_none(),
             'genres': map_associations(Genre, get_genres(media), media_type),
             'themes': map_associations(Theme, get_themes(media), media_type),
         }

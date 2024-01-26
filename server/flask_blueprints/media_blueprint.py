@@ -18,7 +18,8 @@ from youtubesearchpython import VideosSearch
 from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY, IGDB_CLIENT_ID, IGDB_CLIENT_SECRET
 from data_mapper.media_mapper import map_from_tmdb, map_from_mangadex, map_from_igdb, map_from_youtube
 from db_loader import db
-from sql_models.media_model import Media, Genre, Theme, Tag, media_genre_association, media_tag_association, TierList
+from sql_models.media_model import Media, Genre, Theme, Tag, media_genre_association, media_tag_association, TierList, \
+    ContentRating
 from data_mapper.serializer import serialize_media, deserialize_media
 
 bp = Blueprint('media', __name__)
@@ -84,7 +85,7 @@ def handle_igdb_access_token(f_source):
 def get():
     # parameters
     data = request.get_json()
-    # print(data)
+    print(data)
 
     limit = data.get('limit')
     page = data.get('page')
@@ -101,6 +102,7 @@ def get():
     public_ratings = data.get('public_ratings')
     release_dates = data.get('release_dates')
     runtimes = data.get('runtimes')
+    content_ratings = data.get('content_ratings')
 
     search = data.get('search')
 
@@ -127,6 +129,12 @@ def get():
             elif len(q.join(Media.tags).filter(Tag.name.ilike(f'%{search}%')).all()) > 0:
                 q = q.join(Media.tags).filter(Tag.name.ilike(f'%{search}%'))
 
+            elif len(q.filter(Media.studio.ilike(f'%{search}%')).all()) > 0:
+                q = q.filter(Media.studio.ilike(f'%{search}%'))
+
+            elif len(q.filter(Media.author.ilike(f'%{search}%')).all()) > 0:
+                q = q.filter(Media.author.ilike(f'%{search}%'))
+
             else:
                 q = q.filter(Media.overview.ilike(f'%{search}%'))
 
@@ -142,6 +150,11 @@ def get():
         if tags:
             q = (q.join(Media.tags).filter(Tag.id.in_(tags))
                  .group_by(Media.id).having(func.count(Media.id) == len(tags)))
+        if content_ratings:
+            q = q.filter(or_(
+                Media.content_rating_id.in_(content_ratings),
+                Media.content_rating_id.is_(None),
+            ))
 
         if ratings:
             q = q.filter(Media.user_rating >= ratings[0],
@@ -182,7 +195,7 @@ def get():
                 case 'date_added':
                     selected_ordering = Media.created_at.desc()
 
-        q = q.order_by(rating_ordering, selected_ordering, Media.id)
+        q = q.order_by(rating_ordering, selected_ordering, rand_ordering, Media.id)
 
         return q
 
@@ -205,6 +218,7 @@ def find():
     media_name = request.args.get('name')
     media_type = request.args.get('type')
     media_id = request.args.get('id')
+    media_page = request.args.get('page', type=int)
 
     print(f'searching {media_name=} {media_type=} {media_id=}')
 
@@ -215,7 +229,7 @@ def find():
                 "accept": "application/json",
                 "Authorization": f"Bearer {TMDB_ACCESS_TOKEN}"}).json()
 
-        found_ids = [x['id'] for x in id_request['results'][:5]]
+        found_ids = [x['id'] for x in id_request['results'][media_page * 5:(media_page * 5) + 5]]
         print(found_ids)
 
         for media_id in found_ids:
@@ -235,13 +249,20 @@ def find():
                     return my_dict
 
         media_request = requests.get(f"https://api.mangadex.org/manga?title={media_name}"
-                                     f"&limit=5&includes[]=cover_art&includes"
-                                     f"[]=chapter&includes[]=author").json()
+                                     f"&limit=5&offset={media_page * 5}&includes[]=cover_art&includes"
+                                     f"[]=chapter&includes[]=author"
+                                     f"&order[followedCount]=desc&order[relevance]=desc&order[rating]=desc").json()
+
         all_found = media_request['data']
 
         for media in all_found:
+
+            rel_found = find_in_relationships(media.get('relationships'), 'type', 'cover_art')
+            if rel_found is None:
+                continue
+
             path = (f"https://uploads.mangadex.org/covers/{media['id']}"
-                    f"/{find_in_relationships(media['relationships'], 'type', 'cover_art')['attributes']['fileName']}"
+                    f"/{rel_found['attributes']['fileName']}"
                     f".512.jpg")
             statistics = requests.get(f'https://api.mangadex.org/statistics/manga/{media["id"]}').json()
 
@@ -310,6 +331,7 @@ def find():
     serialized_media = [serialize_media(x) for x in mapped_media]
 
     if len(serialized_media) > 0:
+        # print(serialized_media)
         return serialized_media, 200
     else:
         return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
@@ -358,7 +380,7 @@ def update():
     # update
     query.update(deserialize_media(data))
 
-    pprint(deserialize_media(data))
+    # pprint(deserialize_media(data))
 
     # associations
     media_obj = query.one()
@@ -367,6 +389,7 @@ def update():
     media_obj.themes = [db.session.query(Theme).filter_by(id=x['id']).one() for x in data.get('themes', [])]
     media_obj.tags = [db.session.query(Tag).filter_by(id=x['id']).one() for x in data.get('tags', [])]
     media_obj.tier_lists = [db.session.query(TierList).filter_by(id=x['id']).one() for x in data.get('tier_lists', [])]
+    media_obj.content_rating = db.session.query(ContentRating).filter_by(id=data.get('content_rating')['id']).one()
 
     db.session.commit()
     db.session.close()
@@ -441,8 +464,11 @@ def search_extra_posters():
 
     def request_mangadex_posters():
         extra_request = requests.get(f'https://api.mangadex.org/cover?limit=100&manga%5B%5D={media_external_id}').json()
-
         aggregated_links = []
+
+        if extra_request.get('data') is None:
+            return []
+
         for entry in extra_request['data']:
 
             if entry['attributes']['volume'] is None:
@@ -499,28 +525,27 @@ def search_extra_posters():
 def get_filters():
     params = request.get_json()
 
-    print(params)
-
     media_type = params.get('type')
     media_tier_lists = params.get('tier_lists')
 
     print(f'getting filters for {media_type=} {media_tier_lists=}')
 
-    # query = db.session.query(Media).filter(Media.media_type == media_type)
+    genres = db.session.query(Genre)
+    themes = db.session.query(Theme)
+    tags = db.session.query(Tag)
+    content_ratings = db.session.query(ContentRating)
 
-    genres = (db.session.query(Genre).join(Media.genres).join(Media.tier_lists)
-              .filter(Media.media_type == media_type,TierList.name == media_tier_lists[0])
-              .group_by(Genre.id).all())
+    if media_type:
+        genres = genres.join(Media.genres).filter(Media.media_type == media_type)
+        themes = themes.join(Media.themes).filter(Media.media_type == media_type)
+        tags = tags.join(Media.tags).filter(Media.media_type == media_type)
+        content_ratings = content_ratings.join(Media.content_rating).filter(Media.media_type == media_type)
 
-    themes = (db.session.query(Theme).join(Media.themes).join(Media.tier_lists)
-              .filter(Media.media_type == media_type,TierList.name == media_tier_lists[0])
-              .group_by(Theme.id).all())
-
-    tags = (db.session.query(Tag).join(Media.tags).join(Media.tier_lists)
-            .filter(Media.media_type == media_type,TierList.name == media_tier_lists[0])
-            .group_by(Tag.id).all())
-
-    print(genres)
+    if media_tier_lists:
+        genres = genres.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
+        themes = themes.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
+        tags = tags.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
+        content_ratings = content_ratings.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
 
     ratings = (db.session.query(func.max(Media.user_rating).label('max'),
                                 func.min(Media.user_rating).label('min'))
@@ -538,48 +563,21 @@ def get_filters():
                                  func.min(Media.runtime).label('min'))
                 .filter(Media.runtime.is_not(None)))
 
-    content_ratings = db.session.query(Media.content_rating).filter(Media.content_rating.is_not(None),
-                                                                    Media.media_type == media_type).distinct().all()
-
-    # if media_type:
-    #     genres = genres.filter(Media.media_type == media_type)
-    #     themes = themes.filter(Media.media_type == media_type)
-    #     tags = tags.filter(Media.media_type == media_type)
-    #     ratings = ratings.filter(Media.media_type == media_type)
-    #     public_ratings = public_ratings.filter(Media.media_type == media_type)
-    #     release_dates = release_dates.filter(Media.media_type == media_type)
-    #     runtimes = runtimes.filter(Media.media_type == media_type)
-
-    # if tier_lists:
-    #     genres = genres.filter(Media.tier_lists)
-    # genres = genres.join(Media.tier_lists).filter(
-    #     TierList.name.in_(tier_lists).group_by(Media.id).having(func.count(Media.id) == len(tier_lists)))
-    # themes = themes.filter(Media.media_type == media_type)
-    # tags = tags.filter(Media.media_type == media_type)
-    # ratings = ratings.filter(Media.media_type == media_type)
-    # public_ratings = public_ratings.filter(Media.media_type == media_type)
-    # release_dates = release_dates.filter(Media.media_type == media_type)
-    # runtimes = runtimes.filter(Media.media_type == media_type)
-
     ratings = ratings.one()
     public_ratings = public_ratings.one()
     release_dates = release_dates.one()
     runtimes = runtimes.one()
 
-    # print(ratings, public_ratings, release_dates, runtimes)
-
     result = {
-        'genres': genres,
-        'themes': themes,
-        'tags': tags,
+        'genres': genres.group_by(Genre.id).all(),
+        'themes': themes.group_by(Theme.id).all(),
+        'tags': tags.group_by(Tag.id).all(),
+        'content_ratings': content_ratings.group_by(ContentRating.id).all(),
         'user_ratings': [ratings.min or 0, ratings.max or 0],
         'public_ratings': [floor(public_ratings.min or 0), ceil(public_ratings.max or 0)],
         'release_dates': [release_dates.min.year, release_dates.max.year]
         if release_dates.max is not None else [1900, 3000],
         'runtimes': [0, ceil(runtimes.max / 15) * 15] if runtimes.max else [0, 0],
-        'content_ratings': [tuple(x)[0] for x in content_ratings],
     }
-
-    # pprint(result)
 
     return result, 200

@@ -42,9 +42,8 @@ with app.app_context():
 
     logging.disable(logging.WARNING)
 
-    from sql_models.media_model import *
-
-    db.create_all()
+    # from sql_models.media_model import *
+    # db.create_all()
 
     from flask_blueprints import media_blueprint, tag_blueprint, tier_list_blueprint
 

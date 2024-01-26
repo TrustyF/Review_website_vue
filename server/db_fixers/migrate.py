@@ -1,12 +1,13 @@
 import datetime
 import pprint
+from concurrent.futures import ThreadPoolExecutor
 
 import dateutil.parser
 import requests
 
 from constants import TMDB_ACCESS_TOKEN
 from data_mapper.serializer import serialize_media
-from sql_models.media_model import Media, Genre, Theme, Tag
+from sql_models.media_model import Media, Genre, Theme, Tag, ContentRating
 from db_loader import db
 import json
 from app import app
@@ -163,31 +164,50 @@ def update_existing_from_tmdb():
 
 
 def update_all_records():
-    all_records = (db.session.query(Media).filter(
-        Media.media_type == 'tv',
-        Media.updated_at < dateutil.parser.parse('2024-01-24')).all())
-
-    for record in all_records:
-        # print(record.name)
+    def update_record(record):
         find_media = requests.get(
-            f'http://127.0.0.1:5000/media/find?name={record.name}&type={record.media_type}').json()
+            f'http://127.0.0.1:5000/media/find?name={record.name}&type={record.media_type}&page=0').json()
 
         try:
             selected = find_media[0]
         except KeyError:
-            continue
+            return
 
-        print(record.name, ' vs ', selected['name'])
+        print(record.name, record.release_date, ' vs ', selected['name'], record.release_date)
         # check if correct
-        if selected['name'] != record.name or selected['release_date'] != record.release_date:
+        if selected['name'] != record.name or str(selected['release_date']) != str(record.release_date):
             print("!!! ", record.name, ' vs ', selected['name'])
-            continue
+            return
 
         selected['id'] = record.id
         selected['user_rating'] = record.user_rating
         requests.post(f'http://127.0.0.1:5000/media/update', json=selected)
 
+    all_records = (db.session.query(Media).filter(
+        Media.media_type == 'game', Media.content_rating_id.is_(None)).all())
+    # , Media.updated_at < dateutil.parser.parse('2024-01-25')
+
+    print(len(all_records))
+    with ThreadPoolExecutor() as executor:
+        results = [executor.submit(update_record, x) for x in all_records]
+
+
+def connect_content_ratings():
+    all_records = db.session.query(Media).all()
+
+    for record in all_records:
+        print(record.content_rating_old)
+
+        if record.content_rating_old is None or record.content_rating_old == "":
+            continue
+
+        content = db.session.query(ContentRating).filter_by(name=record.content_rating_old).one()
+        record.content_rating = content
+
+    db.session.commit()
+
 
 if __name__ == '__main__':
     with app.app_context():
+        # connect_content_ratings()
         update_all_records()

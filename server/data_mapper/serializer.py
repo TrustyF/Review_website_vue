@@ -1,7 +1,8 @@
+from dataclasses import asdict
 from datetime import datetime
 from sqlalchemy import func
 from db_loader import db
-from sql_models.media_model import Media
+from sql_models.media_model import Media, ContentRating, TierList
 
 
 def serialize_media(media):
@@ -60,23 +61,24 @@ def serialize_media(media):
         'updated_at': media.updated_at,
         'external_id': media.external_id,
         'external_link': media.external_link,
-        'content_rating': media.content_rating,
+        'content_rating': media.content_rating or ContentRating(),
         'runtime': media.runtime,
         'episodes': media.episodes,
         'seasons': media.seasons,
 
-        'genres': media.genres,
-        'themes': media.themes,
-        'tags': media.tags,
-        'tier_lists': media.tier_lists,
+        'genres': media.genres or [],
+        'themes': media.themes or [],
+        'tags': media.tags or [],
+        'tier_lists': media.tier_lists or [],
     }
 
 
 def deserialize_media(data):
     return {
         'name': data.get('name'),
+        'external_name': data.get('external_name'),
         'release_date': datetime.strptime(data.get('release_date'), '%Y-%m-%d'),
-        'overview': data.get('overview'),
+        'overview': data.get('overview')[:1000],
         'poster_path': data.get('poster_path'),
         'author': data.get('author'),
         'studio': data.get('studio'),
@@ -88,7 +90,6 @@ def deserialize_media(data):
         'is_deleted': data.get('is_deleted'),
         'external_id': data.get('external_id'),
         'external_link': data.get('external_link'),
-        'content_rating': data.get('content_rating'),
         'runtime': data.get('runtime'),
         'episodes': data.get('episodes'),
         'seasons': data.get('seasons'),
