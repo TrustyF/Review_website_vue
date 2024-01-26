@@ -39,15 +39,13 @@ onMounted(() => {
       <RouterLink v-if="editMode" active-class="active" class="link" to="/all">Home</RouterLink>
       <h1>|</h1>
       <RouterLink active-class="active" class="link" to="/movies">Movies</RouterLink>
-      <RouterLink active-class="active" class="link" to="/series">Series</RouterLink>
+      <RouterLink active-class="active" class="link" to="/series">TV</RouterLink>
       <RouterLink active-class="active" class="link" to="/shorts">Youtube</RouterLink>
       <h1>•</h1>
       <RouterLink active-class="active" class="link" to="/anime">Anime</RouterLink>
       <RouterLink active-class="active" class="link" to="/manga">Manga</RouterLink>
       <h1>•</h1>
       <RouterLink active-class="active" class="link" to="/games">Games</RouterLink>
-      <h1>•</h1>
-      <RouterLink v-if="editMode" active-class="active" class="link" to="/edit">Edit</RouterLink>
     </div>
   </nav>
 </template>

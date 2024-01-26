@@ -7,7 +7,7 @@ import '@/assets/styles/dark.css'
 import CreditsFooter from "@/components/General/CreditsFooter.vue";
 import {onMounted, provide, ref, watch} from "vue";
 import TooltipBadge from "@/components/tooltip/tooltipBadge.vue";
-import EditPage from "@/pages/EditPage.vue";
+import TooltipEditor from "@/components/tooltip/tooltipEditor.vue";
 
 const selected_media = ref({})
 const edit_media = ref(undefined)
@@ -46,8 +46,8 @@ watch(is_visible_navbar, (oldVal, newVal) => {
   <tooltip-badge></tooltip-badge>
 
   <NavBar/>
-  <div class="edit_page_top_wrapper" v-if="edit_pane_open">
-    <edit-page></edit-page>
+  <div class="tooltip_editor_top_wrapper" v-if="edit_pane_open">
+    <tooltip-editor></tooltip-editor>
   </div>
 
   <div class="main navbar_offset" id="main">
@@ -71,7 +71,7 @@ watch(is_visible_navbar, (oldVal, newVal) => {
   transition-delay: 250ms;
 }
 
-.edit_page_top_wrapper {
+.tooltip_editor_top_wrapper {
 
   left: 0;
   top: 0;

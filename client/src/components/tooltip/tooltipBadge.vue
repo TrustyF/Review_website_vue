@@ -71,7 +71,7 @@ onMounted(() => {
   left: 0;
   top: 0;
   /*right: 0;*/
-  z-index: 1000;
+  z-index: 100000;
   margin: 0 10px 0 10px;
 
   opacity: 0;
