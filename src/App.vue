@@ -11,14 +11,12 @@ import TooltipEditor from "@/components/tooltip/tooltipEditor.vue";
 
 const selected_media = ref({})
 const edit_media = ref(undefined)
-const edit_mode = ref(true)
 const edit_pane_open = ref(false)
 let is_mobile = ref(false)
 let is_visible_navbar = ref(false)
 
 provide('selected_media', selected_media)
 provide('edit_media', edit_media)
-provide('edit_mode', edit_mode)
 provide('edit_pane_open', edit_pane_open)
 provide('is_mobile', is_mobile)
 provide('is_visible_navbar', is_visible_navbar)
@@ -51,6 +49,7 @@ watch(is_visible_navbar, (oldVal, newVal) => {
   </div>
 
   <div class="main navbar_offset" id="main">
+    <p>{{edit_mode}}</p>
     <RouterView>
     </RouterView>
     <CreditsFooter/>

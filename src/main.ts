@@ -9,7 +9,8 @@ const server_api = "https://review-trustyfox.pythonanywhere.com/"
 
 const devMode = import.meta.env.DEV
 // const devMode = false
-const editMode = ref(import.meta.env.DEV)
+const edit_mode = import.meta.env.DEV
+// const edit_mode = false
 
 const session_seed = Math.round(Math.random() * 100)
 
@@ -17,7 +18,7 @@ const app = createApp(App)
 
 app.provide('curr_api', devMode ? local_api : server_api)
 app.provide('devMode', devMode)
-app.provide('editMode', editMode)
+app.provide('edit_mode', edit_mode)
 app.provide('session_seed', session_seed)
 
 //tooltips

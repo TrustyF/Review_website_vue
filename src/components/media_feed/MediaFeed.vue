@@ -120,9 +120,11 @@ const handleInfiniteScroll = () => {
 
 async function clean_load_media() {
   media_page.value = 0
+  media_limit.value = 20
   is_page_loaded.value = false
   await get_media(true)
 }
+
 async function update_load_media() {
   media_limit.value = (media_page.value * media_limit.value) + media_limit.value
   media_page.value = 0
@@ -156,7 +158,8 @@ onMounted(() => {
 
   <div class="top_feed_container" ref="feed_container">
 
-    <media-feed-filter-bar @filter="handle_filter" :media_type="media_type" :tier_lists="tier_lists"></media-feed-filter-bar>
+    <media-feed-filter-bar @filter="handle_filter" :media_type="media_type"
+                           :tier_lists="tier_lists"></media-feed-filter-bar>
 
     <div class="rating_box" v-for="rating in Object.keys(media_grouped).reverse()" :key="rating">
 

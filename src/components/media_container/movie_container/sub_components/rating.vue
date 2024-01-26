@@ -17,12 +17,12 @@ const curr_api = inject("curr_api");
       <img :src="blue_star" alt="gold_star" class="gold_star">
     </div>
 
-    <div class="rating_box" v-if="data['scaled_public_rating']>0">
+    <div class="rating_box" v-if="data['scaled_public_rating']">
       <h2 class="rating"> {{ Math.round(data['scaled_public_rating'] * 10) / 10 }}</h2>
       <img :src="gold_star" alt="gold_star" class="gold_star">
     </div>
 
-    <div class="rating_box" v-else-if="data['public_rating']>0">
+    <div class="rating_box" v-else-if="data['public_rating']">
       <h2 class="rating"> {{ Math.round(data['public_rating'] * 10) / 10 }}</h2>
       <img :src="gold_star" alt="gold_star" class="gold_star">
     </div>
@@ -33,7 +33,7 @@ const curr_api = inject("curr_api");
                    :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
 
 
-        <div style="position:absolute;width: 100%"></div>
+<!--        <div class="debug_center_check" style="position:absolute;width: 100%"></div>-->
 
   </div>
 </template>
