@@ -3,14 +3,19 @@ import {RouterLink} from "vue-router";
 import logo from '@/assets/ui/logo.png'
 import {inject, onMounted, ref} from 'vue'
 
-let editMode = inject('editMode')
+let edit_mode = inject('edit_mode')
 let is_visible_navbar = inject('is_visible_navbar')
 let prev_scroll = ref(0)
 let nav
 
 function get_scroll_direction(event) {
+  // console.log(window.scrollY, document.body.scrollHeight)
 
   if (window.scrollY === 0){
+    nav.classList.remove('hidden')
+    is_visible_navbar.value = false
+  }
+  else if (window.innerHeight + Math.round(window.scrollY) >= document.body.scrollHeight - 150){
     nav.classList.remove('hidden')
     is_visible_navbar.value = false
   }
@@ -36,11 +41,11 @@ onMounted(() => {
   <nav class="dark_accent navbar" id="navbar">
     <div class="wrapper">
       <img :src="logo" alt="website icon" style="height: 40px">
-      <RouterLink v-if="editMode" active-class="active" class="link" to="/all">Home</RouterLink>
+      <RouterLink v-if="edit_mode" active-class="active" class="link" to="/all">Home</RouterLink>
       <h1>|</h1>
       <RouterLink active-class="active" class="link" to="/movies">Movies</RouterLink>
       <RouterLink active-class="active" class="link" to="/series">TV</RouterLink>
-      <RouterLink active-class="active" class="link" to="/shorts">Youtube</RouterLink>
+      <RouterLink active-class="active" class="link" to="/youtube">Youtube</RouterLink>
       <h1>•</h1>
       <RouterLink active-class="active" class="link" to="/anime">Anime</RouterLink>
       <RouterLink active-class="active" class="link" to="/manga">Manga</RouterLink>

@@ -45,6 +45,7 @@ function get_rating_color(rating) {
 <style scoped>
 
 .rating_circle_wrapper {
+  height: 100%;
 }
 
 .progress-bar {

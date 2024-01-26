@@ -20,7 +20,12 @@ const min_size = computed(() => Math.min(poster_size.value[0], poster_size.value
 function convert_seconds_to_time(f_seconds) {
   let minutes = f_seconds % 60
   let hours = (f_seconds - minutes) / 60
-  return hours + 'h ' + minutes + 'm';
+
+  if (hours > 0){
+    return hours + 'h ' + minutes + 'm';
+  } else {
+    return minutes + 'm';
+  }
 }
 
 function get_year_from_release_date(string) {
@@ -56,9 +61,10 @@ function open_link_new_tab(path) {
           <img :src="gold_star" alt="gold_star" class="gold_star">
         </div>
 
-        <rating-circle class="rating_circle" :text_size="(220)" v-if="data['scaled_public_rating']>0"
+        <rating-circle class="rating_circle" :text_size="(150)" v-if="data['scaled_public_rating']>0"
                        :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
       </div>
+
     </div>
 
     <div class="footer_wrapper">
@@ -75,7 +81,7 @@ function open_link_new_tab(path) {
         </div>
       </div>
 
-      <div class="genres_list" v-if="data['genres']">
+      <div class="genres_list" v-if="data['genres'].length > 0">
         <div class="genre_tag"
              v-for="genre in data['genres']"
              :key="genre['id']"
@@ -87,7 +93,7 @@ function open_link_new_tab(path) {
       <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null">
         <div v-for="tag in data['tags']" :key="tag['id']">
           <!--          <badge-tooltip class="tag" :data="tag" :text_size="0.6"></badge-tooltip>-->
-          <badge :data="tag" :min_size="170" :show_title="true"></badge>
+          <badge :data="tag" :min_size="150" :show_title="true"></badge>
 
         </div>
       </div>
@@ -190,19 +196,23 @@ function open_link_new_tab(path) {
 
 /*Badges*/
 .rating_circle {
-  height: 30px;
+  height: 20px;
 }
 
 .badges {
   display: flex;
   flex-flow: row nowrap;
-  position: relative;
+  position: absolute;
+  /*height: 20px;*/
 
   align-items: center;
   gap: 5px;
-  transform: translate(0, -50%);
-  margin-bottom: -15px;
-  margin-left: 5px;
+
+  bottom: 5px;
+  left: 8px;
+  /*transform: translate(0, -50%);*/
+  /*margin-bottom: -15px;*/
+  /*margin-left: 5px;*/
 }
 
 .gold_star {
@@ -216,7 +226,7 @@ function open_link_new_tab(path) {
   box-shadow: 1px 1px 1px #000000;
   background-color: #2b2a34;
 
-  padding: 5px;
+  padding: 3px;
 
   display: flex;
   flex-flow: row nowrap;
@@ -228,7 +238,7 @@ function open_link_new_tab(path) {
 }
 
 .rating {
-  font-size: 0.8em;
+  font-size: 0.6em;
   font-weight: 500;
 }
 
