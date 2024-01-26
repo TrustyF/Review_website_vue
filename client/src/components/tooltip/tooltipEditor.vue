@@ -241,10 +241,16 @@ onUnmounted(() => {
     <div class="preview_area">
 
       <div style="display:flex;flex-flow: column;gap: 20px;justify-content: space-between">
+
         <movie-container :data="selected_media"
                          :container_size="container_size"
                          :container_scale="0.35"
         ></movie-container>
+        <button @click="add_media">Add</button>
+        <img class="update_logo" alt="failed update" v-if="added === 'false'"
+             src="../../assets/ui/stop.png">
+        <img class="update_logo" alt="failed update" v-if="added === 'true'"
+             src="../../assets/ui/success-green-check-mark-icon.svg">
         <button @click="hard_delete">Hard delete</button>
       </div>
 
@@ -281,15 +287,10 @@ onUnmounted(() => {
         <!--        <p>{{selected_media}}</p>-->
 
         <div style="display: flex;align-items: center;gap:10px">
-          <button style="width: 100px" @click="update_media">Update</button>
+          <button style="width: 100%;height: 65px" @click="update_media">Update</button>
           <img class="update_logo" alt="failed update" v-if="updated === 'false'"
                src="../../assets/ui/stop.png">
           <img class="update_logo" alt="failed update" v-if="updated === 'true'"
-               src="../../assets/ui/success-green-check-mark-icon.svg">
-          <button style="width: 100px" @click="add_media">Add</button>
-          <img class="update_logo" alt="failed update" v-if="added === 'false'"
-               src="../../assets/ui/stop.png">
-          <img class="update_logo" alt="failed update" v-if="added === 'true'"
                src="../../assets/ui/success-green-check-mark-icon.svg">
 
         </div>
@@ -369,7 +370,7 @@ onUnmounted(() => {
 
 .extra_posters {
   border: 2px dotted #464646;
-  min-width: 300px;
+  min-width: 100px;
 
   display: flex;
   flex-flow: row wrap;
