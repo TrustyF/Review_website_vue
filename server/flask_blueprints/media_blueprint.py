@@ -12,6 +12,7 @@ from sqlalchemy.orm import contains_eager
 from sqlalchemy.sql.expression import func
 from datetime import datetime, timedelta
 from math import ceil, floor
+from app import dev_mode
 
 from youtubesearchpython import VideosSearch
 
@@ -218,6 +219,9 @@ def get():
 
 @bp.route("/find", methods=['GET'])
 def find():
+    if not dev_mode:
+        return json.dumps({'ok': False}), 200, {'ContentType': 'application/json'}
+
     media_name = request.args.get('name')
     media_type = request.args.get('type')
     media_id = request.args.get('id')
@@ -342,6 +346,9 @@ def find():
 
 @bp.route("/add", methods=['POST'])
 def add():
+    if not dev_mode:
+        return json.dumps({'ok': False}), 200, {'ContentType': 'application/json'}
+
     data = request.get_json()
     print('add', data['name'])
 
@@ -373,6 +380,9 @@ def add():
 
 @bp.route("/update", methods=['POST'])
 def update():
+    if not dev_mode:
+        return json.dumps({'ok': False}), 200, {'ContentType': 'application/json'}
+
     # parameters
     data = request.get_json()
     print('update', data['name'])
@@ -407,6 +417,9 @@ def update():
 
 @bp.route("/delete", methods=['GET'])
 def delete():
+    if not dev_mode:
+        return json.dumps({'ok': False}), 200, {'ContentType': 'application/json'}
+
     # parameters
     media_id = request.args.get('id')
     print('delete', media_id)
@@ -452,6 +465,9 @@ def get_image():
 
 @bp.route("/get_extra_posters")
 def search_extra_posters():
+    if not dev_mode:
+        return json.dumps({'ok': False}), 200, {'ContentType': 'application/json'}
+
     media_name = request.args.get('name')
     media_external_id = request.args.get('external_id')
     media_type = request.args.get('type')
@@ -523,7 +539,7 @@ def search_extra_posters():
     if media_type in ['game']:
         posters = request_igdb_posters()
 
-    if media_type in ['short']:
+    if media_type in ['youtube']:
         posters = request_youtube_posters()
 
     if len(posters) > 0:
