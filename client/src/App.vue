@@ -4,10 +4,11 @@ import {RouterView} from 'vue-router'
 import NavBar from "@/components/General/NavBar.vue";
 import '@/assets/styles/globals.css'
 import '@/assets/styles/dark.css'
-import CreditsFooter from "@/components/General/CreditsFooter.vue";
 import {onMounted, provide, ref, watch} from "vue";
 import TooltipBadge from "@/components/tooltip/tooltipBadge.vue";
 import TooltipEditor from "@/components/tooltip/tooltipEditor.vue";
+
+let add_pane_open = ref(false)
 
 const selected_media = ref({})
 const edit_media = ref(undefined)
@@ -45,20 +46,24 @@ watch(is_visible_navbar, (oldVal, newVal) => {
 
   <NavBar/>
   <div class="tooltip_editor_top_wrapper" v-if="edit_pane_open">
-    <tooltip-editor></tooltip-editor>
+    <tooltip-editor :edit="true" :visible_ref="edit_pane_open"></tooltip-editor>
+  </div>
+
+  <button style="position: absolute;right: 10px;top: 70px" @click="add_pane_open=true">add</button>
+  <div class="tooltip_editor_top_wrapper" v-if="add_pane_open">
+    <tooltip-editor :add="true" :visible_ref="add_pane_open"></tooltip-editor>
   </div>
 
   <div class="main navbar_offset" id="main">
-    <p>{{edit_mode}}</p>
     <RouterView>
     </RouterView>
-    <CreditsFooter/>
   </div>
 
 </template>
 
 <style scoped>
 .main {
+  /*outline: 1px solid orange;*/
   position: relative;
 
   margin: 0 auto 0 auto;
@@ -66,6 +71,8 @@ watch(is_visible_navbar, (oldVal, newVal) => {
   min-height: 80vh;
 
   padding: 0 10px 0 10px;
+
+  transform: translate(0, 0);
   transition: transform 250ms;
   transition-delay: 250ms;
 }

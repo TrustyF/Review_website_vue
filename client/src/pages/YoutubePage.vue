@@ -10,17 +10,17 @@ let tier_lists = [
   {
     'name': 'Riot games media',
     'image': riot_games_img,
-    'link':'/shorts/riot_games_media'
+    'link':'/youtube/riot_games_media'
   },
   {
     'name': 'Youtube short films',
     'image': youtube_short_films_img,
-    'link':'/shorts/yt_short_films'
+    'link':'/youtube/yt_short_films'
   },
   {
     'name': 'Youtube animations',
     'image': youtube_animations_img,
-    'link':'/shorts/yt_animations'
+    'link':'/youtube/yt_animations'
   },
 ]
 </script>

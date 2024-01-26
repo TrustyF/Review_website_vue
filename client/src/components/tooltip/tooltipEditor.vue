@@ -1,15 +1,16 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed, onUnmounted} from "vue";
+import {inject, onMounted, watch, ref, computed, onUnmounted, toRef} from "vue";
 import FilterSearch from "@/components/media_filters/filterSearch.vue";
 import MovieContainer from "@/components/media_container/movie_container/MovieContainer.vue";
 import TagPicker from "@/components/editor_tools/TagPicker.vue";
 import TierListPicker from "@/components/editor_tools/TierListPicker.vue";
 
-// let props = defineProps(["test"]);
+let props = defineProps(["edit","add","visible_ref"]);
 // let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
 let selected_media = inject('selected_media')
-let edit_pane_open = inject('edit_pane_open')
+// let edit_pane_open = inject('edit_pane_open')
+let visible_reference = toRef(props,'visible_ref')
 
 let search_type = ref('movie')
 
@@ -105,7 +106,7 @@ async function update_media() {
   }).then(response => response.json())
 
   updated.value = result.ok ? 'true' : 'false'
-  if (updated.value) edit_pane_open.value = false
+  if (updated.value) visible_reference.value = false
 }
 
 async function hard_delete() {
@@ -171,7 +172,7 @@ function insert_from_search(event) {
 }
 
 function handle_key_press(e) {
-  if (e.keyCode === 27) edit_pane_open.value = false
+  if (e.keyCode === 27) visible_reference.value = false
   if (e.keyCode === 13 && e.ctrlKey) update_media()
 }
 
@@ -197,10 +198,10 @@ onUnmounted(() => {
 <template>
   <div class="edit_page_wrapper">
 
-    <img @click="edit_pane_open=false" class="close_pane_button" alt="close_edit_pane"
+    <img @click="visible_reference=false" class="close_pane_button" alt="close_edit_pane"
          src="/src/assets/ui/cross_button.png">
 
-    <div class="search_area">
+    <div v-if="add" class="search_area">
 
       <div style="display: flex;gap: 15px">
         <div class="search_bars">
@@ -246,7 +247,7 @@ onUnmounted(() => {
                          :container_size="container_size"
                          :container_scale="0.35"
         ></movie-container>
-        <button @click="add_media">Add</button>
+        <button v-if="add" @click="add_media">Add</button>
         <img class="update_logo" alt="failed update" v-if="added === 'false'"
              src="../../assets/ui/stop.png">
         <img class="update_logo" alt="failed update" v-if="added === 'true'"
@@ -287,7 +288,7 @@ onUnmounted(() => {
         <!--        <p>{{selected_media}}</p>-->
 
         <div style="display: flex;align-items: center;gap:10px">
-          <button style="width: 100%;height: 65px" @click="update_media">Update</button>
+          <button v-if="edit" style="width: 100%;height: 65px" @click="update_media">Update</button>
           <img class="update_logo" alt="failed update" v-if="updated === 'false'"
                src="../../assets/ui/stop.png">
           <img class="update_logo" alt="failed update" v-if="updated === 'true'"
@@ -370,7 +371,7 @@ onUnmounted(() => {
 
 .extra_posters {
   border: 2px dotted #464646;
-  min-width: 100px;
+  min-width: 50px;
 
   display: flex;
   flex-flow: row wrap;
@@ -400,9 +401,9 @@ onUnmounted(() => {
   cursor: pointer;
   position: absolute;
   filter: invert();
-  right: 40px;
-  top: 40px;
-  width: 40px;
+  right: 5px;
+  top: 5px;
+  width: 20px;
   object-fit: contain;
 }
 </style>

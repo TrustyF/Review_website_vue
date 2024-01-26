@@ -7,16 +7,14 @@
 
 <style scoped>
 .wrapper {
-  position: absolute;
+  position: relative;
   width: 100%;
 
-  /*outline: 1px solid red;*/
-  /*padding: 20px;*/
+  padding: 20px 0 20px 0;
 
   text-align: center;
   font-size: 0.8em;
   color: #464646;
-  padding-top: 20px;
 
   bottom: 0;
   left: 0;

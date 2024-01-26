@@ -4,6 +4,7 @@ import blue_star from '/src/assets/ui/blue_star.png'
 import MovieContainer from "@/components/media_container/movie_container/MovieContainer.vue";
 import MovieContainerMobile from "@/components/media_container/movie_container/MovieContainerMobile.vue";
 import MediaFeedFilterBar from "@/components/media_feed/MediaFeedFilterBar.vue";
+import CreditsFooter from "@/components/General/CreditsFooter.vue";
 
 let props = defineProps(["media_type", "tier_lists", "media_scales", "media_sizes"]);
 
@@ -182,12 +183,16 @@ onMounted(() => {
 
     <div v-if="media.length < 1" class="empty_result">No result</div>
 
+    <CreditsFooter/>
+
+
   </div>
 
 </template>
 
 <style scoped>
 .top_feed_container {
+  /*outline: 1px solid red;*/
   min-height: 100px;
 }
 

@@ -8,7 +8,7 @@ const curr_api = inject("curr_api");
 
 let tier_box_height = computed(() => (props['box_size'][1] * props['box_scale']) + 'px')
 let tier_box_width = computed(() => (props['box_size'][0] * props['box_scale']) + 'px')
-let feed_width = computed(()=> (props['box_size'][0] * props['box_scale'] + 25) * 2 + 'px')
+let feed_width = computed(() => (props['box_size'][0] * props['box_scale'] + 25) * 2 + 'px')
 
 </script>
 
@@ -17,6 +17,9 @@ let feed_width = computed(()=> (props['box_size'][0] * props['box_scale'] + 25) 
     <tier-box :box_size="box_size" :b_width="tier_box_width" :b_height="tier_box_height"
               :box_data="box" v-for="box in data"
               :key="box"></tier-box>
+
+    <tier-box :box_size="box_size" :b_width="tier_box_width" :b_height="tier_box_height"
+              :box_data="{'name': 'Youtube debug','image': undefined,'link':'/youtube/youtube_debug'  }"></tier-box>
   </div>
 </template>
 
