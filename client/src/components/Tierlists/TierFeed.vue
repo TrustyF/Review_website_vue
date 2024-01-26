@@ -17,9 +17,6 @@ let feed_width = computed(() => (props['box_size'][0] * props['box_scale'] + 25)
     <tier-box :box_size="box_size" :b_width="tier_box_width" :b_height="tier_box_height"
               :box_data="box" v-for="box in data"
               :key="box"></tier-box>
-
-    <tier-box :box_size="box_size" :b_width="tier_box_width" :b_height="tier_box_height"
-              :box_data="{'name': 'Youtube debug','image': undefined,'link':'/youtube/youtube_debug'  }"></tier-box>
   </div>
 </template>
 
@@ -35,14 +32,17 @@ let feed_width = computed(() => (props['box_size'][0] * props['box_scale'] + 25)
   align-items: center;
   justify-items: center;
 
-  margin: 50px auto auto auto;
+  margin: 130px auto auto auto;
+  padding-bottom: 30px;
+
   gap: 50px;
 }
 
 @media only screen and (max-width: 724px) {
   .tier_feed_wrapper {
+    width: 90%;
     flex-flow: column nowrap;
-    grid-gap: 20px;
+    grid-gap: 30px;
   }
 }
 </style>

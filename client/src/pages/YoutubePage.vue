@@ -22,6 +22,11 @@ let tier_lists = [
     'image': youtube_animations_img,
     'link':'/youtube/yt_animations'
   },
+  {
+    'name': 'Youtube',
+    'image': undefined,
+    'link':'/youtube/youtube_debug'
+  },
 ]
 </script>
 

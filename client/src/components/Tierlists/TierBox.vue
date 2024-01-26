@@ -76,8 +76,8 @@ const curr_api = inject("curr_api");
   position: absolute;
 
   width: 100%;
-  height: auto;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
 
   z-index: 1;
 

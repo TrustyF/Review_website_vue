@@ -56,7 +56,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="filters_top_container">
+  <div class="filters_top_container sticky_nav">
 
     <div class="filters_box">
       <img alt="filters" @click="toggle_filters_box" class="filter_button"
@@ -79,11 +79,14 @@ onMounted(() => {
 .filters_top_container {
   position: sticky;
   z-index: 100;
-  top: 10px;
+  top: 80px;
   /*width: 90%;*/
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
+
+  transition: top 250ms;
+  transition-delay: 250ms;
 }
 
 .filters_box {
@@ -168,5 +171,10 @@ onMounted(() => {
   border-width: 23px;
   border-style: solid;
   border-color: transparent transparent #969696 transparent;
+}
+@media only screen and (max-width: 500px) {
+  .filters_top_container {
+    top: 110px;
+  }
 }
 </style>
