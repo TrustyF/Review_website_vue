@@ -13,6 +13,7 @@ const session_seed = inject("session_seed");
 const is_mobile = inject("is_mobile");
 let selected_media = inject('selected_media')
 let edit_pane_open = inject('edit_pane_open')
+let is_visible_navbar = inject('is_visible_navbar')
 
 let media_scale = computed(() => is_mobile.value ? props['media_scales'][1] : props['media_scales'][0])
 let media_size = computed(() => is_mobile.value ? props['media_sizes'][1] : props['media_sizes'][0])
@@ -139,11 +140,31 @@ function emitted_media_to_edit_pane(event) {
   edit_pane_open.value = true
 }
 
+function move_sticky_elements_with_nav(nav_vis) {
+  let stickies = document.getElementsByClassName('sticky_nav')
+
+  Array.from(stickies).forEach((elem) => {
+    if (nav_vis) {
+      elem.style.transitionDelay = '0ms'
+      elem.style.top = is_mobile.value ? '110px' : '80px'
+
+    } else {
+      elem.style.transitionDelay = '250ms'
+      elem.style.top = '10px'
+    }
+  })
+
+}
+
 watch(edit_pane_open, (newV, oldV) => {
   if (newV) page_scroll.value = window.scrollY
   if (!newV) {
     update_load_media()
   }
+})
+
+watch(is_visible_navbar, (oldV, newV) => {
+  move_sticky_elements_with_nav(newV)
 })
 
 onMounted(() => {
@@ -164,7 +185,7 @@ onMounted(() => {
 
     <div class="rating_box" v-for="rating in Object.keys(media_grouped).reverse()" :key="rating">
 
-      <div class="rating_separator">
+      <div class="rating_separator sticky_nav">
         <h1 style="font-weight: 500;font-size: 1em"> {{ rating }} </h1>
         <img :src="blue_star" alt="blue_star" style="width: 15px">
       </div>
@@ -194,6 +215,7 @@ onMounted(() => {
 .top_feed_container {
   /*outline: 1px solid red;*/
   min-height: 100px;
+  margin-top: 80px;
 }
 
 .media_container_wrapper {
@@ -217,11 +239,14 @@ onMounted(() => {
   box-shadow: 0 0 5px #000000;
   border-radius: 8px;
   position: sticky;
-  top: 10px;
+  top: 80px;
   z-index: 10;
   display: flex;
   align-items: center;
   gap: 3px;
+
+  transition: top 250ms;
+  transition-delay: 250ms;
 }
 
 .empty_result {
@@ -232,6 +257,11 @@ onMounted(() => {
 }
 
 @media only screen and (max-width: 500px) {
+  .top_feed_container {
+    /*outline: 1px solid orange;*/
+    margin-top: 100px;
+  }
+
   .media_container_wrapper {
     gap: 10px;
     justify-items: center;
@@ -240,18 +270,10 @@ onMounted(() => {
   }
 
   .rating_separator {
-    /*outline: 1px solid red;*/
+    /*outline: 1px solid orange;*/
     width: fit-content;
     padding: 7px;
-    margin: 35px 0 5px 0;
-    background-color: #2d2d41;
-    border-radius: 8px;
-    position: sticky;
-    top: 10px;
-    z-index: 5;
-    display: flex;
-    align-items: center;
-    gap: 3px;
+    top: 110px;
   }
 }
 

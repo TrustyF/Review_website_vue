@@ -4,21 +4,22 @@ import {RouterView} from 'vue-router'
 import NavBar from "@/components/General/NavBar.vue";
 import '@/assets/styles/globals.css'
 import '@/assets/styles/dark.css'
-import {onMounted, provide, ref, watch} from "vue";
+import {inject, onMounted, provide, ref, watch} from "vue";
 import TooltipBadge from "@/components/tooltip/tooltipBadge.vue";
 import TooltipEditor from "@/components/tooltip/tooltipEditor.vue";
 
-let add_pane_open = ref(false)
-
 const selected_media = ref({})
 const edit_media = ref(undefined)
+const edit_mode = inject('edit_mode')
 const edit_pane_open = ref(false)
+const add_pane_open = ref(false)
 let is_mobile = ref(false)
 let is_visible_navbar = ref(false)
 
 provide('selected_media', selected_media)
 provide('edit_media', edit_media)
 provide('edit_pane_open', edit_pane_open)
+provide('add_pane_open', add_pane_open)
 provide('is_mobile', is_mobile)
 provide('is_visible_navbar', is_visible_navbar)
 
@@ -31,30 +32,21 @@ onMounted(() => {
   addEventListener("resize", () => check_mobile())
 })
 
-watch(is_visible_navbar, (oldVal, newVal) => {
-  let main = window.document.getElementById('main')
-  if (newVal) {
-    main.classList.add('navbar_offset')
-  } else {
-    main.classList.remove('navbar_offset')
-  }
-})
-
 </script>
 <template>
   <tooltip-badge></tooltip-badge>
 
   <NavBar/>
-  <div class="tooltip_editor_top_wrapper" v-if="edit_pane_open">
-    <tooltip-editor :edit="true" :visible_ref="edit_pane_open"></tooltip-editor>
+  <div class="tooltip_editor_top_wrapper" v-if="edit_pane_open && edit_mode">
+    <tooltip-editor :edit="true"></tooltip-editor>
   </div>
 
-  <button style="position: absolute;right: 10px;top: 70px" @click="add_pane_open=true">add</button>
-  <div class="tooltip_editor_top_wrapper" v-if="add_pane_open">
-    <tooltip-editor :add="true" :visible_ref="add_pane_open"></tooltip-editor>
+  <button v-if="edit_mode" style="position: absolute;right: 10px;top: 70px" @click="add_pane_open=true">add</button>
+  <div class="tooltip_editor_top_wrapper" v-if="add_pane_open && edit_mode">
+    <tooltip-editor :add="true"></tooltip-editor>
   </div>
 
-  <div class="main navbar_offset" id="main">
+  <div class="main" id="main">
     <RouterView>
     </RouterView>
   </div>
@@ -72,9 +64,6 @@ watch(is_visible_navbar, (oldVal, newVal) => {
 
   padding: 0 10px 0 10px;
 
-  transform: translate(0, 0);
-  transition: transform 250ms;
-  transition-delay: 250ms;
 }
 
 .tooltip_editor_top_wrapper {
@@ -92,17 +81,5 @@ watch(is_visible_navbar, (oldVal, newVal) => {
   position: fixed;
   z-index: 30000;
   background-color: rgba(15, 15, 15, 97%);
-}
-
-.navbar_offset {
-  transform: translate(0, 60px);
-  transition-delay: 0ms;
-}
-
-@media only screen and (max-width: 724px) {
-  .navbar_offset {
-    transform: translate(0, 100px);
-    transition-delay: 0ms;
-  }
 }
 </style>

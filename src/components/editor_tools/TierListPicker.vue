@@ -2,11 +2,12 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 
 // let props = defineProps(["media_ref"]);
-let emits = defineEmits(["tier_lists"]);
+// let emits = defineEmits(["tier_lists"]);
 const curr_api = inject("curr_api");
+let selected_media = inject('selected_media')
 
 let available_tier_lists = ref([])
-let current_tier_lists = ref([])
+// let current_tier_lists = ref([])
 let dragged_tier_list = ref()
 
 let new_list_name = ref()
@@ -35,18 +36,17 @@ function allowDrop(event) {
 
 function add_drop_to_media() {
 
-  if (current_tier_lists.value.map((e)=>e.id).includes(dragged_tier_list.value['id'])) return
-
-  current_tier_lists.value.push(dragged_tier_list.value)
-  emits('tier_lists', current_tier_lists.value)
+  if (selected_media.value['tier_lists'].map((e)=>e.id).includes(dragged_tier_list.value['id'])) return
+  selected_media.value['tier_lists'].push(dragged_tier_list.value)
+  // emits('tier_lists', selected_media['tier_lists'].value)
 }
 
 function remove_drop_from_media() {
-  let index = current_tier_lists.value.map((elem) => elem['id']).indexOf(dragged_tier_list.value['id'])
+  let index = selected_media.value['tier_lists'].map((elem) => elem['id']).indexOf(dragged_tier_list.value['id'])
 
   if (index > -1) {
-    current_tier_lists.value.splice(index, 1)
-    emits('tier_lists', current_tier_lists.value)
+    selected_media.value['tier_lists'].splice(index, 1)
+    // emits('tier_lists', current_tier_lists.value)
   }
 }
 
@@ -66,7 +66,7 @@ onMounted(() => {
 
       <div class="current_tier_lists" @dragover="allowDrop" @drop="add_drop_to_media"
            @dragleave="remove_drop_from_media">
-        <div class="tier_list_box" draggable="true" @dragstart="drag(t)" v-for="t in current_tier_lists" :key="t['id']">
+        <div class="tier_list_box" draggable="true" @dragstart="drag(t)" v-for="t in selected_media['tier_lists']" :key="t['id']">
           {{ t['name'] }}
         </div>
       </div>

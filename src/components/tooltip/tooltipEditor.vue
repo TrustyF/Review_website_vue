@@ -5,12 +5,13 @@ import MovieContainer from "@/components/media_container/movie_container/MovieCo
 import TagPicker from "@/components/editor_tools/TagPicker.vue";
 import TierListPicker from "@/components/editor_tools/TierListPicker.vue";
 
-let props = defineProps(["edit","add","visible_ref"]);
+let props = defineProps(["edit", "add"]);
 // let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
 let selected_media = inject('selected_media')
-// let edit_pane_open = inject('edit_pane_open')
-let visible_reference = toRef(props,'visible_ref')
+
+let edit_pane_open = inject('edit_pane_open')
+let add_pane_open = inject('add_pane_open')
 
 let search_type = ref('movie')
 
@@ -49,6 +50,7 @@ async function fetch_filters() {
   }).then(response => response.json())
 
   content_ratings.value = result['content_ratings']
+  content_ratings.value.push({'id': 0, 'name': 'None', 'order': -1})
   content_ratings.value.sort((a, b) => a['order'] > b['order'])
   console.log(content_ratings.value)
 
@@ -95,7 +97,7 @@ async function update_media() {
 
   if (selected_media.value['id'] === undefined) return
 
-  console.log('updating',selected_media.value)
+  console.log('updating', selected_media.value)
 
   const url = new URL(`${curr_api}/media/update`)
 
@@ -106,7 +108,7 @@ async function update_media() {
   }).then(response => response.json())
 
   updated.value = result.ok ? 'true' : 'false'
-  if (updated.value) visible_reference.value = false
+  if (updated.value) handle_pane_close()
 }
 
 async function hard_delete() {
@@ -171,8 +173,13 @@ function insert_from_search(event) {
   added.value = 'none'
 }
 
+function handle_pane_close() {
+  if (edit_pane_open.value) edit_pane_open.value = false
+  if (add_pane_open.value) add_pane_open.value = false
+}
+
 function handle_key_press(e) {
-  if (e.keyCode === 27) visible_reference.value = false
+  if (e.keyCode === 27) handle_pane_close()
   if (e.keyCode === 13 && e.ctrlKey) update_media()
 }
 
@@ -182,9 +189,11 @@ function switch_poster(event) {
 
 onMounted(() => {
   search_type.value = selected_media.value['media_type']
+  console.log('selected', selected_media.value)
+  if (add_pane_open.value) selected_media.value = {}
 
   fetch_filters()
-  get_extra_posters()
+  if (edit_pane_open.value) get_extra_posters()
 
   updated.value = 'none'
   added.value = 'none'
@@ -198,7 +207,7 @@ onUnmounted(() => {
 <template>
   <div class="edit_page_wrapper">
 
-    <img @click="visible_reference=false" class="close_pane_button" alt="close_edit_pane"
+    <img @click="handle_pane_close" class="close_pane_button" alt="close_edit_pane"
          src="/src/assets/ui/cross_button.png">
 
     <div v-if="add" class="search_area">
@@ -211,7 +220,8 @@ onUnmounted(() => {
           <!--          </div>-->
           <div style="display: flex;align-items: center;gap: 10px">
             <h1>Find</h1>
-            <filter-search style="height: 30px" @filter="search_text=$event;find_media()" :auto_search="false"></filter-search>
+            <filter-search style="height: 30px" @filter="search_text=$event;find_media()"
+                           :auto_search="false"></filter-search>
           </div>
         </div>
 
@@ -247,12 +257,6 @@ onUnmounted(() => {
                          :container_size="container_size"
                          :container_scale="0.35"
         ></movie-container>
-        <button v-if="add" @click="add_media">Add</button>
-        <img class="update_logo" alt="failed update" v-if="added === 'false'"
-             src="../../assets/ui/stop.png">
-        <img class="update_logo" alt="failed update" v-if="added === 'true'"
-             src="../../assets/ui/success-green-check-mark-icon.svg">
-        <button @click="hard_delete">Hard delete</button>
       </div>
 
       <div class="form_area">
@@ -275,31 +279,41 @@ onUnmounted(() => {
                  @change="selected_media['is_deleted']=$event.target.checked">
 
           <label for="form_media_types">Content rating</label>
-          <select v-model="selected_media['content_rating']"
+          <select @change="selected_media['content_rating']=content_ratings[$event.target.value]"
                   id="form_media_types"
           >
-            <option v-for="c in content_ratings" :key="c['id']" :value="c"
-                    :selected="selected_media['content_rating'].id === c.id">{{ c.name }}
-            </option>.value
+            <option v-for="(c,i) in content_ratings" :key="c['id']" :value="i"
+                    :selected="selected_media['content_rating'] ? selected_media['content_rating'].id === c.id : 0">
+              {{ c.name }}
+            </option>
+            .value
           </select>
 
         </div>
 
         <!--        <p>{{selected_media}}</p>-->
 
-        <div style="display: flex;align-items: center;gap:10px">
+        <div style="display: flex;flex-flow: column;align-content:space-evenly;gap:10px">
           <button v-if="edit" style="width: 100%;height: 65px" @click="update_media">Update</button>
           <img class="update_logo" alt="failed update" v-if="updated === 'false'"
                src="../../assets/ui/stop.png">
           <img class="update_logo" alt="failed update" v-if="updated === 'true'"
                src="../../assets/ui/success-green-check-mark-icon.svg">
 
+          <button v-if="add" @click="add_media">Add</button>
+          <img class="update_logo" alt="failed update" v-if="added === 'false'"
+               src="../../assets/ui/stop.png">
+          <img class="update_logo" alt="failed update" v-if="added === 'true'"
+               src="../../assets/ui/success-green-check-mark-icon.svg">
+
+          <button v-if="add" @click="hard_delete">Hard delete</button>
+
         </div>
 
       </div>
 
       <div class="tier_list_area">
-        <tier-list-picker @tier_lists="selected_media['tier_lists']=$event"></tier-list-picker>
+        <tier-list-picker></tier-list-picker>
       </div>
 
       <div class="extra_posters">
