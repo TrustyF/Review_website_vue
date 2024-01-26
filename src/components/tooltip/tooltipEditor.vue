@@ -14,6 +14,8 @@ let edit_pane_open = inject('edit_pane_open')
 let search_type = ref('movie')
 
 let search_media = ref()
+let search_text = ref('')
+let search_page = ref(0)
 let extra_posters = ref([])
 
 let updated = ref('none')
@@ -33,14 +35,27 @@ let container_size = computed(() => {
 async function fetch_filters() {
 
   const url = new URL(`${curr_api}/media/get_filters`)
-  url.searchParams.set('type', search_type.value !== undefined ? search_type.value : '')
+  const params = {
+    'type': selected_media.value['media_type'],
+    // 'tier_lists': selected_media.value['tier_lists'].map((e)=>e.id),
+    'tier_lists': [],
+  }
 
-  const result = await fetch(url).then(response => response.json())
+  const result = await fetch(url, {
+    method: 'POST',
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(params)
+  }).then(response => response.json())
 
   content_ratings.value = result['content_ratings']
+  content_ratings.value.sort((a, b) => a['order'] > b['order'])
+  console.log(content_ratings.value)
+
+  // console.log(content_ratings.value)
+  // console.log(selected_media.value.content_rating)
 }
 
-async function get_media(text) {
+async function get_media() {
 
   const url = new URL(`${curr_api}/media/get`)
   const params = {
@@ -48,7 +63,7 @@ async function get_media(text) {
     'limit': 5,
     'page': 0,
     'session_seed': 1,
-    'search': text,
+    'search': search_text.value,
     'order': 'date_added',
     'user_rating_sort_override': true,
     'random_sort_override': true,
@@ -64,19 +79,22 @@ async function get_media(text) {
 
 }
 
-async function find_media(text) {
+async function find_media() {
 
   const url = new URL(`${curr_api}/media/find`)
-  url.searchParams.set('name', text)
+  url.searchParams.set('name', search_text.value)
   url.searchParams.set('type', search_type.value)
+  url.searchParams.set('page', String(search_page.value))
 
   search_media.value = await fetch(url).then(response => response.json())
-  // console.log(search_media.value)
+  console.log(search_media.value)
 }
 
 async function update_media() {
 
   if (selected_media.value['id'] === undefined) return
+
+  console.log('updating',selected_media.value)
 
   const url = new URL(`${curr_api}/media/update`)
 
@@ -126,7 +144,6 @@ async function add_media() {
 }
 
 async function get_extra_posters() {
-  console.log('getting extra posters')
 
   const url = new URL(`${curr_api}/media/get_extra_posters`)
 
@@ -140,7 +157,6 @@ async function get_extra_posters() {
 function replace_from_search(event) {
   delete event['id']
   delete event['user_rating']
-  console.log(event)
   selected_media.value = {...selected_media.value, ...event}
   get_extra_posters()
   updated.value = 'none'
@@ -154,8 +170,9 @@ function insert_from_search(event) {
   added.value = 'none'
 }
 
-function close_edit_pane(e) {
+function handle_key_press(e) {
   if (e.keyCode === 27) edit_pane_open.value = false
+  if (e.keyCode === 13 && e.ctrlKey) update_media()
 }
 
 function switch_poster(event) {
@@ -163,16 +180,17 @@ function switch_poster(event) {
 }
 
 onMounted(() => {
-  // get_media()
-  fetch_filters()
   search_type.value = selected_media.value['media_type']
+
+  fetch_filters()
   get_extra_posters()
+
   updated.value = 'none'
   added.value = 'none'
-  window.addEventListener('keydown', close_edit_pane)
+  window.addEventListener('keydown', handle_key_press)
 })
 onUnmounted(() => {
-  window.removeEventListener('keydown', close_edit_pane)
+  window.removeEventListener('keydown', handle_key_press)
 })
 </script>
 
@@ -192,7 +210,7 @@ onUnmounted(() => {
           <!--          </div>-->
           <div style="display: flex;align-items: center;gap: 10px">
             <h1>Find</h1>
-            <filter-search style="height: 30px" @filter="find_media($event)" :auto_search="false"></filter-search>
+            <filter-search style="height: 30px" @filter="search_text=$event;find_media()" :auto_search="false"></filter-search>
           </div>
         </div>
 
@@ -205,6 +223,7 @@ onUnmounted(() => {
             <option value="manga">manga</option>
             <option value="game">game</option>
           </select>
+          <input v-model="search_page" type="number" style="margin-left: 10px;width: 50px" @change="find_media">
         </div>
       </div>
       <div class="search_result">
@@ -249,9 +268,12 @@ onUnmounted(() => {
                  @change="selected_media['is_deleted']=$event.target.checked">
 
           <label for="form_media_types">Content rating</label>
-          <select v-model="selected_media['content_rating']" id="form_media_types"
-                  @change="selected_media['content_rating']=$event.target.value">
-            <option v-for="c in content_ratings" :key="c" :value="c">{{ c }}</option>
+          <select v-model="selected_media['content_rating']"
+                  id="form_media_types"
+          >
+            <option v-for="c in content_ratings" :key="c['id']" :value="c"
+                    :selected="selected_media['content_rating'].id === c.id">{{ c.name }}
+            </option>.value
           </select>
 
         </div>
@@ -261,14 +283,14 @@ onUnmounted(() => {
         <div style="display: flex;align-items: center;gap:10px">
           <button style="width: 100px" @click="update_media">Update</button>
           <img class="update_logo" alt="failed update" v-if="updated === 'false'"
-               src="src/assets/ui/stop.png">
+               src="../../assets/ui/stop.png">
           <img class="update_logo" alt="failed update" v-if="updated === 'true'"
-               src="src/assets/ui/success-green-check-mark-icon.svg">
+               src="../../assets/ui/success-green-check-mark-icon.svg">
           <button style="width: 100px" @click="add_media">Add</button>
           <img class="update_logo" alt="failed update" v-if="added === 'false'"
-               src="src/assets/ui/stop.png">
+               src="../../assets/ui/stop.png">
           <img class="update_logo" alt="failed update" v-if="added === 'true'"
-               src="src/assets/ui/success-green-check-mark-icon.svg">
+               src="../../assets/ui/success-green-check-mark-icon.svg">
 
         </div>
 

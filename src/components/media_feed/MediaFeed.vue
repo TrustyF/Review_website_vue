@@ -4,7 +4,6 @@ import blue_star from '/src/assets/ui/blue_star.png'
 import MovieContainer from "@/components/media_container/movie_container/MovieContainer.vue";
 import MovieContainerMobile from "@/components/media_container/movie_container/MovieContainerMobile.vue";
 import MediaFeedFilterBar from "@/components/media_feed/MediaFeedFilterBar.vue";
-import EditPage from "@/pages/EditPage.vue";
 
 let props = defineProps(["media_type", "tier_lists", "media_scales", "media_sizes"]);
 
@@ -52,6 +51,7 @@ async function get_media(override) {
     'runtimes': media_filters.value['runtimes'],
     'search': media_filters.value['search'],
     'order': media_filters.value['order'],
+    'content_ratings': media_filters.value['content_ratings'],
   }
 
   const result = await fetch(url,
@@ -119,6 +119,11 @@ const handleInfiniteScroll = () => {
 };
 
 async function clean_load_media() {
+  media_page.value = 0
+  is_page_loaded.value = false
+  await get_media(true)
+}
+async function update_load_media() {
   media_limit.value = (media_page.value * media_limit.value) + media_limit.value
   media_page.value = 0
   is_page_loaded.value = false
@@ -134,7 +139,7 @@ function emitted_media_to_edit_pane(event) {
 watch(edit_pane_open, (newV, oldV) => {
   if (newV) page_scroll.value = window.scrollY
   if (!newV) {
-    clean_load_media()
+    update_load_media()
   }
 })
 

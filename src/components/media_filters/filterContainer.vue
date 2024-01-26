@@ -50,7 +50,9 @@ async function fetch_filters() {
   public_ratings.value = result['public_ratings']
   release_dates.value = result['release_dates']
   runtimes.value = result['runtimes']
+
   content_ratings.value = result['content_ratings']
+  content_ratings.value.sort((a, b) => a['order'] > b['order'])
 }
 
 function emit_filter(title, event) {

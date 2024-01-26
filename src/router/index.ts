@@ -7,7 +7,6 @@ import SeriesPage from "../pages/SeriesPage.vue"
 import ShortsPage from "../pages/ShortsPage.vue"
 import AnimePage from "../pages/AnimePage.vue"
 import GamePage from "../pages/GamePage.vue"
-import EditPage from "../pages/EditPage.vue"
 import AllPage from "../pages/AllPage.vue"
 import RiotPage from "../pages/sub_pages/shorts/RiotPage.vue"
 
@@ -59,11 +58,6 @@ const router = createRouter({
             path: "/games",
             name: "games",
             component: GamePage
-        },
-        {
-            path: "/edit",
-            name: "edit",
-            component: EditPage
         },
     ]
 })
