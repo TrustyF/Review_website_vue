@@ -117,11 +117,14 @@ def get():
         if media_type:
             q = q.filter_by(media_type=media_type)
         if search:
-            if len(q.filter(Media.name.ilike(f'{search}')).all()) > 0:
-                q = q.filter(Media.name.ilike(f'{search}'))
+            # if len(q.filter(Media.name.ilike(f'{search}')).all()) > 0:
+            #     q = q.filter(Media.name.ilike(f'{search}'))
 
-            elif len(q.filter(Media.name.ilike(f'%{search}%')).all()) > 0:
+            if len(q.filter(Media.name.ilike(f'%{search}%')).all()) > 0:
                 q = q.filter(Media.name.ilike(f'%{search}%'))
+
+            elif len(q.filter(Media.external_name.ilike(f'%{search}%')).all()) > 0:
+                q = q.filter(Media.external_name.ilike(f'%{search}%'))
 
             elif len(q.join(Media.genres).filter(Genre.name.ilike(f'%{search}%')).all()) > 0:
                 q = q.join(Media.genres).filter(Genre.name.ilike(f'%{search}%'))
@@ -277,10 +280,10 @@ def find():
         token = handle_igdb_access_token('igdb_token')
 
         title_request = f'https://api.igdb.com/v4/games'
-        title_data = f'search "{media_name}"; limit 5;' \
-                     f' fields name,release_dates.y,genres.name,themes.name,total_rating' \
+        title_data = f'search "{media_name}"; limit 5; offset {media_page * 5};' \
+                     f' fields name,release_dates.y,genres.name,themes.name,rating,total_rating' \
                      f',category,url,summary,cover.url,involved_companies.developer,involved_companies.company.name' \
-                     f',age_ratings.rating,age_ratings.category;'
+                     f',age_ratings.rating,age_ratings.category;where rating != null;'
         title_headers = {
             'Client-ID': IGDB_CLIENT_ID,
             'Authorization': f"{token['token_type']} {token['access_token']}",
@@ -357,6 +360,7 @@ def add():
     media_obj.themes = [db.session.query(Theme).filter_by(id=x['id']).one() for x in data.get('themes', [])]
     media_obj.tags = [db.session.query(Tag).filter_by(id=x['id']).one() for x in data.get('tags', [])]
     media_obj.tier_lists = [db.session.query(TierList).filter_by(id=x['id']).one() for x in data.get('tier_lists', [])]
+    media_obj.content_rating = db.session.query(ContentRating).filter_by(id=data.get('content_rating')['id']).one()
 
     db.session.add(media_obj)
     db.session.commit()
@@ -488,15 +492,15 @@ def search_extra_posters():
 
         token = handle_igdb_access_token('igdb_token')
 
-        cover_request = 'https://api.igdb.com/v4/covers'
-        cover_data = f'fields url;'
+        cover_request = 'https://api.igdb.com/v4/artworks'
+        cover_data = f'fields url, game;where game = ({media_external_id});'
         cover_headers = {
             'Client-ID': IGDB_CLIENT_ID,
             'Authorization': f"{token['token_type']} {token['access_token']}",
         }
         cover_response = requests.post(cover_request, data=cover_data, headers=cover_headers).json()
-        print(cover_response)
-        clean_covers = [x['url'] for x in cover_response]
+        # print(cover_response)
+        clean_covers = ['https:' + x['url'].replace('t_thumb', 't_1080p') for x in cover_response]
 
         return clean_covers
 
@@ -518,7 +522,11 @@ def search_extra_posters():
     if media_type in ['short']:
         posters = request_youtube_posters()
 
-    return posters, 200
+    if len(posters) > 0:
+        # print(serialized_media)
+        return posters, 200
+    else:
+        return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
 
 
 @bp.route("/get_filters", methods=['POST'])

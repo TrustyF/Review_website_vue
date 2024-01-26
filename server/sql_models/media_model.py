@@ -112,7 +112,7 @@ class Media(db.Model):
     created_at: datetime.datetime = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at: datetime.datetime = db.Column(db.DateTime, onupdate=datetime.datetime.utcnow)
 
-    external_id: str = db.Column(db.String(100), unique=True)
+    external_id: str = db.Column(db.String(100))
     external_link: str = db.Column(db.String(1000))
 
     runtime: int = db.Column(db.Integer)
