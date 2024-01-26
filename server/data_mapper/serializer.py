@@ -78,7 +78,7 @@ def deserialize_media(data):
         'name': data.get('name'),
         'external_name': data.get('external_name'),
         'release_date': datetime.strptime(data.get('release_date'), '%Y-%m-%d'),
-        'overview': data.get('overview')[:1000],
+        'overview': data.get('overview')[:1000] if data.get('overview') else None,
         'poster_path': data.get('poster_path'),
         'author': data.get('author'),
         'studio': data.get('studio'),

@@ -13,11 +13,10 @@ bp = Blueprint('tag', __name__)
 
 @bp.route("/get", methods=['GET'])
 def get():
-    all_tags = db.session.query(Tag).all()
 
     tag_counts = (
         db.session.query(Tag, func.count(Media.id).label('count'))
-        .join(Tag.media)
+        .outerjoin(Tag.media)
         .group_by(Tag)
         .all()
     )
@@ -34,7 +33,13 @@ def add():
 
     print(f'adding tag {data=}')
 
-    new_tag = Tag(**data)
+    new_tag = Tag(**{
+        'name': data['name'],
+        'overview': data['overview'],
+        'image_path': data['image_path'],
+        'tier': data['tier'],
+        'origin': data['origin'],
+    })
     db.session.add(new_tag)
 
     db.session.commit()

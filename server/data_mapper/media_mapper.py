@@ -415,6 +415,9 @@ def map_from_youtube(medias, media_type):
 
     def convert_text_to_runtime(text):
 
+        if text is None:
+            return
+
         total_time_min = 0.0
 
         for elem in text.split(','):

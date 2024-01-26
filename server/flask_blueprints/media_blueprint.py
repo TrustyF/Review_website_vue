@@ -360,7 +360,9 @@ def add():
     media_obj.themes = [db.session.query(Theme).filter_by(id=x['id']).one() for x in data.get('themes', [])]
     media_obj.tags = [db.session.query(Tag).filter_by(id=x['id']).one() for x in data.get('tags', [])]
     media_obj.tier_lists = [db.session.query(TierList).filter_by(id=x['id']).one() for x in data.get('tier_lists', [])]
-    media_obj.content_rating = db.session.query(ContentRating).filter_by(id=data.get('content_rating')['id']).one()
+    if data.get('content_rating').get('id'):
+        media_obj.content_rating = (db.session.query(ContentRating)
+                                    .filter_by(id=data.get('content_rating').get('id')).one())
 
     db.session.add(media_obj)
     db.session.commit()
@@ -393,7 +395,9 @@ def update():
     media_obj.themes = [db.session.query(Theme).filter_by(id=x['id']).one() for x in data.get('themes', [])]
     media_obj.tags = [db.session.query(Tag).filter_by(id=x['id']).one() for x in data.get('tags', [])]
     media_obj.tier_lists = [db.session.query(TierList).filter_by(id=x['id']).one() for x in data.get('tier_lists', [])]
-    media_obj.content_rating = db.session.query(ContentRating).filter_by(id=data.get('content_rating')['id']).one()
+    if data.get('content_rating').get('id'):
+        media_obj.content_rating = (db.session.query(ContentRating)
+                                    .filter_by(id=data.get('content_rating').get('id')).one())
 
     db.session.commit()
     db.session.close()
@@ -543,11 +547,24 @@ def get_filters():
     tags = db.session.query(Tag)
     content_ratings = db.session.query(ContentRating)
 
+    ratings = db.session.query(func.max(Media.user_rating).label('max'),
+                               func.min(Media.user_rating).label('min'))
+    public_ratings = db.session.query(func.max(Media.public_rating).label('max'),
+                                      func.min(Media.public_rating).label('min'))
+    release_dates = db.session.query(func.max(Media.release_date).label('max'),
+                                     func.min(Media.release_date).label('min'))
+    runtimes = db.session.query(func.max(Media.runtime).label('max'),
+                                func.min(Media.runtime).label('min'))
     if media_type:
         genres = genres.join(Media.genres).filter(Media.media_type == media_type)
         themes = themes.join(Media.themes).filter(Media.media_type == media_type)
         tags = tags.join(Media.tags).filter(Media.media_type == media_type)
         content_ratings = content_ratings.join(Media.content_rating).filter(Media.media_type == media_type)
+
+        ratings = ratings.filter(Media.media_type == media_type)
+        public_ratings = public_ratings.filter(Media.media_type == media_type)
+        release_dates = release_dates.filter(Media.media_type == media_type)
+        runtimes = runtimes.filter(Media.media_type == media_type)
 
     if media_tier_lists:
         genres = genres.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
@@ -555,21 +572,26 @@ def get_filters():
         tags = tags.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
         content_ratings = content_ratings.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
 
-    ratings = (db.session.query(func.max(Media.user_rating).label('max'),
-                                func.min(Media.user_rating).label('min'))
-               .filter(Media.user_rating.is_not(None)))
+        ratings = ratings.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
+        public_ratings = public_ratings.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
+        release_dates = release_dates.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
+        runtimes = runtimes.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
 
-    public_ratings = db.session.query(func.max(Media.public_rating).label('max'),
-                                      func.min(Media.public_rating).label('min')).filter(
-        Media.public_rating != 0, Media.public_rating.is_not(None))
+    # ratings = (db.session.query(func.max(Media.user_rating).label('max'),
+    #                             func.min(Media.user_rating).label('min'))
+    #            .filter(Media.user_rating.is_not(None)))
 
-    release_dates = (db.session.query(func.max(Media.release_date).label('max'),
-                                      func.min(Media.release_date).label('min'))
-                     .filter(Media.release_date.is_not(None)))
+    # public_ratings = db.session.query(func.max(Media.public_rating).label('max'),
+    #                                   func.min(Media.public_rating).label('min')).filter(
+    #     Media.public_rating != 0, Media.public_rating.is_not(None))
 
-    runtimes = (db.session.query(func.max(Media.runtime).label('max'),
-                                 func.min(Media.runtime).label('min'))
-                .filter(Media.runtime.is_not(None)))
+    # release_dates = (db.session.query(func.max(Media.release_date).label('max'),
+    #                                   func.min(Media.release_date).label('min'))
+    #                  .filter(Media.release_date.is_not(None)))
+
+    # runtimes = (db.session.query(func.max(Media.runtime).label('max'),
+    #                              func.min(Media.runtime).label('min'))
+    #             .filter(Media.runtime.is_not(None)))
 
     ratings = ratings.one()
     public_ratings = public_ratings.one()
