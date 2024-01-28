@@ -63,6 +63,7 @@ function toggle_checkbox(filter) {
   gap: 5px;
   /*outline: 1px solid red;*/
   max-height: 400px;
+  height: auto;
   /*border: 1px solid white;*/
   padding: 20px;
   background-color: #131215;

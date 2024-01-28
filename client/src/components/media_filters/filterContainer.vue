@@ -4,7 +4,7 @@ import FilterDropdown from "@/components/media_filters/filterDropdown.vue";
 import FilterRange from "@/components/media_filters/filterRange.vue";
 import FilterRadio from "@/components/media_filters/filterRadio.vue";
 
-let props = defineProps(["media_type","tier_lists"]);
+let props = defineProps(["media_type", "tier_lists"]);
 let emits = defineEmits(["filter"]);
 const curr_api = inject("curr_api");
 
@@ -29,14 +29,14 @@ async function fetch_filters() {
 
   const url = new URL(`${curr_api}/media/get_filters`)
   const params = {
-    'type':props['media_type'] !== undefined ? props['media_type'] : '',
-    'tier_lists':props['tier_lists'] !== undefined ? props['tier_lists'] : [],
+    'type': props['media_type'] !== undefined ? props['media_type'] : '',
+    'tier_lists': props['tier_lists'] !== undefined ? props['tier_lists'] : [],
   }
 
   const result = await fetch(url, {
-  method: 'POST',
-  headers: {"Content-Type": "application/json"},
-  body: JSON.stringify(params)
+    method: 'POST',
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(params)
   }).then(response => response.json())
 
   console.log('filters', result)
@@ -65,29 +65,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="filter_container_wrapper">
-
-    <div class="genres_box">
-
-      <filter-radio v-if="orders!==null && orders.length>0"
-                    @value="emit_filter('order',$event)"
-                    :data="orders" title="Sort by"></filter-radio>
-
-      <filter-dropdown v-if="tags !== null && tags.length>0"
-                       @id="emit_filter('tags',$event)"
-                       :data="tags" title="Tags"></filter-dropdown>
-      <filter-dropdown v-if="genres !== null && genres.length>0"
-                       @id="emit_filter('genres',$event)"
-                       :data="genres" title="Genres"></filter-dropdown>
-      <filter-dropdown v-if="themes!==null && themes.length>0"
-                       @id="emit_filter('themes',$event)"
-                       :data="themes" title="Themes"></filter-dropdown>
-      <filter-dropdown v-if="content_ratings!==null && content_ratings.length>0"
-                       @id="emit_filter('content_ratings',$event)"
-                       :data="content_ratings" title="Content rating"></filter-dropdown>
-
-    </div>
-
+  <div class="filter_inner_container_wrapper">
     <div class="ranges_box">
       <filter-range v-if="user_ratings[0] !== user_ratings[1]"
                     @values="emit_filter('ratings',$event)"
@@ -106,34 +84,89 @@ onMounted(() => {
                     title="Runtime" :time="true" :step="15"></filter-range>
     </div>
 
+
+    <div class="col">
+      <filter-radio v-if="orders!==null && orders.length>0"
+                    @value="emit_filter('order',$event)"
+                    :data="orders" title="Sort by"></filter-radio>
+      <filter-dropdown v-if="content_ratings!==null && content_ratings.length>0"
+                       @id="emit_filter('content_ratings',$event)"
+                       :data="content_ratings" title="Content rating"></filter-dropdown>
+    </div>
+
+    <div class="col">
+      <filter-dropdown v-if="tags !== null && tags.length>0"
+                       @id="emit_filter('tags',$event)"
+                       :data="tags" title="Tags"></filter-dropdown>
+
+      <filter-dropdown v-if="genres !== null && genres.length>0"
+                       @id="emit_filter('genres',$event)"
+                       :data="genres" title="Genres"></filter-dropdown>
+    </div>
+
+    <div class="col">
+    <filter-dropdown v-if="themes!==null && themes.length>0"
+                     @id="emit_filter('themes',$event)"
+                     :data="themes" title="Themes"></filter-dropdown>
+    </div>
+
+
+
   </div>
 </template>
 
 <style scoped>
-.filter_container_wrapper {
+.filter_inner_container_wrapper {
+  position: relative;
+  /*outline: 2px solid orange;*/
+  margin: 20px;
+
+  height: 100%;
   display: flex;
-  flex-flow: row wrap;
-  align-items: flex-start;
-  align-content: flex-start;
-  /*justify-content: center;*/
-  padding: 10px;
+  flex-flow: column;
   gap: 20px;
 }
 
 .genres_box {
+  /*outline: 2px solid greenyellow;*/
+  width: 100%;
   display: flex;
-  flex-flow: row wrap;
-  gap: 20px;
+  flex-flow: row;
+  gap: 10px;
 
+  justify-content: space-evenly;
+  /*align-content: center;*/
+}
+
+.col {
+  /*outline: 2px solid red;*/
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 10px;
 }
 
 .ranges_box {
+  /*outline: 3px solid greenyellow;*/
   display: flex;
-  flex-flow: column wrap;
-  gap: 20px;
+  flex-flow: row;
+  gap: 10px;
+
+  /*margin: 20px;*/
+
   padding: 20px;
   background-color: #131215;
   border-radius: 10px;
   filter: drop-shadow(1px 1px 3px black);
+}
+
+@media only screen and (max-width: 500px) {
+  .genres_box {
+    flex-flow: row wrap;
+  }
+
+  .ranges_box {
+    flex-flow: column;
+  }
 }
 </style>

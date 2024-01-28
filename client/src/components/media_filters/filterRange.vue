@@ -10,6 +10,8 @@ let min_max = computed(() => [props['data'][0], props['data'][1]])
 let min_range = ref(props['data'][0])
 let max_range = ref(props['data'][1])
 
+let is_changed = ref(false)
+
 function clear_ranges() {
   min_range.value = props['data'][0]
   max_range.value = props['data'][1]
@@ -17,7 +19,13 @@ function clear_ranges() {
 }
 
 function emit_ranges() {
+  is_changed.value = true
   emits('values', [min_range.value, max_range.value])
+}
+
+function reset() {
+  clear_ranges()
+  setTimeout(() => is_changed.value = false, 0.1)
 }
 
 function convert_seconds_to_time(f_seconds) {
@@ -35,8 +43,8 @@ function convert_seconds_to_time(f_seconds) {
 
     <div class="title">
       <h1>{{ title }}</h1>
-      <img src="/src/assets/ui/rewind.png" style="filter: brightness(1000%)" class="clear" alt="clear"
-           @click="clear_ranges">
+      <img v-if="is_changed" src="/src/assets/ui/rewind.png" style="filter: brightness(1000%)" class="clear" alt="clear"
+           @click="reset">
     </div>
     <div style="border-bottom: 1px solid white;margin-top: 2px"></div>
 
@@ -70,6 +78,7 @@ function convert_seconds_to_time(f_seconds) {
   gap: 5px;
 
   max-height: 100%;
+  width: 100%;
 }
 
 .filter_list {
@@ -100,7 +109,7 @@ function convert_seconds_to_time(f_seconds) {
 }
 
 .slider {
-  /*width: 100%;*/
+  width: 100%;
 }
 
 .clear {

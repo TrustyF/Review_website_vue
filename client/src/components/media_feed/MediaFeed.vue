@@ -5,6 +5,7 @@ import MovieContainer from "@/components/media_container/movie_container/MovieCo
 import MovieContainerMobile from "@/components/media_container/movie_container/MovieContainerMobile.vue";
 import MediaFeedFilterBar from "@/components/media_feed/MediaFeedFilterBar.vue";
 import CreditsFooter from "@/components/General/CreditsFooter.vue";
+import spinner from '/src/assets/ui/Loading_icon.gif'
 
 let props = defineProps(["media_type", "tier_lists", "media_scales", "media_sizes"]);
 
@@ -27,6 +28,8 @@ let media_grouped = ref([])
 let media_limit = ref(20)
 let media_page = ref(0)
 let media_filters = ref({})
+let filter_load_status = ref('none')
+let page_load_status = ref('none')
 
 let feed_container = ref()
 
@@ -36,6 +39,8 @@ let is_page_loading = ref(true)
 let page_scroll = ref(0)
 
 async function get_media(override) {
+
+  page_load_status.value = 'loading'
 
   const url = new URL(`${curr_api}/media/get`)
   const params = {
@@ -87,15 +92,18 @@ async function get_media(override) {
 
   // cleanup
   is_page_loading.value = false
+  page_load_status.value = 'none'
+  filter_load_status.value = 'none'
   handleInfiniteScroll()
 
 }
 
 function handle_filter(event) {
-  console.log('event', event)
+  filter_load_status.value = 'loading'
   media_filters.value[event[0]] = event[1]
-  console.log('handle filters', media_filters.value)
   clean_load_media()
+  // console.log('event', event)
+  // console.log('handle filters', media_filters.value)
 }
 
 const handleInfiniteScroll = () => {
@@ -180,7 +188,7 @@ onMounted(() => {
 
   <div class="top_feed_container" ref="feed_container">
 
-    <media-feed-filter-bar @filter="handle_filter" :media_type="media_type"
+    <media-feed-filter-bar @filter="handle_filter" :load_status="filter_load_status" :media_type="media_type"
                            :tier_lists="tier_lists"></media-feed-filter-bar>
 
     <div class="rating_box" v-for="rating in Object.keys(media_grouped).reverse()" :key="rating">
@@ -202,7 +210,9 @@ onMounted(() => {
       </div>
     </div>
 
-    <div v-if="media.length < 1" class="empty_result">No result</div>
+<!--    todo implement secured routes-->
+    <img v-if="page_load_status==='loading'" class="spinner" alt="spinner" :src="spinner">
+    <div v-else-if="media.length < 1" class="empty_result">No result</div>
 
     <CreditsFooter/>
 
@@ -248,7 +258,14 @@ onMounted(() => {
   transition: top 250ms;
   transition-delay: 250ms;
 }
-
+.spinner {
+  margin-top: 100px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 50px;
+  filter: opacity(50%);
+}
 .empty_result {
   position: relative;
   text-align: center;
