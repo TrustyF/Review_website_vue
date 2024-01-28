@@ -43,10 +43,10 @@ async function get_media(override) {
 
   page_load_status.value = 'loading'
 
-  if (!await check_server_awake(curr_api)) {
-    page_load_status.value = 'none'
-    return
-  }
+  // if (!await check_server_awake(curr_api)) {
+  //   page_load_status.value = 'none'
+  //   return
+  // }
 
   const url = new URL(`${curr_api}/media/get`)
   const params = {
@@ -74,7 +74,6 @@ async function get_media(override) {
         body: JSON.stringify(params)
       })
       .then(response => response.json())
-      .catch(error => console.log('failed to load media'))
 
   // mark page loaded if no data returned
   if (result.length < 1) {
@@ -95,6 +94,8 @@ async function get_media(override) {
     else r[e['user_rating']].push(e)
     return r;
   }, {})
+
+  // console.log(media_grouped.value)
 
   // cleanup
   is_page_loading.value = false
@@ -216,7 +217,6 @@ onMounted(() => {
       </div>
     </div>
 
-    <!--    todo implement secured routes-->
     <img v-if="page_load_status==='loading'" class="spinner" alt="spinner" :src="spinner">
     <div v-else-if="media.length < 1" class="empty_result">No result</div>
 

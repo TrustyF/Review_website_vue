@@ -28,7 +28,7 @@ let orders = ref([
 
 async function fetch_filters() {
 
-  if (!await check_server_awake(curr_api)) return
+  // if (!await check_server_awake(curr_api)) return
 
   const url = new URL(`${curr_api}/media/get_filters`)
   const params = {
