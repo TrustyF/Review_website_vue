@@ -6,6 +6,7 @@ import MovieContainerMobile from "@/components/media_container/movie_container/M
 import MediaFeedFilterBar from "@/components/media_feed/MediaFeedFilterBar.vue";
 import CreditsFooter from "@/components/General/CreditsFooter.vue";
 import spinner from '/src/assets/ui/Loading_icon.gif'
+import {check_server_awake} from '/src/utils.js'
 
 let props = defineProps(["media_type", "tier_lists", "media_scales", "media_sizes"]);
 
@@ -42,6 +43,11 @@ async function get_media(override) {
 
   page_load_status.value = 'loading'
 
+  if (!await check_server_awake(curr_api)) {
+    page_load_status.value = 'none'
+    return
+  }
+
   const url = new URL(`${curr_api}/media/get`)
   const params = {
     'limit': media_limit.value,
@@ -68,7 +74,7 @@ async function get_media(override) {
         body: JSON.stringify(params)
       })
       .then(response => response.json())
-  // console.log(result)
+      .catch(error => console.log('failed to load media'))
 
   // mark page loaded if no data returned
   if (result.length < 1) {
@@ -186,7 +192,7 @@ onMounted(() => {
   <!--  <p style="position: fixed;left: 0;z-index: 1000;background-color: black">{{`is_page_loaded=${is_page_loaded}`}}</p>-->
   <!--  <p style="position: fixed;left: 0;top: 100px;z-index: 1000;background-color: black">{{`is_page_loading=${is_page_loading}`}}</p>-->
 
-  <div class="top_feed_container" ref="feed_container">
+  <div class="top_feed_container" ref="feed_container" v-if="media_grouped!==undefined">
 
     <media-feed-filter-bar @filter="handle_filter" :load_status="filter_load_status" :media_type="media_type"
                            :tier_lists="tier_lists"></media-feed-filter-bar>
@@ -210,7 +216,7 @@ onMounted(() => {
       </div>
     </div>
 
-<!--    todo implement secured routes-->
+    <!--    todo implement secured routes-->
     <img v-if="page_load_status==='loading'" class="spinner" alt="spinner" :src="spinner">
     <div v-else-if="media.length < 1" class="empty_result">No result</div>
 
@@ -258,6 +264,7 @@ onMounted(() => {
   transition: top 250ms;
   transition-delay: 250ms;
 }
+
 .spinner {
   margin-top: 100px;
   position: relative;
@@ -266,6 +273,7 @@ onMounted(() => {
   height: 50px;
   filter: opacity(50%);
 }
+
 .empty_result {
   position: relative;
   text-align: center;
