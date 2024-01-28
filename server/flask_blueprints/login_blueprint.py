@@ -1,8 +1,6 @@
 from functools import wraps
 
 from flask import Blueprint, request, redirect, Response, jsonify, send_file, url_for, session
-from app import oauth
-import requests
 import json
 
 from constants import FIREBASE_ADMIN_UID

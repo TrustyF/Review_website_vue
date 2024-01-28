@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 
 from constants import MAIN_DIR, FLASK_SECRET
 from constants import GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID, FLASK_SECRET
-from authlib.integrations.flask_client import OAuth
 from db_loader import db
 import logging
 
@@ -17,17 +16,6 @@ dev_mode = os.path.exists(os.path.join(MAIN_DIR, 'devmode.txt'))
 load_dotenv(os.path.join(MAIN_DIR, '.env'))
 
 app = Flask(__name__)
-
-app.secret_key = FLASK_SECRET
-oauth = OAuth(app)
-oauth.register(
-    name="google",
-    secret_key=FLASK_SECRET,
-    client_id=GOOGLE_CLIENT_ID,
-    client_secret=GOOGLE_CLIENT_SECRET,
-    server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
-    client_kwargs={"scope": "openid profile email"}
-)
 
 db_username = os.getenv('MYSQL_DATABASE_USERNAME')
 db_password = os.getenv('MYSQL_DATABASE_PASSWORD')
