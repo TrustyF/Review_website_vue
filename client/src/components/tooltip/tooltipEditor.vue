@@ -4,6 +4,7 @@ import FilterSearch from "@/components/media_filters/filterSearch.vue";
 import MovieContainer from "@/components/media_container/movie_container/MovieContainer.vue";
 import TagPicker from "@/components/editor_tools/TagPicker.vue";
 import TierListPicker from "@/components/editor_tools/TierListPicker.vue";
+import {get_current_user} from "@/firebase_auth.js";
 
 let props = defineProps(["edit", "add"]);
 // let emits = defineEmits(["test"]);
@@ -83,17 +84,25 @@ async function get_media() {
 }
 
 async function find_media() {
+  const token = await get_current_user()
 
   const url = new URL(`${curr_api}/media/find`)
   url.searchParams.set('name', search_text.value)
   url.searchParams.set('type', search_type.value)
   url.searchParams.set('page', String(search_page.value))
 
-  search_media.value = await fetch(url).then(response => response.json())
+  search_media.value = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Authorization': token.uid,
+      'Content-Type': 'application/json',
+    }
+  }).then(response => response.json())
   console.log(search_media.value)
 }
 
 async function update_media() {
+  const token = await get_current_user()
 
   if (selected_media.value['id'] === undefined) return
 
@@ -103,7 +112,10 @@ async function update_media() {
 
   const result = await fetch(url, {
     method: 'POST',
-    headers: {"Content-Type": "application/json"},
+    headers: {
+      'Authorization': token.uid,
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(selected_media.value)
   }).then(response => response.json())
 
@@ -112,6 +124,7 @@ async function update_media() {
 }
 
 async function hard_delete() {
+  const token = await get_current_user()
 
   if (selected_media.value['id'] === undefined) return
   if (hard_delete_count.value < 2) {
@@ -123,12 +136,19 @@ async function hard_delete() {
   const url = new URL(`${curr_api}/media/delete`)
   url.searchParams.set('id', selected_media.value['id'])
 
-  const result = await fetch(url).then(response => response.json())
+  const result = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Authorization': token.uid,
+      'Content-Type': 'application/json',
+    }
+  }).then(response => response.json())
   await get_media()
   selected_media.value = {}
 }
 
 async function add_media() {
+  const token = await get_current_user()
 
   if (selected_media.value['user_rating'] === null) {
     added.value = 'false'
@@ -139,7 +159,10 @@ async function add_media() {
 
   const result = await fetch(url, {
     method: 'POST',
-    headers: {"Content-Type": "application/json"},
+    headers: {
+      'Authorization': token.uid,
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(selected_media.value)
   }).then(response => response.json())
 
@@ -147,6 +170,7 @@ async function add_media() {
 }
 
 async function get_extra_posters() {
+  const token = await get_current_user()
 
   const url = new URL(`${curr_api}/media/get_extra_posters`)
 
@@ -154,7 +178,13 @@ async function get_extra_posters() {
   url.searchParams.set('external_id', selected_media.value['external_id'])
   url.searchParams.set('type', selected_media.value['media_type'])
 
-  extra_posters.value = await fetch(url).then(response => response.json())
+  extra_posters.value = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Authorization': token.uid,
+      'Content-Type': 'application/json',
+    }
+  }).then(response => response.json())
 }
 
 function replace_from_search(event) {

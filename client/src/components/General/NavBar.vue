@@ -2,7 +2,7 @@
 import {RouterLink} from "vue-router";
 import logo from '@/assets/ui/logo.png'
 import {inject, onMounted, ref} from 'vue'
-import {getAuth,GoogleAuthProvider,signInWithPopup} from 'firebase/auth'
+import LoginBar from "@/components/General/LoginBar.vue";
 
 const curr_api = inject("curr_api");
 let edit_mode = inject('edit_mode')
@@ -10,36 +10,16 @@ let is_visible_navbar = inject('is_visible_navbar')
 let prev_scroll = ref(0)
 let nav
 
-const login = async ()=>{
-  const provider = new GoogleAuthProvider()
-  let response = await signInWithPopup(getAuth(),provider)
-
-  const url = new URL(`${curr_api}/login/verify`,{
-    headers:{
-      'Authorization':getAuth().currentUser
-    }
-  })
-
-  const result = await fetch(url).then(response => response.json())
-
-
-  // if (getAuth().currentUser){
-  //   edit_mode.value = true
-  // }
-}
-
 function get_scroll_direction(event) {
   // console.log(window.scrollY, document.body.scrollHeight)
 
-  if (window.scrollY === 0){
+  if (window.scrollY === 0) {
     nav.classList.remove('hidden')
     is_visible_navbar.value = false
-  }
-  else if (window.innerHeight + Math.round(window.scrollY) >= document.body.scrollHeight - 150){
+  } else if (window.innerHeight + Math.round(window.scrollY) >= document.body.scrollHeight - 150) {
     nav.classList.remove('hidden')
     is_visible_navbar.value = false
-  }
-  else if ((prev_scroll.value) > (window.scrollY)) {
+  } else if ((prev_scroll.value) > (window.scrollY)) {
     nav.classList.remove('hidden')
     prev_scroll.value = window.scrollY;
     is_visible_navbar.value = false
@@ -72,7 +52,7 @@ onMounted(() => {
       <h1>•</h1>
       <RouterLink active-class="active" class="link" to="/games">Games</RouterLink>
       <h1>•</h1>
-      <h1 @click="login">Test</h1>
+      <login-bar></login-bar>
     </div>
   </nav>
 </template>
@@ -93,7 +73,7 @@ onMounted(() => {
 }
 
 .hidden {
-  transform: translate(0,-100%);
+  transform: translate(0, -100%);
   transition-delay: 250ms;
 }
 

@@ -7,6 +7,7 @@ import '@/assets/styles/dark.css'
 import {inject, onMounted, provide, ref, watch} from "vue";
 import TooltipBadge from "@/components/tooltip/tooltipBadge.vue";
 import TooltipEditor from "@/components/tooltip/tooltipEditor.vue";
+import {check_server_awake} from "@/utils.js";
 
 const selected_media = ref({})
 const edit_media = ref(undefined)
@@ -23,11 +24,18 @@ provide('add_pane_open', add_pane_open)
 provide('is_mobile', is_mobile)
 provide('is_visible_navbar', is_visible_navbar)
 
+const curr_api = inject("curr_api");
+
 function check_mobile() {
   is_mobile.value = document.body.clientWidth < 500;
 }
 
+function ping_server(){
+  check_server_awake(curr_api)
+}
+
 onMounted(() => {
+  ping_server()
   check_mobile()
   addEventListener("resize", () => check_mobile())
 })
@@ -47,7 +55,6 @@ onMounted(() => {
   </div>
 
   <div class="main" id="main">
-    <p style="position:absolute;top: -20px">{{edit_mode}}</p>
     <RouterView>
     </RouterView>
   </div>
