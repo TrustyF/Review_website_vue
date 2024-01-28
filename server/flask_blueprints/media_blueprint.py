@@ -435,7 +435,7 @@ def delete():
     return json.dumps({'ok': True}), 200, {'ContentType': 'application/json'}
 
 
-@bp.route("/get_image")
+@bp.route("/get_image", methods=['GET'])
 def get_image():
     media_id = request.args.get('id')
     media_path = request.args.get('path')
@@ -467,7 +467,7 @@ def get_image():
     return send_file(file_path, mimetype='image/jpg')
 
 
-@bp.route("/get_extra_posters")
+@bp.route("/get_extra_posters", methods=['GET'])
 @requires_auth
 def search_extra_posters():
     if not dev_mode:

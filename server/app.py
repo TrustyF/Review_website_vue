@@ -1,3 +1,4 @@
+import json
 import os
 
 from flask import Flask
@@ -43,6 +44,12 @@ else:
     app.config["SQLALCHEMY_DATABASE_URI"] = database_uri
 
 CORS(app)
+
+
+@app.route("/awake", methods=['GET'])
+def awake():
+    return json.dumps({'ok': True}), 200, {'ContentType': 'application/json'}
+
 
 with app.app_context():
     db.init_app(app)

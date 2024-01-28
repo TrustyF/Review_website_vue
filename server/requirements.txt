@@ -10,3 +10,4 @@ cryptography
 youtube-search-python
 python-dateutil
 authlib
+firebase-admin
