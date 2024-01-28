@@ -9,4 +9,3 @@ PyMySQL~=1.1.0
 cryptography
 youtube-search-python
 python-dateutil
-firebase-admin
