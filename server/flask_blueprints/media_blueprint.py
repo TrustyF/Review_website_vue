@@ -462,6 +462,14 @@ def get_image():
 
     return send_file(file_path, mimetype='image/jpg')
 
+# todo fix extra posters issue
+@bp.route("/proxy_extra_poster", methods=['GET'])
+def proxy_extra_poster():
+    url = request.args.get('url')
+    response = requests.get(url)
+
+    return response.content
+
 
 @bp.route("/get_extra_posters", methods=['GET'])
 @requires_auth
