@@ -12,10 +12,10 @@ from sqlalchemy.orm import contains_eager
 from sqlalchemy.sql.expression import func
 from datetime import datetime, timedelta
 from math import ceil, floor
-from app import dev_mode
-
 from youtubesearchpython import VideosSearch
+from flask_blueprints.login_blueprint import requires_auth
 
+from app import dev_mode
 from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY, IGDB_CLIENT_ID, IGDB_CLIENT_SECRET
 from data_mapper.media_mapper import map_from_tmdb, map_from_mangadex, map_from_igdb, map_from_youtube
 from db_loader import db
@@ -218,6 +218,7 @@ def get():
 
 
 @bp.route("/find", methods=['GET'])
+@requires_auth
 def find():
     if not dev_mode:
         return json.dumps({'ok': False}), 200, {'ContentType': 'application/json'}
@@ -345,6 +346,7 @@ def find():
 
 
 @bp.route("/add", methods=['POST'])
+@requires_auth
 def add():
     if not dev_mode:
         return json.dumps({'ok': False}), 200, {'ContentType': 'application/json'}
@@ -379,6 +381,7 @@ def add():
 
 
 @bp.route("/update", methods=['POST'])
+@requires_auth
 def update():
     if not dev_mode:
         return json.dumps({'ok': False}), 200, {'ContentType': 'application/json'}
@@ -416,6 +419,7 @@ def update():
 
 
 @bp.route("/delete", methods=['GET'])
+@requires_auth
 def delete():
     if not dev_mode:
         return json.dumps({'ok': False}), 200, {'ContentType': 'application/json'}
@@ -464,6 +468,7 @@ def get_image():
 
 
 @bp.route("/get_extra_posters")
+@requires_auth
 def search_extra_posters():
     if not dev_mode:
         return json.dumps({'ok': False}), 200, {'ContentType': 'application/json'}
