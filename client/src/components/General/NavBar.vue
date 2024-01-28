@@ -2,11 +2,31 @@
 import {RouterLink} from "vue-router";
 import logo from '@/assets/ui/logo.png'
 import {inject, onMounted, ref} from 'vue'
+import {getAuth,GoogleAuthProvider,signInWithPopup} from 'firebase/auth'
 
+const curr_api = inject("curr_api");
 let edit_mode = inject('edit_mode')
 let is_visible_navbar = inject('is_visible_navbar')
 let prev_scroll = ref(0)
 let nav
+
+const login = async ()=>{
+  const provider = new GoogleAuthProvider()
+  let response = await signInWithPopup(getAuth(),provider)
+
+  const url = new URL(`${curr_api}/login/verify`,{
+    headers:{
+      'Authorization':getAuth().currentUser
+    }
+  })
+
+  const result = await fetch(url).then(response => response.json())
+
+
+  // if (getAuth().currentUser){
+  //   edit_mode.value = true
+  // }
+}
 
 function get_scroll_direction(event) {
   // console.log(window.scrollY, document.body.scrollHeight)
@@ -51,6 +71,8 @@ onMounted(() => {
       <RouterLink active-class="active" class="link" to="/manga">Manga</RouterLink>
       <h1>•</h1>
       <RouterLink active-class="active" class="link" to="/games">Games</RouterLink>
+      <h1>•</h1>
+      <h1 @click="login">Test</h1>
     </div>
   </nav>
 </template>

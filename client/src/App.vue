@@ -47,6 +47,7 @@ onMounted(() => {
   </div>
 
   <div class="main" id="main">
+    <p style="position:absolute;top: -20px">{{edit_mode}}</p>
     <RouterView>
     </RouterView>
   </div>
