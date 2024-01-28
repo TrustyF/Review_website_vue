@@ -1,9 +1,5 @@
 import datetime
 from dataclasses import dataclass
-from typing import List
-
-from sqlalchemy.orm import Mapped
-
 from db_loader import db
 
 media_genre_association = db.Table('media_genre_assoc', db.Model.metadata,
@@ -122,7 +118,7 @@ class Media(db.Model):
     content_rating_id = db.Column(db.Integer, db.ForeignKey('content_rating.id'))
     content_rating = db.relationship("ContentRating")
 
-    genres: Mapped[Genre] = db.relationship("Genre", secondary=media_genre_association)
-    themes: Mapped[Theme] = db.relationship("Theme", secondary=media_theme_association)
-    tags: Mapped[Tag] = db.relationship("Tag", secondary=media_tag_association)
-    tier_lists: Mapped[TierList] = db.relationship("TierList", secondary=media_tier_list_association)
+    genres = db.relationship("Genre", secondary=media_genre_association)
+    themes = db.relationship("Theme", secondary=media_theme_association)
+    tags = db.relationship("Tag", secondary=media_tag_association)
+    tier_lists = db.relationship("TierList", secondary=media_tier_list_association)

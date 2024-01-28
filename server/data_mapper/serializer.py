@@ -66,10 +66,10 @@ def serialize_media(media):
         'episodes': media.episodes,
         'seasons': media.seasons,
 
-        'genres': media.genres or [],
-        'themes': media.themes or [],
-        'tags': media.tags or [],
-        'tier_lists': media.tier_lists or [],
+        'genres': media.genres,
+        'themes': media.themes,
+        'tags': media.tags,
+        'tier_lists': media.tier_lists,
     }
 
 
