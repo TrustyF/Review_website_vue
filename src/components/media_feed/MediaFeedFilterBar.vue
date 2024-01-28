@@ -3,10 +3,11 @@ import {inject, onMounted, watch, ref, computed} from "vue";
 import FilterContainer from "../media_filters/filterContainer.vue";
 import FilterSearch from "../media_filters/filterSearch.vue";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
+import spinner from '/src/assets/ui/Loading_icon.gif'
 
 import filter_image from "@/assets/ui/filter_button.png"
 
-let props = defineProps(["media_type","tier_lists"]);
+let props = defineProps(["media_type","tier_lists","load_status"]);
 let emits = defineEmits(["filter"]);
 const curr_api = inject("curr_api");
 
@@ -61,7 +62,8 @@ onMounted(() => {
     <div class="filters_box">
       <img alt="filters" @click="toggle_filters_box" class="filter_button"
            :src="filter_image">
-      <filter-search @filter="emit_filter(['search',$event])"></filter-search>
+        <filter-search @filter="emit_filter(['search',$event])"></filter-search>
+      <img v-if="load_status==='loading'" :src="spinner" alt="spinner" class="filter_box_spinner">
     </div>
 
     <div ref="filter_container" class="filter_wrapper" v-click-out-side="close_filters_box">
@@ -77,10 +79,10 @@ onMounted(() => {
 
 <style scoped>
 .filters_top_container {
+  /*outline: 1px solid red;*/
   position: sticky;
   z-index: 100;
   top: 80px;
-  /*width: 90%;*/
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
@@ -92,42 +94,56 @@ onMounted(() => {
 .filters_box {
   /*outline: 1px solid red;*/
   position: absolute;
-  height: 35px;
-  width: 0;
+  /*height: 35px;*/
+  /*width: 0;*/
 
   display: flex;
   flex-flow: row nowrap;
 
   justify-content: center;
-  /*align-items: center;*/
-  align-content: flex-start;
+  justify-items: center;
+  align-content: center;
+  align-items: center;
 
   gap: 10px;
 }
 
 .filter_button {
-  height: auto;
+  height: 20px;
   background-color: #d7d7c5;
+  /*margin: 7px;*/
   padding: 7px;
   border-radius: 30%;
   filter: invert();
   box-shadow: 1px 1px 5px white;
   cursor: pointer;
   z-index: 10;
-  object-fit: contain;
+  object-fit: cover;
   border: 2px solid #969696;
+}
+.search_bar_wrapper {
+  /*outline: 1px solid red;*/
+  height: 30px;
+}
+.filter_box_spinner {
+  z-index: 10;
+  height: 15px;
+  filter: opacity(50%);
+  /*margin: auto;*/
+  position: absolute;
+  right: 10px;
 }
 
 .filter_wrapper {
   position: absolute;
-  padding: 10px;
+  /*padding: 10px;*/
   margin-top: 80px;
   border-radius: 20px;
   filter: drop-shadow(10px 10px 5px black);
   border: 3px solid #969696;
   max-height: v-bind(box_height);
-
-  width: 95vw;
+  /*outline: 3px solid greenyellow;*/
+  /*height: 100%;*/
 
   visibility: hidden;
   opacity: 0;

@@ -7,6 +7,7 @@ let emits = defineEmits(["id"]);
 const curr_api = inject("curr_api");
 
 let checked_ids = []
+let is_changed = ref(false)
 
 function clear_checkboxes() {
   let checkboxes = document.getElementsByClassName('checkbox')
@@ -32,7 +33,12 @@ function toggle_checkbox(id) {
     checked_ids.push(id)
   }
   emits('id', checked_ids)
+  is_changed.value = true
+}
 
+function reset() {
+  clear_checkboxes()
+  setTimeout(() => is_changed.value = false, 0.1)
 }
 
 </script>
@@ -42,7 +48,8 @@ function toggle_checkbox(id) {
 
     <div class="title">
       <h1>{{ title }}</h1>
-      <img src="/src/assets/ui/rewind.png" style="filter: brightness(1000%)" class="clear" alt="clear" @click="clear_checkboxes">
+      <img v-if="is_changed" src="/src/assets/ui/rewind.png" style="filter: brightness(1000%)" class="clear" alt="clear"
+           @click="reset">
     </div>
     <div style="border-bottom: 1px solid white;margin-top: 2px"></div>
 
@@ -70,6 +77,7 @@ function toggle_checkbox(id) {
   gap: 5px;
   /*outline: 1px solid red;*/
   max-height: 400px;
+  height: auto;
   /*border: 1px solid white;*/
   padding: 20px;
   background-color: #131215;
@@ -93,24 +101,27 @@ function toggle_checkbox(id) {
   padding: 5px;
 }
 
-.title{
+.title {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
   gap: 5px;
 }
+
 .clear {
   height: 1em;
   filter: invert();
   cursor: pointer;
 }
+
 .label {
   font-size: 0.8em;
   max-width: 10em;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+  /*white-space: nowrap;*/
+  /*text-overflow: ellipsis;*/
+  /*overflow-x: hidden;*/
+  /*overflow-y: auto;*/
 }
 
 .checkbox_click_box {

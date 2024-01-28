@@ -41,7 +41,7 @@ function throttle_search(text) {
 
 <template>
   <div>
-    <input class="search_bar" type="text" placeholder="🔍Search"
+    <input class="search_bar_wrapper"  type="text" placeholder="🔍Search"
            @input="throttle_search($event.target.value)"
            @keydown.esc="$event.target.value='';emit_filter('')"
            @keydown.enter="emit_filter($event.target.value)"
@@ -50,11 +50,14 @@ function throttle_search(text) {
 </template>
 
 <style scoped>
-.search_bar {
-  height: 85%;
+.search_bar_wrapper {
+  /*outline: 1px solid red;*/
+  all: unset;
+  height: 35px;
+
   width: 200px;
-  outline: none;
   background-color: #131215;
+  /*background-color: grey;*/
   border: 2px solid grey;
   color: white;
   border-radius: 10px;
