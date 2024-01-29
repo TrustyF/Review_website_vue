@@ -363,6 +363,7 @@ onUnmounted(() => {
 
 <style scoped>
 .edit_page_wrapper {
+  overflow-y: scroll;
   border: 2px dotted #464646;
   padding: 10px;
   display: flex;

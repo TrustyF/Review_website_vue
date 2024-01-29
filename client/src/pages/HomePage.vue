@@ -5,6 +5,7 @@ import {Chart, registerables} from "chart.js";
 
 import rating_info from '/home_images/rating_info.jpg'
 import search_info from '/home_images/search_info.jpg'
+import tags_info from '/home_images/tags_info.jpg'
 
 Chart.register(...registerables);
 
@@ -105,25 +106,42 @@ onMounted(() => {
 
     <div class="intro_text">
       <h1>Ratings</h1>
-      <p>Ratings are split into 3 components: my rating, the public rating and the combined circle</p>
-      <p> - The circle is meant to inform you at a glance of the approximate quality of said media</p>
+      <div>
+        <p>Ratings are split into 3 components: my rating, the public rating and the combined rating circle</p>
+      </div>
       <img :src="rating_info" alt="rating_info" class="home_image">
     </div>
 
     <div class="intro_text">
-      <h1>Searching</h1>
-      <p>The search bar can search for many different fields including:<br>
-        - approximate name<br>
-        - genre<br>
-        - tags<br>
-        - studio<br>
-        - author
-      </p>
-      <p>Filters can also be found next to the search bar and are applied additively</p>
-      <img :src="search_info" alt="search_info" class="home_image">
+      <h1>Tags</h1>
+      <div>
+        <p>Medias are annotated with various tags. These are meant to provide a simple breakdown of my opinion,
+          and to help you decide what to pick. Tags are categorized into different colors representing their
+          sentiment:</p>
+        <p style="margin-left: 20px"> - Gold: the highest honors, the best at what it does</p>
+        <p style="margin-left: 20px"> - Green: Positive</p>
+        <p style="margin-left: 20px"> - Purple: Caveat or disclaimer</p>
+        <p style="margin-left: 20px"> - Red: Negative</p>
+        <p style="margin-left: 20px"> - Grey: Gripe or light criticism</p>
+      </div>
+      <img :src="tags_info" alt="search_info" class="home_image">
     </div>
 
-    <span style="height: 50px"></span>
+    <div class="intro_text">
+      <h1>Searching</h1>
+      <div>
+        <p>The search bar can search for many different fields including:</p>
+        <p style="margin-left: 20px"> - approximate name<br>
+          - genre<br>
+          - tags<br>
+          - studio<br>
+          - author
+        </p>
+      </div>
+      <p>Filters can also be found next to the search bar and are applied additively</p>
+
+      <img :src="search_info" alt="search_info" class="home_image">
+    </div>
 
     <div class="intro_text">
       <h1>Stats for nerds (me)</h1>
@@ -149,7 +167,7 @@ onMounted(() => {
 .home_wrapper {
   display: flex;
   flex-flow: column;
-  gap: 20px;
+  gap: 40px;
   margin: 0 auto 0 auto;
   padding: 120px 150px 100px 150px;
   position: relative;
@@ -183,12 +201,14 @@ onMounted(() => {
   color: #b0b0b0;
   /*margin-left: 20px;*/
 }
+
 .home_image {
   /*outline: 1px solid red;*/
   /*height: 200px;*/
   object-fit: contain;
-  /*border: inset 5px #b0b0b0;*/
-  clip-path: inset(0% 0% 0% 0% round 20px);
+  border: 2px solid #464646;
+  border-radius: 20px;
+  filter: drop-shadow(2px 2px 3px black) drop-shadow(2px 2px 2px black);
 }
 
 .graphs_wrapper {
@@ -234,7 +254,7 @@ onMounted(() => {
 
 @media only screen and (max-width: 500px) {
   .home_wrapper {
-    padding: 120px 20px 50px 20px;
+    padding: 130px 20px 50px 20px;
   }
 }
 </style>
