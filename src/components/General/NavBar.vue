@@ -70,6 +70,7 @@ onMounted(() => {
 
   transition: 250ms;
   transition-delay: 0ms;
+  background-color: #36204b;
 }
 
 .hidden {
@@ -87,7 +88,7 @@ nav ul li {
 
 .wrapper {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row;
   align-items: center;
   max-width: 1000px;
   margin: auto;
