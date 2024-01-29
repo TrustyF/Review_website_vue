@@ -41,7 +41,7 @@ onMounted(() => {
   <nav class="dark_accent navbar" id="navbar">
     <div class="wrapper">
       <img :src="logo" alt="website icon" style="height: 40px">
-      <RouterLink v-if="edit_mode" active-class="active" class="link" to="/all">Home</RouterLink>
+      <RouterLink active-class="active" class="link" to="/">Home</RouterLink>
       <h1>|</h1>
       <RouterLink active-class="active" class="link" to="/movies">Movies</RouterLink>
       <RouterLink active-class="active" class="link" to="/series">TV</RouterLink>
