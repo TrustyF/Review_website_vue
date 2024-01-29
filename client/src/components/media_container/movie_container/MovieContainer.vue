@@ -60,7 +60,7 @@ function open_link_new_tab(path) {
 <!--      <p v-if="data['genres']">genres= {{ data['genres'].map((elem)=>elem['name']) }}</p>-->
       <p v-if="data['tier_lists']">tier_lists= {{ data['tier_lists'].map((elem)=>elem['name']) }}</p>
 <!--      <p v-if="data['themes']">themes= {{ data['themes'].map((elem)=>elem['name']) }}</p>-->
-<!--      <p v-if="data['tags']">tags= {{ data['tags'].map((elem)=>elem['name']) }}</p>-->
+      <p v-if="data['tags']">tags= {{ data['tags'].map((elem)=>elem['name']) }}</p>
 <!--      <p v-if="data['author']">author= {{ data['author'] }}</p>-->
 <!--      <p v-if="data['studio']">studio= {{ data['studio'] }}</p>-->
 <!--      <p v-if="data['release_date']">release_date= {{ data['release_date'] }}</p>-->

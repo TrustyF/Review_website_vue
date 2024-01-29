@@ -190,7 +190,7 @@ onMounted(() => {
 }
 @media only screen and (max-width: 500px) {
   .filters_top_container {
-    top: 110px;
+    /*top: 110px;*/
   }
 }
 </style>

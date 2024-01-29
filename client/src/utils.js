@@ -9,6 +9,7 @@ export async function check_server_awake(curr_api) {
         const url = new URL(`${curr_api}/awake`)
         await fetch(url)
             .then(response => {
+                console.log('server response',response)
                 if (response.ok) {
                     console.info('server awake')
 

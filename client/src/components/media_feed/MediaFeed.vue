@@ -161,7 +161,7 @@ function move_sticky_elements_with_nav(nav_vis) {
   Array.from(stickies).forEach((elem) => {
     if (nav_vis) {
       elem.style.transitionDelay = '0ms'
-      elem.style.top = is_mobile.value ? '110px' : '80px'
+      elem.style.top = '80px'
 
     } else {
       elem.style.transitionDelay = '250ms'
@@ -284,7 +284,7 @@ onMounted(() => {
 @media only screen and (max-width: 500px) {
   .top_feed_container {
     /*outline: 1px solid orange;*/
-    margin-top: 100px;
+    /*margin-top: 100px;*/
   }
 
   .media_container_wrapper {
@@ -298,7 +298,7 @@ onMounted(() => {
     /*outline: 1px solid orange;*/
     width: fit-content;
     padding: 7px;
-    top: 110px;
+    /*top: 100px;*/
   }
 }
 
