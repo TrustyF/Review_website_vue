@@ -10,13 +10,19 @@ export async function check_server_awake(curr_api) {
         await fetch(url)
             .then(response => {
                 if (response.ok) {
+                    console.info('server awake')
+
                     found = true
                     retry = 0
                 } else {
+                    console.info('server sleeping')
+
                     retry -= 1
                 }
             })
             .catch(error => {
+                console.info('server error')
+
                 retry -= 1
             })
     }
