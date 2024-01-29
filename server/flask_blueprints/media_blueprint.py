@@ -462,6 +462,7 @@ def get_image():
 
     return send_file(file_path, mimetype='image/jpg')
 
+
 # todo fix extra posters issue
 @bp.route("/proxy_extra_poster", methods=['GET'])
 def proxy_extra_poster():
@@ -636,3 +637,44 @@ def get_filters():
     }
 
     return result, 200
+
+
+@bp.route("/get_stats", methods=['GET'])
+def get_stats():
+    def construct_rating_list(arr):
+        base = [x for x in range(1,10)]
+        types = set([x[0] for x in arr])
+
+        constructed = {}
+
+        for rating in base:
+            for med_type in types:
+
+                if med_type not in constructed:
+                    constructed[med_type] = {}
+
+                for entry in arr:
+                    if entry[1] == rating and entry[0] == med_type:
+                        constructed[med_type][rating] = entry[2]
+                        break
+                    else:
+                        constructed[med_type][rating] = 0
+
+        return constructed
+
+    movie_rating_count = (
+        db.session.query(Media.media_type, Media.user_rating, func.count(Media.id).label('count'))
+        .group_by(Media.media_type)
+        .group_by(Media.user_rating)
+        .all()
+    )
+
+    print(movie_rating_count)
+
+    stats = {
+        'ratings': construct_rating_list(movie_rating_count)
+    }
+
+    print(stats)
+
+    return stats, 200

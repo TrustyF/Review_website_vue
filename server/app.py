@@ -42,7 +42,7 @@ def awake():
 with app.app_context():
     db.init_app(app)
 
-    # logging.disable(logging.WARNING)
+    logging.disable(logging.WARNING)
 
     # from sql_models.media_model import *
     # db.create_all()
