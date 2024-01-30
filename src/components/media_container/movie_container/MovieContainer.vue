@@ -54,6 +54,8 @@ function open_link_new_tab(path) {
 <template>
   <div class="movie_container_wrapper">
 
+<!--    todo sort tag by value (color)-->
+
     <div v-if="edit_mode" style="position:absolute;background-color: #25222a;padding: 5px;font-size: 0.5em">
 <!--      <p v-if="data['external_name']">external_name = {{ data['external_name'] }}</p>-->
       <p v-if="data['content_rating']">content= {{ data['content_rating']['name'] }}</p>
