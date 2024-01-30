@@ -32,9 +32,18 @@ async function get_tags() {
 
   let result = await fetch(url).then(response => response.json())
 
-  available_badges.value = result.sort((a, b) => a['image_path'] > b['image_path'])
+  // available_badges.value = result.sort((a, b) => a['image_path'] > b['image_path'])
   available_badges.value = result.sort((a, b) => a['count'] < b['count'])
   available_badges.value = Object.groupBy(result, ({tier}) => tier)
+  available_badges.value = Object.values(available_badges.value)
+
+  // sort tags by color
+  const priority = ['gold', 'green', 'purple', 'silver', 'red']
+  available_badges.value.sort((a, b) => {
+    const fi = priority.indexOf(a[0].tier)
+    const si = priority.indexOf(b[0].tier)
+    return fi - si
+  })
 }
 
 function map_images_from_folders() {

@@ -150,12 +150,23 @@ async function clean_load_media() {
   await get_media(true)
 }
 
-async function update_load_media() {
-  media_limit.value = (media_page.value * media_limit.value) + media_limit.value
-  media_page.value = 0
-  is_page_loaded.value = false
-  await get_media(true)
-  // window.scrollY = page_scroll.value
+async function spot_reload_media() {
+
+  const url = new URL(`${curr_api}/media/get`)
+  const params = {'id': selected_media.value.id}
+
+  const result = await fetch(url, {
+  method: 'POST',
+  headers: {"Content-Type": "application/json"},
+  body: JSON.stringify(params)
+  }).then(response => response.json())
+
+  media_grouped.value[result.user_rating].forEach((elem,i)=>{
+    if (elem.id === result.id){
+      media_grouped.value[result.user_rating][i] = result
+    }
+  })
+
 }
 
 function emitted_media_to_edit_pane(event) {
@@ -166,10 +177,9 @@ function emitted_media_to_edit_pane(event) {
 watch(edit_pane_open, (newV, oldV) => {
   if (newV) page_scroll.value = window.scrollY
   if (!newV) {
-    update_load_media()
+    spot_reload_media()
   }
 })
-
 
 onMounted(() => {
   get_media()
