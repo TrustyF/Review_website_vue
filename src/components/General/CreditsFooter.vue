@@ -14,7 +14,8 @@
 
   text-align: center;
   font-size: 0.8em;
-  color: #464646;
+  line-height: 1.2em;
+  color: #6e6e6e;
 
   bottom: 0;
   left: 0;

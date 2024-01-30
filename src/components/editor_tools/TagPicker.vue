@@ -2,8 +2,9 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
 
+let selected_media = inject('selected_media')
 
-let props = defineProps(["media_ref", "media_type"]);
+let props = defineProps(["media_type"]);
 let emits = defineEmits(["tags"]);
 const curr_api = inject("curr_api");
 
@@ -118,13 +119,11 @@ function emit() {
 onMounted(() => {
   get_tags()
   map_images_from_folders()
-})
 
-watch(props, (newV) => {
-  if (newV.media_ref.tags === null) {
-    newV.media_ref.tags = []
+  if (selected_media.value.tags === null) {
+    selected_media.value.tags = []
   }
-  constructed_badges.value = newV.media_ref.tags
+  constructed_badges.value = selected_media.value.tags
 })
 </script>
 
