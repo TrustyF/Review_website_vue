@@ -1,6 +1,7 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
+import {get_current_user} from "@/firebase_auth.js";
 
 let selected_media = inject('selected_media')
 
@@ -78,11 +79,17 @@ function switch_tag_image(path) {
 }
 
 async function add_tag() {
+  const token = await get_current_user()
+
   const url = new URL(`${curr_api}/tag/add`)
+
 
   await fetch(url, {
     method: 'POST',
-    headers: {"Content-Type": "application/json"},
+    headers: {
+      "Content-Type": "application/json",
+      'Authorization': token.uid,
+    },
     body: JSON.stringify(temp_tag.value)
   }).then(response => response.json())
 
@@ -90,11 +97,16 @@ async function add_tag() {
 }
 
 async function update_tag() {
+  const token = await get_current_user()
+
   const url = new URL(`${curr_api}/tag/update`)
 
   await fetch(url, {
     method: 'POST',
-    headers: {"Content-Type": "application/json"},
+    headers: {
+      "Content-Type": "application/json",
+      'Authorization': token.uid,
+    },
     body: JSON.stringify(temp_tag.value)
   }).then(response => response.json())
 
@@ -102,11 +114,19 @@ async function update_tag() {
 }
 
 async function delete_tag() {
+  const token = await get_current_user()
+
   const url = new URL(`${curr_api}/tag/delete`)
 
   url.searchParams.set('id', temp_tag.value['id'])
 
-  await fetch(url).then(response => response.json())
+  await fetch(url, {
+    method: 'GET',
+    headers: {
+      "Content-Type": "application/json",
+      'Authorization': token.uid,
+    }
+  }).then(response => response.json())
   temp_tag.value = temp_tag_template
 
   await get_tags()

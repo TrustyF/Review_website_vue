@@ -214,7 +214,7 @@ const runtime_stats_options = ref({
 
 async function get_stats() {
 
-  await check_server_awake(curr_api)
+  // await check_server_awake(curr_api)
   const url = new URL(`${curr_api}/media/get_stats`)
 
   const result = await fetch(url).then(response => response.json())

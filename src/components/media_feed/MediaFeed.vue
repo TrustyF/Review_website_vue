@@ -43,11 +43,6 @@ async function get_media(override) {
 
   page_load_status.value = 'loading'
 
-  if (!await check_server_awake(curr_api)) {
-    page_load_status.value = 'none'
-    return
-  }
-
   const url = new URL(`${curr_api}/media/get`)
   const params = {
     'limit': media_limit.value,
@@ -73,13 +68,26 @@ async function get_media(override) {
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(params)
       })
-      .then(response => response.json())
+      .then(response => {
+        console.log('response',response)
+        return response.json()
+      })
 
   // mark page loaded if no data returned
   if (result.length < 1) {
     is_page_loading.value = false
     is_page_loaded.value = true
   }
+
+  // sort tags by color
+  const priority = ['gold','green','purple','silver','red']
+  media.value.forEach((entry,i)=>{
+    media.value[i].tags.sort((a,b)=>{
+      const fi = priority.indexOf(a.tier)
+      const si = priority.indexOf(b.tier)
+      return fi - si
+    })
+  })
 
   if (override) {
     media.value = result
