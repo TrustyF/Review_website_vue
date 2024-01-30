@@ -6,14 +6,16 @@ from flask import Blueprint, request, Response, jsonify, send_file
 from sqlalchemy import func
 
 from db_loader import db
+from flask_blueprints.login_blueprint import requires_auth
 from sql_models.media_model import Tag, Media
 
 bp = Blueprint('tag', __name__)
 
 
+# todo pass auth to tag routes
+
 @bp.route("/get", methods=['GET'])
 def get():
-
     tag_counts = (
         db.session.query(Tag, func.count(Media.id).label('count'))
         .outerjoin(Tag.media)
@@ -27,6 +29,7 @@ def get():
 
 
 @bp.route("/add", methods=['POST'])
+@requires_auth
 def add():
     data = request.get_json()
     # print(data)
@@ -55,6 +58,7 @@ def add():
 
 
 @bp.route("/update", methods=['POST'])
+@requires_auth
 def update():
     data = request.get_json()
     tag_id = data['id']
@@ -76,6 +80,7 @@ def update():
 
 
 @bp.route("/delete")
+@requires_auth
 def delete():
     tag_id = request.args.get('id')
 
