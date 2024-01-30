@@ -407,7 +407,7 @@ def map_from_youtube(medias, media_type):
 
         if 'month' in text:
             number = text.split('month')[0]
-            return f'{year}-{month - int(number)}-{day}'
+            return f'{year}-{max(1,month - int(number))}-{day}'
 
         if 'year' in text:
             number = text.split('year')[0]

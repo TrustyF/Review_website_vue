@@ -1,3 +1,4 @@
+import csv
 import datetime
 import pprint
 from concurrent.futures import ThreadPoolExecutor
@@ -207,7 +208,21 @@ def connect_content_ratings():
     db.session.commit()
 
 
+def compare_csv_to_db():
+    with open(r'C:\Users\sirja\Downloads\ratings.csv') as csv_file:
+        reader = csv.reader(csv_file, delimiter=',')
+
+        for row in reader:
+            # print(row[4][:-1])
+            # code = row[4].split('/')
+            try:
+                if len(db.session.query(Media).filter(Media.external_link == row[4][:-1]).all()) < 1:
+                    print(f'{row[3]} was not found {row[4]}')
+            except:
+                pass
+
+
+
 if __name__ == '__main__':
     with app.app_context():
-        # connect_content_ratings()
-        update_all_records()
+        compare_csv_to_db()

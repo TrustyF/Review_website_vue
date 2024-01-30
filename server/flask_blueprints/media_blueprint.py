@@ -216,7 +216,6 @@ def get():
 @bp.route("/find", methods=['GET'])
 @requires_auth
 def find():
-
     media_name = request.args.get('name')
     media_type = request.args.get('type')
     media_id = request.args.get('id')
@@ -292,13 +291,17 @@ def find():
         return title_response
 
     def request_youtube():
-        search = VideosSearch(media_name, limit=5).result()
-        result = search.get('result')
+        search = VideosSearch(media_name, limit=50)
 
-        for video in result[:2]:
+        result = search.result().get('result')[media_page * 5: (media_page * 5) + 5]
+
+        for video in result:
             print(video['id'])
             votes = requests.get(f'https://returnyoutubedislikeapi.com/votes?videoId={video["id"]}').json()
-            vote_rating = votes['likes'] / (votes['likes'] + votes['dislikes']) * 10
+            try:
+                vote_rating = votes['likes'] / (votes['likes'] + votes['dislikes']) * 10
+            except ZeroDivisionError:
+                vote_rating = 0
 
             video['public_rating'] = vote_rating
 
@@ -342,7 +345,6 @@ def find():
 @bp.route("/add", methods=['POST'])
 @requires_auth
 def add():
-
     data = request.get_json()
     print('add', data['name'])
 
@@ -375,7 +377,6 @@ def add():
 @bp.route("/update", methods=['POST'])
 @requires_auth
 def update():
-
     # parameters
     data = request.get_json()
     print('update', data['name'])
@@ -409,7 +410,6 @@ def update():
 @bp.route("/delete", methods=['GET'])
 @requires_auth
 def delete():
-
     # parameters
     media_id = request.args.get('id')
     print('delete', media_id)
@@ -435,7 +435,8 @@ def get_image():
     if media_path in ['null', 'undefined', 'not_found']:
         return send_file(os.path.join(MAIN_DIR, "assets", "not_found.jpg", ), mimetype='image/jpg')
 
-    file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches", media_id + f'_{media_type}_' + poster_id + '.jpg')
+    file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches",
+                             media_id + f'_{media_type}_' + poster_id + '.jpg')
 
     # return saved file if exists
     if os.path.exists(file_path):
