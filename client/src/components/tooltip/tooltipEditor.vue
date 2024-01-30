@@ -286,6 +286,23 @@ onUnmounted(() => {
                          :container_size="container_size"
                          :container_scale="0.35"
         ></movie-container>
+
+        <div style="display: flex;flex-flow: column;align-content:space-evenly;gap:10px">
+          <button v-if="edit" style="width: 100%;height: 65px" @click="update_media">Update</button>
+          <img class="update_logo" alt="failed update" v-if="updated === 'false'"
+               src="../../assets/ui/stop.png">
+          <img class="update_logo" alt="failed update" v-if="updated === 'true'"
+               src="../../assets/ui/success-green-check-mark-icon.svg">
+
+          <button v-if="add" @click="add_media">Add</button>
+          <img class="update_logo" alt="failed update" v-if="added === 'false'"
+               src="../../assets/ui/stop.png">
+          <img class="update_logo" alt="failed update" v-if="added === 'true'"
+               src="../../assets/ui/success-green-check-mark-icon.svg">
+
+          <button v-if="edit" @click="hard_delete">Hard delete</button>
+
+        </div>
       </div>
 
       <div class="form_area">
@@ -319,37 +336,18 @@ onUnmounted(() => {
           </select>
 
           <label for="form_image_url">Poster path</label>
-          <textarea id="form_image_url" v-model="selected_media['poster_path']" type="text"
+          <textarea id="form_image_url" v-model="selected_media['poster_path']"
                  style="width: 100%"
                     @change="selected_media['poster_path']=$event.target.value"></textarea>
 
           <label for="form_external_link">External link</label>
-          <textarea id="form_external_link" v-model="selected_media['external_link']" type="text"
+          <textarea id="form_external_link" v-model="selected_media['external_link']"
                  style="width: 100%"
                     @change="selected_media['external_link']=$event.target.value"></textarea>
 
           <label for="form_public_rating">Public rating</label>
           <input id="form_public_rating" v-model="selected_media['public_rating']" type="number"
                  @change="selected_media['public_rating']=$event.target.value">
-
-        </div>
-
-        <!--        <p>{{selected_media}}</p>-->
-
-        <div style="display: flex;flex-flow: column;align-content:space-evenly;gap:10px">
-          <button v-if="edit" style="width: 100%;height: 65px" @click="update_media">Update</button>
-          <img class="update_logo" alt="failed update" v-if="updated === 'false'"
-               src="../../assets/ui/stop.png">
-          <img class="update_logo" alt="failed update" v-if="updated === 'true'"
-               src="../../assets/ui/success-green-check-mark-icon.svg">
-
-          <button v-if="add" @click="add_media">Add</button>
-          <img class="update_logo" alt="failed update" v-if="added === 'false'"
-               src="../../assets/ui/stop.png">
-          <img class="update_logo" alt="failed update" v-if="added === 'true'"
-               src="../../assets/ui/success-green-check-mark-icon.svg">
-
-          <button v-if="edit" @click="hard_delete">Hard delete</button>
 
         </div>
 
@@ -436,13 +434,12 @@ onUnmounted(() => {
   flex-flow: row wrap;
   gap: 5px;
   overflow-y: scroll;
-  height: 400px;
-  /*width: 600px;*/
+  height: 500px;
 }
 
 .extra_poster_image {
-  width: 150px;
-  height: 200px;
+  /*width: 150px;*/
+  height: 150px;
   object-fit: contain;
 }
 
