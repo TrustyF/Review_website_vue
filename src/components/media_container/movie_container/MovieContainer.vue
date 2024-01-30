@@ -70,6 +70,10 @@ function open_link_new_tab(path) {
     <img @click="open_link_new_tab(data['external_link'])" class="poster" alt="poster" v-lazy="image_path"/>
     <div class="poster_gradient"></div>
 
+    <div v-if="data['is_dropped']" class="dropped_banner_wrapper">
+      <div class="dropped_banner">Dropped</div>
+    </div>
+
     <Rating v-if="data!==undefined" class="ratings" :data="data" :max_size="min_size"></Rating>
 
     <div class="footer_wrapper" @click="emits('media_data',data)">
@@ -137,6 +141,25 @@ function open_link_new_tab(path) {
   top: 0;
   width: v-bind(poster_size [0] + 'px');
   height: v-bind(poster_size [1] + 'px');
+}
+.dropped_banner_wrapper {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: v-bind(poster_size [0] + 'px');
+  height: v-bind(poster_size [1] + 'px');
+  clip-path: inset(0% 0% 0% 0% round 5%);
+}
+.dropped_banner {
+  height: 30px;
+  background-color: #c41717;
+  transform: translate(v-bind(poster_size[0]/2 + 'px'),0) rotate(45deg) translate(-10px,30px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8em;
+  text-shadow: 1px 1px 1px black,1px 1px 3px black;
+  filter: drop-shadow(1px 1px 3px black);
 }
 
 .ratings {

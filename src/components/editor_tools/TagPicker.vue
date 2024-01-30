@@ -247,6 +247,7 @@ onMounted(() => {
 }
 
 .badges_wrapper {
+  position: relative;
   border: 1px solid #464646;
   padding: 10px;
   display: flex;

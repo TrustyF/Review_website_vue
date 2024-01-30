@@ -27,14 +27,14 @@ function throttle_search(text) {
     emit_filter(last_typed.value)
   }, 200)
 
-  if (is_typing.value) return
+  // if (is_typing.value) return
+  //
+  // is_typing.value = true
+  // emit_filter(text)
 
-  is_typing.value = true
-  emit_filter(text)
-
-  throttle_id = setTimeout(() => {
-    is_typing.value = false
-  }, 500)
+  // throttle_id = setTimeout(() => {
+  //   is_typing.value = false
+  // }, 500)
 }
 
 </script>

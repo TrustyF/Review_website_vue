@@ -318,6 +318,20 @@ onUnmounted(() => {
             .value
           </select>
 
+          <label for="form_image_url">Poster path</label>
+          <textarea id="form_image_url" v-model="selected_media['poster_path']" type="text"
+                 style="width: 100%"
+                    @change="selected_media['poster_path']=$event.target.value"></textarea>
+
+          <label for="form_external_link">External link</label>
+          <textarea id="form_external_link" v-model="selected_media['external_link']" type="text"
+                 style="width: 100%"
+                    @change="selected_media['external_link']=$event.target.value"></textarea>
+
+          <label for="form_public_rating">Public rating</label>
+          <input id="form_public_rating" v-model="selected_media['public_rating']" type="number"
+                 @change="selected_media['public_rating']=$event.target.value">
+
         </div>
 
         <!--        <p>{{selected_media}}</p>-->
@@ -335,7 +349,7 @@ onUnmounted(() => {
           <img class="update_logo" alt="failed update" v-if="added === 'true'"
                src="../../assets/ui/success-green-check-mark-icon.svg">
 
-          <button v-if="add" @click="hard_delete">Hard delete</button>
+          <button v-if="edit" @click="hard_delete">Hard delete</button>
 
         </div>
 
@@ -387,8 +401,9 @@ onUnmounted(() => {
 
 .preview_area {
   padding: 20px;
-  display: flex;
-  flex-flow: row;
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  /*flex-flow: row;*/
   gap: 20px;
 }
 
@@ -432,6 +447,7 @@ onUnmounted(() => {
 }
 
 .search_result {
+  overflow-x: scroll;
   display: flex;
   flex-flow: row;
   gap: 10px;
