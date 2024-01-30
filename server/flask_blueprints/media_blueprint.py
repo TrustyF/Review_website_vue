@@ -437,12 +437,18 @@ def get_image():
 
     file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches", media_id + f'_{media_type}_' + '.jpg')
 
+    # return saved file if exists
+    if os.path.exists(file_path):
+        print('returning local')
+        return send_file(file_path, mimetype='image/jpg')
+
     # check if the requested image is part of a db entry and save if true
     if db.session.query(Media).filter(Media.external_id == media_id,
                                       Media.poster_path == media_path).one_or_none():
 
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         response = requests.get(media_path)
+        print('making poster request')
 
         with open(file_path, 'wb') as outfile:
             outfile.write(response.content)
