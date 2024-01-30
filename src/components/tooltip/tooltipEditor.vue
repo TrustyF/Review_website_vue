@@ -315,14 +315,15 @@ onUnmounted(() => {
           <label for="form_user_rating">Rating</label>
           <input id="form_user_rating" v-model="selected_media['user_rating']" type="number"
                  @change="selected_media['user_rating']=Number($event.target.value)">
+          <div>
+            <label for="form_user_dropped">dropped</label>
+            <input id="form_user_dropped" v-model="selected_media['is_dropped']" type="checkbox"
+                   @change="selected_media['is_dropped']=$event.target.checked">
 
-          <label for="form_user_dropped">dropped</label>
-          <input id="form_user_dropped" v-model="selected_media['is_dropped']" type="checkbox"
-                 @change="selected_media['is_dropped']=$event.target.checked">
-
-          <label for="form_user_deleted">deleted</label>
-          <input id="form_user_deleted" v-model="selected_media['is_deleted']" type="checkbox"
-                 @change="selected_media['is_deleted']=$event.target.checked">
+            <label for="form_user_deleted">deleted</label>
+            <input id="form_user_deleted" v-model="selected_media['is_deleted']" type="checkbox"
+                   @change="selected_media['is_deleted']=$event.target.checked">
+          </div>
 
           <label for="form_media_types">Content rating</label>
           <select @change="selected_media['content_rating']=content_ratings[$event.target.value]"
