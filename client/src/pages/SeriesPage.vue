@@ -6,6 +6,7 @@ import MediaFeed from "@/components/media_feed/MediaFeed.vue";
 
 <template>
   <media-feed :media_type="'tv'"
+              :tier_lists="['not anime']"
               :media_sizes="[[500,750],[500,750]]"
               :media_scales="[0.35,0.25]"
   ></media-feed>

@@ -1,4 +1,8 @@
 export async function check_server_awake(curr_api) {
+
+    // todo fix server sleeping
+    return true
+
     let retry = 3
     let found = false
 

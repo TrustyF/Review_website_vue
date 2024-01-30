@@ -5,7 +5,10 @@ import MoviePage from "../pages/MoviePage.vue"
 import MangaPage from "../pages/MangaPage.vue"
 import SeriesPage from "../pages/SeriesPage.vue"
 import YoutubePage from "../pages/YoutubePage.vue"
-import RiotPage from "../pages/sub_pages/youtube/RiotPage.vue"
+import RiotPage from "../pages/sub_pages/youtube/YTRiotPage.vue"
+import YTAnimationPage from "../pages/sub_pages/youtube/YTAnimationsPage.vue"
+import YTShortPage from "../pages/sub_pages/youtube/YTShortsPage.vue"
+import YTShowPage from "../pages/sub_pages/youtube/YTShowsPage.vue"
 import YTDebugPage from "../pages/sub_pages/youtube/YoutubeDebug.vue"
 
 import AnimePage from "../pages/AnimePage.vue"
@@ -44,6 +47,21 @@ const router = createRouter({
             path: "/youtube/riot_games_media",
             name: "riot games media",
             component: RiotPage
+        },
+        {
+            path: "/youtube/yt_animations",
+            name: "youtube animations",
+            component: YTAnimationPage
+        },
+        {
+            path: "/youtube/yt_short_films",
+            name: "youtube short films",
+            component: YTShortPage
+        },
+        {
+            path: "/youtube/yt_shows",
+            name: "youtube shows",
+            component: YTShowPage
         },
         {
             path: "/youtube/youtube_debug",
