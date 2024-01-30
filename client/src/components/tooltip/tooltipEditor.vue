@@ -53,7 +53,6 @@ async function fetch_filters() {
   content_ratings.value = result['content_ratings']
   content_ratings.value.push({'id': 0, 'name': 'None', 'order': -1})
   content_ratings.value.sort((a, b) => a['order'] > b['order'])
-  console.log(content_ratings.value)
 
   // console.log(content_ratings.value)
   // console.log(selected_media.value.content_rating)
@@ -355,7 +354,7 @@ onUnmounted(() => {
     </div>
 
     <div class="tags_area">
-      <tag-picker :media_type="search_type" :media_ref="selected_media"></tag-picker>
+      <tag-picker :media_type="search_type"></tag-picker>
     </div>
 
   </div>

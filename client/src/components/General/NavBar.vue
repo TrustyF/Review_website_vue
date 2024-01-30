@@ -3,12 +3,17 @@ import {RouterLink} from "vue-router";
 import logo from '@/assets/ui/logo.png'
 import {inject, onMounted, ref} from 'vue'
 import LoginBar from "@/components/General/LoginBar.vue";
+import triple_bars from "/src/assets/ui/triple_bars.png";
 
 const curr_api = inject("curr_api");
+let is_mobile = inject("is_mobile")
+
 let edit_mode = inject('edit_mode')
 let is_visible_navbar = inject('is_visible_navbar')
 let prev_scroll = ref(0)
 let nav
+
+let side_menu = ref()
 
 function get_scroll_direction(event) {
   // console.log(window.scrollY, document.body.scrollHeight)
@@ -31,6 +36,17 @@ function get_scroll_direction(event) {
   }
 }
 
+function toggle_side_menu(){
+  let elem = side_menu.value
+
+  if (elem.classList.contains('side_hidden')) {
+    elem.classList.remove('side_hidden')
+  } else {
+    elem.classList.add('side_hidden')
+  }
+
+}
+
 onMounted(() => {
   nav = document.getElementById('navbar')
   addEventListener('scroll', event => get_scroll_direction())
@@ -39,22 +55,43 @@ onMounted(() => {
 
 <template>
   <nav class="dark_accent navbar" id="navbar">
-    <div class="wrapper">
+    <div class="nav_wrapper">
       <img :src="logo" alt="website icon" style="height: 40px">
-      <RouterLink active-class="active" class="link" to="/">Home</RouterLink>
-      <h1>|</h1>
-      <RouterLink active-class="active" class="link" to="/movies">Movies</RouterLink>
-      <RouterLink active-class="active" class="link" to="/series">TV</RouterLink>
-      <RouterLink active-class="active" class="link" to="/youtube">Youtube</RouterLink>
-      <h1>•</h1>
-      <RouterLink active-class="active" class="link" to="/anime">Anime</RouterLink>
-      <RouterLink active-class="active" class="link" to="/manga">Manga</RouterLink>
-      <h1>•</h1>
-      <RouterLink active-class="active" class="link" to="/games">Games</RouterLink>
-      <h1>•</h1>
-      <login-bar></login-bar>
+
+      <div v-if="!is_mobile" class="wrapper">
+        <RouterLink active-class="active" class="link" to="/">Home</RouterLink>
+        <h1>|</h1>
+        <RouterLink active-class="active" class="link" to="/movies">Movies</RouterLink>
+        <RouterLink active-class="active" class="link" to="/series">TV</RouterLink>
+        <RouterLink active-class="active" class="link" to="/youtube">Youtube</RouterLink>
+        <h1>•</h1>
+        <RouterLink active-class="active" class="link" to="/anime">Anime</RouterLink>
+        <RouterLink active-class="active" class="link" to="/manga">Manga</RouterLink>
+        <h1>•</h1>
+        <RouterLink active-class="active" class="link" to="/games">Games</RouterLink>
+        <h1>•</h1>
+        <login-bar></login-bar>
+      </div>
+
+      <div v-if="is_mobile" @click="toggle_side_menu" class="mobile_wrapper">
+        <img alt="menu"  :src="triple_bars" class="triple_bars">
+      </div>
+
     </div>
   </nav>
+
+  <div class="side_menu side_hidden" ref="side_menu">
+    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/">Home</RouterLink>
+    <h1>------------</h1>
+    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/movies">Movies</RouterLink>
+    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/series">TV</RouterLink>
+    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/youtube">Youtube</RouterLink>
+    <h1>------------</h1>
+    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/anime">Anime</RouterLink>
+    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/manga">Manga</RouterLink>
+    <h1>------------</h1>
+    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/games">Games</RouterLink>
+  </div>
 </template>
 
 <style scoped>
@@ -71,11 +108,58 @@ onMounted(() => {
   transition: 250ms;
   transition-delay: 0ms;
   background-color: #36204b;
+  /*background: linear-gradient(to top, #6d4594 0%, #36204b 100%);*/
+}
+
+.nav_wrapper {
+  display: flex;
+  flex-flow: row;
+  align-items: flex-start;
+  max-width: 1000px;
+  margin: auto;
+  gap: 20px;
+  padding: 10px;
 }
 
 .hidden {
   transform: translate(0, -100%);
   transition-delay: 250ms;
+}
+.triple_bars {
+  height: 30px;
+  filter: invert();
+  cursor: pointer;
+}
+.side_menu {
+  position: fixed;
+  gap: 20px;
+  padding: 20px;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-flow: column;
+  z-index: 500;
+  background-color: #36204b;
+  filter: drop-shadow(2px 2px 3px black);
+  border-radius: 0 0 10px 0;
+
+  transition: 250ms;
+}
+.side_hidden {
+  transform: translate(-100%, 0);
+  filter: unset;
+}
+.link_side {
+  /*font-weight: lighter;*/
+  font-weight: 300;
+  background-color: #4b2d67;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.link_side, .link_side:visited {
+  text-decoration: none;
+  color: white;
 }
 
 nav ul li {
@@ -90,11 +174,16 @@ nav ul li {
   display: flex;
   flex-flow: row;
   align-items: center;
-  max-width: 1000px;
-  margin: auto;
   gap: 20px;
   padding: 10px;
-  /*outline: 1px solid greenyellow;*/
+}
+.mobile_wrapper {
+  position: absolute;
+  display: flex;
+  flex-flow: row;
+  right: 0;
+  padding: 20px;
+  cursor: pointer;
 }
 
 .link {

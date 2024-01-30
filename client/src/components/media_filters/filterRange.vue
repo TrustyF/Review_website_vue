@@ -32,7 +32,7 @@ function convert_seconds_to_time(f_seconds) {
   let minutes = f_seconds % 60
   let hours = (f_seconds - minutes) / 60
 
-  if (hours < 1) return minutes + ' min'
+  if (hours < 1) return minutes + 'm'
   return hours + 'h ' + minutes;
 }
 </script>

@@ -30,12 +30,27 @@ function check_mobile() {
   is_mobile.value = document.body.clientWidth < 500;
 }
 
-function ping_server(){
-  check_server_awake(curr_api)
+function move_sticky_elements_with_nav(nav_vis) {
+  let stickies = document.getElementsByClassName('sticky_nav')
+
+  Array.from(stickies).forEach((elem) => {
+    if (nav_vis) {
+      elem.style.transitionDelay = '0ms'
+      elem.style.top = '80px'
+
+    } else {
+      elem.style.transitionDelay = '250ms'
+      elem.style.top = '10px'
+    }
+  })
+
 }
 
+watch(is_visible_navbar, (oldV, newV) => {
+  move_sticky_elements_with_nav(newV)
+})
+
 onMounted(() => {
-  ping_server()
   check_mobile()
   addEventListener("resize", () => check_mobile())
 })
@@ -50,6 +65,8 @@ onMounted(() => {
   </div>
 
   <button v-if="edit_mode" style="position: absolute;right: 10px;top: 70px" @click="add_pane_open=true">add</button>
+  <p v-if="edit_mode" style="position: absolute;right: 10px;top: 100px;font-size: 0.7em">{{curr_api}}</p>
+
   <div class="tooltip_editor_top_wrapper" v-if="add_pane_open && edit_mode">
     <tooltip-editor :add="true"></tooltip-editor>
   </div>

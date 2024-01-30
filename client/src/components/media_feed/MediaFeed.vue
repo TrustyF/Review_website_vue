@@ -43,10 +43,10 @@ async function get_media(override) {
 
   page_load_status.value = 'loading'
 
-  // if (!await check_server_awake(curr_api)) {
-  //   page_load_status.value = 'none'
-  //   return
-  // }
+  if (!await check_server_awake(curr_api)) {
+    page_load_status.value = 'none'
+    return
+  }
 
   const url = new URL(`${curr_api}/media/get`)
   const params = {
@@ -155,22 +155,6 @@ function emitted_media_to_edit_pane(event) {
   edit_pane_open.value = true
 }
 
-function move_sticky_elements_with_nav(nav_vis) {
-  let stickies = document.getElementsByClassName('sticky_nav')
-
-  Array.from(stickies).forEach((elem) => {
-    if (nav_vis) {
-      elem.style.transitionDelay = '0ms'
-      elem.style.top = '80px'
-
-    } else {
-      elem.style.transitionDelay = '250ms'
-      elem.style.top = '10px'
-    }
-  })
-
-}
-
 watch(edit_pane_open, (newV, oldV) => {
   if (newV) page_scroll.value = window.scrollY
   if (!newV) {
@@ -178,9 +162,6 @@ watch(edit_pane_open, (newV, oldV) => {
   }
 })
 
-watch(is_visible_navbar, (oldV, newV) => {
-  move_sticky_elements_with_nav(newV)
-})
 
 onMounted(() => {
   get_media()
