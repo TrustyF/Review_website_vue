@@ -88,6 +88,8 @@ def get():
     data = request.get_json()
     # print(data)
 
+    media_id = data.get('id')
+
     limit = data.get('limit')
     page = data.get('page')
     order = data.get('order')
@@ -113,6 +115,16 @@ def get():
     # setup query
     query = (db.session.query(Media).filter(
         or_(Media.is_deleted == 0, Media.is_deleted == None)))  # noqa
+
+    # return selected media
+    print(media_id)
+    if media_id:
+        single_media = db.session.query(Media).filter_by(id=media_id).one_or_none()
+        print(single_media)
+        if single_media is not None:
+            return serialize_media(single_media), 200
+        else:
+            return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
 
     def apply_filters(q):
         if media_type:

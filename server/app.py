@@ -30,6 +30,7 @@ if dev_mode:
 else:
     print('using cloud')
     app.config["SQLALCHEMY_DATABASE_URI"] = database_uri
+app.config["SQLALCHEMY_POOL_RECYCLE"] = 280
 
 CORS(app)
 
