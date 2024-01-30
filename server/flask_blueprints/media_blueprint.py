@@ -82,7 +82,7 @@ def handle_igdb_access_token(f_source):
 def get():
     # parameters
     data = request.get_json()
-    print(data)
+    # print(data)
 
     limit = data.get('limit')
     page = data.get('page')
@@ -346,7 +346,7 @@ def add():
     data = request.get_json()
     print('add', data['name'])
 
-    pprint(data)
+    # pprint(data)
 
     exist_check = db.session.query(Media).filter(Media.external_id == data['external_id']).one_or_none()
 
@@ -379,7 +379,7 @@ def update():
     # parameters
     data = request.get_json()
     print('update', data['name'])
-    pprint(data)
+    # pprint(data)
 
     query = db.session.query(Media).filter_by(id=data['id'])
 
@@ -388,8 +388,6 @@ def update():
 
     # update
     query.update(deserialize_media(data))
-
-    # pprint(deserialize_media(data))
 
     # associations
     media_obj = query.one()
@@ -429,17 +427,18 @@ def get_image():
     media_path = request.args.get('path')
     media_type = request.args.get('type')
 
+    poster_id = str(abs(hash(media_path)) % (10 ** 8))
+
     # print(f'getting image {media_id=} {media_type=} {media_path=}')
 
     # return not found image
     if media_path in ['null', 'undefined', 'not_found']:
         return send_file(os.path.join(MAIN_DIR, "assets", "not_found.jpg", ), mimetype='image/jpg')
 
-    file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches", media_id + f'_{media_type}_' + '.jpg')
+    file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches", media_id + f'_{media_type}_' + poster_id + '.jpg')
 
     # return saved file if exists
     if os.path.exists(file_path):
-        print('returning local')
         return send_file(file_path, mimetype='image/jpg')
 
     # check if the requested image is part of a db entry and save if true
@@ -606,7 +605,7 @@ def get_filters():
         'runtimes': [0, ceil(runtimes.max / 15) * 15] if runtimes.max else [0, 0],
     }
 
-    pprint(result)
+    # pprint(result)
 
     return result, 200
 
