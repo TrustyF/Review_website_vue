@@ -463,20 +463,18 @@ def get_image():
     return send_file(file_path, mimetype='image/jpg')
 
 
-@bp.route("/proxy_extra_poster", methods=['GET'])
-def proxy_extra_poster():
-    url = request.args.get('url')
-    print('proxy image', url)
-    response = requests.get(url)
-
-    return response.content
+# @bp.route("/proxy_extra_poster", methods=['GET'])
+# def proxy_extra_poster():
+#     url = request.args.get('url')
+#     print('proxy image', url)
+#     response = requests.get(url)
+#
+#     return response.content
 
 
 @bp.route("/get_extra_posters", methods=['GET'])
 @requires_auth
 def search_extra_posters():
-    if not dev_mode:
-        return json.dumps({'ok': False}), 200, {'ContentType': 'application/json'}
 
     media_name = request.args.get('name')
     media_external_id = request.args.get('external_id')
