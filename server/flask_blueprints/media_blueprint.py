@@ -216,8 +216,6 @@ def get():
 @bp.route("/find", methods=['GET'])
 @requires_auth
 def find():
-    if not dev_mode:
-        return json.dumps({'ok': False}), 200, {'ContentType': 'application/json'}
 
     media_name = request.args.get('name')
     media_type = request.args.get('type')
@@ -344,8 +342,6 @@ def find():
 @bp.route("/add", methods=['POST'])
 @requires_auth
 def add():
-    if not dev_mode:
-        return json.dumps({'ok': False}), 200, {'ContentType': 'application/json'}
 
     data = request.get_json()
     print('add', data['name'])
@@ -379,13 +375,11 @@ def add():
 @bp.route("/update", methods=['POST'])
 @requires_auth
 def update():
-    if not dev_mode:
-        return json.dumps({'ok': False}), 200, {'ContentType': 'application/json'}
 
     # parameters
     data = request.get_json()
     print('update', data['name'])
-    # pprint(data)
+    pprint(data)
 
     query = db.session.query(Media).filter_by(id=data['id'])
 
@@ -417,8 +411,6 @@ def update():
 @bp.route("/delete", methods=['GET'])
 @requires_auth
 def delete():
-    if not dev_mode:
-        return json.dumps({'ok': False}), 200, {'ContentType': 'application/json'}
 
     # parameters
     media_id = request.args.get('id')
