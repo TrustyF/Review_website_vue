@@ -642,7 +642,7 @@ def get_filters():
 @bp.route("/get_stats", methods=['GET'])
 def get_stats():
     def construct_rating_list(arr):
-        base = [x for x in range(1,10)]
+        base = [x for x in range(1, 11)]
         types = set([x[0] for x in arr])
 
         constructed = {}
@@ -653,28 +653,102 @@ def get_stats():
                 if med_type not in constructed:
                     constructed[med_type] = {}
 
+                constructed[med_type][rating] = 0
+
                 for entry in arr:
-                    if entry[1] == rating and entry[0] == med_type:
-                        constructed[med_type][rating] = entry[2]
-                        break
-                    else:
-                        constructed[med_type][rating] = 0
+                    if (entry[1]) <= (rating + 0.5) and entry[1] >= (rating - 0.5) and entry[0] == med_type:
+                        constructed[med_type][rating] += entry[2]
+                        continue
 
         return constructed
 
-    movie_rating_count = (
+    def construct_release_date_list(arr):
+        base = [x for x in range(1935, datetime.now().year)]
+        types = set([x[0] for x in arr])
+
+        constructed = {}
+
+        for year in base:
+            for med_type in types:
+
+                if med_type not in constructed:
+                    constructed[med_type] = {}
+
+                constructed[med_type][year] = 0
+
+                for entry in arr:
+                    if entry[1] == year and entry[0] == med_type:
+                        constructed[med_type][year] = entry[2]
+                        break
+
+        return constructed
+
+    def construct_runtime_list(arr):
+        time_interval = 5
+        base = [x for x in range(0, 250) if x % time_interval == 0]
+        types = set([x[0] for x in arr])
+
+        constructed = {}
+
+        for time in base:
+            for med_type in types:
+
+                if med_type not in constructed.keys():
+                    constructed[med_type] = {}
+
+                constructed[med_type][time] = 0
+
+                for entry in arr:
+                    if entry[1] is None:
+                        continue
+
+                    if entry[1] <= time and entry[1] >= (time - time_interval) and entry[0] == med_type:
+                        # if entry[0] == 'movie':
+                        #     print(entry)
+
+                        constructed[med_type][time] += entry[2]
+                        continue
+
+        return constructed
+
+    rating_count = (
         db.session.query(Media.media_type, Media.user_rating, func.count(Media.id).label('count'))
-        .group_by(Media.media_type)
-        .group_by(Media.user_rating)
+        .filter(Media.is_deleted.is_(None))
+        .group_by(Media.media_type, Media.user_rating)
         .all()
     )
 
-    print(movie_rating_count)
+    public_rating_count = (
+        db.session.query(Media.media_type, Media.public_rating, func.count(Media.id).label('count'))
+        .filter(Media.is_deleted.is_(None))
+        .group_by(Media.media_type, Media.public_rating)
+        .all()
+    )
+
+    release_date_count = (
+        db.session.query(Media.media_type, func.extract('year', Media.release_date).label('release_year'),
+                         func.count(Media.id).label('count'))
+        .filter(Media.is_deleted.is_(None))
+        .group_by(Media.media_type, 'release_year')
+        .all()
+    )
+
+    runtime_count = (
+        db.session.query(Media.media_type, Media.runtime, func.count(Media.id).label('count'))
+        .filter(Media.is_deleted.is_(None))
+        .group_by(Media.media_type, Media.runtime)
+        .all()
+    )
+
+    # print(runtime_count)
 
     stats = {
-        'ratings': construct_rating_list(movie_rating_count)
+        'ratings': construct_rating_list(rating_count),
+        'public_ratings': construct_rating_list(public_rating_count),
+        'release_dates': construct_release_date_list(release_date_count),
+        'runtimes': construct_runtime_list(runtime_count),
     }
 
-    print(stats)
+    # pprint(stats['ratings'])
 
     return stats, 200
