@@ -12,8 +12,6 @@ from sql_models.media_model import Tag, Media
 bp = Blueprint('tag', __name__)
 
 
-# todo pass auth to tag routes
-
 @bp.route("/get", methods=['GET'])
 def get():
     tag_counts = (

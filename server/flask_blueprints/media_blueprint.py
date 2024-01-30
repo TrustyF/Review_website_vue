@@ -1,8 +1,7 @@
+import hashlib
 import json
 import os.path
-from pprint import pprint
 import requests
-
 from flask import Blueprint, request, Response, jsonify, send_file
 from sqlalchemy import not_, and_, or_
 from sqlalchemy.sql.expression import func
@@ -80,6 +79,11 @@ def handle_igdb_access_token(f_source):
 
 @bp.route("/get", methods=['POST'])
 def get():
+    # return 'failed', 500
+
+    # if random.randint(0, 100) < 50:
+    #     return 'failed',500
+
     # parameters
     data = request.get_json()
     # print(data)
@@ -427,8 +431,9 @@ def get_image():
     media_path = request.args.get('path')
     media_type = request.args.get('type')
 
-    poster_id = str(abs(hash(media_path)) % (10 ** 8))
+    poster_id = hashlib.shake_256(media_path.encode("utf-8")).hexdigest(5)
 
+    # return 'not found',404
     # print(f'getting image {media_id=} {media_type=} {media_path=}')
 
     # return not found image

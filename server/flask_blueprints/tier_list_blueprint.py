@@ -6,6 +6,7 @@ from sqlalchemy import func
 
 from db_loader import db
 from sql_models.media_model import Media, TierList
+from flask_blueprints.login_blueprint import requires_auth
 
 bp = Blueprint('tier_list', __name__)
 
@@ -17,6 +18,7 @@ def get():
 
 
 @bp.route("/add", methods=['GET'])
+@requires_auth
 def add():
 
     tier_list_name = request.args.get('name')
