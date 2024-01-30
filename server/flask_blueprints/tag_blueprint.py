@@ -29,7 +29,8 @@ def get():
 @bp.route("/add", methods=['POST'])
 def add():
     data = request.get_json()
-    del data['id']
+    # print(data)
+    # del data['id']
 
     print(f'adding tag {data=}')
 
