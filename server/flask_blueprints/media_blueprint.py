@@ -463,19 +463,9 @@ def get_image():
     return send_file(file_path, mimetype='image/jpg')
 
 
-# @bp.route("/proxy_extra_poster", methods=['GET'])
-# def proxy_extra_poster():
-#     url = request.args.get('url')
-#     print('proxy image', url)
-#     response = requests.get(url)
-#
-#     return response.content
-
-
 @bp.route("/get_extra_posters", methods=['GET'])
 @requires_auth
 def search_extra_posters():
-
     media_name = request.args.get('name')
     media_external_id = request.args.get('external_id')
     media_type = request.args.get('type')
@@ -591,31 +581,15 @@ def get_filters():
         runtimes = runtimes.filter(Media.media_type == media_type)
 
     if media_tier_lists:
-        genres = genres.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
-        themes = themes.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
-        tags = tags.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
-        content_ratings = content_ratings.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
+        genres = genres.join(Media.tier_lists).filter(TierList.name.in_(media_tier_lists))
+        themes = themes.join(Media.tier_lists).filter(TierList.name.in_(media_tier_lists))
+        tags = tags.join(Media.tier_lists).filter(TierList.name.in_(media_tier_lists))
+        content_ratings = content_ratings.join(Media.tier_lists).filter(TierList.name.in_(media_tier_lists))
 
-        ratings = ratings.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
-        public_ratings = public_ratings.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
-        release_dates = release_dates.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
-        runtimes = runtimes.join(Media.tier_lists).filter(TierList.id.in_(media_tier_lists))
-
-    # ratings = (db.session.query(func.max(Media.user_rating).label('max'),
-    #                             func.min(Media.user_rating).label('min'))
-    #            .filter(Media.user_rating.is_not(None)))
-
-    # public_ratings = db.session.query(func.max(Media.public_rating).label('max'),
-    #                                   func.min(Media.public_rating).label('min')).filter(
-    #     Media.public_rating != 0, Media.public_rating.is_not(None))
-
-    # release_dates = (db.session.query(func.max(Media.release_date).label('max'),
-    #                                   func.min(Media.release_date).label('min'))
-    #                  .filter(Media.release_date.is_not(None)))
-
-    # runtimes = (db.session.query(func.max(Media.runtime).label('max'),
-    #                              func.min(Media.runtime).label('min'))
-    #             .filter(Media.runtime.is_not(None)))
+        ratings = ratings.join(Media.tier_lists).filter(TierList.name.in_(media_tier_lists))
+        public_ratings = public_ratings.join(Media.tier_lists).filter(TierList.name.in_(media_tier_lists))
+        release_dates = release_dates.join(Media.tier_lists).filter(TierList.name.in_(media_tier_lists))
+        runtimes = runtimes.join(Media.tier_lists).filter(TierList.name.in_(media_tier_lists))
 
     ratings = ratings.one()
     public_ratings = public_ratings.one()
@@ -630,9 +604,11 @@ def get_filters():
         'user_ratings': [ratings.min or 0, ratings.max or 0],
         'public_ratings': [floor(public_ratings.min or 0), ceil(public_ratings.max or 0)],
         'release_dates': [release_dates.min.year, release_dates.max.year]
-        if release_dates.max is not None else [1900, 3000],
+        if release_dates.max is not None else [0, 0],
         'runtimes': [0, ceil(runtimes.max / 15) * 15] if runtimes.max else [0, 0],
     }
+
+    pprint(result)
 
     return result, 200
 
