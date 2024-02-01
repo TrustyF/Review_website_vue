@@ -1,10 +1,12 @@
 <script setup>
 import {inject, onMounted, watch, ref, provide, computed} from "vue";
 import BadgeExpanded from "../media_container/movie_container/sub_components/badgeExpanded.vue";
+import {useRouter} from "vue-router";
 
 // let props = defineProps(["position", "data"]);
 // let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
+const router = useRouter()
 
 const tooltip_container = ref()
 
@@ -43,6 +45,12 @@ async function position_tooltip() {
 watch(tooltip_data, (newV, oldV) => {
   position_tooltip()
 })
+
+router.beforeEach((to, from) => {
+  tooltip_pos.value = [0,0]
+  position_tooltip()
+})
+
 onMounted(() => {
   // const resizer = new ResizeObserver(position_tooltip)
   // resizer.observe(tooltip_container.value)

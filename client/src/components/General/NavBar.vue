@@ -4,6 +4,7 @@ import logo from '@/assets/ui/logo.png'
 import {inject, onMounted, ref} from 'vue'
 import LoginBar from "@/components/General/LoginBar.vue";
 import triple_bars from "/src/assets/ui/triple_bars.png";
+import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 
 const curr_api = inject("curr_api");
 let is_mobile = inject("is_mobile")
@@ -14,6 +15,7 @@ let prev_scroll = ref(0)
 let nav
 
 let side_menu = ref()
+let side_menu_opening = ref(false)
 
 function get_scroll_direction(event) {
   // console.log(window.scrollY, document.body.scrollHeight)
@@ -36,8 +38,11 @@ function get_scroll_direction(event) {
   }
 }
 
-function toggle_side_menu(){
+function toggle_side_menu() {
   let elem = side_menu.value
+
+  if (side_menu_opening.value) return
+  side_menu_opening.value = true
 
   if (elem.classList.contains('side_hidden')) {
     elem.classList.remove('side_hidden')
@@ -45,6 +50,18 @@ function toggle_side_menu(){
     elem.classList.add('side_hidden')
   }
 
+  setTimeout(() => {
+    side_menu_opening.value = false
+  }, 250)
+}
+
+function close_side_menu() {
+  if (side_menu_opening.value) return
+
+  let elem = side_menu.value
+  if (elem.classList.contains('side_hidden')) return;
+
+  elem.classList.add('side_hidden')
 }
 
 onMounted(() => {
@@ -74,22 +91,23 @@ onMounted(() => {
       </div>
 
       <div v-if="is_mobile" @click="toggle_side_menu" class="mobile_wrapper">
-        <img alt="menu"  :src="triple_bars" class="triple_bars">
+        <img alt="menu" :src="triple_bars" class="triple_bars">
       </div>
 
     </div>
   </nav>
 
-  <div class="side_menu side_hidden" ref="side_menu">
-    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/">Home</RouterLink>
-    <h1>------------</h1>
+  <div class="side_menu side_hidden"
+       ref="side_menu" v-click-out-side="close_side_menu">
+    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side side_home" to="/">Home</RouterLink>
+    <div style="height: 20px"></div>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/movies">Movies</RouterLink>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/series">TV</RouterLink>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/youtube">Youtube</RouterLink>
-    <h1>------------</h1>
+    <div class="horiz_separator"></div>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/anime">Anime</RouterLink>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/manga">Manga</RouterLink>
-    <h1>------------</h1>
+    <div class="horiz_separator"></div>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/games">Games</RouterLink>
   </div>
 </template>
@@ -102,6 +120,8 @@ onMounted(() => {
   left: 0;
   width: 100%;
   z-index: 500;
+
+  overflow-x: scroll;
 
   font-size: 1.2em;
 
@@ -125,41 +145,55 @@ onMounted(() => {
   transform: translate(0, -100%);
   transition-delay: 250ms;
 }
+
 .triple_bars {
   height: 30px;
   filter: invert();
   cursor: pointer;
 }
+
 .side_menu {
   position: fixed;
-  gap: 20px;
+  /*gap: 20px;*/
   padding: 20px;
   left: 0;
   top: 0;
+  bottom: 0;
   display: flex;
   flex-flow: column;
   z-index: 500;
   background-color: #36204b;
-  filter: drop-shadow(2px 2px 3px black);
-  border-radius: 0 0 10px 0;
-
+  filter: drop-shadow(2px 0 10px black);
   transition: 250ms;
 }
+
 .side_hidden {
   transform: translate(-100%, 0);
   filter: unset;
 }
+
 .link_side {
-  /*font-weight: lighter;*/
+  width: 200px;
   font-weight: 300;
-  background-color: #4b2d67;
-  padding: 20px;
-  border-radius: 5px;
+  font-size: 1.2em;
+  /*background-color: #4b2d67;*/
+  padding: 20px 20px 20px 0;
+}
+.side_home {
+  background-color: #26113a;
+  padding: 20px 40px 20px 20px;
+  margin: -20px -20px -10px -20px;
 }
 
 .link_side, .link_side:visited {
   text-decoration: none;
   color: white;
+}
+
+.horiz_separator {
+  margin: 10px 0 10px 0;
+  height: 1px;
+  background-color: white;
 }
 
 nav ul li {
@@ -177,12 +211,14 @@ nav ul li {
   gap: 20px;
   padding: 10px;
 }
+
 .mobile_wrapper {
   position: absolute;
   display: flex;
   flex-flow: row;
+  top: 0;
   right: 0;
-  padding: 20px;
+  padding: 15px;
   cursor: pointer;
 }
 

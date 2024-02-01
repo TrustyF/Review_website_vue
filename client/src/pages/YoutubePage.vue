@@ -34,6 +34,10 @@ let tier_lists = [
     'link':'/youtube/youtube_debug'
   },
 ]
+
+onMounted(() => {
+  window.scroll(0, 0)
+})
 </script>
 
 <template>

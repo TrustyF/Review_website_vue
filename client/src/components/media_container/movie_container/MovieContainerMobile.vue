@@ -226,7 +226,7 @@ function open_link_new_tab(path) {
   box-shadow: 1px 1px 1px #000000;
   background-color: #2b2a34;
 
-  padding: 3px;
+  padding: 4px;
 
   display: flex;
   flex-flow: row nowrap;

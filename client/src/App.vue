@@ -27,7 +27,7 @@ provide('is_visible_navbar', is_visible_navbar)
 const curr_api = inject("curr_api");
 
 function check_mobile() {
-  is_mobile.value = document.body.clientWidth < 500;
+    is_mobile.value = document.body.clientWidth < 724;
 }
 
 function move_sticky_elements_with_nav(nav_vis) {

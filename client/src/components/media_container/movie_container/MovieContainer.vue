@@ -3,7 +3,7 @@ import {inject, onMounted, watch, ref, computed, provide} from "vue";
 import Rating from "@/components/media_container/movie_container/sub_components/rating.vue";
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
 import {useRouter} from 'vue-router'
-let props = defineProps(["data", "container_scale", "container_size"]);
+let props = defineProps(["data", "container_scale", "container_size","lazy_poster"]);
 let emits = defineEmits(["media_data"]);
 
 let edit_mode = inject('edit_mode')
@@ -54,7 +54,7 @@ function open_link_new_tab(path) {
 <template>
   <div class="movie_container_wrapper">
 
-    <div v-if="edit_mode" style="position:absolute;background-color: #25222a;padding: 5px;font-size: 0.5em">
+    <div v-if="edit_mode" style="position:absolute;background-color: #25222a;left: 5px;top:5px;padding: 5px;font-size: 0.5em">
 <!--      <p v-if="data['external_name']">external_name = {{ data['external_name'] }}</p>-->
       <p v-if="data['content_rating']">content= {{ data['content_rating']['name'] }}</p>
 <!--      <p v-if="data['genres']">genres= {{ data['genres'].map((elem)=>elem['name']) }}</p>-->
@@ -67,7 +67,9 @@ function open_link_new_tab(path) {
 <!--      <p>{{ image_path }}</p>-->
     </div>
 
-    <img @click="open_link_new_tab(data['external_link'])" class="poster" alt="poster" v-lazy="image_path"/>
+    <img v-if="lazy_poster === undefined" @click="open_link_new_tab(data['external_link'])" class="poster" alt="poster" v-lazy="image_path"/>
+    <img v-if="lazy_poster === false" @click="open_link_new_tab(data['external_link'])" class="poster" alt="poster" :src="image_path"/>
+
     <div class="poster_gradient"></div>
 
     <div v-if="data['is_dropped']" class="dropped_banner_wrapper">
@@ -136,7 +138,7 @@ function open_link_new_tab(path) {
   pointer-events: none;
   content: "";
   position: absolute;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 90%, rgba(0, 0, 0, 0.5) 100%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 90%, rgba(0, 0, 0, 0.5) 101%);
   left: 0;
   top: 0;
   width: v-bind(poster_size [0] + 'px');
