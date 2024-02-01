@@ -9,7 +9,5 @@ onMounted(() => {
 
 <template>
   <media-feed :media_type="'manga'"
-              :media_sizes="[[256,360],[256,360]]"
-              :media_scales="[0.7,0.5]"
   ></media-feed>
 </template>

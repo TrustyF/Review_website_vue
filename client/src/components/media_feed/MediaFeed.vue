@@ -8,7 +8,7 @@ import CreditsFooter from "@/components/General/CreditsFooter.vue";
 import spinner from '/src/assets/ui/Loading_icon.gif'
 import {check_server_awake} from '/src/utils.js'
 
-let props = defineProps(["media_type", "tier_lists", "media_scales", "media_sizes"]);
+let props = defineProps(["media_type", "tier_lists"]);
 
 const curr_api = inject("curr_api");
 const session_seed = inject("session_seed");
@@ -17,11 +17,7 @@ let selected_media = inject('selected_media')
 let edit_pane_open = inject('edit_pane_open')
 let is_visible_navbar = inject('is_visible_navbar')
 
-let media_scale = computed(() => is_mobile.value ? props['media_scales'][1] : props['media_scales'][0])
-let media_size = computed(() => is_mobile.value ? props['media_sizes'][1] : props['media_sizes'][0])
 let media_container = computed(() => is_mobile.value ? MovieContainerMobile : MovieContainer)
-
-const element_width = computed(() => String(media_size.value[0] * media_scale.value) + 'px')
 
 let media = ref([])
 let media_grouped = ref([])
@@ -209,8 +205,6 @@ onMounted(() => {
                    :key="med['id']"
                    :is="media_container"
                    :data="med"
-                   :container_size="media_size"
-                   :container_scale="media_scale"
                    @media_data="emitted_media_to_edit_pane"
         ></component>
       </div>
@@ -235,7 +229,8 @@ onMounted(() => {
 
 .media_container_wrapper {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(v-bind(element_width), 0fr));
+  /*grid-template-columns: repeat(auto-fill, minmax(v-bind(element_width), 0fr));*/
+  grid-template-columns: repeat(5,1fr);
   grid-gap: 20px;
   justify-items: center;
   justify-content: center;
@@ -281,11 +276,6 @@ onMounted(() => {
 }
 
 @media only screen and (max-width: 500px) {
-  .top_feed_container {
-    /*outline: 1px solid orange;*/
-    /*margin-top: 100px;*/
-  }
-
   .media_container_wrapper {
     gap: 10px;
     justify-items: center;
@@ -294,10 +284,8 @@ onMounted(() => {
   }
 
   .rating_separator {
-    /*outline: 1px solid orange;*/
     width: fit-content;
     padding: 7px;
-    /*top: 100px;*/
   }
 }
 

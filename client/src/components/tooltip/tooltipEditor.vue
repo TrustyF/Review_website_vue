@@ -350,6 +350,10 @@ onUnmounted(() => {
           <input id="form_public_rating" v-model="selected_media['public_rating']" type="number"
                  @change="selected_media['public_rating']=$event.target.value">
 
+<!--          <label for="form_added_date">Date added</label>-->
+<!--          <input id="form_added_date" v-model="selected_media['created_at']" type="text"-->
+<!--                 @change="selected_media['created_at']=$event.target.value">-->
+
         </div>
 
       </div>

@@ -6,26 +6,14 @@ let props = defineProps({
   media_type: {
     type: String,
     default: null,
-  },
-  order: {
-    type: String,
-    default: null,
-  },
-  ratings: {
-    type: Array,
-    default: null,
-  },
-  tier_lists: {
-    type: Array,
-    default: null,
-  },
+  }
 });
 let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
 const session_seed = inject("session_seed");
 const is_mobile = inject("is_mobile");
 
-let media = ref(new Array(10).fill().map((e, i) => {
+let media = ref(new Array(20).fill().map((e, i) => {
   return {
     name: 'none',
     release_date: 'none',
@@ -38,10 +26,8 @@ async function get_media() {
   const params = {
     'limit': 20,
     'page': 0,
-    'type': props.media_type,
-    'order': props.order,
-    'ratings':props.ratings,
-    'tier_lists':props.tier_lists,
+    'type': props['media_type'],
+    'ratings': [7, 10],
     'session_seed': session_seed,
     'user_rating_sort_override': true,
   }
@@ -76,6 +62,14 @@ onMounted(() => {
             :size_override="[500,750]"
         ></movie-container>
       </div>
+      <div class="scroll_content" v-for="med in media" :key="med.id">
+        <movie-container
+            :data="med"
+            :lazy_poster="false"
+            :scale_mul="!is_mobile ? 0.3:0.2"
+            :size_override="[500,750]"
+        ></movie-container>
+      </div>
     </div>
   </div>
 </template>
@@ -90,14 +84,16 @@ onMounted(() => {
 
 .scroll_container {
   /*position: relative;*/
-  overflow-x: scroll;
-  /*overflow-y: hidden;*/
+  overflow-x: hidden;
   display: flex;
   flex-flow: row;
   gap: 10px;
-  padding-bottom: 20px;
-  /*white-space:nowrap;*/
   /*outline: 1px solid red;*/
+}
+
+.scroll_content {
+  animation: scroll_banner 100s linear infinite;
+  will-change: transform;
 }
 
 .banner_fade {
@@ -107,7 +103,12 @@ onMounted(() => {
   height: 100%;
   z-index: 5;
   position: absolute;
-  background: linear-gradient(to right, rgba(19, 18, 21, 0) 95%, rgba(19, 18, 21, 1) 100%);
+  background: linear-gradient(to right, rgba(19, 18, 21, 0) 95%, rgba(19, 18, 21, 1) 100%), linear-gradient(to left, rgba(19, 18, 21, 0) 95%, rgba(19, 18, 21, 1) 100%);
 }
 
+@keyframes scroll_banner {
+  to {
+    transform: translate(calc(-2000% - 200px));
+  }
+}
 </style>

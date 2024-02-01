@@ -4,7 +4,7 @@ import {RouterView} from 'vue-router'
 import NavBar from "@/components/General/NavBar.vue";
 import '@/assets/styles/globals.css'
 import '@/assets/styles/dark.css'
-import {inject, onMounted, provide, ref, watch} from "vue";
+import {computed, inject, onMounted, provide, ref, watch} from "vue";
 import TooltipBadge from "@/components/tooltip/tooltipBadge.vue";
 import TooltipEditor from "@/components/tooltip/tooltipEditor.vue";
 import {check_server_awake} from "@/utils.js";
@@ -17,17 +17,45 @@ const add_pane_open = ref(false)
 let is_mobile = ref(false)
 let is_visible_navbar = ref(false)
 
+const media_scales = computed(() => {
+  return {
+    'movie': {
+      'size': [500, 750],
+      'scale': !is_mobile.value ? 0.35 : 0.25,
+    },
+    'tv': {
+      'size': [500, 750],
+      'scale': !is_mobile.value ? 0.35 : 0.25,
+    },
+    'manga': {
+      'size': [256,360],
+      'scale': !is_mobile.value ? 0.7 : 0.5,
+    },
+    'youtube': {
+      'size': [1280,720],
+      'scale': !is_mobile.value ? 0.2 : 0.14,
+    },
+    'game': {
+      'size': [264,352],
+      'scale': !is_mobile.value ? 0.69 : 0.5,
+    },
+  }
+})
+
+
 provide('selected_media', selected_media)
 provide('edit_media', edit_media)
 provide('edit_pane_open', edit_pane_open)
 provide('add_pane_open', add_pane_open)
 provide('is_mobile', is_mobile)
 provide('is_visible_navbar', is_visible_navbar)
+provide('media_scales', media_scales)
 
 const curr_api = inject("curr_api");
 
 function check_mobile() {
-    is_mobile.value = document.body.clientWidth < 724;
+  is_mobile.value = document.body.clientWidth < 724;
+  // console.log('is mobile', is_mobile.value)
 }
 
 function move_sticky_elements_with_nav(nav_vis) {
@@ -65,7 +93,7 @@ onMounted(() => {
   </div>
 
   <button v-if="edit_mode" style="position: fixed;right: 10px;top: 70px" @click="add_pane_open=true">add</button>
-  <p v-if="edit_mode" style="position: fixed;right: 10px;top: 100px;font-size: 0.7em">{{curr_api}}</p>
+  <p v-if="edit_mode" style="position: fixed;right: 10px;top: 100px;font-size: 0.7em">{{ curr_api }}</p>
 
   <div class="tooltip_editor_top_wrapper" v-if="add_pane_open && edit_mode">
     <tooltip-editor :add="true"></tooltip-editor>

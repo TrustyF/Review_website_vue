@@ -10,8 +10,6 @@ onMounted(() => {
 <template>
   <media-feed :media_type="'tv'"
               :tier_lists="['anime']"
-              :media_sizes="[[500,750],[500,750]]"
-              :media_scales="[0.35,0.25]"
   ></media-feed>
 
 </template>
