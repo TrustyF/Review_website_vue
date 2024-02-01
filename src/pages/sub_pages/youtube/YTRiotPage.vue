@@ -10,7 +10,5 @@ onMounted(() => {
 <template>
   <media-feed :media_type="'youtube'"
               :tier_lists="['lol cinematic']"
-              :media_sizes="[[1280,720],[1280,720]]"
-              :media_scales="[0.2,0.14]"
   ></media-feed>
 </template>

@@ -9,11 +9,15 @@ import Badge from "@/components/media_container/movie_container/sub_components/b
 const image_path = computed(() => `${curr_api}/media/get_image?path=${props.data['poster_path']}&id=${props.data['id']}`)
 let props = defineProps(["data", "container_scale", "container_size"]);
 let emits = defineEmits(["media_data"]);
+
 const curr_api = inject("curr_api");
+let media_scales = inject('media_scales')
+
+const media_type = computed(() => props['data']['media_type'])
 
 const poster_size = computed(() => [
-  props['container_size'][0] * props['container_scale'],
-  props['container_size'][1] * props['container_scale']
+  media_scales.value[media_type.value]['size'][0] * media_scales.value[media_type.value]['scale'],
+  media_scales.value[media_type.value]['size'][1] * media_scales.value[media_type.value]['scale']
 ])
 const min_size = computed(() => Math.min(poster_size.value[0], poster_size.value[1]))
 
@@ -132,7 +136,7 @@ function open_link_new_tab(path) {
   height: v-bind(poster_size [1] + 'px');
 
   border-radius: 8px;
-  object-fit: cover;
+  object-fit: scale-down;
 }
 
 .poster_gradient {

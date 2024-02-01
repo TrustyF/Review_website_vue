@@ -218,7 +218,6 @@ async function get_stats() {
   const url = new URL(`${curr_api}/media/get_stats`)
 
   const result = await fetch(url).then(response => response.json())
-  console.log('result', result)
   stats.value = result
 
 }

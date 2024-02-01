@@ -9,8 +9,6 @@ onMounted(() => {
 
 <template>
   <media-feed :media_type="'game'"
-              :media_sizes="[[264,352],[264,352]]"
-              :media_scales="[0.69,0.5]"
   ></media-feed>
 
 </template>
