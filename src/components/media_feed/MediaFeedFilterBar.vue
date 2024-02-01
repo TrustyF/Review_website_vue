@@ -22,7 +22,7 @@ function emit_filter(event) {
 function calculate_box_height() {
   let box = filter_container.value.getBoundingClientRect()
 
-  let bottom = (window.scrollY + window.innerHeight) - box.top - 100
+  let bottom = (window.innerHeight) - box.top - 100
 
   box_height.value = String(bottom) + 'px'
 }

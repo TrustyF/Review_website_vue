@@ -6,9 +6,13 @@ import search_info from '/home_images/search_info.jpg'
 import tags_info from '/home_images/tags_info.jpg'
 import StatsGraphs from "@/components/General/StatsGraphs.vue";
 import CreditsFooter from "@/components/General/CreditsFooter.vue";
+import MediaBanner from "@/components/MediaBanner/MediaBanner.vue";
 
 const curr_api = inject("curr_api");
 
+onMounted(() => {
+  window.scroll(0, 0)
+})
 </script>
 
 <template>
@@ -20,6 +24,8 @@ const curr_api = inject("curr_api");
         people.</p>
       <p>I also really love cataloguing.</p>
     </div>
+
+    <media-banner></media-banner>
 
     <div class="intro_text">
       <h1>Ratings</h1>

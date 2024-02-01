@@ -79,6 +79,13 @@ async function get_media(override) {
     is_page_loaded.value = true
   }
 
+  if (override) {
+    media.value = result
+  } else {
+    // concat result to media
+    result.forEach(entry => media.value.push(entry))
+  }
+
   // sort tags by color
   const priority = ['gold','green','purple','silver','red']
   media.value.forEach((entry,i)=>{
@@ -88,13 +95,6 @@ async function get_media(override) {
       return fi - si
     })
   })
-
-  if (override) {
-    media.value = result
-  } else {
-    // concat result to media
-    result.forEach(entry => media.value.push(entry))
-  }
 
   // group media by rating
   media_grouped.value = media.value.reduce((r, e, index) => {
