@@ -212,15 +212,22 @@ def compare_csv_to_db():
     with open(r'C:\Users\sirja\Downloads\ratings.csv') as csv_file:
         reader = csv.reader(csv_file, delimiter=',')
 
-        for row in reader:
-            # print(row[4][:-1])
-            # code = row[4].split('/')
+        for i, row in enumerate(reader):
+            date = row[2]
+            print(row[4][:-1])
+            print(date)
             try:
-                if len(db.session.query(Media).filter(Media.external_link == row[4][:-1]).all()) < 1:
-                    print(f'{row[3]} was not found {row[4]}')
-            except:
+                obj = db.session.query(Media).filter(Media.external_link == row[4][:-1])
+                obj.update({'created_at': dateutil.parser.parse(date)})
+            except Exception as e:
+                print(e)
+                print(row[3], ' not found')
                 pass
 
+            # if i > 3:
+            #     break
+
+        db.session.commit()
 
 
 if __name__ == '__main__':

@@ -1,6 +1,8 @@
 import hashlib
 import json
 import os.path
+import pprint
+
 import requests
 from flask import Blueprint, request, Response, jsonify, send_file
 from sqlalchemy import not_, and_, or_
@@ -79,11 +81,6 @@ def handle_igdb_access_token(f_source):
 
 @bp.route("/get", methods=['POST'])
 def get():
-    # return 'failed', 500
-
-    # if random.randint(0, 100) < 50:
-    #     return 'failed',500
-
     # parameters
     data = request.get_json()
     # print(data)
