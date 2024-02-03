@@ -82,7 +82,7 @@ const default_movie = {
 }
 
 onMounted(() => {
-  window.scroll(0, 0)
+  // window.scroll(0, 0)
 })
 </script>
 
@@ -98,12 +98,18 @@ onMounted(() => {
 
     <media-scroll-banner></media-scroll-banner>
 
-    <div class="intro_text">
+    <div class="intro_text" style="margin-top: 50px">
       <h1>Watched recently</h1>
       <media-banner :order="'date_added'" :media_type="'movie'"></media-banner>
     </div>
 
-<!--    <div class="intro_text">-->
+    <div class="intro_text">
+      <h1>Latest release</h1>
+      <media-banner :order="'release_date'" :media_type="'movie'"></media-banner>
+    </div>
+
+
+    <!--    <div class="intro_text">-->
 <!--      <h1>Movie</h1>-->
 <!--      <media-banner :media_type="'movie'" :ratings="[7,10]"></media-banner>-->
 <!--    </div>-->
@@ -119,7 +125,7 @@ onMounted(() => {
         <p>Ratings are split into 3 components: my rating, the public rating and the combined rating circle.</p>
       </div>
       <div class="rating_example">
-        <movie-container :data="default_movie"
+        <movie-container :data="default_movie" :scale_mul="1.5"
         ></movie-container>
         <img :src="rating_arrows" alt="rating_info" class="rating_example_arrows">
       </div>
@@ -181,7 +187,7 @@ onMounted(() => {
   flex-flow: column;
   gap: 40px;
   margin: 0 auto 0 auto;
-  padding: 120px 150px 100px 150px;
+  padding: 120px 0 100px 0;
   position: relative;
   /*outline: 1px solid red;*/
   min-height: 80vh;
@@ -235,13 +241,14 @@ onMounted(() => {
 .rating_example_arrows {
   pointer-events: none;
   position: absolute;
-  bottom: -50px;
-  width: 600px;
+  bottom: -70px;
+  left: 55px;
+  width: 800px;
   transform: translate(-20px);
   filter: drop-shadow(2px 2px 1px black) drop-shadow(1px 1px 3px black);
 }
 
-@media only screen and (max-width: 724px) {
+@media only screen and (max-width: 500px) {
   .home_wrapper {
     padding: 100px 20px 50px 20px;
   }

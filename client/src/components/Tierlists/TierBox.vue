@@ -91,7 +91,7 @@ const curr_api = inject("curr_api");
   opacity: 100%;
 }
 
-@media only screen and (max-width: 724px) {
+@media only screen and (max-width: 500px) {
   .tier_box{
     width: 100%;
     height: 300px;
