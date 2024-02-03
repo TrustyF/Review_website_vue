@@ -462,7 +462,7 @@ def get_image():
 
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         response = requests.get(media_path)
-        print('making poster request')
+        print('making poster request', media_id, media_type)
 
         with open(file_path, 'wb') as outfile:
             outfile.write(response.content)
@@ -651,7 +651,7 @@ def get_stats():
 
     def construct_release_date_list(arr):
         base = [x for x in range(1935, datetime.now().year)]
-        types = set([x[0] for x in arr])
+        types = set([x[1] for x in arr])
 
         constructed = {}
 
@@ -661,12 +661,12 @@ def get_stats():
                 if med_type not in constructed:
                     constructed[med_type] = {}
 
-                constructed[med_type][year] = 0
+                constructed[med_type][year] = []
 
                 for entry in arr:
-                    if entry[1] == year and entry[0] == med_type:
-                        constructed[med_type][year] = entry[2]
-                        break
+                    if entry[2] == year and entry[1] == med_type:
+                        constructed[med_type][year].append(entry[0])
+                        continue
 
         return constructed
 
@@ -712,11 +712,17 @@ def get_stats():
         .all()
     )
 
+    # release_date_count = (
+    #     db.session.query(Media.media_type, func.extract('year', Media.release_date).label('release_year'),
+    #                      func.count(Media.id).label('count'))
+    #     .filter(Media.is_deleted.is_(None))
+    #     .group_by(Media.media_type, 'release_year')
+    #     .all()
+    # )
     release_date_count = (
-        db.session.query(Media.media_type, func.extract('year', Media.release_date).label('release_year'),
-                         func.count(Media.id).label('count'))
+        db.session.query(Media.name, Media.media_type, func.extract('year', Media.release_date).label('release_year'))
         .filter(Media.is_deleted.is_(None))
-        .group_by(Media.media_type, 'release_year')
+        .group_by(Media.name, Media.media_type, 'release_year')
         .all()
     )
 
@@ -727,7 +733,7 @@ def get_stats():
         .all()
     )
 
-    # print(rate_date_count)
+    # print(release_date_count)
 
     stats = {
         'ratings': construct_rating_list(rating_count),
@@ -736,6 +742,6 @@ def get_stats():
         'runtimes': construct_runtime_list(runtime_count),
     }
 
-    # pprint.pprint(stats['rated_date'])
+    pprint.pprint(stats['release_dates'])
 
     return stats, 200
