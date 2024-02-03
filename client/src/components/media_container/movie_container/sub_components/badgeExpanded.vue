@@ -8,7 +8,7 @@ const curr_api = inject("curr_api");
 const tier_details = computed(() => {
   let tier = props['data']['tier']
 
-  if (tier === 'purple') return 'Caveat'
+  if (tier === 'purple') return 'Warning'
   if (tier === 'green') return 'Positive'
   if (tier === 'red') return 'Negative'
   if (tier === 'gold') return 'Peak'

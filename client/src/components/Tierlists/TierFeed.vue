@@ -32,7 +32,7 @@ let feed_width = computed(() => (props['box_size'][0] * props['box_scale'] + 25)
   align-items: center;
   justify-items: center;
 
-  margin: 130px auto auto auto;
+  margin: 100px auto auto auto;
   padding-bottom: 30px;
 
   gap: 50px;
@@ -42,6 +42,8 @@ let feed_width = computed(() => (props['box_size'][0] * props['box_scale'] + 25)
   .tier_feed_wrapper {
     width: 90%;
     flex-flow: column nowrap;
+    margin:100px auto auto auto;
+
     grid-gap: 30px;
   }
 }

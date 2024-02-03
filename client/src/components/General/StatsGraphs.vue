@@ -2,7 +2,7 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import {BarChart, LineChart} from 'vue-chart-3';
 import {Chart, registerables} from "chart.js";
-import {check_server_awake} from "@/utils.js";
+import axios from "axios";
 
 Chart.register(...registerables);
 
@@ -40,22 +40,22 @@ let rating_stats = computed(() => {
         data: Object.values(stats.value['ratings'][stat_media_type.value]),
         backgroundColor: [stat_media_type_colors[0]],
         borderColor: [stat_media_type_colors[0]],
-        pointRadius:3,
+        pointRadius: 3,
         // barPercentage: 1,
         // categoryPercentage: 0.7,
         // yAxisID: 'y',
-        cubicInterpolationMode:'monotone',
+        cubicInterpolationMode: 'monotone',
       },
       {
         label: 'Public rating',
         data: Object.values(stats.value['public_ratings'][stat_media_type.value]),
         backgroundColor: [stat_media_type_colors[3]],
         borderColor: [stat_media_type_colors[3]],
-        pointRadius:3,
+        pointRadius: 3,
         // barPercentage: 1,
         // categoryPercentage: 0.7,
         // yAxisID: 'y1',
-        cubicInterpolationMode:'monotone',
+        cubicInterpolationMode: 'monotone',
       }],
 
   }
@@ -167,7 +167,7 @@ const pub_rating_stats_options = ref({
   plugins: {
     title: {
       display: true,
-      position:'bottom',
+      position: 'bottom',
       text: 'Public rating distribution',
       font: {
         weight: 'normal'
@@ -194,7 +194,7 @@ const release_date_stats_options = ref({
   plugins: {
     title: {
       display: true,
-      position:'bottom',
+      position: 'bottom',
       text: 'Release year distribution',
       font: {
         weight: 'normal'
@@ -221,7 +221,7 @@ const runtime_stats_options = ref({
   plugins: {
     title: {
       display: true,
-      position:'bottom',
+      position: 'bottom',
       text: 'Runtime distribution ( minutes )',
       font: {
         weight: 'normal'
@@ -245,10 +245,17 @@ const runtime_stats_options = ref({
 
 async function get_stats() {
 
-  // await check_server_awake(curr_api)
   const url = new URL(`${curr_api}/media/get_stats`)
 
-  stats.value = await fetch(url).then(response => response.json())
+  stats.value = await axios(
+      {
+        method: 'GET',
+        url: url,
+      }).then(response => response.data)
+      .catch(error => {
+        console.log('get_stats', error.response)
+        return []
+      })
 }
 
 function switch_media(event) {

@@ -14,18 +14,6 @@ const tooltip_pos = inject("tooltip_badge_pos");
 const tooltip_data = inject("tooltip_badge_data");
 const tooltip_hover = inject("tooltip_badge_hover");
 
-const detail_popup_value = computed(() => {
-  let tier = tooltip_data.value['tier']
-
-  if (tier === 'purple') return 'Caveat'
-  if (tier === 'green') return 'Positive'
-  if (tier === 'red') return 'Negative'
-  if (tier === 'gold') return 'Selling point'
-  if (tier === 'silver') return 'Gripe'
-
-  return undefined
-})
-
 async function position_tooltip() {
   // hack to give time to the element to update it's size
   await setTimeout(() => {

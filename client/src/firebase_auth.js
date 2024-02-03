@@ -1,4 +1,5 @@
-import {getAuth, GoogleAuthProvider,signOut , signInWithPopup, onAuthStateChanged} from "firebase/auth";
+import {getAuth, GoogleAuthProvider, signOut, signInWithPopup, onAuthStateChanged} from "firebase/auth";
+import axios from "axios";
 
 export async function login() {
     const provider = new GoogleAuthProvider()
@@ -19,13 +20,20 @@ export async function check_admin(curr_api) {
     if (!token) return false
 
     const url = new URL(`${curr_api}/login/verify`)
-    const result = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Authorization': token.uid,
-            'Content-Type': 'application/json',
-        }
-    }).then(response => response.json())
+    const result = await axios(
+        {
+            method: 'GET',
+            url: url,
+            headers: {
+                'Authorization': token.uid,
+                'Content-Type': 'application/json',
+            }
+        }).then(response => response.data)
+        .catch(error => {
+            console.log('check_admin', error.response)
+            return []
+        })
+
     return result.ok;
 }
 

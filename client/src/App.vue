@@ -20,22 +20,22 @@ const media_scales = computed(() => {
   return {
     'movie': {
       'size': [500, 750],
-      'scale': !is_mobile.value ? 0.35 : 0.25,
+      'scale': !is_mobile.value ? 0.35 : 0.2,
     },
     'tv': {
       'size': [500, 750],
-      'scale': !is_mobile.value ? 0.35 : 0.25,
+      'scale': !is_mobile.value ? 0.35 : 0.2,
     },
     'manga': {
-      'size': [256,360],
+      'size': [256, 360],
       'scale': !is_mobile.value ? 0.7 : 0.5,
     },
     'youtube': {
-      'size': [1280,720],
+      'size': [1280, 720],
       'scale': !is_mobile.value ? 0.2 : 0.14,
     },
     'game': {
-      'size': [264,352],
+      'size': [264, 352],
       'scale': !is_mobile.value ? 0.69 : 0.5,
     },
   }
@@ -111,6 +111,7 @@ onMounted(() => {
   margin: 0 auto 0 auto;
   max-width: 1000px;
   min-height: 80vh;
+  overflow-x: clip;
 
   padding: 0 40px 0 40px;
 }
@@ -129,5 +130,11 @@ onMounted(() => {
   position: fixed;
   z-index: 30000;
   background-color: rgba(15, 15, 15, 97%);
+}
+
+@media only screen and (max-width: 500px) {
+  .main {
+    padding: 0 5px 0 5px;
+  }
 }
 </style>
