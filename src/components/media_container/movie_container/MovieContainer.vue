@@ -7,21 +7,21 @@ import {useRouter} from 'vue-router'
 let props = defineProps({
   data: {
     default: {
-      name:'none',
-      release_date:'none',
-      media_type:'movie',
+      name: 'none',
+      release_date: 'none',
+      media_type: 'movie',
     }
   },
   lazy_poster: {
-    type:Boolean,
+    type: Boolean,
     default: true
   },
   scale_mul: {
-    type:Number,
+    type: Number,
     default: 1
   },
   size_override: {
-    type:Array,
+    type: Array,
     default: null
   },
 });
@@ -92,6 +92,7 @@ function emitted_media_to_edit_pane() {
   selected_media.value = props.data
   edit_pane_open.value = true
 }
+
 // onMounted(()=>{
 //   console.log('media scales',media_scales.value)
 //   console.log('media type',media_type.value)
@@ -102,20 +103,23 @@ function emitted_media_to_edit_pane() {
 <template>
   <div class="movie_container_wrapper">
 
-<!--    <div v-if="edit_mode"-->
-<!--         style="position:absolute;background-color: #25222a;left: 5px;top:5px;padding: 5px;font-size: 0.5em">-->
-<!--      &lt;!&ndash;      <p v-if="data['external_name']">external_name = {{ data['external_name'] }}</p>&ndash;&gt;-->
-<!--      <p v-if="data['content_rating']">content= {{ data['content_rating']['name'] }}</p>-->
-<!--      &lt;!&ndash;      <p v-if="data['genres']">genres= {{ data['genres'].map((elem)=>elem['name']) }}</p>&ndash;&gt;-->
-<!--      <p v-if="data['tier_lists']">tier_lists= {{ data['tier_lists'].map((elem) => elem['name']) }}</p>-->
-<!--      &lt;!&ndash;      <p v-if="data['themes']">themes= {{ data['themes'].map((elem)=>elem['name']) }}</p>&ndash;&gt;-->
-<!--      <p v-if="data['tags']">tags= {{ data['tags'].map((elem) => elem['name']) }}</p>-->
-<!--      &lt;!&ndash;      <p v-if="data['author']">author= {{ data['author'] }}</p>&ndash;&gt;-->
-<!--      &lt;!&ndash;      <p v-if="data['studio']">studio= {{ data['studio'] }}</p>&ndash;&gt;-->
-<!--      &lt;!&ndash;      <p v-if="data['release_date']">release_date= {{ data['release_date'] }}</p>&ndash;&gt;-->
-<!--            <p v-if="data['created_at']">created_at= {{ data['created_at'] }}</p>-->
-<!--      &lt;!&ndash;      <p>{{ image_path }}</p>&ndash;&gt;-->
-<!--    </div>-->
+    <!--    todo add age ratings, compress dropped, add media type ?-->
+    <!--    todo move tag images to backend -->
+
+    <!--    <div v-if="edit_mode"-->
+    <!--         style="position:absolute;background-color: #25222a;left: 5px;top:5px;padding: 5px;font-size: 0.5em">-->
+    <!--      &lt;!&ndash;      <p v-if="data['external_name']">external_name = {{ data['external_name'] }}</p>&ndash;&gt;-->
+    <!--      <p v-if="data['content_rating']">content= {{ data['content_rating']['name'] }}</p>-->
+    <!--      &lt;!&ndash;      <p v-if="data['genres']">genres= {{ data['genres'].map((elem)=>elem['name']) }}</p>&ndash;&gt;-->
+    <!--      <p v-if="data['tier_lists']">tier_lists= {{ data['tier_lists'].map((elem) => elem['name']) }}</p>-->
+    <!--      &lt;!&ndash;      <p v-if="data['themes']">themes= {{ data['themes'].map((elem)=>elem['name']) }}</p>&ndash;&gt;-->
+    <!--      <p v-if="data['tags']">tags= {{ data['tags'].map((elem) => elem['name']) }}</p>-->
+    <!--      &lt;!&ndash;      <p v-if="data['author']">author= {{ data['author'] }}</p>&ndash;&gt;-->
+    <!--      &lt;!&ndash;      <p v-if="data['studio']">studio= {{ data['studio'] }}</p>&ndash;&gt;-->
+    <!--      &lt;!&ndash;      <p v-if="data['release_date']">release_date= {{ data['release_date'] }}</p>&ndash;&gt;-->
+    <!--            <p v-if="data['created_at']">created_at= {{ data['created_at'] }}</p>-->
+    <!--      &lt;!&ndash;      <p>{{ image_path }}</p>&ndash;&gt;-->
+    <!--    </div>-->
 
     <img v-if="lazy_poster" @click="open_link_new_tab(data['external_link'])" class="poster" alt="poster"
          v-lazy="image_path"/>

@@ -4,6 +4,8 @@ import App from './App.vue'
 
 import VueLazyLoad from "vue-lazyload";
 import {initializeApp} from 'firebase/app';
+import axiosRetry from 'axios-retry';
+import axios from 'axios';
 
 const local_api = "http://192.168.1.11:5000"
 const server_api = "https://review-trustyfox.pythonanywhere.com"
@@ -35,6 +37,13 @@ app.provide('session_seed', session_seed)
 app.provide('tooltip_badge_hover', ref(false))
 app.provide('tooltip_badge_pos', ref([0, 0]))
 app.provide('tooltip_badge_data', ref({}))
+
+axiosRetry(axios, {
+    retryDelay: ((count) => count * 1000),
+    retries: 3,
+    onRetry: (() => console.log('retry')),
+    retryCondition: (() => true)
+});
 
 app.use(VueLazyLoad, {
     preLoad: 2,

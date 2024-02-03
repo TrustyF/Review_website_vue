@@ -213,8 +213,8 @@ nav ul li {
 
 .mobile_wrapper {
   position: absolute;
-  display: flex;
-  flex-flow: row;
+  /*display: flex;*/
+  /*flex-flow: row;*/
   top: 0;
   right: 0;
   padding: 15px;

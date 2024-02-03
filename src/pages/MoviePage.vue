@@ -8,6 +8,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <media-feed media_type="movie"
-  ></media-feed>
+  <media-feed media_type="movie"></media-feed>
 </template>

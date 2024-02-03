@@ -40,7 +40,6 @@ async function fetch_filters() {
   const url = new URL(`${curr_api}/media/get_filters`)
   const params = {
     'type': selected_media.value['media_type'],
-    // 'tier_lists': selected_media.value['tier_lists'].map((e)=>e.id),
     'tier_lists': [],
   }
 

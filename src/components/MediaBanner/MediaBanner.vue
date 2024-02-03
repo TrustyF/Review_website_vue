@@ -1,6 +1,7 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
 import MovieContainer from '@/components/media_container/movie_container/MovieContainer.vue'
+import axios from "axios";
 
 let props = defineProps({
   media_type: {
@@ -46,15 +47,17 @@ async function get_media() {
     'user_rating_sort_override': true,
   }
 
-  media.value = await fetch(url,
+  media.value = await axios(
       {
         method: 'POST',
+        url:url,
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(params)
+        data: JSON.stringify(params)
       })
-      .then(response => {
-        console.log('response', response)
-        return response.json()
+      .then(response => response.data)
+      .catch(error => {
+        console.log('media_banner_get_media', error.response)
+        return []
       })
 
   // sort tags by color

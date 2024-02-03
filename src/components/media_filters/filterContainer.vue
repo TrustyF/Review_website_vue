@@ -3,7 +3,7 @@ import {inject, onMounted, watch, ref, computed} from "vue";
 import FilterDropdown from "@/components/media_filters/filterDropdown.vue";
 import FilterRange from "@/components/media_filters/filterRange.vue";
 import FilterRadio from "@/components/media_filters/filterRadio.vue";
-import {check_server_awake} from "@/utils.js";
+import axios from "axios";
 
 let props = defineProps(["media_type", "tier_lists"]);
 let emits = defineEmits(["filter"]);
@@ -28,21 +28,24 @@ let orders = ref([
 
 async function fetch_filters() {
 
-  // if (!await check_server_awake(curr_api)) return
-  // await check_server_awake(curr_api)
-
   const url = new URL(`${curr_api}/media/get_filters`)
   const params = {
     'type': props['media_type'] !== undefined ? props['media_type'] : '',
     'tier_lists': props['tier_lists'] !== undefined ? props['tier_lists'] : [],
   }
 
-
-  const result = await fetch(url, {
-    method: 'POST',
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(params)
-  }).then(response => response.json())
+  const result = await axios(
+      {
+        method: 'POST',
+        url: url,
+        headers: {"Content-Type": "application/json"},
+        data: JSON.stringify(params)
+      })
+      .then(response => response.data)
+      .catch(error => {
+        console.log('fetch_filters', error.response)
+        return []
+      })
 
   console.log('filters', result)
 
@@ -110,11 +113,10 @@ onMounted(() => {
     </div>
 
     <div class="col">
-    <filter-dropdown v-if="themes!==null && themes.length>0"
-                     @id="emit_filter('themes',$event)"
-                     :data="themes" title="Themes"></filter-dropdown>
+      <filter-dropdown v-if="themes!==null && themes.length>0"
+                       @id="emit_filter('themes',$event)"
+                       :data="themes" title="Themes"></filter-dropdown>
     </div>
-
 
 
   </div>

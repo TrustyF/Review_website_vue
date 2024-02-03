@@ -6,6 +6,7 @@ import MovieContainerMobile from "@/components/media_container/movie_container/M
 import MediaFeedFilterBar from "@/components/media_feed/MediaFeedFilterBar.vue";
 import CreditsFooter from "@/components/General/CreditsFooter.vue";
 import spinner from '/src/assets/ui/Loading_icon.gif'
+import axios from "axios";
 
 let props = defineProps(["media_type", "tier_lists"]);
 
@@ -17,7 +18,13 @@ let edit_pane_open = inject('edit_pane_open')
 let is_visible_navbar = inject('is_visible_navbar')
 let media_scales = inject('media_scales')
 
-let media_container = computed(() => is_mobile.value ? MovieContainerMobile : MovieContainer)
+let media_container = computed(() => {
+  if (is_mobile.value) {
+    return MovieContainerMobile
+  } else {
+    return MovieContainer
+  }
+})
 const element_width = computed(() => {
   return String(media_scales.value[props.media_type]['size'][0] *
       media_scales.value[props.media_type]['scale']) + 'px'
@@ -62,16 +69,20 @@ async function get_media(override) {
     'content_ratings': media_filters.value['content_ratings'],
   }
 
-  const result = await fetch(url,
+  const result = await axios(
       {
         method: 'POST',
+        url: url,
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(params)
+        data: JSON.stringify(params)
       })
-      .then(response => {
-        console.log('response', response)
-        return response.json()
+      .then(response => response.data)
+      .catch(error => {
+        console.log('get_media', error.response)
+        return []
       })
+
+  console.log('res', result)
 
   // mark page loaded if no data returned
   if (result.length < 1) {
@@ -155,11 +166,18 @@ async function spot_reload_media() {
   const url = new URL(`${curr_api}/media/get`)
   const params = {'id': selected_media.value.id}
 
-  const result = await fetch(url, {
-    method: 'POST',
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(params)
-  }).then(response => response.json())
+  const result = await axios(
+      {
+        method: 'POST',
+        url: url,
+        headers: {"Content-Type": "application/json"},
+        data: JSON.stringify(params)
+      })
+      .then(response => response.data)
+      .catch(error => {
+        console.log('spot_reload_media', error.response)
+        return []
+      })
 
   media_grouped.value[result.user_rating].forEach((elem, i) => {
     if (elem.id === result.id) {

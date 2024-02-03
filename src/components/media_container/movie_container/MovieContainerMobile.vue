@@ -54,20 +54,6 @@ function open_link_new_tab(path) {
       <img @click="open_link_new_tab(data['external_link'])" class="poster" alt="poster" v-lazy="image_path"/>
       <div class="poster_gradient"></div>
 
-      <div class="badges">
-        <div class="rating_box">
-          <h2 class="rating"> {{ data['user_rating'] }}</h2>
-          <img :src="blue_star" alt="gold_star" class="gold_star">
-        </div>
-
-        <div class="rating_box" v-if="data['scaled_public_rating']>0">
-          <h2 class="rating"> {{ Math.round(data['scaled_public_rating'] * 10) / 10 }}</h2>
-          <img :src="gold_star" alt="gold_star" class="gold_star">
-        </div>
-
-        <rating-circle class="rating_circle" :text_size="(150)" v-if="data['scaled_public_rating']>0"
-                       :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
-      </div>
 
     </div>
 
@@ -84,14 +70,28 @@ function open_link_new_tab(path) {
           <h2 class="date" v-if="data['episodes']>0">{{ ' • ' + data['episodes'] + ' episodes' }} </h2>
         </div>
       </div>
-
-      <div class="genres_list" v-if="data['genres'].length > 0">
-        <div class="genre_tag"
-             v-for="genre in data['genres']"
-             :key="genre['id']"
-        >{{ genre['name'] }}
+      <div class="badges">
+        <div class="rating_box">
+          <h2 class="rating"> {{ data['user_rating'] }}</h2>
+          <img :src="blue_star" alt="gold_star" class="gold_star">
         </div>
+
+        <div class="rating_box" v-if="data['scaled_public_rating']>0">
+          <h2 class="rating"> {{ Math.round(data['scaled_public_rating'] * 10) / 10 }}</h2>
+          <img :src="gold_star" alt="gold_star" class="gold_star">
+        </div>
+
+        <rating-circle class="rating_circle" :text_size="(150)" v-if="data['scaled_public_rating']>0"
+                       :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
       </div>
+
+<!--      <div class="genres_list" v-if="data['genres'].length > 0">-->
+<!--        <div class="genre_tag"-->
+<!--             v-for="genre in data['genres']"-->
+<!--             :key="genre['id']"-->
+<!--        >{{ genre['name'] }}-->
+<!--        </div>-->
+<!--      </div>-->
 
 
       <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null">
@@ -110,9 +110,10 @@ function open_link_new_tab(path) {
 
 <style scoped>
 .movie_mobile_container_wrapper {
-  cursor: pointer;
+  /*outline: 1px solid red;*/
+  position: relative;
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: row;
   justify-items: center;
   align-items: center;
   border-radius: 8px;
@@ -120,6 +121,9 @@ function open_link_new_tab(path) {
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
   background-color: #25222a;
   padding: 5px;
+
+  user-select: none;
+  /*outline: 1px solid red;*/
 }
 
 .poster_wrapper {
@@ -153,9 +157,11 @@ function open_link_new_tab(path) {
 
 /* Footer*/
 .footer_wrapper {
+  overflow-x: hidden;
+  position: relative;
   padding: 10px 10px 10px 15px;
   display: flex;
-  flex-flow: column nowrap;
+  flex-flow: column;
   gap: 7px;
 }
 
@@ -166,9 +172,12 @@ function open_link_new_tab(path) {
 }
 
 .title {
-  font-size: 1.2em;
+  font-size: 1em;
   line-height: normal;
   font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .secondary_info {
@@ -206,14 +215,14 @@ function open_link_new_tab(path) {
 .badges {
   display: flex;
   flex-flow: row nowrap;
-  position: absolute;
+  /*position: absolute;*/
   /*height: 20px;*/
 
   align-items: center;
   gap: 5px;
 
   bottom: 5px;
-  left: 8px;
+  left: 5px;
   /*transform: translate(0, -50%);*/
   /*margin-bottom: -15px;*/
   /*margin-left: 5px;*/
@@ -227,7 +236,9 @@ function open_link_new_tab(path) {
 .rating_box {
   border-radius: 5px;
 
-  box-shadow: 1px 1px 1px #000000;
+  /*box-shadow: 1px 1px 1px #000000;*/
+  box-shadow: 1px 1px 1px #000000,inset 1px 1px 0 #424052;
+
   background-color: #2b2a34;
 
   padding: 4px;

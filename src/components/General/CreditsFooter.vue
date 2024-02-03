@@ -10,7 +10,8 @@
   position: relative;
   width: 100%;
 
-  padding: 20px 0 20px 0;
+  /*padding: 20px 0 20px 0;*/
+  margin: 20px 0 20px 0;
 
   text-align: center;
   font-size: 0.8em;
