@@ -16,6 +16,7 @@ bp = Blueprint('tag', __name__)
 def get():
     tag_counts = (
         db.session.query(Tag, func.count(Media.id).label('count'))
+        .filter(Tag.is_deleted.is_(None))
         .outerjoin(Tag.media)
         .group_by(Tag)
         .all()
@@ -84,7 +85,7 @@ def delete():
 
     print(f'deleting tag {tag_id=}')
 
-    db.session.query(Tag).filter(Tag.id == tag_id).delete()
+    db.session.query(Tag).filter(Tag.id == tag_id).update({'is_deleted': True})
 
     db.session.commit()
     db.session.close()

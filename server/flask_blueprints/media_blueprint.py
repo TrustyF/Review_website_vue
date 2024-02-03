@@ -726,7 +726,7 @@ def get_stats():
         .all()
     )
 
-    # print(runtime_count)
+    # print(rate_date_count)
 
     stats = {
         'ratings': construct_rating_list(rating_count),
@@ -735,6 +735,6 @@ def get_stats():
         'runtimes': construct_runtime_list(runtime_count),
     }
 
-    # pprint(stats['ratings'])
+    # pprint.pprint(stats['rated_date'])
 
     return stats, 200
