@@ -8,6 +8,7 @@ import axios from "axios";
 let props = defineProps(["media_type", "tier_lists"]);
 let emits = defineEmits(["filter"]);
 const curr_api = inject("curr_api");
+const vis_container_content_rating = inject("vis_container_content_rating");
 
 let genres = ref(null)
 let themes = ref(null)
@@ -19,12 +20,29 @@ let public_ratings = ref([0, 0])
 let release_dates = ref([0, 0])
 let runtimes = ref([0, 0])
 let orders = ref([
-  {'id': 1, 'name': 'Name', 'value': 'name'},
-  {'id': 0, 'name': 'Release date', 'value': 'release_date'},
+  {'id': 0, 'name': 'Name', 'value': 'name'},
+  {'id': 1, 'name': 'Release date', 'value': 'release_date'},
   {'id': 2, 'name': 'Public rating', 'value': 'public_rating'},
   {'id': 3, 'name': 'Runtime', 'value': 'runtime'},
   {'id': 4, 'name': 'Date added', 'value': 'date_added'},
 ])
+let options = ref([
+  {'id': 0, 'name': 'Show content ratings', 'value': vis_container_content_rating},
+])
+
+function handle_options(event) {
+  console.log(event.value)
+
+  if (event.value.length < 1) {
+    options.value.forEach((option) => {
+      option['value'] = false
+    })
+  } else {
+    event.value.forEach((event_id) => {
+      options.value[event_id]["value"] = !options.value[event_id]["value"]
+    })
+  }
+}
 
 async function fetch_filters() {
 
@@ -47,7 +65,7 @@ async function fetch_filters() {
         return []
       })
 
-  console.log('filters', result)
+  // console.log('filters', result)
 
   genres.value = result['genres']
   themes.value = result['themes']
@@ -61,6 +79,7 @@ async function fetch_filters() {
 
   content_ratings.value = result['content_ratings']
   content_ratings.value.sort((a, b) => a['order'] > b['order'])
+  content_ratings.value.map((x) => x['name'] += `: +${x['age']}`)
 }
 
 function emit_filter(title, event) {
@@ -74,6 +93,12 @@ onMounted(() => {
 
 <template>
   <div class="filter_inner_container_wrapper">
+
+    <div class="col">
+      <filter-dropdown @id="handle_options"
+                       :data="options" title="Options"></filter-dropdown>
+    </div>
+
     <div class="ranges_box">
       <filter-range v-if="user_ratings[0] !== user_ratings[1]"
                     @values="emit_filter('ratings',$event)"

@@ -12,6 +12,8 @@ let emits = defineEmits(["media_data"]);
 
 const curr_api = inject("curr_api");
 let media_scales = inject('media_scales')
+let vis_container_content_rating = inject('vis_container_content_rating')
+
 
 const media_type = computed(() => props['data']['media_type'])
 
@@ -25,7 +27,7 @@ function convert_seconds_to_time(f_seconds) {
   let minutes = f_seconds % 60
   let hours = (f_seconds - minutes) / 60
 
-  if (hours > 0){
+  if (hours > 0) {
     return hours + 'h ' + minutes + 'm';
   } else {
     return minutes + 'm';
@@ -53,14 +55,15 @@ function open_link_new_tab(path) {
     <div class="poster_wrapper">
       <img @click="open_link_new_tab(data['external_link'])" class="poster" alt="poster" v-lazy="image_path"/>
       <div class="poster_gradient"></div>
-
-
     </div>
+
 
     <div class="footer_wrapper">
 
       <div class="header">
-        <div class="title">{{ data['name'] }}</div>
+        <div>
+          <h1 class="title">{{ data['name'] }}</h1>
+        </div>
         <div class="secondary_info">
           <h2 class="date" v-if="data['release_date']!==undefined"> {{
               get_year_from_release_date(data['release_date'])
@@ -68,8 +71,10 @@ function open_link_new_tab(path) {
           <h2 class="date" v-if="data['runtime']>0">{{ ' • ' + convert_seconds_to_time(data['runtime']) }}</h2>
           <h2 class="date" v-if="data['seasons']>0">{{ ' • ' + data['seasons'] + ' seasons' }} </h2>
           <h2 class="date" v-if="data['episodes']>0">{{ ' • ' + data['episodes'] + ' episodes' }} </h2>
+          <h1 class="content_rating" v-if="data['content_rating'] && data['content_rating'].age">+{{ data['content_rating'].age }}</h1>
         </div>
       </div>
+
       <div class="badges">
         <div class="rating_box">
           <h2 class="rating"> {{ data['user_rating'] }}</h2>
@@ -85,13 +90,13 @@ function open_link_new_tab(path) {
                        :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
       </div>
 
-<!--      <div class="genres_list" v-if="data['genres'].length > 0">-->
-<!--        <div class="genre_tag"-->
-<!--             v-for="genre in data['genres']"-->
-<!--             :key="genre['id']"-->
-<!--        >{{ genre['name'] }}-->
-<!--        </div>-->
-<!--      </div>-->
+      <!--      <div class="genres_list" v-if="data['genres'].length > 0">-->
+      <!--        <div class="genre_tag"-->
+      <!--             v-for="genre in data['genres']"-->
+      <!--             :key="genre['id']"-->
+      <!--        >{{ genre['name'] }}-->
+      <!--        </div>-->
+      <!--      </div>-->
 
 
       <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null">
@@ -162,32 +167,44 @@ function open_link_new_tab(path) {
   padding: 10px 10px 10px 15px;
   display: flex;
   flex-flow: column;
-  gap: 7px;
+  gap: 5px;
 }
 
 .header {
   display: flex;
   flex-flow: column;
-  /*gap: 2px;*/
+  gap: 5px;
+  justify-content: center;
+  align-content: center;
 }
 
 .title {
   font-size: 1em;
-  line-height: normal;
+  /*line-height: 1em;*/
   font-weight: 500;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
-
+.content_rating {
+  font-size: 0.7em;
+  /*line-height: 0.7em;*/
+  font-weight: 300;
+  padding: 3px 5px 3px 5px;
+  border-radius: 7px;
+  color: grey;
+  border: 0.1em dimgrey solid;
+}
 .secondary_info {
   display: flex;
-  gap: 3px;
+  flex-flow: row;
+  gap: 5px;
+  align-items: center;
 }
 
 .date {
-  margin-top: 5px;
   font-size: 0.7em;
+  /*line-height: 0.7em;*/
   color: rgba(255, 255, 255, 0.5);
 }
 
@@ -200,8 +217,6 @@ function open_link_new_tab(path) {
 
 .genre_tag {
   padding: 5px;
-  /*background: white;*/
-  /*color: black;*/
   border-radius: 5px;
   font-size: 0.7em;
   outline: 0.1em grey solid;
@@ -237,7 +252,7 @@ function open_link_new_tab(path) {
   border-radius: 5px;
 
   /*box-shadow: 1px 1px 1px #000000;*/
-  box-shadow: 1px 1px 1px #000000,inset 1px 1px 0 #424052;
+  box-shadow: 1px 1px 1px #000000, inset 1px 1px 0 #424052;
 
   background-color: #2b2a34;
 
