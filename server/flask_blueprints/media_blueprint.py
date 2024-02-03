@@ -393,7 +393,7 @@ def update():
     # parameters
     data = request.get_json()
     print('update', data['name'])
-    # pprint(data)
+    # pprint.pprint(data)
 
     query = db.session.query(Media).filter_by(id=data['id'])
 
@@ -613,6 +613,7 @@ def get_filters():
         'themes': themes.group_by(Theme.id).all(),
         'tags': tags.group_by(Tag.id).all(),
         'content_ratings': content_ratings.group_by(ContentRating.id).all(),
+        'all_content_ratings': db.session.query(ContentRating).all(),
         'user_ratings': [ratings.min or 0, ratings.max or 0],
         'public_ratings': [floor(public_ratings.min or 0), ceil(public_ratings.max or 0)],
         'release_dates': [release_dates.min.year, release_dates.max.year]
