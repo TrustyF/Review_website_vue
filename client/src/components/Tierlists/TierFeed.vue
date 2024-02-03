@@ -41,7 +41,8 @@ let feed_width = computed(() => (props['box_size'][0] * props['box_scale'] + 25)
 @media only screen and (max-width: 500px) {
   .tier_feed_wrapper {
     width: 90%;
-    flex-flow: column nowrap;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
     margin:100px auto auto auto;
 
     grid-gap: 30px;

@@ -31,6 +31,7 @@ let edit_mode = inject('edit_mode')
 let media_scales = inject('media_scales')
 let selected_media = inject('selected_media')
 let edit_pane_open = inject('edit_pane_open')
+let vis_container_content_rating = inject('vis_container_content_rating')
 
 
 const curr_api = inject("curr_api");
@@ -103,8 +104,9 @@ function emitted_media_to_edit_pane() {
 <template>
   <div class="movie_container_wrapper">
 
-    <!--    todo add age ratings, compress dropped, add media type ?-->
+    <!--    todo compress dropped, add media type ?-->
     <!--    todo move tag images to backend -->
+    <!--    todo remove short films from movies category -->
 
     <!--    <div v-if="edit_mode"-->
     <!--         style="position:absolute;background-color: #25222a;left: 5px;top:5px;padding: 5px;font-size: 0.5em">-->
@@ -128,6 +130,11 @@ function emitted_media_to_edit_pane() {
 
     <div class="poster_gradient"></div>
 
+    <div class="content_rating" v-if="vis_container_content_rating && data['content_rating']!==undefined">
+      <h1 style="font-size: 0.8em;margin-top: 2px">+</h1>
+      <h2 style="color: white">{{ data['content_rating']['age'] }}</h2>
+    </div>
+
     <div v-if="data['is_dropped']" class="dropped_banner_wrapper">
       <div class="dropped_banner">Dropped</div>
     </div>
@@ -147,6 +154,9 @@ function emitted_media_to_edit_pane() {
         <h2 class="date" v-if="data['seasons']>0">•</h2>
         <h2 class="date" v-if="data['seasons']>0">{{ data['seasons'] + ' s' }} </h2>
         <h2 class="date" v-if="data['episodes']>0">{{ data['episodes'] + ' ep' }} </h2>
+<!--        <h2 class="date" v-if="data['content_rating'] && data['content_rating'].name">•</h2>-->
+<!--        <h2 class="date" v-if="data['content_rating'] && data['content_rating'].name">-->
+<!--          {{ data['content_rating'].name }}</h2>-->
       </div>
 
       <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null">
@@ -254,6 +264,29 @@ function emitted_media_to_edit_pane() {
   /*margin-top: 5px;*/
   font-size: calc(v-bind(min_size) * 0.004em);
   color: rgba(255, 255, 255, 0.5);
+}
+.content_rating {
+
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 5px;
+
+  font-size: calc(v-bind(min_size) * 0.005em);
+  height: calc(v-bind(min_size) * 0.01em);
+  width: calc(v-bind(min_size) * 0.01em);
+
+  padding: calc(v-bind(min_size) * 0.001em);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  outline: 0.1em grey solid;
+
+  color: lightgrey;
+  background-color: black;
+  filter: drop-shadow(1px 1px 2px black) drop-shadow(0px 0px 4px black);
 }
 
 .tags_wrapper {

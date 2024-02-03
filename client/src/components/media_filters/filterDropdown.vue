@@ -6,7 +6,7 @@ let props = defineProps(["data", "title"]);
 let emits = defineEmits(["id"]);
 const curr_api = inject("curr_api");
 
-let checked_ids = []
+let checked_ids = ref([])
 let is_changed = ref(false)
 
 function clear_checkboxes() {
@@ -16,7 +16,7 @@ function clear_checkboxes() {
       elem.checked = false
     }
   })
-  checked_ids = []
+  checked_ids.value = []
   emits('id', checked_ids)
 
 }
@@ -26,11 +26,11 @@ function toggle_checkbox(id) {
 
   if (checkbox.checked) {
     checkbox.checked = false
-    let index = checked_ids.indexOf(id)
-    checked_ids.splice(index, 1)
+    let index = checked_ids.value.indexOf(id)
+    checked_ids.value.splice(index, 1)
   } else {
     checkbox.checked = true
-    checked_ids.push(id)
+    checked_ids.value.push(id)
   }
   emits('id', checked_ids)
   is_changed.value = true
@@ -48,7 +48,7 @@ function reset() {
 
     <div class="title">
       <h1>{{ title }}</h1>
-      <img v-if="is_changed" src="/src/assets/ui/rewind.png" style="filter: brightness(1000%)" class="clear" alt="clear"
+      <img v-if="checked_ids.length > 0" src="/src/assets/ui/rewind.png" style="filter: brightness(1000%)" class="clear" alt="clear"
            @click="reset">
     </div>
     <div style="border-bottom: 1px solid white;margin-top: 2px"></div>

@@ -26,6 +26,7 @@ let added = ref('none')
 let hard_delete_count = ref(0)
 
 let content_ratings = ref()
+let all_content_ratings = ref()
 
 let container_size = computed(() => {
   if (search_type.value === 'youtube') {
@@ -50,10 +51,12 @@ async function fetch_filters() {
   }).then(response => response.json())
 
   content_ratings.value = result['content_ratings']
-  content_ratings.value.push({'id': 0, 'name': 'None', 'order': -1})
+  all_content_ratings.value = result['all_content_ratings']
+  // content_ratings.value.push({'id': 0, 'name': 'None', 'order': -1})
   content_ratings.value.sort((a, b) => a['order'] > b['order'])
+  all_content_ratings.value.sort((a, b) => a['order'] > b['order'])
 
-  // console.log(content_ratings.value)
+  console.log('content ratings', content_ratings.value)
   // console.log(selected_media.value.content_rating)
 }
 
@@ -329,15 +332,26 @@ onUnmounted(() => {
           </div>
 
           <label for="form_media_types">Content rating</label>
-          <select @change="selected_media['content_rating']=content_ratings[$event.target.value]"
-                  id="form_media_types"
-          >
+          <select v-if="selected_media['content_rating'].id"
+                  @change="selected_media['content_rating']=content_ratings[$event.target.value]"
+                  id="form_media_types">
             <option v-for="(c,i) in content_ratings" :key="c['id']" :value="i"
-                    :selected="selected_media['content_rating'] ? selected_media['content_rating'].id === c.id : 0">
+                    :selected="selected_media['content_rating'].id === c.id">
               {{ c.name }}
             </option>
             .value
           </select>
+
+          <label for="form_media_types">All Content ratings</label>
+          <select @change="selected_media['content_rating']=all_content_ratings[$event.target.value]"
+                  id="form_media_types"
+          >
+            <option v-for="(c,i) in all_content_ratings" :key="c['id']" :value="i">
+              {{ c.name }}
+            </option>
+            .value
+          </select>
+
 
           <label for="form_image_url">Poster path</label>
           <textarea id="form_image_url" v-model="selected_media['poster_path']"

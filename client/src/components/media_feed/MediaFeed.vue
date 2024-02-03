@@ -11,6 +11,7 @@ import axios from "axios";
 let props = defineProps(["media_type", "tier_lists"]);
 
 const curr_api = inject("curr_api");
+const edit_mode = inject("edit_mode");
 const session_seed = inject("session_seed");
 const is_mobile = inject("is_mobile");
 let selected_media = inject('selected_media')
@@ -43,6 +44,9 @@ let feed_container = ref()
 
 let is_page_loaded = ref(false)
 let is_page_loading = ref(true)
+
+let vis_container_content_rating = ref(false)
+provide('vis_container_content_rating',vis_container_content_rating)
 
 let page_scroll = ref(0)
 
@@ -179,6 +183,7 @@ async function spot_reload_media() {
         return []
       })
 
+  if (edit_mode) console.log(result)
   media_grouped.value[result.user_rating].forEach((elem, i) => {
     if (elem.id === result.id) {
       media_grouped.value[result.user_rating][i] = result
@@ -263,7 +268,9 @@ onMounted(() => {
   padding: 10px;
   margin: 0 0 25px 0;
   background-color: #2d2d41;
-  box-shadow: 0 0 5px #000000;
+  /*box-shadow: 0 0 5px #000000;*/
+  box-shadow: 1px 1px 1px #000000, inset 1px 1px 0 #424052;
+
   border-radius: 8px;
   position: sticky;
   top: 80px;
@@ -302,7 +309,7 @@ onMounted(() => {
 
   .rating_separator {
     width: fit-content;
-    padding: 7px;
+    /*padding: 7px;*/
   }
 }
 
