@@ -1,5 +1,6 @@
 import datetime
 import dateutil.parser
+from dateutil.relativedelta import relativedelta
 
 import json
 from pprint import pprint
@@ -385,6 +386,8 @@ def map_from_igdb(medias, media_type):
 def map_from_youtube(medias, media_type):
     def convert_text_to_date(text):
 
+        print(text)
+
         if text is None:
             return None
 
@@ -402,16 +405,20 @@ def map_from_youtube(medias, media_type):
             return f'{year}-{month}-{day}'
 
         if 'day' in text:
-            number = text.split('day')[0]
-            return f'{year}-{month}-{day - int(number)}'
+            number = int(text.split('day')[0])
+            return (datetime.date.today() - relativedelta(days=number)).strftime('%Y-%m-%d')
+
+        if 'week' in text:
+            number = int(text.split('week')[0])
+            return (datetime.date.today() - relativedelta(weeks=number)).strftime('%Y-%m-%d')
 
         if 'month' in text:
-            number = text.split('month')[0]
-            return f'{year}-{max(1,month - int(number))}-{day}'
+            number = int(text.split('month')[0])
+            return (datetime.date.today() - relativedelta(months=number)).strftime('%Y-%m-%d')
 
         if 'year' in text:
-            number = text.split('year')[0]
-            return f'{year - int(number)}-{month}-{day}'
+            number = int(text.split('year')[0])
+            return (datetime.date.today() - relativedelta(years=number)).strftime('%Y-%m-%d')
 
     def convert_text_to_runtime(text):
 
