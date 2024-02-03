@@ -30,15 +30,8 @@ if dev_mode:
 else:
     print('using cloud')
     app.config["SQLALCHEMY_DATABASE_URI"] = database_uri
-app.config["SQLALCHEMY_POOL_RECYCLE"] = 280
 
 CORS(app)
-
-
-@app.route("/awake", methods=['GET'])
-def awake():
-    return json.dumps({'ok': True}), 200, {'ContentType': 'application/json'}
-
 
 with app.app_context():
     db.init_app(app)
