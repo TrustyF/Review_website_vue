@@ -79,6 +79,8 @@ async function get_media() {
         body: JSON.stringify(params)
       })
       .then(response => response.json())
+  updated.value = 'none'
+  added.value = 'none'
 
 }
 
@@ -98,6 +100,8 @@ async function find_media() {
     }
   }).then(response => response.json())
   console.log(search_media.value)
+  updated.value = 'none'
+  added.value = 'none'
 }
 
 async function update_media() {
@@ -338,21 +342,21 @@ onUnmounted(() => {
 
           <label for="form_image_url">Poster path</label>
           <textarea id="form_image_url" v-model="selected_media['poster_path']"
-                 style="width: 100%"
+                    style="width: 100%"
                     @change="selected_media['poster_path']=$event.target.value"></textarea>
 
           <label for="form_external_link">External link</label>
           <textarea id="form_external_link" v-model="selected_media['external_link']"
-                 style="width: 100%"
+                    style="width: 100%"
                     @change="selected_media['external_link']=$event.target.value"></textarea>
 
           <label for="form_public_rating">Public rating</label>
           <input id="form_public_rating" v-model="selected_media['public_rating']" type="number"
                  @change="selected_media['public_rating']=$event.target.value">
 
-<!--          <label for="form_added_date">Date added</label>-->
-<!--          <input id="form_added_date" v-model="selected_media['created_at']" type="text"-->
-<!--                 @change="selected_media['created_at']=$event.target.value">-->
+          <!--          <label for="form_added_date">Date added</label>-->
+          <!--          <input id="form_added_date" v-model="selected_media['created_at']" type="text"-->
+          <!--                 @change="selected_media['created_at']=$event.target.value">-->
 
         </div>
 
@@ -405,7 +409,7 @@ onUnmounted(() => {
 .preview_area {
   padding: 20px;
   display: grid;
-  grid-template-columns: repeat(4,1fr);
+  grid-template-columns: repeat(4, 1fr);
   /*flex-flow: row;*/
   gap: 20px;
 }

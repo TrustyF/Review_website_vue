@@ -18,6 +18,7 @@ let stat_media_type_colors = [
   '#8EC7D2',
   '#0D6A87',
   '#07475A',
+  '#690d87',
 ]
 
 let rating_stats = computed(() => {
@@ -33,10 +34,29 @@ let rating_stats = computed(() => {
   }
   return {
     labels: Object.keys(stats.value['ratings'][stat_media_type.value]),
-    datasets: [{
-      data: Object.values(stats.value['ratings'][stat_media_type.value]),
-      backgroundColor: [stat_media_type_colors[0]],
-    }],
+    datasets: [
+      {
+        label: 'My rating',
+        data: Object.values(stats.value['ratings'][stat_media_type.value]),
+        backgroundColor: [stat_media_type_colors[0]],
+        borderColor: [stat_media_type_colors[0]],
+        pointRadius:3,
+        // barPercentage: 1,
+        // categoryPercentage: 0.7,
+        // yAxisID: 'y',
+        cubicInterpolationMode:'monotone',
+      },
+      {
+        label: 'Public rating',
+        data: Object.values(stats.value['public_ratings'][stat_media_type.value]),
+        backgroundColor: [stat_media_type_colors[3]],
+        borderColor: [stat_media_type_colors[3]],
+        pointRadius:3,
+        // barPercentage: 1,
+        // categoryPercentage: 0.7,
+        // yAxisID: 'y1',
+        cubicInterpolationMode:'monotone',
+      }],
 
   }
 })
@@ -73,11 +93,11 @@ let date_stats = computed(() => {
   }
   return {
     labels: Object.keys(stats.value['release_dates'][stat_media_type.value]),
-    datasets: [{
-      data: Object.values(stats.value['release_dates'][stat_media_type.value]),
-      backgroundColor: [stat_media_type_colors[1]],
-    }],
-
+    datasets: [
+      {
+        data: Object.values(stats.value['release_dates'][stat_media_type.value]),
+        backgroundColor: [stat_media_type_colors[1]],
+      }],
   }
 })
 let runtime_stats = computed(() => {
@@ -107,23 +127,24 @@ let total_media_count = computed(() => {
 })
 const rating_stats_options = ref({
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     title: {
       display: true,
-      text: 'My rating distribution',
+      text: 'Rating distribution',
+      // position:'top',
       font: {
-        weight: 'normal'
+        weight: 'normal',
+        color: 'white',
       }
     },
     legend: {
       position: 'top',
-      display: false,
+      display: true,
+      labels: {
+        color: "white",
+      },
     },
-  },
-  layout: {
-    padding: {
-      top: 40
-    }
   },
   scales: {
     x: {
@@ -131,15 +152,22 @@ const rating_stats_options = ref({
     },
     y: {
       display: false,
-    }
+      position: 'left',
+    },
+    y1: {
+      display: false,
+      position: 'right',
+    },
   },
 
 });
 const pub_rating_stats_options = ref({
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     title: {
       display: true,
+      position:'bottom',
       text: 'Public rating distribution',
       font: {
         weight: 'normal'
@@ -160,12 +188,13 @@ const pub_rating_stats_options = ref({
   },
 
 });
-
 const release_date_stats_options = ref({
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     title: {
       display: true,
+      position:'bottom',
       text: 'Release year distribution',
       font: {
         weight: 'normal'
@@ -188,9 +217,11 @@ const release_date_stats_options = ref({
 });
 const runtime_stats_options = ref({
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     title: {
       display: true,
+      position:'bottom',
       text: 'Runtime distribution ( minutes )',
       font: {
         weight: 'normal'
@@ -217,9 +248,7 @@ async function get_stats() {
   // await check_server_awake(curr_api)
   const url = new URL(`${curr_api}/media/get_stats`)
 
-  const result = await fetch(url).then(response => response.json())
-  stats.value = result
-
+  stats.value = await fetch(url).then(response => response.json())
 }
 
 function switch_media(event) {
@@ -252,10 +281,7 @@ onMounted(() => {
     </div>
 
     <div class="chart">
-      <bar-chart :chartData="rating_stats" :options="rating_stats_options"></bar-chart>
-    </div>
-    <div class="chart">
-      <bar-chart :chartData="pub_rating_stats" :options="pub_rating_stats_options"></bar-chart>
+      <line-chart :chartData="rating_stats" :options="rating_stats_options"></line-chart>
     </div>
     <div class="chart">
       <bar-chart :chartData="date_stats" :options="release_date_stats_options"></bar-chart>
@@ -298,6 +324,13 @@ onMounted(() => {
   align-items: flex-start;
   gap: 10px;
   /*padding: 10px;*/
+}
+
+.chart {
+  /*outline: 1px solid red;*/
+  /*position: relative;*/
+  /*height: 100%;*/
+  /*max-height: 200px;*/
 }
 
 .graphs_count {

@@ -40,8 +40,8 @@ async function get_media() {
     'page': 0,
     'type': props.media_type,
     'order': props.order,
-    'ratings':props.ratings,
-    'tier_lists':props.tier_lists,
+    'ratings': props.ratings,
+    'tier_lists': props.tier_lists,
     'session_seed': session_seed,
     'user_rating_sort_override': true,
   }
@@ -56,6 +56,16 @@ async function get_media() {
         console.log('response', response)
         return response.json()
       })
+
+  // sort tags by color
+  const priority = ['gold', 'green', 'purple', 'silver', 'red']
+  media.value.forEach((entry, i) => {
+    media.value[i].tags.sort((a, b) => {
+      const fi = priority.indexOf(a.tier)
+      const si = priority.indexOf(b.tier)
+      return fi - si
+    })
+  })
 }
 
 onMounted(() => {
@@ -67,7 +77,7 @@ onMounted(() => {
 <template>
   <div class="banner_wrapper">
     <div class="banner_fade"></div>
-    <div class="scroll_container" id="home_scroll_container">
+    <div class="scroll_container">
       <div class="scroll_content" v-for="med in media" :key="med.id">
         <movie-container
             :data="med"
@@ -94,7 +104,7 @@ onMounted(() => {
   /*overflow-y: hidden;*/
   display: flex;
   flex-flow: row;
-  gap: 10px;
+  gap: 20px;
   padding-bottom: 20px;
   /*white-space:nowrap;*/
   /*outline: 1px solid red;*/

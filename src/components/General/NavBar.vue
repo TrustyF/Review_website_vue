@@ -114,7 +114,6 @@ onMounted(() => {
 
 <style scoped>
 .navbar {
-  /*outline: 1px solid red;*/
   position: fixed;
   top: 0;
   left: 0;

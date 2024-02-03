@@ -6,7 +6,6 @@ import MovieContainerMobile from "@/components/media_container/movie_container/M
 import MediaFeedFilterBar from "@/components/media_feed/MediaFeedFilterBar.vue";
 import CreditsFooter from "@/components/General/CreditsFooter.vue";
 import spinner from '/src/assets/ui/Loading_icon.gif'
-import {check_server_awake} from '/src/utils.js'
 
 let props = defineProps(["media_type", "tier_lists"]);
 
@@ -16,8 +15,13 @@ const is_mobile = inject("is_mobile");
 let selected_media = inject('selected_media')
 let edit_pane_open = inject('edit_pane_open')
 let is_visible_navbar = inject('is_visible_navbar')
+let media_scales = inject('media_scales')
 
 let media_container = computed(() => is_mobile.value ? MovieContainerMobile : MovieContainer)
+const element_width = computed(() => {
+  return String(media_scales.value[props.media_type]['size'][0] *
+      media_scales.value[props.media_type]['scale']) + 'px'
+})
 
 let media = ref([])
 let media_grouped = ref([])
@@ -65,7 +69,7 @@ async function get_media(override) {
         body: JSON.stringify(params)
       })
       .then(response => {
-        console.log('response',response)
+        console.log('response', response)
         return response.json()
       })
 
@@ -83,9 +87,9 @@ async function get_media(override) {
   }
 
   // sort tags by color
-  const priority = ['gold','green','purple','silver','red']
-  media.value.forEach((entry,i)=>{
-    media.value[i].tags.sort((a,b)=>{
+  const priority = ['gold', 'green', 'purple', 'silver', 'red']
+  media.value.forEach((entry, i) => {
+    media.value[i].tags.sort((a, b) => {
       const fi = priority.indexOf(a.tier)
       const si = priority.indexOf(b.tier)
       return fi - si
@@ -152,22 +156,17 @@ async function spot_reload_media() {
   const params = {'id': selected_media.value.id}
 
   const result = await fetch(url, {
-  method: 'POST',
-  headers: {"Content-Type": "application/json"},
-  body: JSON.stringify(params)
+    method: 'POST',
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(params)
   }).then(response => response.json())
 
-  media_grouped.value[result.user_rating].forEach((elem,i)=>{
-    if (elem.id === result.id){
+  media_grouped.value[result.user_rating].forEach((elem, i) => {
+    if (elem.id === result.id) {
       media_grouped.value[result.user_rating][i] = result
     }
   })
 
-}
-
-function emitted_media_to_edit_pane(event) {
-  selected_media.value = event
-  edit_pane_open.value = true
 }
 
 watch(edit_pane_open, (newV, oldV) => {
@@ -205,7 +204,6 @@ onMounted(() => {
                    :key="med['id']"
                    :is="media_container"
                    :data="med"
-                   @media_data="emitted_media_to_edit_pane"
         ></component>
       </div>
     </div>
@@ -228,12 +226,13 @@ onMounted(() => {
 }
 
 .media_container_wrapper {
+  /*display: flex;*/
+  /*flex-flow: row wrap;*/
   display: grid;
-  /*grid-template-columns: repeat(auto-fill, minmax(v-bind(element_width), 0fr));*/
-  grid-template-columns: repeat(5,1fr);
+  grid-template-columns: repeat(auto-fill, minmax(v-bind(element_width), 0fr));
+  /*grid-template-columns: repeat(5,1fr);*/
   grid-gap: 20px;
-  justify-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 
 .rating_box {

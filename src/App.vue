@@ -7,7 +7,6 @@ import '@/assets/styles/dark.css'
 import {computed, inject, onMounted, provide, ref, watch} from "vue";
 import TooltipBadge from "@/components/tooltip/tooltipBadge.vue";
 import TooltipEditor from "@/components/tooltip/tooltipEditor.vue";
-import {check_server_awake} from "@/utils.js";
 
 const selected_media = ref({})
 const edit_media = ref(undefined)
@@ -42,7 +41,6 @@ const media_scales = computed(() => {
   }
 })
 
-
 provide('selected_media', selected_media)
 provide('edit_media', edit_media)
 provide('edit_pane_open', edit_pane_open)
@@ -54,8 +52,8 @@ provide('media_scales', media_scales)
 const curr_api = inject("curr_api");
 
 function check_mobile() {
-  is_mobile.value = document.body.clientWidth < 724;
-  // console.log('is mobile', is_mobile.value)
+  // is_mobile.value = document.body.clientWidth < 724;
+  is_mobile.value = document.body.clientWidth <= 500;
 }
 
 function move_sticky_elements_with_nav(nav_vis) {
@@ -108,19 +106,16 @@ onMounted(() => {
 
 <style scoped>
 .main {
-  /*outline: 1px solid orange;*/
   position: relative;
 
   margin: 0 auto 0 auto;
   max-width: 1000px;
   min-height: 80vh;
 
-  padding: 0 10px 0 10px;
-
+  padding: 0 40px 0 40px;
 }
 
 .tooltip_editor_top_wrapper {
-
   left: 0;
   top: 0;
   right: 0;

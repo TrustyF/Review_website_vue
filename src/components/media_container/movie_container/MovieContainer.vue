@@ -29,11 +29,14 @@ let emits = defineEmits(["media_data"]);
 
 let edit_mode = inject('edit_mode')
 let media_scales = inject('media_scales')
+let selected_media = inject('selected_media')
+let edit_pane_open = inject('edit_pane_open')
+
 
 const curr_api = inject("curr_api");
 const router = useRouter()
 
-const media_type = computed(() => props['data']['media_type'])
+const media_type = computed(() => props['data']['media_type'] || 'movie')
 
 const image_path = computed(() => format_image_path(props['data']['poster_path'], props['data']['external_id']))
 const poster_size = computed(() => {
@@ -85,25 +88,34 @@ function open_link_new_tab(path) {
   window.open(path, '_blank');
 }
 
+function emitted_media_to_edit_pane() {
+  selected_media.value = props.data
+  edit_pane_open.value = true
+}
+// onMounted(()=>{
+//   console.log('media scales',media_scales.value)
+//   console.log('media type',media_type.value)
+// })
+
 </script>
 
 <template>
   <div class="movie_container_wrapper">
 
-    <div v-if="edit_mode"
-         style="position:absolute;background-color: #25222a;left: 5px;top:5px;padding: 5px;font-size: 0.5em">
-      <!--      <p v-if="data['external_name']">external_name = {{ data['external_name'] }}</p>-->
-      <p v-if="data['content_rating']">content= {{ data['content_rating']['name'] }}</p>
-      <!--      <p v-if="data['genres']">genres= {{ data['genres'].map((elem)=>elem['name']) }}</p>-->
-      <p v-if="data['tier_lists']">tier_lists= {{ data['tier_lists'].map((elem) => elem['name']) }}</p>
-      <!--      <p v-if="data['themes']">themes= {{ data['themes'].map((elem)=>elem['name']) }}</p>-->
-      <p v-if="data['tags']">tags= {{ data['tags'].map((elem) => elem['name']) }}</p>
-      <!--      <p v-if="data['author']">author= {{ data['author'] }}</p>-->
-      <!--      <p v-if="data['studio']">studio= {{ data['studio'] }}</p>-->
-      <!--      <p v-if="data['release_date']">release_date= {{ data['release_date'] }}</p>-->
-            <p v-if="data['created_at']">created_at= {{ data['created_at'] }}</p>
-      <!--      <p>{{ image_path }}</p>-->
-    </div>
+<!--    <div v-if="edit_mode"-->
+<!--         style="position:absolute;background-color: #25222a;left: 5px;top:5px;padding: 5px;font-size: 0.5em">-->
+<!--      &lt;!&ndash;      <p v-if="data['external_name']">external_name = {{ data['external_name'] }}</p>&ndash;&gt;-->
+<!--      <p v-if="data['content_rating']">content= {{ data['content_rating']['name'] }}</p>-->
+<!--      &lt;!&ndash;      <p v-if="data['genres']">genres= {{ data['genres'].map((elem)=>elem['name']) }}</p>&ndash;&gt;-->
+<!--      <p v-if="data['tier_lists']">tier_lists= {{ data['tier_lists'].map((elem) => elem['name']) }}</p>-->
+<!--      &lt;!&ndash;      <p v-if="data['themes']">themes= {{ data['themes'].map((elem)=>elem['name']) }}</p>&ndash;&gt;-->
+<!--      <p v-if="data['tags']">tags= {{ data['tags'].map((elem) => elem['name']) }}</p>-->
+<!--      &lt;!&ndash;      <p v-if="data['author']">author= {{ data['author'] }}</p>&ndash;&gt;-->
+<!--      &lt;!&ndash;      <p v-if="data['studio']">studio= {{ data['studio'] }}</p>&ndash;&gt;-->
+<!--      &lt;!&ndash;      <p v-if="data['release_date']">release_date= {{ data['release_date'] }}</p>&ndash;&gt;-->
+<!--            <p v-if="data['created_at']">created_at= {{ data['created_at'] }}</p>-->
+<!--      &lt;!&ndash;      <p>{{ image_path }}</p>&ndash;&gt;-->
+<!--    </div>-->
 
     <img v-if="lazy_poster" @click="open_link_new_tab(data['external_link'])" class="poster" alt="poster"
          v-lazy="image_path"/>
@@ -118,7 +130,7 @@ function open_link_new_tab(path) {
 
     <Rating v-if="data!==undefined" class="ratings" :data="data" :max_size="min_size"></Rating>
 
-    <div class="footer_wrapper" @click="emits('media_data',data)">
+    <div class="footer_wrapper" @click="emitted_media_to_edit_pane">
 
       <p v-if="data['name']!==undefined" class="title" :title="data['name']">{{ data['name'] }}</p>
 
