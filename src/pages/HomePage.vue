@@ -127,9 +127,9 @@ onMounted(() => {
         <p>Ratings are split into 3 components: my rating, the public rating and the combined rating circle.</p>
       </div>
       <div class="rating_example">
-        <movie-container :scale_mul="!is_mobile ? 1.5 : 1"
+        <movie-container :data="default_movie" :scale_mul="!is_mobile ? 1.5 : 1"
         ></movie-container>
-<!--        <img :src="rating_arrows" alt="rating_info" class="rating_example_arrows">-->
+        <img :src="rating_arrows" alt="rating_info" class="rating_example_arrows">
       </div>
     </div>
 
