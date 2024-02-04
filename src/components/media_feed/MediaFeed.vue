@@ -5,7 +5,7 @@ import MovieContainer from "@/components/media_container/movie_container/MovieCo
 import MovieContainerMobile from "@/components/media_container/movie_container/MovieContainerMobile.vue";
 import MediaFeedFilterBar from "@/components/media_feed/MediaFeedFilterBar.vue";
 import CreditsFooter from "@/components/General/CreditsFooter.vue";
-import spinner from '/src/assets/ui/Loading_icon.gif'
+import spinner from '/src/assets/ui/custom_spinner.webp'
 import axios from "axios";
 
 let props = defineProps(["media_type", "tier_lists"]);
@@ -284,12 +284,12 @@ onMounted(() => {
 }
 
 .spinner {
-  margin-top: 100px;
+  margin: 75px auto auto auto;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
-  height: 50px;
-  filter: opacity(50%);
+  height: 250px;
+  /*filter: opacity(75%);*/
 }
 
 .empty_result {

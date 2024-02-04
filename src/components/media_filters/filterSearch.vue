@@ -21,20 +21,14 @@ function throttle_search(text) {
   }
 
   last_typed.value = text
-  clearTimeout(debounce_id)
 
-  debounce_id = setTimeout(() => {
-    emit_filter(last_typed.value)
-  }, 200)
+  if (text.length % 5 === 0)  emit_filter(last_typed.value)
 
-  // if (is_typing.value) return
-  //
-  // is_typing.value = true
-  // emit_filter(text)
+  clearTimeout(throttle_id)
 
-  // throttle_id = setTimeout(() => {
-  //   is_typing.value = false
-  // }, 500)
+  throttle_id = setTimeout(() => {
+      emit_filter(last_typed.value)
+  }, 400)
 }
 
 </script>

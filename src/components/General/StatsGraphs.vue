@@ -95,7 +95,7 @@ let date_stats = computed(() => {
     labels: Object.keys(stats.value['release_dates'][stat_media_type.value]),
     datasets: [
       {
-        data: Object.values(stats.value['release_dates'][stat_media_type.value]),
+        data: Object.values(stats.value['release_dates'][stat_media_type.value]).map((e)=>e.length),
         backgroundColor: [stat_media_type_colors[1]],
       }],
   }
@@ -161,33 +161,6 @@ const rating_stats_options = ref({
   },
 
 });
-const pub_rating_stats_options = ref({
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    title: {
-      display: true,
-      position: 'bottom',
-      text: 'Public rating distribution',
-      font: {
-        weight: 'normal'
-      }
-    },
-    legend: {
-      position: 'top',
-      display: false,
-    },
-  },
-  scales: {
-    x: {
-      display: true,
-    },
-    y: {
-      display: false,
-    }
-  },
-
-});
 const release_date_stats_options = ref({
   responsive: true,
   maintainAspectRatio: false,
@@ -204,6 +177,11 @@ const release_date_stats_options = ref({
       position: 'top',
       display: false,
     },
+    tooltip: {
+      callbacks: {
+        footer: ((elems)=>{return stats.value['release_dates'][stat_media_type.value][elems[0].label].slice(0,5)}),
+      }
+    }
   },
   scales: {
     x: {
@@ -247,7 +225,7 @@ async function get_stats() {
 
   const url = new URL(`${curr_api}/media/get_stats`)
 
-  stats.value = await axios(
+  let result = await axios(
       {
         method: 'GET',
         url: url,
@@ -256,6 +234,7 @@ async function get_stats() {
         console.log('get_stats', error.response)
         return []
       })
+  stats.value = result
 }
 
 function switch_media(event) {

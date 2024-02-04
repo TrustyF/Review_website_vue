@@ -47,19 +47,22 @@ async function get_media() {
     'user_rating_sort_override': true,
   }
 
-  media.value = await axios(
+   let result = await axios(
       {
         method: 'POST',
-        url:url,
+        url: url,
         headers: {"Content-Type": "application/json"},
         data: JSON.stringify(params)
       })
-      .then(response => response.data)
       .catch(error => {
         console.log('media_banner_get_media', error.response)
         return []
       })
 
+  console.log(result)
+  if (result.status !== 200) return
+
+  media.value = result.data
   // sort tags by color
   const priority = ['gold', 'green', 'purple', 'silver', 'red']
   media.value.forEach((entry, i) => {
@@ -90,6 +93,10 @@ onMounted(() => {
         ></movie-container>
       </div>
     </div>
+<!--    <div class="scroll_container" v-else>-->
+<!--      <img class="spinner" alt="spinner" :src="spinner">-->
+<!--    </div>-->
+
   </div>
 </template>
 
@@ -111,6 +118,13 @@ onMounted(() => {
   padding-bottom: 20px;
   /*white-space:nowrap;*/
   /*outline: 1px solid red;*/
+}
+
+.spinner {
+  position: relative;
+  height: 50%;
+  /*object-fit: cover;*/
+  /*margin: 0 auto 0 auto;*/
 }
 
 .banner_fade {
