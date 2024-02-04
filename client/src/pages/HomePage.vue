@@ -98,16 +98,15 @@ onMounted(() => {
 
     <media-scroll-banner></media-scroll-banner>
 
-    <div class="intro_text" style="margin-top: 50px">
-      <h1>Watched recently</h1>
+    <div class="intro_text" style="margin-top: 25px">
+      <h1 style="margin-bottom: 20px">Watched recently</h1>
       <media-banner :order="'date_added'" :media_type="'movie'"></media-banner>
     </div>
 
     <div class="intro_text">
-      <h1>Latest release</h1>
+      <h1 style="margin-bottom: 20px">Latest release</h1>
       <media-banner :order="'release_date'" :media_type="'movie'"></media-banner>
     </div>
-
 
     <!--    <div class="intro_text">-->
 <!--      <h1>Movie</h1>-->
@@ -118,6 +117,7 @@ onMounted(() => {
 <!--      <h1>Show</h1>-->
 <!--      <media-banner :media_type="'tv'" :ratings="[7,10]" :tier_lists="['not anime']"></media-banner>-->
 <!--    </div>-->
+
     <div class="intro_text">
       <h1 style="font-size: 2em;text-decoration: underline">How does this work ?</h1>
     </div>
@@ -127,9 +127,9 @@ onMounted(() => {
         <p>Ratings are split into 3 components: my rating, the public rating and the combined rating circle.</p>
       </div>
       <div class="rating_example">
-        <movie-container :data="default_movie" :scale_mul="!is_mobile ? 1.5 : 1"
+        <movie-container :scale_mul="!is_mobile ? 1.5 : 1"
         ></movie-container>
-        <img :src="rating_arrows" alt="rating_info" class="rating_example_arrows">
+<!--        <img :src="rating_arrows" alt="rating_info" class="rating_example_arrows">-->
       </div>
     </div>
 

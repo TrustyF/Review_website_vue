@@ -12,7 +12,7 @@ const curr_api = inject("curr_api");
 <template>
   <div class="badges_bar">
 
-    <div class="rating_box">
+    <div class="rating_box" v-if="data['user_rating']">
       <h2 class="rating"> {{ data['user_rating'] }}</h2>
       <img :src="blue_star" alt="gold_star" class="gold_star">
     </div>

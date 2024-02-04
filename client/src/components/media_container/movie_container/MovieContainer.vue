@@ -3,13 +3,18 @@ import {inject, onMounted, watch, ref, computed, provide} from "vue";
 import Rating from "@/components/media_container/movie_container/sub_components/rating.vue";
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
 import {useRouter} from 'vue-router'
+import not_found from '@/assets/ui/not_found.jpg'
 
 let props = defineProps({
   data: {
     default: {
-      name: 'none',
-      release_date: 'none',
+      name: 'Title',
+      release_date: '2000',
       media_type: 'movie',
+      user_rating: 9,
+      public_rating: 9,
+      scaled_public_rating: 9,
+      poster_path: 'null',
     }
   },
   lazy_poster: {
@@ -76,13 +81,11 @@ function get_year_from_release_date(string) {
 }
 
 function format_image_path(f_path, f_id) {
-
-  if (f_path !== undefined || f_path !== 'null') {
+  if (f_path !== 'null' && f_path !== undefined) {
     return `${curr_api}/media/get_image?path=${f_path}&type=${props['data']['media_type']}&id=${f_id}`
   } else {
-    return `${curr_api}/media/get_image?path=not_found.jpg`
+    return not_found
   }
-
 }
 
 function open_link_new_tab(path) {
@@ -107,6 +110,7 @@ function emitted_media_to_edit_pane() {
     <!--    todo compress dropped, add media type ?-->
     <!--    todo move tag images to backend -->
     <!--    todo remove short films from movies category -->
+    <!--    todo remove youtube from home banners -->
 
     <!--    <div v-if="edit_mode"-->
     <!--         style="position:absolute;background-color: #25222a;left: 5px;top:5px;padding: 5px;font-size: 0.5em">-->
@@ -123,9 +127,9 @@ function emitted_media_to_edit_pane() {
     <!--      &lt;!&ndash;      <p>{{ image_path }}</p>&ndash;&gt;-->
     <!--    </div>-->
 
-    <img v-if="lazy_poster" @click="open_link_new_tab(data['external_link'])" class="poster" alt="poster"
+    <img v-if="lazy_poster" @click="open_link_new_tab(data['external_link'])" class="poster"
          v-lazy="image_path"/>
-    <img v-else @click="open_link_new_tab(data['external_link'])" class="poster" alt="poster"
+    <img v-else @click="open_link_new_tab(data['external_link'])" class="poster"
          :src="image_path"/>
 
     <div class="poster_gradient"></div>
@@ -168,6 +172,7 @@ function emitted_media_to_edit_pane() {
     </div>
 
   </div>
+<!--  <div style="background-color: red;width: 5000px;height:5000px;z-index:-1;position: fixed;left: 0;top: 0"></div>-->
 </template>
 
 <style scoped>
@@ -241,6 +246,7 @@ function emitted_media_to_edit_pane() {
 }
 
 .footer_wrapper {
+  min-height: calc(v-bind(min_size) * 0.18px);
   padding: 12px;
   margin-top: calc(v-bind(min_size) * 0.05px);
 }

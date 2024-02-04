@@ -33,18 +33,22 @@ async function get_media() {
     'user_rating_sort_override': true,
   }
 
-  media.value = await axios(
+  let result = await axios(
       {
         method: 'POST',
         url:url,
         headers: {"Content-Type": "application/json"},
         data: JSON.stringify(params)
       })
-      .then(response => response.data)
       .catch(error => {
         console.log('media_scroll_banner_get_media', error.response)
         return []
       })
+
+  console.log(result)
+  if (result.status !== 200) return
+
+  media.value = result.data
 
   // sort tags by color
   const priority = ['gold', 'green', 'purple', 'silver', 'red']
@@ -66,7 +70,7 @@ onMounted(() => {
 <template>
   <div class="banner_wrapper">
     <div class="banner_fade"></div>
-    <div class="scroll_container">
+    <div class="scroll_container" v-if="media.length > 0">
       <div class="scroll_content" v-for="med in media" :key="med.id">
         <movie-container
             :data="med"
@@ -84,6 +88,9 @@ onMounted(() => {
         ></movie-container>
       </div>
     </div>
+    <div class="scroll_container" v-else>
+      <img class="spinner" alt="spinner" :src="spinner">
+    </div>
   </div>
 </template>
 
@@ -93,15 +100,30 @@ onMounted(() => {
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
+
+  height: calc(750 * 0.4px);
+  width: 100%;
 }
 
 .scroll_container {
-  /*position: relative;*/
+  position: relative;
   overflow-x: hidden;
+  height: 100%;
+  width: 100%;
+
   display: flex;
   flex-flow: row;
   gap: 20px;
+  justify-content: center;
+  align-items: center;
   /*outline: 1px solid red;*/
+}
+.spinner {
+  position: relative;
+  height: 50%;
+  /*object-fit: cover;*/
+  /*margin: 0 auto 0 auto;*/
 }
 
 .scroll_content {
