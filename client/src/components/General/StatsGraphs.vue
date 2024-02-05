@@ -2,9 +2,10 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import {BarChart, LineChart} from 'vue-chart-3';
 import {Chart, registerables} from "chart.js";
+import chartTrendline from 'chartjs-plugin-trendline';
 import axios from "axios";
 
-Chart.register(...registerables);
+Chart.register(...registerables, chartTrendline);
 
 let props = defineProps(["test"]);
 let emits = defineEmits(["test"]);
@@ -14,8 +15,8 @@ let stats = ref()
 let stat_media_type = ref("movie")
 let stat_media_type_colors = [
   '#DA073B',
-  '#DAA507',
-  '#8EC7D2',
+  '#755800',
+  '#004139',
   '#0D6A87',
   '#07475A',
   '#690d87',
@@ -24,7 +25,7 @@ let stat_media_type_colors = [
 let rating_stats = computed(() => {
   if (stats.value === undefined) {
     return {
-      labels: [...Array(11).keys()],
+      labels: [],
       datasets: [
         {
           data: [],
@@ -41,9 +42,6 @@ let rating_stats = computed(() => {
         backgroundColor: [stat_media_type_colors[0]],
         borderColor: [stat_media_type_colors[0]],
         pointRadius: 3,
-        // barPercentage: 1,
-        // categoryPercentage: 0.7,
-        // yAxisID: 'y',
         cubicInterpolationMode: 'monotone',
       },
       {
@@ -52,38 +50,15 @@ let rating_stats = computed(() => {
         backgroundColor: [stat_media_type_colors[3]],
         borderColor: [stat_media_type_colors[3]],
         pointRadius: 3,
-        // barPercentage: 1,
-        // categoryPercentage: 0.7,
-        // yAxisID: 'y1',
         cubicInterpolationMode: 'monotone',
       }],
-
-  }
-})
-let pub_rating_stats = computed(() => {
-  if (stats.value === undefined) {
-    return {
-      labels: [...Array(11).keys()],
-      datasets: [
-        {
-          data: [],
-          backgroundColor: []
-        }]
-    }
-  }
-  return {
-    labels: Object.keys(stats.value['public_ratings'][stat_media_type.value]),
-    datasets: [{
-      data: Object.values(stats.value['public_ratings'][stat_media_type.value]),
-      backgroundColor: [stat_media_type_colors[3]],
-    }],
 
   }
 })
 let date_stats = computed(() => {
   if (stats.value === undefined) {
     return {
-      labels: [1900, 2024],
+      labels: [],
       datasets: [
         {
           data: [],
@@ -95,9 +70,44 @@ let date_stats = computed(() => {
     labels: Object.keys(stats.value['release_dates'][stat_media_type.value]),
     datasets: [
       {
-        data: Object.values(stats.value['release_dates'][stat_media_type.value]).map((e)=>e.length),
+        type: 'line',
+        label: 'Average rating',
+        data: Object.values(stats.value['avg_rating_release_date'][stat_media_type.value]).map((e) => {
+          if (e.length >= 3) return e.reduce((a, b) => a + b, 0) / e.length
+          else return undefined
+        }),
+        backgroundColor: [stat_media_type_colors[0]],
+        borderColor: [stat_media_type_colors[0]],
+        pointRadius: 3,
+        cubicInterpolationMode: 'monotone',
+        spanGaps: true,
+        yAxisID: 'y1',
+      },
+      {
+        type: 'line',
+        label: 'Average public rating',
+        data: Object.values(stats.value['avg_pub_rating_release_date'][stat_media_type.value]).map((e) => {
+          if (e.length >= 3) return (e.reduce((a, b) => a + b, 0) / e.length)
+          else return undefined
+        }),
+        backgroundColor: [stat_media_type_colors[3]],
+        borderColor: [stat_media_type_colors[3]],
+        pointRadius: 3,
+        cubicInterpolationMode: 'monotone',
+        spanGaps: true,
+        yAxisID: 'y1',
+      },
+      {
+        type: 'bar',
+        label: 'Release date',
+        data: Object.values(stats.value['release_dates'][stat_media_type.value]).map((e) => e.length),
         backgroundColor: [stat_media_type_colors[1]],
-      }],
+        yAxisID: 'y',
+        barPercentage: 1,
+        categoryPercentage: 1,
+      },
+
+    ],
   }
 })
 let runtime_stats = computed(() => {
@@ -113,10 +123,42 @@ let runtime_stats = computed(() => {
   }
   return {
     labels: Object.keys(stats.value['runtimes'][stat_media_type.value]),
-    datasets: [{
-      data: Object.values(stats.value['runtimes'][stat_media_type.value]),
-      backgroundColor: [stat_media_type_colors[2]],
-    }],
+    datasets: [
+      {
+        type: 'line',
+        label: 'Average rating',
+        data: Object.values(stats.value['avg_rating_runtimes'][stat_media_type.value]).map((e) => {
+          if (e.length >= 3) return e.reduce((a, b) => a + b, 0) / e.length
+          else return undefined
+        }),
+        backgroundColor: [stat_media_type_colors[0]],
+        borderColor: [stat_media_type_colors[0]],
+        pointRadius: 3,
+        cubicInterpolationMode: 'monotone',
+        spanGaps: true,
+        yAxisID: 'y1',
+      },
+      {
+        type: 'line',
+        label: 'Average public rating',
+        data: Object.values(stats.value['avg_pub_rating_runtimes'][stat_media_type.value]).map((e) => {
+          if (e.length >= 3) return (e.reduce((a, b) => a + b, 0) / e.length)
+          else return undefined
+        }),
+        backgroundColor: [stat_media_type_colors[3]],
+        borderColor: [stat_media_type_colors[3]],
+        pointRadius: 3,
+        cubicInterpolationMode: 'monotone',
+        spanGaps: true,
+        yAxisID: 'y1',
+      },
+      {
+        label: 'Runtime (minutes)',
+        data: Object.values(stats.value['runtimes'][stat_media_type.value]).map((e) => e.length),
+        backgroundColor: [stat_media_type_colors[2]],
+        barPercentage: 1,
+        categoryPercentage: 1,
+      }],
 
   }
 })
@@ -167,19 +209,25 @@ const release_date_stats_options = ref({
   plugins: {
     title: {
       display: true,
-      position: 'bottom',
-      text: 'Release year distribution',
+      text: 'Release distribution',
+      // position:'top',
       font: {
-        weight: 'normal'
+        weight: 'normal',
+        color: 'white',
       }
     },
     legend: {
       position: 'top',
-      display: false,
+      display: true,
+      labels: {
+        color: "white",
+      },
     },
     tooltip: {
       callbacks: {
-        footer: ((elems)=>{return stats.value['release_dates'][stat_media_type.value][elems[0].label].slice(0,5)}),
+        footer: ((elems) => {
+          return stats.value['release_dates'][stat_media_type.value][elems[0].label].slice(0, 5)
+        }),
       }
     }
   },
@@ -189,6 +237,14 @@ const release_date_stats_options = ref({
     },
     y: {
       display: false,
+      // min: 1,
+      // max: 100,
+    },
+    y1: {
+      display: true,
+      position: 'right',
+      min: 1,
+      max: 10,
     }
   },
 
@@ -199,16 +255,28 @@ const runtime_stats_options = ref({
   plugins: {
     title: {
       display: true,
-      position: 'bottom',
-      text: 'Runtime distribution ( minutes )',
+      text: 'Runtime distribution',
+      // position:'top',
       font: {
-        weight: 'normal'
+        weight: 'normal',
+        color: 'white',
       }
     },
     legend: {
       position: 'top',
-      display: false,
+      display: true,
+      labels: {
+        color: "white",
+      },
     },
+    tooltip: {
+      callbacks: {
+        footer: ((elems) => {
+          return stats.value['runtimes'][stat_media_type.value][elems[0].label].slice(0, 5)
+        }),
+      }
+    }
+
   },
   scales: {
     x: {
@@ -216,8 +284,17 @@ const runtime_stats_options = ref({
     },
     y: {
       display: false,
+      // min: 1,
+      // max: 100,
+    },
+    y1: {
+      display: true,
+      position: 'right',
+      min: 1,
+      max: 10,
     }
   },
+
 
 });
 
@@ -235,6 +312,10 @@ async function get_stats() {
         return []
       })
   stats.value = result
+  console.log(result)
+  // console.log('result', Object.values(stats.value['avg_rating_release_date'][stat_media_type.value]).map((e) => {
+  //   return (e.reduce((a, b) => a + b, 0))
+  // }))
 }
 
 function switch_media(event) {

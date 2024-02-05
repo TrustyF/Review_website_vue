@@ -82,7 +82,7 @@ const default_movie = {
 }
 
 onMounted(() => {
-  window.scroll(0, 0)
+  // window.scroll(0, 0)
 })
 </script>
 
@@ -185,7 +185,6 @@ onMounted(() => {
 
 <style scoped>
 .home_wrapper {
-  overflow: hidden;
   display: flex;
   flex-flow: column;
   gap: 40px;

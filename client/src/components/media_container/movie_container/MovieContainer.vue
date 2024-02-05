@@ -36,6 +36,7 @@ let edit_mode = inject('edit_mode')
 let media_scales = inject('media_scales')
 let selected_media = inject('selected_media')
 let edit_pane_open = inject('edit_pane_open')
+let add_pane_open = inject('add_pane_open')
 let vis_container_content_rating = inject('vis_container_content_rating')
 
 
@@ -93,8 +94,10 @@ function open_link_new_tab(path) {
 }
 
 function emitted_media_to_edit_pane() {
+  if (!edit_pane_open.value && !add_pane_open.value) {
+    edit_pane_open.value = true
+  }
   selected_media.value = props.data
-  edit_pane_open.value = true
 }
 
 // onMounted(()=>{

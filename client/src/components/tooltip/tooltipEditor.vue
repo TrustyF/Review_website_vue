@@ -125,6 +125,8 @@ async function update_media() {
   }).then(response => response.json())
 
   updated.value = result.ok ? 'true' : 'false'
+  setTimeout(()=>updated.value = 'none',3000)
+
   if (updated.value) handle_pane_close()
 }
 
@@ -172,6 +174,7 @@ async function add_media() {
   }).then(response => response.json())
 
   added.value = result.ok ? 'true' : 'false'
+  setTimeout(()=>added.value = 'none',3000)
 }
 
 async function get_extra_posters() {
@@ -223,8 +226,8 @@ function switch_poster(event) {
 }
 
 onMounted(() => {
-  search_type.value = selected_media.value['media_type']
-  console.log('selected', selected_media.value)
+  if (selected_media.value['media_type']) search_type.value = selected_media.value['media_type']
+  // console.log('selected', selected_media.value)
   if (add_pane_open.value) selected_media.value = {}
 
   fetch_filters()
@@ -241,6 +244,8 @@ onUnmounted(() => {
 
 <template>
   <div class="edit_page_wrapper">
+
+    <p>{{ added }}</p>
 
     <img @click="handle_pane_close" class="close_pane_button" alt="close_edit_pane"
          src="/src/assets/ui/cross_button.png">
@@ -263,11 +268,11 @@ onUnmounted(() => {
         <div class="media_type_selector">
           <label for="media_types" style="margin-right: 10px">Media type</label>
           <select v-model="search_type" id="media_types" @change="get_media();fetch_filters();">
-            <option value="movie">movie</option>
-            <option value="tv">tv</option>
-            <option value="youtube">youtube</option>
-            <option value="manga">manga</option>
-            <option value="game">game</option>
+            <option value="movie" :selected="search_type">movie</option>
+            <option value="tv" :selected="search_type">tv</option>
+            <option value="youtube" :selected="search_type">youtube</option>
+            <option value="manga" :selected="search_type">manga</option>
+            <option value="game" :selected="search_type">game</option>
           </select>
           <input v-model="search_page" type="number" style="margin-left: 10px;width: 50px" @change="find_media">
         </div>
@@ -277,7 +282,7 @@ onUnmounted(() => {
                          :key="search_type + med['external_id'] + med['id']"
                          :data="med"
                          :container_size="container_size"
-                         :container_scale="0.20"
+                         :scale_mul="0.6"
                          @media_data="replace_from_search"
         ></movie-container>
       </div>
@@ -332,7 +337,7 @@ onUnmounted(() => {
           </div>
 
           <label for="form_media_types">Content rating</label>
-          <select v-if="selected_media['content_rating'].id"
+          <select v-if="selected_media['content_rating'] && selected_media['content_rating'].id"
                   @change="selected_media['content_rating']=content_ratings[$event.target.value]"
                   id="form_media_types">
             <option v-for="(c,i) in content_ratings" :key="c['id']" :value="i"
