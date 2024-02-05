@@ -89,16 +89,18 @@ onMounted(() => {
 <template>
   <div class="home_wrapper">
 
-    <div class="intro_text">
+    <div class="intro_text"
+         style="position: relative;padding:20px;border-radius:10px;display: flex;justify-content: center">
       <h2>Welcome to Trusty's Corner !</h2>
-      <p>This was made for fun while learning web-dev with the goal to more easily share my media recommendations with
-        people.</p>
-      <p>I also really love cataloguing.</p>
+
+      <div
+          style="display: flex;align-items: center;position:absolute;left: 0;
+          z-index: -3;width: 100%">
+        <media-scroll-banner></media-scroll-banner>
+      </div>
     </div>
 
-    <media-scroll-banner></media-scroll-banner>
-
-    <div class="intro_text" style="margin-top: 25px">
+    <div class="intro_text" style="margin-top: 5px">
       <h1 style="margin-bottom: 20px">Watched recently</h1>
       <media-banner :order="'date_added'" :media_type="'movie'"></media-banner>
     </div>
@@ -109,32 +111,34 @@ onMounted(() => {
     </div>
 
     <!--    <div class="intro_text">-->
-<!--      <h1>Movie</h1>-->
-<!--      <media-banner :media_type="'movie'" :ratings="[7,10]"></media-banner>-->
-<!--    </div>-->
+    <!--      <h1>Movie</h1>-->
+    <!--      <media-banner :media_type="'movie'" :ratings="[7,10]"></media-banner>-->
+    <!--    </div>-->
 
-<!--    <div class="intro_text">-->
-<!--      <h1>Show</h1>-->
-<!--      <media-banner :media_type="'tv'" :ratings="[7,10]" :tier_lists="['not anime']"></media-banner>-->
-<!--    </div>-->
+    <!--    <div class="intro_text">-->
+    <!--      <h1>Show</h1>-->
+    <!--      <media-banner :media_type="'tv'" :ratings="[7,10]" :tier_lists="['not anime']"></media-banner>-->
+    <!--    </div>-->
 
     <div class="intro_text">
       <h1 style="font-size: 2em;text-decoration: underline">How does this work ?</h1>
+<!--      <p>This was made for fun while learning web-dev with the goal to more easily share my media recommendations with-->
+<!--        people. <br> I also really love cataloguing.</p>-->
     </div>
     <div class="intro_text">
-      <h1>- Ratings</h1>
+      <h1>Ratings</h1>
       <div>
         <p>Ratings are split into 3 components: my rating, the public rating and the combined rating circle.</p>
       </div>
       <div class="rating_example">
-        <movie-container :data="default_movie" :scale_mul="!is_mobile ? 1.5 : 1"
+        <movie-container :data="default_movie" :scale_mul="!is_mobile ? 1.3 : 2"
         ></movie-container>
         <img :src="rating_arrows" alt="rating_info" class="rating_example_arrows">
       </div>
     </div>
 
     <div class="intro_text">
-      <h1>- Tags</h1>
+      <h1>Tags</h1>
       <div>
         <p>Medias are annotated with various tags. These are meant to provide a simple breakdown of my opinion,
           and to help you decide what to pick. Tags are categorized into different colors representing their
@@ -157,7 +161,7 @@ onMounted(() => {
     </div>
 
     <div class="intro_text">
-      <h1>- Searching</h1>
+      <h1>Searching</h1>
       <div>
         <p>The search bar can search for many different fields including:</p>
         <p style="margin-left: 20px"> - name<br>
@@ -173,7 +177,7 @@ onMounted(() => {
     </div>
 
     <div class="intro_text">
-      <h1>- Stats for nerds (me)</h1>
+      <h1>Stats for nerds (me)</h1>
     </div>
 
     <stats-graphs></stats-graphs>
@@ -206,19 +210,23 @@ onMounted(() => {
 .intro_text h2 {
   font-size: 2em;
   font-weight: 1000;
+  text-shadow: 3px 2px 2px black, 3px 2px 4px black, 3px 2px 7px black, 0 0 20px black, 0 0 20px black, 0 0 20px black;
 }
 
 .intro_text h1 {
   font-size: 1.5em;
   /*text-decoration: underline;*/
   font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 10px;
+  margin-bottom: 10px;
 }
 
 .intro_text p {
   font-size: 0.9em;
   font-weight: 300;
   line-height: 1.5em;
-  color: #969696;
+  /*color: #c9c9c9;*/
   font-family: sans-serif;
   /*margin-left: 20px;*/
 }
@@ -243,10 +251,9 @@ onMounted(() => {
 .rating_example_arrows {
   pointer-events: none;
   position: absolute;
-  bottom: -70px;
-  left: 55px;
-  width: 800px;
-  transform: translate(-20px);
+  bottom: -55px;
+  width: 700px;
+  transform: translate(-25px);
   filter: drop-shadow(2px 2px 1px black) drop-shadow(1px 1px 3px black);
 }
 
@@ -256,10 +263,9 @@ onMounted(() => {
   }
 
   .rating_example_arrows {
-    bottom: -23px;
-    left: -25px;
-    width: 400px;
-    /*transform: translate(-10px);*/
+    bottom: -35px;
+    width: 550px;
+    transform: translate(-30px);
   }
 }
 </style>

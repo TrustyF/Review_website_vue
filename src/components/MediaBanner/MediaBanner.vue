@@ -103,6 +103,9 @@ onMounted(() => {
 <style scoped>
 .banner_wrapper {
   /*outline: 1px solid red;*/
+  /*border: 0.1em dotted #41404d;*/
+  border-radius: 10px;
+  /*padding: 15px 0 15px 15px;*/
   position: relative;
   display: flex;
   align-items: center;
@@ -119,6 +122,16 @@ onMounted(() => {
   /*white-space:nowrap;*/
   /*outline: 1px solid red;*/
 }
+::-webkit-scrollbar {
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  width: 7px;
+  height: 2px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #000000;
+  border-radius: 10px;
+}
 
 .spinner {
   position: relative;
@@ -134,7 +147,7 @@ onMounted(() => {
   height: 100%;
   z-index: 5;
   position: absolute;
-  background: linear-gradient(to right, rgba(19, 18, 21, 0) 95%, rgba(19, 18, 21, 1) 100%);
+  background: linear-gradient(to right, rgba(19, 18, 21, 0) 90%, rgba(19, 18, 21, 1) 100%);
 }
 
 </style>
