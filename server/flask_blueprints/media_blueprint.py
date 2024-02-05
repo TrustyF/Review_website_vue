@@ -57,6 +57,9 @@ def handle_igdb_access_token(f_source):
     token_path = os.path.join(MAIN_DIR, 'tokens')
     file_path = os.path.join(token_path, (f_source + '.json'))
 
+    if not os.path.isdir(token_path):
+        os.mkdir(token_path)
+
     # no file
     if not os.path.isfile(file_path):
         return make_new_token()

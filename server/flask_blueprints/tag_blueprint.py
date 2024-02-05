@@ -1,10 +1,12 @@
 import json
+import os
 from dataclasses import asdict
 
 import sqlalchemy.exc
 from flask import Blueprint, request, Response, jsonify, send_file
 from sqlalchemy import func
 
+from constants import MAIN_DIR
 from db_loader import db
 from flask_blueprints.login_blueprint import requires_auth
 from sql_models.media_model import Tag, Media
@@ -25,6 +27,18 @@ def get():
     serialized_tags = [{**asdict(tag), 'count': count} for tag, count in tag_counts]
 
     return serialized_tags, 200
+
+
+@bp.route("/get_image", methods=['GET'])
+def get_image():
+    path = request.args.get('path')
+    tier = request.args.get('tier')
+
+    # print('getting image',path,tier)
+
+    file_path = os.path.join(MAIN_DIR, 'assets', 'static', 'tags', 'icons', tier, path)
+
+    return send_file(file_path, mimetype='image/png')
 
 
 @bp.route("/add", methods=['POST'])
