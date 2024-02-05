@@ -3,9 +3,9 @@ import {inject, onMounted, watch, ref, computed} from "vue";
 import FilterContainer from "../media_filters/filterContainer.vue";
 import FilterSearch from "../media_filters/filterSearch.vue";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
-import spinner from '/src/assets/ui/Loading_icon.gif'
+import spinner from '/ui/Loading_icon.gif'
 
-import filter_image from "@/assets/ui/filter_button.png"
+import filter_image from "/ui/filter_button.png"
 
 let props = defineProps(["media_type","tier_lists","load_status"]);
 let emits = defineEmits(["filter"]);
@@ -110,6 +110,7 @@ onMounted(() => {
 
 .filter_button {
   height: 20px;
+  width: 20px;
   background-color: #d7d7c5;
   /*margin: 7px;*/
   padding: 7px;

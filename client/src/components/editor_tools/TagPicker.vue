@@ -9,8 +9,8 @@ let props = defineProps(["media_type"]);
 let emits = defineEmits(["tags"]);
 const curr_api = inject("curr_api");
 
-const folders = Object.keys(import.meta.glob('/public/tags/icons/**'));
-const tiers = [...new Set(folders.map((elem) => elem.split('/')[4]))]
+// const folders = Object.keys(import.meta.glob('/public/tags/icons/**'));
+// const tiers = [...new Set(folders.map((elem) => elem.split('/')[4]))]
 
 const tag_images = ref({})
 

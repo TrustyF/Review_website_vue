@@ -35,7 +35,7 @@ function add_line_break_v2(content) {
 <template>
   <div ref="tooltip_container" class="tag_tooltip" v-if="data!==undefined">
 
-    <img class="tag_preview" :src="`/tags/icons/${data['tier']}/${data['image_path']}`">
+    <img class="tag_preview" :src="`${curr_api}/tag/get_image?tier=${data['tier']}&path=${data['image_path']}`">
 
     <div class="tooltip_content">
 

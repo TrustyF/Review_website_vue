@@ -82,7 +82,7 @@ const default_movie = {
 }
 
 onMounted(() => {
-  // window.scroll(0, 0)
+  window.scroll(0, 0)
 })
 </script>
 
