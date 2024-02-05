@@ -31,7 +31,7 @@ function close_tooltip() {
 
 <template>
   <div class="tag_box" @mouseover="emit_tooltip_data" @mouseleave="close_tooltip">
-    <img ref="tag_container" class="tag_image" v-lazy="`${curr_api}/tag/get_image?tier=${data['tier']}&path=${data['image_path']}`">
+    <img v-if="data['tier']" ref="tag_container" class="tag_image" v-lazy="`${curr_api}/tag/get_image?tier=${data['tier']}&path=${data['image_path']}`">
     <h1 v-if="show_title" class="tag_title">{{ data['name'] }}</h1>
   </div>
 </template>
