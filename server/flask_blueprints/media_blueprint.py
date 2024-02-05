@@ -114,10 +114,10 @@ def get():
         or_(Media.is_deleted == 0, Media.is_deleted == None)))  # noqa
 
     # return selected media
-    print(media_id)
     if media_id:
+        print('getting id', media_id)
         single_media = db.session.query(Media).filter_by(id=media_id).one_or_none()
-        print(single_media)
+        # print(single_media)
         if single_media is not None:
             return serialize_media(single_media), 200
         else:
@@ -244,7 +244,7 @@ def find():
                 "Authorization": f"Bearer {TMDB_ACCESS_TOKEN}"}).json()
 
         found_ids = [x['id'] for x in id_request['results'][media_page * 5:(media_page * 5) + 5]]
-        print(found_ids)
+        # print('tmdb_ids',found_ids)
 
         for media_id in found_ids:
             full_info = requests.get(
@@ -309,7 +309,7 @@ def find():
         result = search.result().get('result')[media_page * 5: (media_page * 5) + 5]
 
         for video in result:
-            print(video['id'])
+            # print(video['id'])
             votes = requests.get(f'https://returnyoutubedislikeapi.com/votes?videoId={video["id"]}').json()
             try:
                 vote_rating = votes['likes'] / (votes['likes'] + votes['dislikes']) * 10
@@ -462,7 +462,7 @@ def get_image():
 
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         response = requests.get(media_path)
-        print('making poster request', media_id, media_type)
+        # print('making poster request', media_id, media_type)
 
         with open(file_path, 'wb') as outfile:
             outfile.write(response.content)
@@ -650,7 +650,9 @@ def get_stats():
         return constructed
 
     def construct_release_date_list(arr):
-        base = [x for x in range(1935, datetime.now().year)]
+        all_dates = [x[2] for x in arr]
+        min_date, max_date = min(all_dates), max(all_dates)
+        base = [x for x in range(min_date, max_date)]
         types = set([x[1] for x in arr])
 
         constructed = {}
@@ -671,8 +673,14 @@ def get_stats():
         return constructed
 
     def construct_runtime_list(arr):
+        if arr is None:
+            return []
+
         time_interval = 5
-        base = [x for x in range(0, 250) if x % time_interval == 0]
+        all_runtimes = [x[1] for x in arr if x[1] is not None]
+        min_run, max_run = min(all_runtimes), max(all_runtimes)
+
+        base = [x for x in range(min_run, max_run) if x % time_interval == 0]
         types = set([x[0] for x in arr])
 
         constructed = {}
@@ -683,7 +691,7 @@ def get_stats():
                 if med_type not in constructed.keys():
                     constructed[med_type] = {}
 
-                constructed[med_type][time] = 0
+                constructed[med_type][time] = []
 
                 for entry in arr:
                     if entry[1] is None:
@@ -693,7 +701,7 @@ def get_stats():
                         # if entry[0] == 'movie':
                         #     print(entry)
 
-                        constructed[med_type][time] += entry[2]
+                        constructed[med_type][time].append(entry[2])
                         continue
 
         return constructed
@@ -726,10 +734,40 @@ def get_stats():
         .all()
     )
 
-    runtime_count = (
-        db.session.query(Media.media_type, Media.runtime, func.count(Media.id).label('count'))
+    avg_rating_release_date_count = (
+        db.session.query(Media.user_rating, Media.media_type,
+                         func.extract('year', Media.release_date).label('release_year'))
         .filter(Media.is_deleted.is_(None))
-        .group_by(Media.media_type, Media.runtime)
+        .group_by(Media.user_rating, Media.media_type, 'release_year')
+        .all()
+    )
+
+    avg_pub_rating_release_date_count = (
+        db.session.query(Media.public_rating, Media.media_type,
+                         func.extract('year', Media.release_date).label('release_year'))
+        .filter(Media.is_deleted.is_(None))
+        .group_by(Media.public_rating, Media.media_type, 'release_year')
+        .all()
+    )
+
+    runtime_count = (
+        db.session.query(Media.media_type, Media.runtime, Media.name, )
+        .filter(Media.is_deleted.is_(None))
+        .group_by(Media.media_type, Media.runtime, Media.name, )
+        .all()
+    )
+
+    avg_rating_runtime_count = (
+        db.session.query(Media.media_type, Media.runtime, Media.user_rating, )
+        .filter(Media.is_deleted.is_(None))
+        .group_by(Media.media_type, Media.runtime, Media.user_rating, )
+        .all()
+    )
+
+    avg_pub_rating_runtime_count = (
+        db.session.query(Media.media_type, Media.runtime, Media.public_rating, )
+        .filter(Media.is_deleted.is_(None))
+        .group_by(Media.media_type, Media.runtime, Media.public_rating, )
         .all()
     )
 
@@ -739,9 +777,13 @@ def get_stats():
         'ratings': construct_rating_list(rating_count),
         'public_ratings': construct_rating_list(public_rating_count),
         'release_dates': construct_release_date_list(release_date_count),
+        'avg_rating_release_date': construct_release_date_list(avg_rating_release_date_count),
+        'avg_pub_rating_release_date': construct_release_date_list(avg_pub_rating_release_date_count),
         'runtimes': construct_runtime_list(runtime_count),
+        'avg_rating_runtimes': construct_runtime_list(avg_rating_runtime_count),
+        'avg_pub_rating_runtimes': construct_runtime_list(avg_pub_rating_runtime_count),
     }
 
-    pprint.pprint(stats['release_dates'])
+    # pprint.pprint(stats['avg_rating_release_date'])
 
     return stats, 200
