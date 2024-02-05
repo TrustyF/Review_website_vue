@@ -13,8 +13,9 @@ let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
 const session_seed = inject("session_seed");
 const is_mobile = inject("is_mobile");
+let med_limit = 30
 
-let media = ref(new Array(20).fill().map((e, i) => {
+let media = ref(new Array(med_limit).fill().map((e, i) => {
   return {
     name: 'none',
     release_date: 'none',
@@ -25,7 +26,7 @@ async function get_media() {
 
   const url = new URL(`${curr_api}/media/get`)
   const params = {
-    'limit': 20,
+    'limit': med_limit,
     'page': 0,
     'type': props['media_type'],
     'ratings': [7, 10],
@@ -36,7 +37,7 @@ async function get_media() {
   let result = await axios(
       {
         method: 'POST',
-        url:url,
+        url: url,
         headers: {"Content-Type": "application/json"},
         data: JSON.stringify(params)
       })
@@ -75,15 +76,15 @@ onMounted(() => {
         <movie-container
             :data="med"
             :lazy_poster="false"
-            :scale_mul="!is_mobile ? 0.3:0.2"
+            :scale_mul="!is_mobile ? 0.3:0.35"
             :size_override="[500,750]"
         ></movie-container>
       </div>
-      <div class="scroll_content" v-for="med in media" :key="med.id">
+      <div class="scroll_content" v-for="med in media" :key="med.id + 'over'">
         <movie-container
             :data="med"
             :lazy_poster="false"
-            :scale_mul="!is_mobile ? 0.3:0.2"
+            :scale_mul="!is_mobile ? 0.3:0.35"
             :size_override="[500,750]"
         ></movie-container>
       </div>
@@ -102,8 +103,9 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
 
-  height: calc(750 * 0.4px);
+  /*height: calc(750 * 0.4px);*/
   width: 100%;
+  clip-path: inset(0% 0% 0% 0%);
 }
 
 .scroll_container {
@@ -114,11 +116,13 @@ onMounted(() => {
 
   display: flex;
   flex-flow: row;
-  gap: 20px;
-  justify-content: center;
-  align-items: center;
+  transform: translate(0, 40px);
+  /*gap: 20px;*/
+  /*justify-content: center;*/
+  /*align-items: center;*/
   /*outline: 1px solid red;*/
 }
+
 .spinner {
   position: relative;
   height: 50%;
@@ -127,7 +131,7 @@ onMounted(() => {
 }
 
 .scroll_content {
-  animation: scroll_banner 150s linear infinite;
+  animation: scroll_banner 200s linear infinite;
   will-change: transform;
 }
 
@@ -138,12 +142,15 @@ onMounted(() => {
   height: 100%;
   z-index: 5;
   position: absolute;
-  background: linear-gradient(to right, rgba(19, 18, 21, 0) 95%, rgba(19, 18, 21, 1) 100%), linear-gradient(to left, rgba(19, 18, 21, 0) 95%, rgba(19, 18, 21, 1) 100%);
+  background: linear-gradient(to right, rgba(19, 18, 21, 0) 80%, rgba(19, 18, 21, 1) 100%),
+  linear-gradient(to left, rgba(19, 18, 21, 0) 40%, rgba(19, 18, 21, 1) 100%),
+  linear-gradient(to top, rgba(19, 18, 21, 0) 60%, rgba(19, 18, 21, 1) 80%),
+  linear-gradient(to bottom, rgba(19, 18, 21, 0) 60%, rgba(19, 18, 21, 1) 80%);
 }
 
 @keyframes scroll_banner {
   to {
-    transform: translate(calc(-2000% - 800px));
+    transform: translate(calc((-100% - 20px) * v-bind(med_limit)));
   }
 }
 </style>

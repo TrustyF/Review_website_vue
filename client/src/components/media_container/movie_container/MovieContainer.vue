@@ -115,6 +115,7 @@ function emitted_media_to_edit_pane() {
     <!--    todo remove short films from movies category -->
     <!--    todo remove youtube from home banners -->
     <!--    todo add graph average rating by year -->
+    <!--    todo panel for expanded movie -->
 
     <!--    <div v-if="edit_mode"-->
     <!--         style="position:absolute;background-color: #25222a;left: 5px;top:5px;padding: 5px;font-size: 0.5em">-->
