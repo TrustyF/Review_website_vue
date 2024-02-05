@@ -2,10 +2,9 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import {BarChart, LineChart} from 'vue-chart-3';
 import {Chart, registerables} from "chart.js";
-import chartTrendline from 'chartjs-plugin-trendline';
 import axios from "axios";
 
-Chart.register(...registerables, chartTrendline);
+Chart.register(...registerables);
 
 let props = defineProps(["test"]);
 let emits = defineEmits(["test"]);

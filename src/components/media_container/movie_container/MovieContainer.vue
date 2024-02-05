@@ -3,7 +3,6 @@ import {inject, onMounted, watch, ref, computed, provide} from "vue";
 import Rating from "@/components/media_container/movie_container/sub_components/rating.vue";
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
 import {useRouter} from 'vue-router'
-import not_found from '@/assets/ui/not_found.jpg'
 
 let props = defineProps({
   data: {
@@ -85,7 +84,7 @@ function format_image_path(f_path, f_id) {
   if (f_path !== 'null' && f_path !== undefined) {
     return `${curr_api}/media/get_image?path=${f_path}&type=${props['data']['media_type']}&id=${f_id}`
   } else {
-    return not_found
+    return undefined
   }
 }
 
@@ -132,10 +131,11 @@ function emitted_media_to_edit_pane() {
     <!--      &lt;!&ndash;      <p>{{ image_path }}</p>&ndash;&gt;-->
     <!--    </div>-->
 
-    <img v-if="lazy_poster" @click="open_link_new_tab(data['external_link'])" class="poster"
+    <img v-if="lazy_poster && image_path" @click="open_link_new_tab(data['external_link'])" class="poster" alt=""
          v-lazy="image_path"/>
-    <img v-else @click="open_link_new_tab(data['external_link'])" class="poster"
+    <img v-else-if="image_path" @click="open_link_new_tab(data['external_link'])" class="poster" alt=""
          :src="image_path"/>
+    <div v-else class="poster"></div>
 
     <div class="poster_gradient"></div>
 
@@ -163,9 +163,9 @@ function emitted_media_to_edit_pane() {
         <h2 class="date" v-if="data['seasons']>0">•</h2>
         <h2 class="date" v-if="data['seasons']>0">{{ data['seasons'] + ' s' }} </h2>
         <h2 class="date" v-if="data['episodes']>0">{{ data['episodes'] + ' ep' }} </h2>
-<!--        <h2 class="date" v-if="data['content_rating'] && data['content_rating'].name">•</h2>-->
-<!--        <h2 class="date" v-if="data['content_rating'] && data['content_rating'].name">-->
-<!--          {{ data['content_rating'].name }}</h2>-->
+        <!--        <h2 class="date" v-if="data['content_rating'] && data['content_rating'].name">•</h2>-->
+        <!--        <h2 class="date" v-if="data['content_rating'] && data['content_rating'].name">-->
+        <!--          {{ data['content_rating'].name }}</h2>-->
       </div>
 
       <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null">
@@ -177,7 +177,7 @@ function emitted_media_to_edit_pane() {
     </div>
 
   </div>
-<!--  <div style="background-color: red;width: 5000px;height:5000px;z-index:-1;position: fixed;left: 0;top: 0"></div>-->
+  <!--  <div style="background-color: red;width: 5000px;height:5000px;z-index:-1;position: fixed;left: 0;top: 0"></div>-->
 </template>
 
 <style scoped>
@@ -276,6 +276,7 @@ function emitted_media_to_edit_pane() {
   font-size: calc(v-bind(min_size) * 0.004em);
   color: rgba(255, 255, 255, 0.5);
 }
+
 .content_rating {
 
   position: absolute;

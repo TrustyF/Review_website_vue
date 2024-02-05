@@ -1,9 +1,9 @@
 <script setup>
 import {RouterLink} from "vue-router";
-import logo from '@/assets/ui/logo.png'
+import logo from '/ui/logo.png'
 import {inject, onMounted, ref} from 'vue'
 import LoginBar from "@/components/General/LoginBar.vue";
-import triple_bars from "/src/assets/ui/triple_bars.png";
+import triple_bars from "/ui/triple_bars.png";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 
 const curr_api = inject("curr_api");

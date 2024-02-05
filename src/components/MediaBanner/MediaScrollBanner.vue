@@ -17,8 +17,8 @@ let med_limit = 30
 
 let media = ref(new Array(med_limit).fill().map((e, i) => {
   return {
-    name: 'none',
-    release_date: 'none',
+    name: '',
+    release_date: '',
   }
 }))
 

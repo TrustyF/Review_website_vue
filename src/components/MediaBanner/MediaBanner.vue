@@ -28,8 +28,8 @@ const is_mobile = inject("is_mobile");
 
 let media = ref(new Array(10).fill().map((e, i) => {
   return {
-    name: 'none',
-    release_date: 'none',
+    name: '',
+    release_date: '',
   }
 }))
 

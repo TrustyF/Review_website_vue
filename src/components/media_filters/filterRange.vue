@@ -43,7 +43,7 @@ function convert_seconds_to_time(f_seconds) {
 
     <div class="title">
       <h1>{{ title }}</h1>
-      <img v-if="is_changed" src="/src/assets/ui/rewind.png" style="filter: brightness(1000%)" class="clear" alt="clear"
+      <img v-if="is_changed" src="/ui/rewind.png" style="filter: brightness(1000%)" class="clear" alt="clear"
            @click="reset">
     </div>
     <div style="border-bottom: 1px solid white;margin-top: 2px"></div>

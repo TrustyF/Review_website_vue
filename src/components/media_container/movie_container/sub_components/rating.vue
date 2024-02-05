@@ -1,7 +1,7 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
-import gold_star from '@/assets/ui/gold_star.png'
-import blue_star from '@/assets/ui/blue_star.png'
+import gold_star from '/ui/gold_star.png'
+import blue_star from '/ui/blue_star.png'
 import RatingCircle from "./RatingCircle.vue";
 
 let props = defineProps(["data", "max_size"]);

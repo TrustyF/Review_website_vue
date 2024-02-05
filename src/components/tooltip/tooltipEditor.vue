@@ -248,7 +248,7 @@ onUnmounted(() => {
     <p>{{ added }}</p>
 
     <img @click="handle_pane_close" class="close_pane_button" alt="close_edit_pane"
-         src="/src/assets/ui/cross_button.png">
+         src="/ui/cross_button.png">
 
     <div v-if="add" class="search_area">
 
@@ -301,15 +301,15 @@ onUnmounted(() => {
         <div style="display: flex;flex-flow: column;align-content:space-evenly;gap:10px">
           <button v-if="edit" style="width: 100%;height: 65px" @click="update_media">Update</button>
           <img class="update_logo" alt="failed update" v-if="updated === 'false'"
-               src="../../assets/ui/stop.png">
+               src="/ui/stop.png">
           <img class="update_logo" alt="failed update" v-if="updated === 'true'"
-               src="../../assets/ui/success-green-check-mark-icon.svg">
+               src="/ui/success-green-check-mark-icon.svg">
 
           <button v-if="add" @click="add_media">Add</button>
           <img class="update_logo" alt="failed update" v-if="added === 'false'"
-               src="../../assets/ui/stop.png">
+               src="/ui/stop.png">
           <img class="update_logo" alt="failed update" v-if="added === 'true'"
-               src="../../assets/ui/success-green-check-mark-icon.svg">
+               src="/ui/success-green-check-mark-icon.svg">
 
           <button v-if="edit" @click="hard_delete">Hard delete</button>
 
