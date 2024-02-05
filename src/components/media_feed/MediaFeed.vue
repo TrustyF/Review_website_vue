@@ -46,9 +46,7 @@ let is_page_loaded = ref(false)
 let is_page_loading = ref(true)
 
 let vis_container_content_rating = ref(false)
-provide('vis_container_content_rating',vis_container_content_rating)
-
-let page_scroll = ref(0)
+provide('vis_container_content_rating', vis_container_content_rating)
 
 async function get_media(override) {
 
@@ -193,10 +191,7 @@ async function spot_reload_media() {
 }
 
 watch(edit_pane_open, (newV, oldV) => {
-  if (newV) page_scroll.value = window.scrollY
-  if (!newV) {
-    spot_reload_media()
-  }
+  if (!newV) spot_reload_media()
 })
 
 onMounted(() => {

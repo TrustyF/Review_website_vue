@@ -90,8 +90,8 @@ onMounted(() => {
     <tooltip-editor :edit="true"></tooltip-editor>
   </div>
 
-  <button v-if="edit_mode" style="position: fixed;right: 10px;top: 70px" @click="add_pane_open=true">add</button>
-  <p v-if="edit_mode" style="position: fixed;right: 10px;top: 100px;font-size: 0.7em">{{ curr_api }}</p>
+  <button v-if="edit_mode" style="position: fixed;right: 10px;top: 70px;z-index: 10" @click="add_pane_open=true">add</button>
+  <p v-if="edit_mode" style="position: fixed;right: 10px;top: 150px;font-size: 0.7em;z-index: 10;background-color: black">{{ curr_api }}</p>
 
   <div class="tooltip_editor_top_wrapper" v-if="add_pane_open && edit_mode">
     <tooltip-editor :add="true"></tooltip-editor>
