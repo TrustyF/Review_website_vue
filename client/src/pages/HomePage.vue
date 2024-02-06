@@ -42,8 +42,8 @@ onMounted(() => {
     </div>
 
     <div class="">
-      <h1 style="margin-bottom: 20px">Gamer</h1>
-      <media-banner :ratings=[7,10] :media_types="['game']"></media-banner>
+      <h1 style="margin-bottom: 20px">Gamer games</h1>
+      <media-banner :ratings=[7,10] :media_types="['game']" :size_override="[528, 704]"></media-banner>
     </div>
 
     <credits-footer></credits-footer>
