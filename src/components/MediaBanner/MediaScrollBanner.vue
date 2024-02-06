@@ -76,7 +76,7 @@ onMounted(() => {
         <movie-container
             :data="med"
             :lazy_poster="false"
-            :scale_mul="!is_mobile ? 0.3:0.35"
+            :scale_mul="!is_mobile ? 0.37:0.42"
             :size_override="[500,750]"
         ></movie-container>
       </div>
@@ -84,7 +84,7 @@ onMounted(() => {
         <movie-container
             :data="med"
             :lazy_poster="false"
-            :scale_mul="!is_mobile ? 0.3:0.35"
+            :scale_mul="!is_mobile ? 0.37:0.42"
             :size_override="[500,750]"
         ></movie-container>
       </div>
@@ -97,18 +97,15 @@ onMounted(() => {
 
 <style scoped>
 .banner_wrapper {
-  /*outline: 1px solid red;*/
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  /*height: calc(750 * 0.4px);*/
-  width: 100%;
-  clip-path: inset(0% 0% 0% 0%);
+  position: absolute;
+  z-index: -5;
+  left: 0;
+  right: 0;
+  height: 170%;
 }
 
 .scroll_container {
+
   position: relative;
   overflow-x: hidden;
   height: 100%;
@@ -116,22 +113,17 @@ onMounted(() => {
 
   display: flex;
   flex-flow: row;
-  transform: translate(0, 40px);
-  /*gap: 20px;*/
-  /*justify-content: center;*/
+
   /*align-items: center;*/
-  /*outline: 1px solid red;*/
 }
 
 .spinner {
   position: relative;
   height: 50%;
-  /*object-fit: cover;*/
-  /*margin: 0 auto 0 auto;*/
 }
 
 .scroll_content {
-  animation: scroll_banner 200s linear infinite;
+  animation: scroll_banner 250s linear infinite;
   will-change: transform;
 }
 
@@ -143,11 +135,15 @@ onMounted(() => {
   z-index: 5;
   position: absolute;
   background: linear-gradient(to right, rgba(19, 18, 21, 0) 80%, rgba(19, 18, 21, 1) 100%),
-  linear-gradient(to left, rgba(19, 18, 21, 0) 40%, rgba(19, 18, 21, 1) 100%),
-  linear-gradient(to top, rgba(19, 18, 21, 0) 60%, rgba(19, 18, 21, 1) 80%),
-  linear-gradient(to bottom, rgba(19, 18, 21, 0) 60%, rgba(19, 18, 21, 1) 80%);
+  linear-gradient(to left, rgba(19, 18, 21, 0) 80%, rgba(19, 18, 21, 1) 100%),
+  linear-gradient(to top, rgba(19, 18, 21, 0) 50%, rgba(19, 18, 21, 1) 95%),
+  linear-gradient(to bottom, rgba(19, 18, 21, 0) 50%, rgba(19, 18, 21, 1) 95%);
 }
-
+@media only screen and (max-width: 500px) {
+  .scroll_content {
+    animation: scroll_banner 250s linear infinite;
+  }
+  }
 @keyframes scroll_banner {
   to {
     transform: translate(calc((-100% - 20px) * v-bind(med_limit)));

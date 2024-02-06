@@ -135,4 +135,9 @@ p {
   border-radius: 20px;
   filter: drop-shadow(2px 2px 3px black) drop-shadow(2px 2px 2px black);
 }
+@media only screen and (max-width: 500px) {
+  .info_wrapper {
+    padding: 100px 20px 50px 20px;
+  }
+}
 </style>
