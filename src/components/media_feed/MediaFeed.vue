@@ -8,7 +8,20 @@ import CreditsFooter from "@/components/General/CreditsFooter.vue";
 import spinner from '/ui/custom_spinner.webp'
 import axios from "axios";
 
-let props = defineProps(["media_type", "tier_lists"]);
+let props = defineProps({
+  media_types:{
+    default:null,
+    type:Array,
+  },
+  media_container_type:{
+    default:'movie',
+    type:String,
+  },
+  tier_lists:{
+    default:null,
+    type:Array,
+  }
+});
 
 const curr_api = inject("curr_api");
 const edit_mode = inject("edit_mode");
@@ -27,8 +40,8 @@ let media_container = computed(() => {
   }
 })
 const element_width = computed(() => {
-  return String(media_scales.value[props.media_type]['size'][0] *
-      media_scales.value[props.media_type]['scale']) + 'px'
+  return String(media_scales.value[props.media_container_type]['size'][0] *
+      media_scales.value[props.media_container_type]['scale']) + 'px'
 })
 
 let media = ref([])
@@ -57,7 +70,7 @@ async function get_media(override) {
     'limit': media_limit.value,
     'page': media_page.value,
     'session_seed': session_seed,
-    'type': props['media_type'],
+    'types': props['media_types'],
     'genres': media_filters.value['genres'],
     'themes': media_filters.value['themes'],
     'tags': media_filters.value['tags'],
@@ -207,7 +220,7 @@ onMounted(() => {
 
   <div class="top_feed_container" ref="feed_container" v-if="media_grouped!==undefined">
 
-    <media-feed-filter-bar @filter="handle_filter" :load_status="filter_load_status" :media_type="media_type"
+    <media-feed-filter-bar @filter="handle_filter" :load_status="filter_load_status" :media_types="media_types"
                            :tier_lists="tier_lists"></media-feed-filter-bar>
 
     <div class="rating_box" v-for="rating in Object.keys(media_grouped).reverse()" :key="rating">

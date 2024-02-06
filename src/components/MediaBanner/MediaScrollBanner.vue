@@ -14,6 +14,7 @@ const curr_api = inject("curr_api");
 const session_seed = inject("session_seed");
 const is_mobile = inject("is_mobile");
 let med_limit = 30
+const rangeOfNumbers = (a,b) => [...Array(b+1).keys()].slice(a)
 
 let media = ref(new Array(med_limit).fill().map((e, i) => {
   return {
@@ -28,8 +29,9 @@ async function get_media() {
   const params = {
     'limit': med_limit,
     'page': 0,
-    'type': props['media_type'],
+    'types': ['movie','tv','manga','game'],
     'ratings': [7, 10],
+    'content_ratings':rangeOfNumbers(20,39).filter((elem,i)=> ![33,34].includes(elem)),
     'session_seed': session_seed,
     'user_rating_sort_override': true,
   }

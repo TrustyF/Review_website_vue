@@ -4,8 +4,8 @@ import MovieContainer from '@/components/media_container/movie_container/MovieCo
 import axios from "axios";
 
 let props = defineProps({
-  media_type: {
-    type: String,
+  media_types: {
+    type: Array,
     default: null,
   },
   order: {
@@ -39,7 +39,7 @@ async function get_media() {
   const params = {
     'limit': 20,
     'page': 0,
-    'type': props.media_type,
+    'types': props.media_types,
     'order': props.order,
     'ratings': props.ratings,
     'tier_lists': props.tier_lists,
