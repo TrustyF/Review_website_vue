@@ -20,6 +20,10 @@ let props = defineProps({
     type: Array,
     default: null,
   },
+  size_override: {
+    type: Array(),
+    default: [500,750],
+  },
 });
 let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
@@ -89,7 +93,7 @@ onMounted(() => {
             :data="med"
             :lazy_poster="false"
             :scale_mul="!is_mobile ? 0.3:0.25"
-            :size_override="[500,750]"
+            :size_override="size_override"
         ></movie-container>
       </div>
     </div>
