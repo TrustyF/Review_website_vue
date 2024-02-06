@@ -100,7 +100,10 @@ onMounted(() => {
 
   <div class="side_menu side_hidden"
        ref="side_menu" v-click-out-side="close_side_menu">
-    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side side_home" to="/">Home</RouterLink>
+    <div class="side_home">
+    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/">Home</RouterLink>
+    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/info">Info</RouterLink>
+    </div>
     <div style="height: 20px"></div>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/movies">Movies</RouterLink>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/series">TV</RouterLink>

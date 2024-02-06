@@ -182,8 +182,6 @@ onMounted(() => {
             <label for="tag_overview">Overview</label>
             <textarea id="tag_overview" v-model="temp_tag['overview']"></textarea>
 
-            <p>{{ temp_tag }}</p>
-
             <label for="tag_tier">Tier</label>
             <select id="tag_tier" v-model="temp_tag['tier']" @change="get_tier_images">
               <option v-for="tier in tiers" :key="tier" :selected="tier.indexOf(temp_tag['tier'])+1">{{ tier }}</option>
