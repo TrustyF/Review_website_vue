@@ -67,7 +67,8 @@ table {
 
 html {
     font-family: main_font, sans-serif;
-    font-weight: lighter;
+
+    font-weight: 300;
     min-height: 100%;
     width: 100%;
     scroll-behavior: smooth;

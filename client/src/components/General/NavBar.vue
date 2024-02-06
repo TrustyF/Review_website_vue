@@ -77,6 +77,7 @@ onMounted(() => {
 
       <div v-if="!is_mobile" class="wrapper">
         <RouterLink active-class="active" class="link" to="/">Home</RouterLink>
+        <RouterLink active-class="active" class="link" to="/info">Info</RouterLink>
         <h1>|</h1>
         <RouterLink active-class="active" class="link" to="/movies">Movies</RouterLink>
         <RouterLink active-class="active" class="link" to="/series">TV</RouterLink>
