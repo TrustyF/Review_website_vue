@@ -110,10 +110,8 @@ function emitted_media_to_edit_pane() {
   <div class="movie_container_wrapper">
 
     <!--    todo compress dropped, add media type ?-->
-    <!--    todo move tag images to backend -->
     <!--    todo remove short films from movies category -->
-    <!--    todo remove youtube from home banners -->
-    <!--    todo add graph average rating by year -->
+    <!--    todo hide erotica by default -->
     <!--    todo panel for expanded movie -->
 
     <!--    <div v-if="edit_mode"-->

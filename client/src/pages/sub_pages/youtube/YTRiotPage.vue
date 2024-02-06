@@ -8,7 +8,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <media-feed :media_type="'youtube'"
+  <media-feed :media_types="['youtube']"
               :tier_lists="['lol cinematic']"
+              :media_container_type="'youtube'"
   ></media-feed>
 </template>

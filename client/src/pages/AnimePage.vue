@@ -8,8 +8,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <media-feed :media_type="'tv'"
+  <media-feed :media_types="['tv']"
               :tier_lists="['anime']"
+              :media_container_type="'tv'"
   ></media-feed>
 
 </template>

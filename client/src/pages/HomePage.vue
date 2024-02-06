@@ -33,12 +33,17 @@ onMounted(() => {
 
     <div class="" style="margin-top: 5px">
       <h1 style="margin-bottom: 20px">Watched recently</h1>
-      <media-banner :order="'date_added'" :media_type="'movie'"></media-banner>
+      <media-banner :order="'date_added'" :media_types="['movie','tv']"></media-banner>
     </div>
 
     <div class="">
       <h1 style="margin-bottom: 20px">Latest release</h1>
-      <media-banner :order="'release_date'" :media_type="'movie'"></media-banner>
+      <media-banner :order="'release_date'" :media_types="['movie','tv']"></media-banner>
+    </div>
+
+    <div class="">
+      <h1 style="margin-bottom: 20px">Gamer</h1>
+      <media-banner :ratings=[7,10] :media_types="['game']"></media-banner>
     </div>
 
     <credits-footer></credits-footer>

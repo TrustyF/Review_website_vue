@@ -5,7 +5,17 @@ import FilterRange from "@/components/media_filters/filterRange.vue";
 import FilterRadio from "@/components/media_filters/filterRadio.vue";
 import axios from "axios";
 
-let props = defineProps(["media_type", "tier_lists"]);
+let props = defineProps({
+  media_types: {
+    default: null,
+    type: Array
+  },
+  tier_lists: {
+    default: null,
+    type: Array
+  }
+});
+
 let emits = defineEmits(["filter"]);
 const curr_api = inject("curr_api");
 const vis_container_content_rating = inject("vis_container_content_rating");
@@ -48,8 +58,8 @@ async function fetch_filters() {
 
   const url = new URL(`${curr_api}/media/get_filters`)
   const params = {
-    'type': props['media_type'] !== undefined ? props['media_type'] : '',
-    'tier_lists': props['tier_lists'] !== undefined ? props['tier_lists'] : [],
+    'types': props['media_types'],
+    'tier_lists': props['tier_lists'],
   }
 
   const result = await axios(

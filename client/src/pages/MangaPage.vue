@@ -8,6 +8,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <media-feed :media_type="'manga'"
+  <media-feed :media_types="['manga']"
+              :media_container_type="'manga'"
   ></media-feed>
 </template>

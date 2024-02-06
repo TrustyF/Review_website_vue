@@ -7,7 +7,20 @@ import spinner from '/ui/Loading_icon.gif'
 
 import filter_image from "/ui/filter_button.png"
 
-let props = defineProps(["media_type","tier_lists","load_status"]);
+let props = defineProps({
+  media_types: {
+    default: null,
+    type: Array
+  },
+  tier_lists: {
+    default: null,
+    type: Array
+  },
+  load_status: {
+    default: null,
+    type: String
+  }
+});
 let emits = defineEmits(["filter"]);
 const curr_api = inject("curr_api");
 
@@ -62,13 +75,13 @@ onMounted(() => {
     <div class="filters_box">
       <img alt="filters" @click="toggle_filters_box" class="filter_button"
            :src="filter_image">
-        <filter-search @filter="emit_filter(['search',$event])"></filter-search>
+      <filter-search @filter="emit_filter(['search',$event])"></filter-search>
       <img v-if="load_status==='loading'" :src="spinner" alt="spinner" class="filter_box_spinner">
     </div>
 
     <div ref="filter_container" class="filter_wrapper" v-click-out-side="close_filters_box">
       <div class="overflow_filter">
-        <filter-container @filter="emit_filter" :media_type="media_type" :tier_lists="tier_lists"></filter-container>
+        <filter-container @filter="emit_filter" :media_types="media_types" :tier_lists="tier_lists"></filter-container>
       </div>
       <div class="filter_wrapper_arrow"></div>
       <div class="filter_wrapper_arrow_border"></div>
@@ -122,10 +135,12 @@ onMounted(() => {
   object-fit: cover;
   border: 2px solid #969696;
 }
+
 .search_bar_wrapper {
   /*outline: 1px solid red;*/
   height: 30px;
 }
+
 .filter_box_spinner {
   z-index: 10;
   height: 15px;
@@ -189,6 +204,7 @@ onMounted(() => {
   border-style: solid;
   border-color: transparent transparent #969696 transparent;
 }
+
 @media only screen and (max-width: 500px) {
   .filters_top_container {
     /*top: 110px;*/
