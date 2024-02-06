@@ -93,7 +93,7 @@ def get():
     limit = data.get('limit')
     page = data.get('page')
     order = data.get('order')
-    media_type = data.get('type')
+    media_types = data.get('types')
     session_seed = data.get('session_seed')
 
     genres = data.get('genres')
@@ -107,6 +107,7 @@ def get():
     runtimes = data.get('runtimes')
     content_ratings = data.get('content_ratings')
 
+    print(content_ratings, media_types)
     search = data.get('search')
 
     user_rating_sort_override = data.get('user_rating_sort_override')
@@ -127,8 +128,10 @@ def get():
             return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
 
     def apply_filters(q):
-        if media_type:
-            q = q.filter_by(media_type=media_type)
+
+        if media_types and len(media_types) > 0:
+            q = q.filter(Media.media_type.in_(media_types))
+
         if search:
             # if len(q.filter(Media.name.ilike(f'{search}')).all()) > 0:
             #     q = q.filter(Media.name.ilike(f'{search}'))
@@ -566,10 +569,10 @@ def search_extra_posters():
 def get_filters():
     params = request.get_json()
 
-    media_type = params.get('type')
+    media_types = params.get('types')
     media_tier_lists = params.get('tier_lists')
 
-    print(f'getting filters for {media_type=} {media_tier_lists=}')
+    print(f'getting filters for {media_types=} {media_tier_lists=}')
 
     genres = db.session.query(Genre)
     themes = db.session.query(Theme)
@@ -584,16 +587,16 @@ def get_filters():
                                      func.min(Media.release_date).label('min'))
     runtimes = db.session.query(func.max(Media.runtime).label('max'),
                                 func.min(Media.runtime).label('min'))
-    if media_type:
-        genres = genres.join(Media.genres).filter(Media.media_type == media_type)
-        themes = themes.join(Media.themes).filter(Media.media_type == media_type)
-        tags = tags.join(Media.tags).filter(Media.media_type == media_type)
-        content_ratings = content_ratings.join(Media.content_rating).filter(Media.media_type == media_type)
+    if media_types and len(media_types) > 0:
+        genres = genres.join(Media.genres).filter(Media.media_type.in_(media_types))
+        themes = themes.join(Media.themes).filter(Media.media_type.in_(media_types))
+        tags = tags.join(Media.tags).filter(Media.media_type.in_(media_types))
+        content_ratings = content_ratings.join(Media.content_rating).filter(Media.media_type.in_(media_types))
 
-        ratings = ratings.filter(Media.media_type == media_type)
-        public_ratings = public_ratings.filter(Media.media_type == media_type)
-        release_dates = release_dates.filter(Media.media_type == media_type)
-        runtimes = runtimes.filter(Media.media_type == media_type)
+        ratings = ratings.filter(Media.media_type.in_(media_types))
+        public_ratings = public_ratings.filter(Media.media_type.in_(media_types))
+        release_dates = release_dates.filter(Media.media_type.in_(media_types))
+        runtimes = runtimes.filter(Media.media_type.in_(media_types))
 
     if media_tier_lists:
         genres = genres.join(Media.tier_lists).filter(TierList.name.in_(media_tier_lists))
