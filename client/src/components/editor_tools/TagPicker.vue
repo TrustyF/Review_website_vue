@@ -2,6 +2,7 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
 import {get_current_user} from "@/firebase_auth.js";
+import axios from "axios";
 
 let selected_media = inject('selected_media')
 
@@ -9,8 +10,7 @@ let props = defineProps(["media_type"]);
 let emits = defineEmits(["tags"]);
 const curr_api = inject("curr_api");
 
-// const folders = Object.keys(import.meta.glob('/public/tags/icons/**'));
-// const tiers = [...new Set(folders.map((elem) => elem.split('/')[4]))]
+const tiers = ['gold', 'green', 'purple', 'grey', 'red']
 
 const tag_images = ref({})
 
@@ -46,17 +46,18 @@ async function get_tags() {
   })
 }
 
-function map_images_from_folders() {
+async function get_tier_images() {
 
-  tiers.forEach((tier) => {
-    tag_images.value[tier] = []
-  })
+  const url = `${curr_api}/tag/get_tier_images`
+  const params = {
+    tier: temp_tag.value.tier
+  }
 
-  folders.forEach((path) => {
-    let tier = path.split('/')[4]
-    let name = path.split('/')[5]
-    tag_images.value[tier].push(name)
-  })
+  const result = await axios.get(url, {params: params})
+      .then(response => response.data)
+
+  console.log(result)
+  tag_images.value = result
 }
 
 function allowDrop(event) {
@@ -147,7 +148,6 @@ function emit() {
 
 onMounted(() => {
   get_tags()
-  map_images_from_folders()
 
   if (selected_media.value.tags === null) {
     selected_media.value.tags = []
@@ -182,8 +182,10 @@ onMounted(() => {
             <label for="tag_overview">Overview</label>
             <textarea id="tag_overview" v-model="temp_tag['overview']"></textarea>
 
+            <p>{{ temp_tag }}</p>
+
             <label for="tag_tier">Tier</label>
-            <select id="tag_tier" v-model="temp_tag['tier']">
+            <select id="tag_tier" v-model="temp_tag['tier']" @change="get_tier_images">
               <option v-for="tier in tiers" :key="tier" :selected="tier.indexOf(temp_tag['tier'])+1">{{ tier }}</option>
             </select>
 
@@ -212,9 +214,10 @@ onMounted(() => {
 
     <div class="bottom_area">
       <div class="available_images">
-        <div class="template_image" @click="switch_tag_image(img)" v-for="img in tag_images[temp_tag['tier']]"
+        <div class="template_image" @click="switch_tag_image(img)" v-for="img in tag_images"
              :key="img">
-          <img class="tag_template_image" :src="`/tags/icons/${temp_tag['tier']}/${img}`" alt="tag_template">
+          <img class="tag_template_image" :src="`${curr_api}/tag/get_image?tier=${img[0]}&path=${img[1]}`"
+               alt="tag_template">
         </div>
       </div>
     </div>
