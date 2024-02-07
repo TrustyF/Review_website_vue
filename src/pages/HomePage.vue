@@ -32,19 +32,36 @@ onMounted(() => {
     </div>
 
     <div class="" style="margin-top: 5px">
-      <h1 style="margin-bottom: 20px">Watched recently</h1>
+      <h1>Watched recently</h1>
+      <div style="margin: 10px 0 20px 0" class="separator"></div>
       <media-banner :order="'date_added'" :media_types="['movie','tv']"></media-banner>
     </div>
 
     <div class="">
-      <h1 style="margin-bottom: 20px">Latest release</h1>
+      <h1>Latest releases</h1>
+      <div style="margin: 10px 0 20px 0" class="separator"></div>
       <media-banner :order="'release_date'" :media_types="['movie','tv']"></media-banner>
     </div>
 
     <div class="">
-      <h1 style="margin-bottom: 20px">Gamer games</h1>
+      <h1>Recommended movie</h1>
+      <div style="margin: 10px 0 20px 0" class="separator"></div>
+      <media-banner :ratings=[7,10] :media_types="['movie']"></media-banner>
+    </div>
+
+    <div class="">
+      <h1>Recommended manga</h1>
+      <div style="margin: 10px 0 20px 0" class="separator"></div>
+      <media-banner :ratings=[7,10] :media_types="['manga']" :size_override="[512, 720]"></media-banner>
+    </div>
+
+    <div class="">
+      <h1>Recommended games</h1>
+      <div style="margin: 10px 0 20px 0" class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['game']" :size_override="[528, 704]"></media-banner>
     </div>
+
+
 
     <credits-footer></credits-footer>
 
@@ -62,6 +79,10 @@ onMounted(() => {
   /*outline: 1px solid red;*/
   min-height: 80vh;
   /*background-color: #1c1b23;*/
+}
+.separator {
+  height: 1px;
+  background-color: #2b2a34;
 }
 
 .top_banner {
