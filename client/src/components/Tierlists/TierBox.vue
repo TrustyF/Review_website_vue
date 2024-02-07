@@ -95,7 +95,7 @@ const curr_api = inject("curr_api");
   object-fit: cover;
 
   /*z-index: -1;*/
-  opacity: 75%;
+  opacity: 85%;
   transition: 150ms ease-in-out;
 }
 

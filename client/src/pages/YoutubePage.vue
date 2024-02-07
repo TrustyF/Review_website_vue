@@ -1,11 +1,12 @@
 <script setup>
 import {ref, onMounted, inject, provide} from 'vue'
-import TierFeed from "@/components/Tierlists/TierFeed.vue";
+import TierFeed from "../components/Tierlists/TierFeed.vue";
 
 import riot_games_img from "/tier_list_images/riot_games.jpg"
-import youtube_short_films_img from "/tier_list_images/youtube_short_films.jpg"
-import youtube_animations_img from "/tier_list_images/youtube_animations.jpg"
-import youtube_shows_img from "/tier_list_images/youtube_shows.jpg"
+import fever_ghost_img from "/tier_list_images/fever_the_ghost.jpg"
+import dont_thug_img from "/tier_list_images/dont_thug_me.jpg"
+import hazbin_img from "/tier_list_images/hazbin_hotel.jpg"
+import skeleton_vulvine_img from "/tier_list_images/skeleton_vulvina.jpg"
 
 let tier_lists = [
   {
@@ -15,23 +16,23 @@ let tier_lists = [
   },
   {
     'name': 'Youtube short films',
-    'image': youtube_short_films_img,
+    'image': skeleton_vulvine_img,
     'link':'/youtube/yt_short_films'
   },
   {
     'name': 'Youtube animations',
-    'image': youtube_animations_img,
+    'image': dont_thug_img,
     'link':'/youtube/yt_animations'
   },
   {
-    'name': 'Youtube shows',
-    'image': youtube_shows_img,
-    'link':'/youtube/yt_shows'
+    'name': 'Youtube music videos',
+    'image': fever_ghost_img,
+    'link':'/youtube/yt_music_videos'
   },
   {
-    'name': 'Youtube',
-    'image': undefined,
-    'link':'/youtube/youtube_debug'
+    'name': 'Youtube shows',
+    'image': hazbin_img,
+    'link':'/youtube/yt_shows'
   },
 ]
 
