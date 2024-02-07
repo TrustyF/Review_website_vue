@@ -109,7 +109,7 @@ function format_image_path(f_path, f_id) {
   <div class="movie_container_wrapper">
 
     <!--    todo compress dropped, add media type ?-->
-    <!--    todo remove short films from movies category -->
+    <!--    todo change tier list to outline instead of opacity fade-->
     <!--    todo hide erotica by default -->
     <!--    todo panel for expanded movie -->
 
