@@ -71,7 +71,6 @@ function open_link_new_tab(path) {
           <h2 class="date" v-if="data['runtime']>0">{{ ' • ' + convert_seconds_to_time(data['runtime']) }}</h2>
           <h2 class="date" v-if="data['seasons']>0">{{ ' • ' + data['seasons'] + ' seasons' }} </h2>
           <h2 class="date" v-if="data['episodes']>0">{{ ' • ' + data['episodes'] + ' episodes' }} </h2>
-          <h1 class="content_rating" v-if="data['content_rating'] && data['content_rating'].age">+{{ data['content_rating'].age }}</h1>
         </div>
       </div>
 
@@ -109,6 +108,7 @@ function open_link_new_tab(path) {
 
     </div>
 
+    <h1 class="content_rating" v-if="data['content_rating'] && data['content_rating'].age">+{{ data['content_rating'].age }}</h1>
 
   </div>
 </template>
@@ -187,12 +187,16 @@ function open_link_new_tab(path) {
   overflow: hidden;
 }
 .content_rating {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 7px;
   font-size: 0.7em;
   /*line-height: 0.7em;*/
   font-weight: 300;
   padding: 3px 5px 3px 5px;
   border-radius: 7px;
-  color: grey;
+  color: dimgrey;
   border: 0.1em dimgrey solid;
 }
 .secondary_info {

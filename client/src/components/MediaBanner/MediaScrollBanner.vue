@@ -77,7 +77,6 @@ onMounted(() => {
       <div class="scroll_content" v-for="med in media" :key="med.id">
         <movie-container
             :data="med"
-            :lazy_poster="false"
             :scale_mul="!is_mobile ? 0.37:0.42"
             :size_override="[500,750]"
         ></movie-container>
@@ -85,7 +84,6 @@ onMounted(() => {
       <div class="scroll_content" v-for="med in media" :key="med.id + 'over'">
         <movie-container
             :data="med"
-            :lazy_poster="false"
             :scale_mul="!is_mobile ? 0.37:0.42"
             :size_override="[500,750]"
         ></movie-container>

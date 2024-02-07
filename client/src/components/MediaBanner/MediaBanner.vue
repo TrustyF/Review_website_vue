@@ -91,7 +91,6 @@ onMounted(() => {
       <div class="scroll_content" v-for="med in media" :key="med.id">
         <movie-container
             :data="med"
-            :lazy_poster="false"
             :scale_mul="!is_mobile ? 0.3:0.25"
             :size_override="size_override"
         ></movie-container>

@@ -1,8 +1,8 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed, provide} from "vue";
 import Rating from "@/components/media_container/movie_container/sub_components/rating.vue";
-import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
 import {useRouter} from 'vue-router'
+import HoverUI from "@/components/media_container/movie_container/sub_components/HoverUI.vue";
 
 let props = defineProps({
   data: {
@@ -34,10 +34,6 @@ let emits = defineEmits(["media_data"]);
 let edit_mode = inject('edit_mode')
 let media_scales = inject('media_scales')
 let selected_media = inject('selected_media')
-let edit_pane_open = inject('edit_pane_open')
-let add_pane_open = inject('add_pane_open')
-let vis_container_content_rating = inject('vis_container_content_rating')
-
 
 const curr_api = inject("curr_api");
 const router = useRouter()
@@ -88,16 +84,6 @@ function format_image_path(f_path, f_id) {
   }
 }
 
-function open_link_new_tab(path) {
-  window.open(path, '_blank');
-}
-
-function emitted_media_to_edit_pane() {
-  if (!edit_pane_open.value && !add_pane_open.value) {
-    edit_pane_open.value = true
-  }
-  selected_media.value = props.data
-}
 
 // onMounted(()=>{
 //   console.log('media scales',media_scales.value)
@@ -112,43 +98,18 @@ function emitted_media_to_edit_pane() {
     <!--    todo compress dropped, add media type ?-->
     <!--    todo remove short films from movies category -->
     <!--    todo hide erotica by default -->
+    <!--    todo add banner separator -->
     <!--    todo panel for expanded movie -->
 
-    <!--    <div v-if="edit_mode"-->
-    <!--         style="position:absolute;background-color: #25222a;left: 5px;top:5px;padding: 5px;font-size: 0.5em">-->
-    <!--      &lt;!&ndash;      <p v-if="data['external_name']">external_name = {{ data['external_name'] }}</p>&ndash;&gt;-->
-    <!--      <p v-if="data['content_rating']">content= {{ data['content_rating']['name'] }}</p>-->
-    <!--      &lt;!&ndash;      <p v-if="data['genres']">genres= {{ data['genres'].map((elem)=>elem['name']) }}</p>&ndash;&gt;-->
-    <!--      <p v-if="data['tier_lists']">tier_lists= {{ data['tier_lists'].map((elem) => elem['name']) }}</p>-->
-    <!--      &lt;!&ndash;      <p v-if="data['themes']">themes= {{ data['themes'].map((elem)=>elem['name']) }}</p>&ndash;&gt;-->
-    <!--      <p v-if="data['tags']">tags= {{ data['tags'].map((elem) => elem['name']) }}</p>-->
-    <!--      &lt;!&ndash;      <p v-if="data['author']">author= {{ data['author'] }}</p>&ndash;&gt;-->
-    <!--      &lt;!&ndash;      <p v-if="data['studio']">studio= {{ data['studio'] }}</p>&ndash;&gt;-->
-    <!--      &lt;!&ndash;      <p v-if="data['release_date']">release_date= {{ data['release_date'] }}</p>&ndash;&gt;-->
-    <!--            <p v-if="data['created_at']">created_at= {{ data['created_at'] }}</p>-->
-    <!--      &lt;!&ndash;      <p>{{ image_path }}</p>&ndash;&gt;-->
-    <!--    </div>-->
-
-    <img v-if="lazy_poster && image_path" @click="open_link_new_tab(data['external_link'])" class="poster" alt=""
-         v-lazy="image_path"/>
-    <img v-else-if="image_path" @click="open_link_new_tab(data['external_link'])" class="poster" alt=""
-         :src="image_path"/>
+    <img v-if="lazy_poster && image_path" class="poster" alt="" v-lazy="image_path"/>
+    <img v-else-if="image_path" class="poster" alt="" :src="image_path"/>
     <div v-else class="poster"></div>
 
-    <div class="poster_gradient"></div>
-
-    <div class="content_rating" v-if="vis_container_content_rating && data['content_rating']!==undefined">
-      <h1 style="font-size: 0.8em;margin-top: 2px">+</h1>
-      <h2 style="color: white">{{ data['content_rating']['age'] }}</h2>
-    </div>
-
-    <div v-if="data['is_dropped']" class="dropped_banner_wrapper">
-      <div class="dropped_banner">Dropped</div>
-    </div>
+    <HoverUI :data="data" :poster_size="poster_size" :min_size="min_size"></HoverUI>
 
     <Rating v-if="data!==undefined" class="ratings" :data="data" :max_size="min_size"></Rating>
 
-    <div class="footer_wrapper" @click="emitted_media_to_edit_pane">
+    <div class="footer_wrapper">
 
       <p v-if="data['name']!==undefined" class="title" :title="data['name']">{{ data['name'] }}</p>
 
@@ -165,23 +126,14 @@ function emitted_media_to_edit_pane() {
         <!--        <h2 class="date" v-if="data['content_rating'] && data['content_rating'].name">-->
         <!--          {{ data['content_rating'].name }}</h2>-->
       </div>
-
-      <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null">
-        <div v-for="tag in data['tags']" :key="tag['id']">
-          <badge :data="tag" :min_size="min_size" :show_title="false"></badge>
-        </div>
-      </div>
-
     </div>
-
   </div>
-  <!--  <div style="background-color: red;width: 5000px;height:5000px;z-index:-1;position: fixed;left: 0;top: 0"></div>-->
 </template>
 
 <style scoped>
 .movie_container_wrapper {
   /*outline: 1px solid red;*/
-  cursor: pointer;
+  /*cursor: pointer;*/
   position: relative;
   display: flex;
   flex-flow: column nowrap;
@@ -206,38 +158,6 @@ function emitted_media_to_edit_pane() {
 
   border-radius: 8px 8px 0 0;
   object-fit: cover;
-}
-
-.poster_gradient {
-  pointer-events: none;
-  content: "";
-  position: absolute;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 90%, rgba(0, 0, 0, 0.5) 101%);
-  left: 0;
-  top: 0;
-  width: v-bind(poster_size [0] + 'px');
-  height: v-bind(poster_size [1] + 'px');
-}
-
-.dropped_banner_wrapper {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: v-bind(poster_size [0] + 'px');
-  height: v-bind(poster_size [1] + 'px');
-  clip-path: inset(0% 0% 0% 0% round 5%);
-}
-
-.dropped_banner {
-  height: 30px;
-  background-color: #c41717;
-  transform: translate(v-bind(poster_size [0]/2 + 'px'), 0) rotate(45deg) translate(-10px, 30px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.8em;
-  text-shadow: 1px 1px 1px black, 1px 1px 3px black;
-  filter: drop-shadow(1px 1px 3px black);
 }
 
 .ratings {
@@ -274,59 +194,4 @@ function emitted_media_to_edit_pane() {
   font-size: calc(v-bind(min_size) * 0.004em);
   color: rgba(255, 255, 255, 0.5);
 }
-
-.content_rating {
-
-  position: absolute;
-  right: 0;
-  top: 0;
-  margin: 5px;
-
-  font-size: calc(v-bind(min_size) * 0.005em);
-  height: calc(v-bind(min_size) * 0.01em);
-  width: calc(v-bind(min_size) * 0.01em);
-
-  padding: calc(v-bind(min_size) * 0.001em);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  outline: 0.1em grey solid;
-
-  color: lightgrey;
-  background-color: black;
-  filter: drop-shadow(1px 1px 2px black) drop-shadow(0px 0px 4px black);
-}
-
-.tags_wrapper {
-  /*outline: 1px solid red;*/
-  width: v-bind(poster_size [0] + 'px');
-  position: absolute;
-
-  left: 0;
-  top: 0;
-
-  display: flex;
-  flex-flow: column wrap;
-  gap: 5px;
-
-  padding: 5px;
-  transform: translate(-10px, 0);
-  visibility: hidden;
-  opacity: 0;
-  z-index: 20;
-
-  transition: 400ms;
-  transition-delay: 700ms;
-}
-
-.movie_container_wrapper:hover .tags_wrapper {
-  visibility: visible;
-  opacity: 100%;
-  transform: translate(0, 0);
-  transition-delay: 0ms;
-  transition: 50ms;
-}
-
 </style>
