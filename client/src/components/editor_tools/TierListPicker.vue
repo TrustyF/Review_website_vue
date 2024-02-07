@@ -1,5 +1,6 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
+import {get_current_user} from "@/firebase_auth.js";
 
 // let props = defineProps(["media_ref"]);
 // let emits = defineEmits(["tier_lists"]);
@@ -20,13 +21,21 @@ async function fetch_tier_lists() {
 }
 
 async function add_new_list() {
-
   if (new_list_name.value === undefined || new_list_name.value === '') return
+
+  const token = await get_current_user()
+
 
   const url = new URL(`${curr_api}/tier_list/add`)
   url.searchParams.set('name', new_list_name.value)
 
-  await fetch(url).then(response => response.json())
+  await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Authorization': token.uid,
+      'Content-Type': 'application/json',
+    }
+  }).then(response => response.json())
   await fetch_tier_lists()
 }
 
@@ -36,7 +45,7 @@ function allowDrop(event) {
 
 function add_drop_to_media() {
 
-  if (selected_media.value['tier_lists'].map((e)=>e.id).includes(dragged_tier_list.value['id'])) return
+  if (selected_media.value['tier_lists'].map((e) => e.id).includes(dragged_tier_list.value['id'])) return
   selected_media.value['tier_lists'].push(dragged_tier_list.value)
   // emits('tier_lists', selected_media['tier_lists'].value)
 }
@@ -66,7 +75,8 @@ onMounted(() => {
 
       <div class="current_tier_lists" @dragover="allowDrop" @drop="add_drop_to_media"
            @dragleave="remove_drop_from_media">
-        <div class="tier_list_box" draggable="true" @dragstart="drag(t)" v-for="t in selected_media['tier_lists']" :key="t['id']">
+        <div class="tier_list_box" draggable="true" @dragstart="drag(t)" v-for="t in selected_media['tier_lists']"
+             :key="t['id']">
           {{ t['name'] }}
         </div>
       </div>

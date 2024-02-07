@@ -81,6 +81,7 @@ onMounted(() => {
         <h1>|</h1>
         <RouterLink active-class="active" class="link" to="/movies">Movies</RouterLink>
         <RouterLink active-class="active" class="link" to="/series">TV</RouterLink>
+        <RouterLink active-class="active" class="link" to="/shorts">Shorts</RouterLink>
         <RouterLink active-class="active" class="link" to="/youtube">Youtube</RouterLink>
         <h1>•</h1>
         <RouterLink active-class="active" class="link" to="/anime">Anime</RouterLink>
@@ -107,6 +108,7 @@ onMounted(() => {
     <div style="height: 20px"></div>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/movies">Movies</RouterLink>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/series">TV</RouterLink>
+    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/shorts">Shorts</RouterLink>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/youtube">Youtube</RouterLink>
     <div class="horiz_separator"></div>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/anime">Anime</RouterLink>

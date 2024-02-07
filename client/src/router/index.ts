@@ -5,6 +5,7 @@ import InfoPage from "../pages/InfoPage.vue"
 import MoviePage from "../pages/MoviePage.vue"
 import MangaPage from "../pages/MangaPage.vue"
 import SeriesPage from "../pages/SeriesPage.vue"
+import ShortsPage from "../pages/ShortPage.vue"
 import YoutubePage from "../pages/YoutubePage.vue"
 import RiotPage from "../pages/sub_pages/youtube/YTRiotPage.vue"
 import YTAnimationPage from "../pages/sub_pages/youtube/YTAnimationsPage.vue"
@@ -43,6 +44,11 @@ const router = createRouter({
             path: "/series",
             name: "series",
             component: SeriesPage
+        },
+        {
+            path: "/shorts",
+            name: "shorts",
+            component: ShortsPage
         },
         {
             path: "/youtube",
