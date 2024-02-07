@@ -15,22 +15,22 @@ let tier_lists = [
     'link':'/youtube/riot_games_media'
   },
   {
-    'name': 'Youtube short films',
+    'name': 'Short films',
     'image': skeleton_vulvine_img,
     'link':'/youtube/yt_short_films'
   },
   {
-    'name': 'Youtube animations',
+    'name': 'Animations',
     'image': dont_thug_img,
     'link':'/youtube/yt_animations'
   },
   {
-    'name': 'Youtube music videos',
+    'name': 'Music videos',
     'image': fever_ghost_img,
     'link':'/youtube/yt_music_videos'
   },
   {
-    'name': 'Youtube shows',
+    'name': 'Shows',
     'image': hazbin_img,
     'link':'/youtube/yt_shows'
   },
@@ -42,5 +42,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <tier-feed :box_size="[700,500]" :box_scale="0.5" :data="tier_lists"></tier-feed>
+  <tier-feed :box_size="[700,500]" :box_scale="0.6" :data="tier_lists"></tier-feed>
 </template>

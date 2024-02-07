@@ -33,7 +33,7 @@ let debug =   {
 
 <style scoped>
 .tier_feed_wrapper {
-  /*outline: 1px solid greenyellow;*/
+  outline: 1px solid greenyellow;
 
   width: v-bind(feed_width);
 
@@ -41,6 +41,8 @@ let debug =   {
   flex-flow: row wrap;
 
   align-items: center;
+  /*align-content: center;*/
+  /*justify-content: center;*/
   justify-items: center;
 
   margin: 100px auto auto auto;
@@ -49,7 +51,7 @@ let debug =   {
   gap: 50px;
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 1000px) {
   .tier_feed_wrapper {
     width: 90%;
     display: grid;

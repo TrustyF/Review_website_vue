@@ -33,8 +33,11 @@ const curr_api = inject("curr_api");
 
   height: v-bind(b_height);
   width: v-bind(b_width);
+  border-radius: 10px;
+  outline: 0 solid #969696;
 
   filter: drop-shadow(5px 5px 6px black);
+  transition: 50ms ease-in-out;
 }
 
 .tier_box_wrapper {
@@ -43,11 +46,15 @@ const curr_api = inject("curr_api");
   justify-content: center;
   align-items: center;
 
+  border: 0 solid #464646;
+  /*outline: 1px solid red;*/
+
   height: 100%;
   width: 100%;
 
   background-color: #2b2a34;
-  clip-path: inset(0% 0% 0% 0% round 5%);
+  transition: 150ms ease-in-out;
+  clip-path: inset(0% 0% 0% 0% round 10px);
 }
 
 .box_content {
@@ -82,7 +89,7 @@ const curr_api = inject("curr_api");
   width: 100%;
   aspect-ratio: 1;
   z-index: 11;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 1) 100%);
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0) 80%, rgba(0, 0, 0, 1) 110%);
   opacity: 100%;
   transition: 150ms ease-in-out;
 }
@@ -94,8 +101,9 @@ const curr_api = inject("curr_api");
   height: 100%;
   object-fit: cover;
 
+
   /*z-index: -1;*/
-  opacity: 85%;
+  /*opacity: 85%;*/
   transition: 150ms ease-in-out;
 }
 
@@ -107,9 +115,12 @@ const curr_api = inject("curr_api");
 .tier_box:hover .vignette {
   opacity: 0;
 }
+.tier_box:hover {
+  outline: 0.1em solid #464646;
+}
 
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 1000px) {
   .bg_image {
     opacity: 100%;
   }
