@@ -34,6 +34,8 @@ def get_image():
     path = request.args.get('path')
     tier = request.args.get('tier')
 
+    # print('get tier image', path,tier)
+
     if path == 'null':
         return [], 200
 
@@ -44,7 +46,6 @@ def get_image():
 @bp.route("/get_tier_images", methods=['GET'])
 def get_tier_images():
     tier = request.args.get('tier')
-    print(tier)
 
     all_tags_path = os.path.join(MAIN_DIR, 'assets', 'static', 'tags', 'icons', tier)
     images = [[tier, x] for x in os.listdir(all_tags_path)]
@@ -59,7 +60,7 @@ def add():
     # print(data)
     # del data['id']
 
-    print(f'adding tag {data=}')
+    # print(f'adding tag {data=}')
 
     new_tag = Tag(**{
         'name': data['name'],
