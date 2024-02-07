@@ -98,7 +98,6 @@ function format_image_path(f_path, f_id) {
     <!--    todo compress dropped, add media type ?-->
     <!--    todo remove short films from movies category -->
     <!--    todo hide erotica by default -->
-    <!--    todo add banner separator -->
     <!--    todo panel for expanded movie -->
 
     <img v-if="lazy_poster && image_path" class="poster" alt="" v-lazy="image_path"/>

@@ -107,9 +107,9 @@ async function find_media() {
 }
 
 async function update_media() {
-  const token = await get_current_user()
-
   if (selected_media.value['id'] === undefined) return
+
+  const token = await get_current_user()
 
   console.log('updating', selected_media.value)
 

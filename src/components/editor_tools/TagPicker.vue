@@ -81,7 +81,15 @@ function remove_dragged_badge_from_constructor() {
 }
 
 function add_dragged_badge_to_editor() {
-  temp_tag.value = dragged_badge.value
+
+  if (temp_tag.value.tier !== dragged_badge.value.tier) {
+    temp_tag.value = dragged_badge.value
+    get_tier_images()
+  } else {
+    temp_tag.value = dragged_badge.value
+  }
+
+
 }
 
 function switch_tag_image(path) {
@@ -212,7 +220,7 @@ onMounted(() => {
 
     <div class="bottom_area">
       <div class="available_images">
-        <div class="template_image" @click="switch_tag_image(img)" v-for="img in tag_images"
+        <div class="template_image" @click="switch_tag_image(img[1])" v-for="img in tag_images"
              :key="img">
           <img class="tag_template_image" :src="`${curr_api}/tag/get_image?tier=${img[0]}&path=${img[1]}`"
                alt="tag_template">

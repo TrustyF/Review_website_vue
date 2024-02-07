@@ -3,6 +3,9 @@ import {inject, onMounted, watch, ref, computed} from "vue";
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
 import crayon_img from '/ui/crayon.png'
 import external_img from '/ui/external_link.png'
+import dot_img from '/ui/simple_dot.png'
+import bookmark_img from '/ui/bookmark.png'
+import arrow_img from '/ui/single_arrow.png'
 
 let props = defineProps({
   data: {
@@ -11,7 +14,7 @@ let props = defineProps({
   },
   poster_size: {
     type: Array,
-    default: null,
+    default: [0,0],
   },
   min_size: {
     type: Number,
@@ -44,11 +47,15 @@ function open_link_new_tab(path) {
 <template>
   <div class="poster_gradient"></div>
 
-<!--  <div class="blackout_hover"></div>-->
+  <!--  <div class="blackout_hover"></div>-->
 
   <div class="content_rating" v-if="vis_container_content_rating && data['content_rating']!==undefined">
     <h1 style="font-size: 0.8em;margin-top: 2px">+</h1>
     <h2 style="color: white">{{ data['content_rating']['age'] }}</h2>
+  </div>
+
+  <div class="poster_overflow">
+    <img v-if="data['tags'] && data['tags'].length > 0" class="tag_indicator" :src="arrow_img">
   </div>
 
   <div v-if="data['is_dropped']" class="dropped_banner_wrapper">
@@ -67,12 +74,20 @@ function open_link_new_tab(path) {
          @click="open_link_new_tab(data['external_link'])">
   </div>
 
-<!--  <input class="seen_checkbox" type="checkbox" title="mark as seen">-->
+  <!--  <input class="seen_checkbox" type="checkbox" title="mark as seen">-->
 
 
 </template>
 
 <style scoped>
+.poster_overflow {
+  position: absolute;
+  inset: 0;
+  width: v-bind(poster_size [0]);
+  height: v-bind(poster_size [1]);
+  clip-path: inset(0% 0% 0% 0% round 8px);
+}
+
 .poster_gradient {
   pointer-events: none;
   content: "";
@@ -88,7 +103,7 @@ function open_link_new_tab(path) {
   pointer-events: none;
   content: "";
   position: absolute;
-  background: rgba(0,0,0,0.2);
+  background: rgba(0, 0, 0, 0.2);
   left: 0;
   top: 0;
   width: v-bind(poster_size [0] + 'px');
@@ -97,6 +112,29 @@ function open_link_new_tab(path) {
   visibility: hidden;
   opacity: 0;
   transition: 400ms;
+  transition-delay: 700ms;
+}
+
+.tag_indicator {
+  position: absolute;
+  margin: 5px;
+  width: calc(v-bind(min_size) * 0.004em);
+  height: calc(v-bind(min_size) * 0.004em);
+  padding: 2px;
+  border-radius: 4px;
+
+  left: 0;
+  top: 0;
+
+  background-color: #d8dbd3;
+
+  filter: invert();
+
+  transform: translate(0);
+
+  visibility: visible;
+  opacity: 100%;
+  transition: 600ms;
   transition-delay: 700ms;
 }
 
@@ -221,10 +259,18 @@ function open_link_new_tab(path) {
 
 .movie_container_wrapper:hover .edit_tools_wrapper,
 .movie_container_wrapper:hover .tags_wrapper,
-.movie_container_wrapper:hover .blackout_hover{
+.movie_container_wrapper:hover .blackout_hover {
   visibility: visible;
   opacity: 100%;
   transform: translate(0, 0);
+  transition-delay: 0ms;
+  transition: 50ms;
+}
+
+.movie_container_wrapper:hover .tag_indicator {
+  visibility: hidden;
+  opacity: 0;
+  transform: translate(0, -5px);
   transition-delay: 0ms;
   transition: 50ms;
 }
