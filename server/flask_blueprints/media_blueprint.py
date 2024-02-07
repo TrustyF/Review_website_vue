@@ -107,7 +107,7 @@ def get():
     runtimes = data.get('runtimes')
     content_ratings = data.get('content_ratings')
 
-    print(content_ratings, media_types)
+    print(tier_lists, media_types)
     search = data.get('search')
 
     user_rating_sort_override = data.get('user_rating_sort_override')
@@ -119,9 +119,8 @@ def get():
 
     # return selected media
     if media_id:
-        print('getting id', media_id)
+        # print('getting id', media_id)
         single_media = db.session.query(Media).filter_by(id=media_id).one_or_none()
-        # print(single_media)
         if single_media is not None:
             return serialize_media(single_media), 200
         else:
@@ -160,6 +159,8 @@ def get():
         if tier_lists:
             q = (q.join(Media.tier_lists).filter(TierList.name.in_(tier_lists))
                  .group_by(Media.id).having(func.count(Media.id) == len(tier_lists)))
+        else:
+            q = q.filter(~Media.tier_lists.any())
         if genres:
             q = (q.join(Media.genres).filter(Genre.id.in_(genres))
                  .group_by(Media.id).having(func.count(Media.id) == len(genres)))
@@ -240,7 +241,7 @@ def find():
     media_id = request.args.get('id')
     media_page = request.args.get('page', type=int)
 
-    print(f'searching {media_name=} {media_type=} {media_id=}')
+    # print(f'searching {media_name=} {media_type=} {media_id=}')
 
     def request_tmdb():
         all_found = []
@@ -365,7 +366,7 @@ def find():
 @requires_auth
 def add():
     data = request.get_json()
-    print('add', data['name'])
+    # print('add', data['name'])
 
     # pprint(data)
 
@@ -398,7 +399,7 @@ def add():
 def update():
     # parameters
     data = request.get_json()
-    print('update', data['name'])
+    # print('update', data['name'])
     # pprint.pprint(data)
 
     query = db.session.query(Media).filter_by(id=data['id'])
@@ -431,7 +432,7 @@ def update():
 def delete():
     # parameters
     media_id = request.args.get('id')
-    print('delete', media_id)
+    # print('delete', media_id)
 
     db.session.query(Media).filter_by(id=media_id).delete()
     db.session.commit()
@@ -453,7 +454,7 @@ def get_image():
 
     # return not found image
     if media_path in ['null', 'undefined', 'not_found']:
-        return send_file(os.path.join(MAIN_DIR, "assets", "not_found.jpg", ), mimetype='image/jpg')
+        return [], 200
 
     file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches",
                              media_id + f'_{media_type}_' + poster_id + '.jpg')
@@ -572,7 +573,7 @@ def get_filters():
     media_types = params.get('types')
     media_tier_lists = params.get('tier_lists')
 
-    print(f'getting filters for {media_types=} {media_tier_lists=}')
+    # print(f'getting filters for {media_types=} {media_tier_lists=}')
 
     genres = db.session.query(Genre)
     themes = db.session.query(Theme)

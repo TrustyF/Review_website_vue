@@ -14,7 +14,7 @@ def requires_auth(f):
         id_token = request.headers.get('Authorization')
 
         if id_token != FIREBASE_ADMIN_UID:
-            return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
+            return json.dumps({'ok': False, 'body': 'not authenticated'}), 511, {'ContentType': 'application/json'}
 
         return f(*args, **kwargs)
 
