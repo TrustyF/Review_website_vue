@@ -5,10 +5,17 @@ import TierBox from "./TierBox.vue";
 let props = defineProps(["box_size", "box_scale", "data"]);
 let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
+const edit_mode = inject("edit_mode");
 
 let tier_box_height = computed(() => (props['box_size'][1] * props['box_scale']) + 'px')
 let tier_box_width = computed(() => (props['box_size'][0] * props['box_scale']) + 'px')
 let feed_width = computed(() => (props['box_size'][0] * props['box_scale'] + 25) * 2 + 'px')
+
+let debug =   {
+  'name': 'Youtube',
+  'image': undefined,
+  'link':'/youtube/youtube_debug'
+}
 
 </script>
 
@@ -17,7 +24,11 @@ let feed_width = computed(() => (props['box_size'][0] * props['box_scale'] + 25)
     <tier-box :box_size="box_size" :b_width="tier_box_width" :b_height="tier_box_height"
               :box_data="box" v-for="box in data"
               :key="box"></tier-box>
+
+    <tier-box v-if="edit_mode" :box_size="box_size" :b_width="tier_box_width" :b_height="tier_box_height"
+              :box_data="debug"></tier-box>
   </div>
+
 </template>
 
 <style scoped>

@@ -1,99 +1,88 @@
 import {createRouter, createWebHistory} from "vue-router";
 
-import HomePage from "../pages/HomePage.vue"
-import InfoPage from "../pages/InfoPage.vue"
-import MoviePage from "../pages/MoviePage.vue"
-import MangaPage from "../pages/MangaPage.vue"
-import SeriesPage from "../pages/SeriesPage.vue"
-import ShortsPage from "../pages/ShortPage.vue"
-import YoutubePage from "../pages/YoutubePage.vue"
-import RiotPage from "../pages/sub_pages/youtube/YTRiotPage.vue"
-import YTAnimationPage from "../pages/sub_pages/youtube/YTAnimationsPage.vue"
-import YTShortPage from "../pages/sub_pages/youtube/YTShortsPage.vue"
-import YTShowPage from "../pages/sub_pages/youtube/YTShowsPage.vue"
-import YTDebugPage from "../pages/sub_pages/youtube/YoutubeDebug.vue"
-
-import AnimePage from "../pages/AnimePage.vue"
-import GamePage from "../pages/GamePage.vue"
-import AllPage from "../pages/AllPage.vue"
-
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: "/all",
             name: "all",
-            component: AllPage
+            component: () => import("../pages/AllPage.vue")
         },
         {
             path: "/",
             name: "home",
-            component: HomePage,
+            component: () => import("../pages/HomePage.vue")
         },
         {
             path: "/info",
             name: "info",
-            component: InfoPage,
+            component: () => import("../pages/InfoPage.vue")
         },
         {
             path: "/movies",
             name: "movies",
-            component: MoviePage
+            component: () => import("../pages/MoviePage.vue")
         },
         {
             path: "/series",
             name: "series",
-            component: SeriesPage
+            component: () => import("../pages/SeriesPage.vue")
         },
         {
             path: "/shorts",
             name: "shorts",
-            component: ShortsPage
+            component: () => import("../pages/ShortPage.vue")
         },
         {
             path: "/youtube",
             name: "youtube",
-            component: YoutubePage
+            component: () => import("../pages/YoutubePage.vue")
         },
         {
             path: "/youtube/riot_games_media",
             name: "riot games media",
-            component: RiotPage
+            component: () => import("../pages/sub_pages/youtube/YTRiotPage.vue")
+
         },
         {
             path: "/youtube/yt_animations",
             name: "youtube animations",
-            component: YTAnimationPage
+            component: () => import("../pages/sub_pages/youtube/YTAnimationsPage.vue")
+        },
+        {
+            path: "/youtube/yt_music_videos",
+            name: "youtube music videos",
+            component: () => import("../pages/sub_pages/youtube/YTMusicVideoPage.vue")
         },
         {
             path: "/youtube/yt_short_films",
             name: "youtube short films",
-            component: YTShortPage
+            component: () => import("../pages/sub_pages/youtube/YTShortsPage.vue")
         },
         {
             path: "/youtube/yt_shows",
             name: "youtube shows",
-            component: YTShowPage
+            component: () => import("../pages/sub_pages/youtube/YTShowsPage.vue")
         },
         {
             path: "/youtube/youtube_debug",
             name: "youtube debug",
-            component: YTDebugPage
+            component: () => import("../pages/sub_pages/youtube/YoutubeDebug.vue")
         },
         {
             path: "/anime",
             name: "anime",
-            component: AnimePage
+            component: () => import("../pages/AnimePage.vue")
         },
         {
             path: "/manga",
             name: "manga",
-            component: MangaPage
+            component: () => import("../pages/MangaPage.vue")
         },
         {
             path: "/games",
             name: "games",
-            component: GamePage
+            component: () => import("../pages/GamePage.vue")
         },
     ]
 })

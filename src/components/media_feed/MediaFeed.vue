@@ -17,6 +17,10 @@ let props = defineProps({
     default:'movie',
     type:String,
   },
+  media_container_type_override:{
+    default:null,
+    type:String,
+  },
   tier_lists:{
     default:null,
     type:Array,
@@ -235,6 +239,7 @@ onMounted(() => {
                    :key="med['id']"
                    :is="media_container"
                    :data="med"
+                   :media_container_type_override = props.media_container_type_override
         ></component>
       </div>
     </div>

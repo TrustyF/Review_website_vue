@@ -10,5 +10,6 @@ onMounted(() => {
 <template>
   <media-feed :media_types="['movie']"
               :tier_lists="['short film']"
-              :media_container_type="'movie'"></media-feed>
+              :media_container_type="'movie'"
+  ></media-feed>
 </template>

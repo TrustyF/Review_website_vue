@@ -28,6 +28,10 @@ let props = defineProps({
     type: Array,
     default: null
   },
+  media_container_type_override: {
+    type: String,
+    default: null
+  },
 });
 let emits = defineEmits(["media_data"]);
 
@@ -47,7 +51,16 @@ const poster_size = computed(() => {
       props.size_override[0] * props['scale_mul'],
       props.size_override[1] * props['scale_mul']
     ]
-  } else {
+  }
+  else if (props.media_container_type_override) {
+    return [
+      (media_scales.value[props.media_container_type_override]['size'][0] *
+          media_scales.value[props.media_container_type_override]['scale']) * props['scale_mul'],
+      (media_scales.value[props.media_container_type_override]['size'][1] *
+          media_scales.value[props.media_container_type_override]['scale']) * props['scale_mul'],
+    ]
+  }
+  else {
     return [
       (media_scales.value[media_type.value]['size'][0] *
           media_scales.value[media_type.value]['scale']) * props['scale_mul'],
