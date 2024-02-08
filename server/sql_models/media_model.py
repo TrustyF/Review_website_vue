@@ -113,6 +113,7 @@ class Media(db.Model):
 
     external_id: str = db.Column(db.String(100))
     external_link: str = db.Column(db.String(1000))
+    video_link: str = db.Column(db.String(1000))
 
     runtime: int = db.Column(db.Integer)
     episodes: int = db.Column(db.Integer)
