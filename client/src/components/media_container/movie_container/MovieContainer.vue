@@ -108,8 +108,6 @@ function format_image_path(f_path, f_id) {
 <template>
   <div class="movie_container_wrapper">
 
-    <!--    todo compress dropped, add media type ?-->
-    <!--    todo change tier list to outline instead of opacity fade-->
     <!--    todo hide erotica by default -->
     <!--    todo panel for expanded movie -->
 
