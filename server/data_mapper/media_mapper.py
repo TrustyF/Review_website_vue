@@ -458,7 +458,7 @@ def map_from_youtube(medias, media_type):
             'user_rating': None,
             'public_rating': media.get('public_rating') if media.get('public_rating') else None,
             'external_id': media.get('id'),
-            'external_link': media.get('link'),
+            'video_link': media.get('link'),
             'author': media.get('channel').get('name'),
             'runtime': convert_text_to_runtime(media.get('accessibility').get('duration')),
         }
