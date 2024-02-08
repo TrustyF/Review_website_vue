@@ -6,6 +6,7 @@ import external_img from '/ui/external_link.png'
 import dot_img from '/ui/simple_dot.png'
 import bookmark_img from '/ui/bookmark.png'
 import arrow_img from '/ui/single_arrow.png'
+import youtube_img from '/ui/youtube.png'
 
 let props = defineProps({
   data: {
@@ -14,7 +15,7 @@ let props = defineProps({
   },
   poster_size: {
     type: Array,
-    default: [0,0],
+    default: [0, 0],
   },
   min_size: {
     type: Number,
@@ -70,7 +71,9 @@ function open_link_new_tab(path) {
 
   <div class="edit_tools_wrapper">
     <img v-if="edit_mode" class="edit_tool" :src="crayon_img" @click="emitted_media_to_edit_pane">
-    <img class="edit_tool" title="go to external website" :src="external_img"
+    <img v-if="data['video_link']" class="edit_tool" title="go to video" :src="youtube_img"
+         @click="open_link_new_tab(data['video_link'])">
+    <img v-if="data['external_link']" class="edit_tool" title="go to external website" :src="external_img"
          @click="open_link_new_tab(data['external_link'])">
   </div>
 
@@ -221,6 +224,7 @@ function open_link_new_tab(path) {
 
 .edit_tool {
   border: unset;
+  /*margin: 5px;*/
   padding: 5px;
   pointer-events: auto;
   cursor: pointer;
@@ -231,7 +235,7 @@ function open_link_new_tab(path) {
   /*background-color: #d8dbd3;*/
   /*box-shadow: 1px 1px 1px white, inset 1px 1px 0 #bdc0bb;*/
 
-  filter: invert() drop-shadow(1px 1px 1px black) drop-shadow(0 0 3px black);
+  filter: invert() drop-shadow(0.05em 0 0.01em black) drop-shadow(0 0.05em 0.01em black) drop-shadow(-0.05em 0 0.01em black) drop-shadow(0 -0.05em 0.01em black) drop-shadow(1px 1px 3px black);
   border-radius: 5px;
 }
 

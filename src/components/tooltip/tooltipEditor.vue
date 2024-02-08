@@ -368,6 +368,11 @@ onUnmounted(() => {
                     style="width: 100%"
                     @change="selected_media['external_link']=$event.target.value"></textarea>
 
+          <label for="form_video_link">Video link</label>
+          <textarea id="form_video_link" v-model="selected_media['video_link']"
+                    style="width: 100%"
+                    @change="selected_media['video_link']=$event.target.value"></textarea>
+
           <label for="form_public_rating">Public rating</label>
           <input id="form_public_rating" v-model="selected_media['public_rating']" type="number"
                  @change="selected_media['public_rating']=$event.target.value">
