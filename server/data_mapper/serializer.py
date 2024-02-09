@@ -1,8 +1,20 @@
+import pprint
 from dataclasses import asdict
 from datetime import datetime
 from sqlalchemy import func
 from db_loader import db
 from sql_models.media_model import Media, ContentRating, TierList
+
+pub_rating_range = (db.session.query(Media.media_type, func.min(Media.public_rating), func.max(Media.public_rating))
+                    .where(Media.public_rating > 0)
+                    .group_by(Media.media_type))
+
+user_rating_range = (db.session.query(Media.media_type, func.min(Media.user_rating), func.max(Media.user_rating))
+                     .group_by(Media.media_type))
+user_rating_max = 10
+
+pub_ratings = {x[0]: [x[1], x[2]] for x in pub_rating_range.all()}
+user_ratings = {x[0]: [x[1], x[2]] for x in user_rating_range.all()}
 
 
 def serialize_media(media):
@@ -22,24 +34,17 @@ def serialize_media(media):
             new_value = (((value - old_min) * new_range) / old_range) + new_min
             return new_value
 
-        pub_rating_min = (db.session.query(func.min(Media.public_rating))
-                          .where(Media.media_type == media.media_type)
-                          .where(Media.public_rating > 0)
-                          .scalar())
-        pub_rating_max = (db.session.query(func.max(Media.public_rating))
-                          .where(Media.media_type == media.media_type)
-                          .scalar())
-        user_rating_min = (db.session.query(func.min(Media.user_rating))
-                           .where(Media.media_type == media.media_type)
-                           .scalar())
-        user_rating_max = 10
+        pub_min = pub_ratings[media.media_type][0]
+        pub_max = pub_ratings[media.media_type][1]
+        user_min = user_ratings[media.media_type][0]
+        user_max = user_rating_max
 
         return remap_value(media.public_rating,
-                           pub_rating_min,
-                           pub_rating_max,
-                           user_rating_min,
-                           user_rating_max) \
-            if (pub_rating_min <= 7 if pub_rating_min is not None else False) else media.public_rating
+                           pub_min,
+                           pub_max,
+                           user_min,
+                           user_max) \
+            if (pub_min <= 7 if pub_min is not None else False) else media.public_rating
 
     return {
         'id': media.id,
@@ -54,7 +59,7 @@ def serialize_media(media):
         'media_medium': media.media_medium,
         'user_rating': media.user_rating,
         'public_rating': media.public_rating,
-        # 'scaled_public_rating': calc_scaled_rating(),
+        'scaled_public_rating': calc_scaled_rating(),
         'is_dropped': media.is_dropped,
         'is_deleted': media.is_deleted,
         'created_at': media.created_at,
@@ -69,7 +74,7 @@ def serialize_media(media):
 
         'genres': media.genres,
         'themes': media.themes,
-        'tags': media.tags,
+        'tags': [x for x in media.tags if x.is_deleted is not True],
         'tier_lists': media.tier_lists,
     }
 

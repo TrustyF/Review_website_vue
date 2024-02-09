@@ -2,6 +2,7 @@ import hashlib
 import json
 import os.path
 import pprint
+import time
 
 import requests
 from flask import Blueprint, request, Response, jsonify, send_file
@@ -85,6 +86,9 @@ def handle_igdb_access_token(f_source):
 
 @bp.route("/get", methods=['POST'])
 def get():
+
+    # start = time.time()
+
     # parameters
     data = request.get_json()
     # print(data)
@@ -159,18 +163,18 @@ def get():
             ])
 
         if tier_lists:
-            q = (q.filter(TierList.name.in_(tier_lists))
+            q = (q.join(Media.tier_lists).filter(TierList.name.in_(tier_lists))
                  .group_by(Media.id).having(func.count(Media.id) == len(tier_lists)))
         else:
             q = q.filter(~Media.tier_lists.any())
         if genres:
-            q = (q.filter(Genre.id.in_(genres))
+            q = (q.join(Media.genres).filter(Genre.id.in_(genres))
                  .group_by(Media.id).having(func.count(Media.id) == len(genres)))
         if themes:
-            q = (q.filter(Theme.id.in_(themes))
+            q = (q.join(Media.themes).filter(Theme.id.in_(themes))
                  .group_by(Media.id).having(func.count(Media.id) == len(themes)))
         if tags:
-            q = (q.filter(Tag.id.in_(tags))
+            q = (q.join(Media.tags).filter(Tag.id.in_(tags))
                  .group_by(Media.id).having(func.count(Media.id) == len(tags)))
         if content_ratings:
             q = q.filter(or_(
@@ -231,6 +235,9 @@ def get():
     # get query and map
     media = query.all()
     serialized_media = [serialize_media(x) for x in media]
+
+    # end = time.time()
+    # print(end - start)
 
     return serialized_media, 200
 
