@@ -4,7 +4,6 @@ import os.path
 import pprint
 
 import requests
-import sqltap
 from flask import Blueprint, request, Response, jsonify, send_file
 from sqlalchemy import not_, and_, or_
 from sqlalchemy.orm import undefer, joinedload, lazyload
@@ -86,11 +85,6 @@ def handle_igdb_access_token(f_source):
 
 @bp.route("/get", methods=['POST'])
 def get():
-    import time
-    start = time.time()
-
-    # profiler = sqltap.start()
-
     # parameters
     data = request.get_json()
     # print(data)
@@ -237,12 +231,6 @@ def get():
     # get query and map
     media = query.all()
     serialized_media = [serialize_media(x) for x in media]
-
-    end = time.time()
-    print(end - start)
-
-    # statistics = profiler.collect()
-    # sqltap.report(statistics, "report.html")
 
     return serialized_media, 200
 
