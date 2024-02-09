@@ -54,7 +54,7 @@ def serialize_media(media):
         'media_medium': media.media_medium,
         'user_rating': media.user_rating,
         'public_rating': media.public_rating,
-        'scaled_public_rating': calc_scaled_rating(),
+        # 'scaled_public_rating': calc_scaled_rating(),
         'is_dropped': media.is_dropped,
         'is_deleted': media.is_deleted,
         'created_at': media.created_at,
@@ -69,7 +69,7 @@ def serialize_media(media):
 
         'genres': media.genres,
         'themes': media.themes,
-        'tags': [x for x in media.tags if x.is_deleted is not True],
+        'tags': media.tags,
         'tier_lists': media.tier_lists,
     }
 

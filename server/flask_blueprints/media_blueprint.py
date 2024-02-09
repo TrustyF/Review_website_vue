@@ -4,8 +4,10 @@ import os.path
 import pprint
 
 import requests
+import sqltap
 from flask import Blueprint, request, Response, jsonify, send_file
 from sqlalchemy import not_, and_, or_
+from sqlalchemy.orm import undefer, joinedload, lazyload
 from sqlalchemy.sql.expression import func
 from datetime import datetime, timedelta
 from math import ceil, floor
@@ -84,6 +86,11 @@ def handle_igdb_access_token(f_source):
 
 @bp.route("/get", methods=['POST'])
 def get():
+    import time
+    start = time.time()
+
+    # profiler = sqltap.start()
+
     # parameters
     data = request.get_json()
     # print(data)
@@ -107,7 +114,7 @@ def get():
     runtimes = data.get('runtimes')
     content_ratings = data.get('content_ratings')
 
-    print(tier_lists, media_types)
+    # print(tier_lists, media_types)
     search = data.get('search')
 
     user_rating_sort_override = data.get('user_rating_sort_override')
@@ -132,43 +139,44 @@ def get():
             q = q.filter(Media.media_type.in_(media_types))
 
         if search:
-            # if len(q.filter(Media.name.ilike(f'{search}')).all()) > 0:
-            #     q = q.filter(Media.name.ilike(f'{search}'))
 
-            if len(q.filter(Media.name.ilike(f'%{search}%')).all()) > 0:
-                q = q.filter(Media.name.ilike(f'%{search}%'))
+            def find_best_result(queries):
+                for f_query in queries:
+                    result = f_query.first()
+                    if result is not None:
+                        return f_query
 
-            elif len(q.filter(Media.external_name.ilike(f'%{search}%')).all()) > 0:
-                q = q.filter(Media.external_name.ilike(f'%{search}%'))
+            name_search = q.filter(Media.name.ilike(f'%{search}%'))
+            ext_name_search = q.filter(Media.external_name.ilike(f'%{search}%'))
+            genre_search = q.join(Media.genres).filter(Genre.name.ilike(f'%{search}%'))
+            tag_search = q.join(Media.tags).filter(Tag.name.ilike(f'%{search}%'))
+            studio_search = q.filter(Media.studio.ilike(f'%{search}%'))
+            author_search = q.filter(Media.author.ilike(f'%{search}%'))
+            overview_search = q.filter(Media.overview.ilike(f'%{search}%'))
 
-            elif len(q.join(Media.genres).filter(Genre.name.ilike(f'%{search}%')).all()) > 0:
-                q = q.join(Media.genres).filter(Genre.name.ilike(f'%{search}%'))
-
-            elif len(q.join(Media.tags).filter(Tag.name.ilike(f'%{search}%')).all()) > 0:
-                q = q.join(Media.tags).filter(Tag.name.ilike(f'%{search}%'))
-
-            elif len(q.filter(Media.studio.ilike(f'%{search}%')).all()) > 0:
-                q = q.filter(Media.studio.ilike(f'%{search}%'))
-
-            elif len(q.filter(Media.author.ilike(f'%{search}%')).all()) > 0:
-                q = q.filter(Media.author.ilike(f'%{search}%'))
-
-            else:
-                q = q.filter(Media.overview.ilike(f'%{search}%'))
+            q = find_best_result([
+                name_search,
+                ext_name_search,
+                genre_search,
+                tag_search,
+                studio_search,
+                author_search,
+                overview_search
+            ])
 
         if tier_lists:
-            q = (q.join(Media.tier_lists).filter(TierList.name.in_(tier_lists))
+            q = (q.filter(TierList.name.in_(tier_lists))
                  .group_by(Media.id).having(func.count(Media.id) == len(tier_lists)))
         else:
             q = q.filter(~Media.tier_lists.any())
         if genres:
-            q = (q.join(Media.genres).filter(Genre.id.in_(genres))
+            q = (q.filter(Genre.id.in_(genres))
                  .group_by(Media.id).having(func.count(Media.id) == len(genres)))
         if themes:
-            q = (q.join(Media.themes).filter(Theme.id.in_(themes))
+            q = (q.filter(Theme.id.in_(themes))
                  .group_by(Media.id).having(func.count(Media.id) == len(themes)))
         if tags:
-            q = (q.join(Media.tags).filter(Tag.id.in_(tags))
+            q = (q.filter(Tag.id.in_(tags))
                  .group_by(Media.id).having(func.count(Media.id) == len(tags)))
         if content_ratings:
             q = q.filter(or_(
@@ -229,6 +237,12 @@ def get():
     # get query and map
     media = query.all()
     serialized_media = [serialize_media(x) for x in media]
+
+    end = time.time()
+    print(end - start)
+
+    # statistics = profiler.collect()
+    # sqltap.report(statistics, "report.html")
 
     return serialized_media, 200
 
@@ -448,9 +462,6 @@ def get_image():
     media_type = request.args.get('type')
 
     poster_id = hashlib.shake_256(media_path.encode("utf-8")).hexdigest(5)
-
-    # return 'not found',404
-    # print(f'getting image {media_id=} {media_type=} {media_path=}')
 
     # return not found image
     if media_path in ['null', 'undefined', 'not_found']:

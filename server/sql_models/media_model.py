@@ -32,7 +32,7 @@ class Genre(db.Model):
     name: str = db.Column(db.String(50), nullable=False, unique=True)
     origin: str = db.Column(db.String(50), nullable=False)
 
-    media = db.relationship("Media", back_populates='genres', lazy='dynamic', secondary=media_genre_association)
+    media = db.relationship("Media", back_populates='genres', secondary=media_genre_association)
 
 
 @dataclass
@@ -53,7 +53,7 @@ class Theme(db.Model):
     name: str = db.Column(db.String(50), nullable=False, unique=True)
     origin: str = db.Column(db.String(50), nullable=False)
 
-    media = db.relationship("Media", back_populates='themes', lazy='dynamic', secondary=media_theme_association)
+    media = db.relationship("Media", back_populates='themes', secondary=media_theme_association)
 
 
 @dataclass
@@ -69,7 +69,7 @@ class Tag(db.Model):
 
     is_deleted: bool = db.Column(db.Boolean)
 
-    media = db.relationship("Media", back_populates='tags', lazy='dynamic', secondary=media_tag_association)
+    media = db.relationship("Media", back_populates='tags', secondary=media_tag_association)
 
     def __repr__(self):
         return f'{self.name}'
@@ -82,7 +82,7 @@ class TierList(db.Model):
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name: str = db.Column(db.String(50), nullable=False, unique=True)
 
-    media = db.relationship("Media", back_populates='tier_lists', lazy='dynamic', secondary=media_tier_list_association)
+    media = db.relationship("Media", back_populates='tier_lists', secondary=media_tier_list_association)
 
 
 @dataclass
@@ -120,9 +120,9 @@ class Media(db.Model):
     seasons: int = db.Column(db.Integer)
 
     content_rating_id = db.Column(db.Integer, db.ForeignKey('content_rating.id'))
-    content_rating = db.relationship("ContentRating")
+    content_rating = db.relationship("ContentRating", lazy='joined')
 
-    genres = db.relationship("Genre", secondary=media_genre_association)
-    themes = db.relationship("Theme", secondary=media_theme_association)
-    tags = db.relationship("Tag", secondary=media_tag_association)
-    tier_lists = db.relationship("TierList", secondary=media_tier_list_association)
+    genres = db.relationship("Genre", secondary=media_genre_association, lazy='joined')
+    themes = db.relationship("Theme", secondary=media_theme_association, lazy='joined')
+    tags = db.relationship("Tag", secondary=media_tag_association, lazy='joined')
+    tier_lists = db.relationship("TierList", secondary=media_tier_list_association, lazy='joined')
