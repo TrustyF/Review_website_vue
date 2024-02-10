@@ -9,7 +9,6 @@ onMounted(() => {
 
 <template>
   <media-feed :media_types="['tv']"
-              :tier_lists="['not anime']"
               :media_container_type="'tv'"
   ></media-feed>
 
