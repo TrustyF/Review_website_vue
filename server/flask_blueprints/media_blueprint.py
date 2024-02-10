@@ -86,7 +86,6 @@ def handle_igdb_access_token(f_source):
 
 @bp.route("/get", methods=['POST'])
 def get():
-
     # start = time.time()
 
     # parameters
@@ -133,40 +132,47 @@ def get():
 
     def apply_filters(q):
 
+        match = ''
+
         if media_types and len(media_types) > 0:
             q = q.filter(Media.media_type.in_(media_types))
 
         if search:
+            conditions = [
+                Media.name.ilike(f'%{search}%'),
+                Media.external_name.ilike(f'%{search}%'),
+                Media.genres.any(Genre.name.ilike(f'%{search}%')),
+                Media.tags.any(Tag.name.ilike(f'%{search}%')),
+                Media.studio.ilike(f'%{search}%'),
+                Media.author.ilike(f'%{search}%'),
+                Media.overview.ilike(f'%{search}%'),
+            ]
+            matches = [
+                'name',
+                'original name',
+                'genre',
+                'tag',
+                'studio',
+                'author',
+                'overview',
+            ]
 
-            def find_best_result(queries):
-                for f_query in queries:
-                    result = f_query.first()
-                    if result is not None:
-                        return f_query
+            for i, cond in enumerate(conditions):
+                res = q.filter(cond).first()
+                if res is not None:
+                    q = q.filter(cond)
+                    match = matches[i]
+                    break
 
-            name_search = q.filter(Media.name.ilike(f'%{search}%'))
-            ext_name_search = q.filter(Media.external_name.ilike(f'%{search}%'))
-            genre_search = q.join(Media.genres).filter(Genre.name.ilike(f'%{search}%'))
-            tag_search = q.join(Media.tags).filter(Tag.name.ilike(f'%{search}%'))
-            studio_search = q.filter(Media.studio.ilike(f'%{search}%'))
-            author_search = q.filter(Media.author.ilike(f'%{search}%'))
-            overview_search = q.filter(Media.overview.ilike(f'%{search}%'))
-
-            q = find_best_result([
-                name_search,
-                ext_name_search,
-                genre_search,
-                tag_search,
-                studio_search,
-                author_search,
-                overview_search
-            ])
+                if i >= len(conditions) - 1:
+                    q = q.filter(cond)
 
         if tier_lists:
             q = (q.join(Media.tier_lists).filter(TierList.name.in_(tier_lists))
                  .group_by(Media.id).having(func.count(Media.id) == len(tier_lists)))
         else:
             q = q.filter(~Media.tier_lists.any())
+
         if genres:
             q = (q.join(Media.genres).filter(Genre.id.in_(genres))
                  .group_by(Media.id).having(func.count(Media.id) == len(genres)))
@@ -200,7 +206,7 @@ def get():
         if runtimes:
             q = q.filter(Media.runtime >= int(runtimes[0]), Media.runtime <= int(runtimes[1]))
 
-        return q
+        return q, match
 
     def order_results(q):
         # order result
@@ -225,7 +231,7 @@ def get():
 
         return q
 
-    query = apply_filters(query)
+    query, matched_search_field = apply_filters(query)
     query = order_results(query)
 
     # limiting
@@ -239,7 +245,10 @@ def get():
     # end = time.time()
     # print(end - start)
 
-    return serialized_media, 200
+    return {
+        'media': serialized_media,
+        'matched_field': matched_search_field,
+    }, 200
 
 
 @bp.route("/find", methods=['GET'])
