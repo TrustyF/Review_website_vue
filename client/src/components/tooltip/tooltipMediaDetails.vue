@@ -80,116 +80,120 @@ onUnmounted(() => {
     <img @click="handle_pane_close" class="close_pane_button" alt="close_edit_pane"
          src="/ui/cross_button.png">
 
-    <div class="top_container">
+    <div class="overflow">
 
-      <img :src="media['poster_path']" @load="imageHandler" class="poster" alt="poster">
+      <div class="top_container">
 
-      <!--      <img v-lazy="media['poster_path']" class="bg_poster" alt="poster">-->
+        <img :src="media['poster_path']" @load="imageHandler" class="poster" alt="poster">
 
-      <div class="footer_wrapper" v-if="is_image_loaded">
+        <!--      <img v-lazy="media['poster_path']" class="bg_poster" alt="poster">-->
 
-        <div class="header">
-          <div>
-            <h1 class="title">{{ media['name'] }}</h1>
-          </div>
-          <div class="secondary_info">
-            <h2 class="date" v-if="media"> {{ get_year_from_release_date(media['release_date']) }}</h2>
-            <h2 class="date" v-if="media['runtime']>0">•</h2>
-            <h2 class="date" v-if="media['runtime']>0">{{ convert_seconds_to_time(media['runtime']) }}</h2>
-            <h2 class="date" v-if="media['seasons']>0">•</h2>
-            <h2 class="date" v-if="media['seasons']>0">{{ media['seasons'] + ' seasons' }} </h2>
-            <h2 class="date" v-if="media['episodes']>0">•</h2>
-            <h2 class="date" v-if="media['episodes']>0">{{ media['episodes'] + ' episodes' }} </h2>
-            <!--            <h2 class="date" v-if="data['content_rating'] && data['content_rating'].age">•</h2>-->
-            <h1 class="content_rating" v-if="media['content_rating'] && media['content_rating'].age">
-              +{{ media['content_rating'].age }}</h1>
-          </div>
-        </div>
+        <div class="footer_wrapper" v-if="is_image_loaded">
 
-        <div class="badges">
-          <div class="rating_box">
-            <h2 class="rating"> {{ media['user_rating'] }}</h2>
-            <img :src="blue_star" alt="gold_star" class="gold_star">
+          <div class="header">
+            <div>
+              <h1 class="title">{{ media['name'] }}</h1>
+            </div>
+            <div class="secondary_info">
+              <h2 class="date" v-if="media"> {{ get_year_from_release_date(media['release_date']) }}</h2>
+              <h2 class="date" v-if="media['runtime']>0">•</h2>
+              <h2 class="date" v-if="media['runtime']>0">{{ convert_seconds_to_time(media['runtime']) }}</h2>
+              <h2 class="date" v-if="media['seasons']>0">•</h2>
+              <h2 class="date" v-if="media['seasons']>0">{{ media['seasons'] + ' seasons' }} </h2>
+              <h2 class="date" v-if="media['episodes']>0">•</h2>
+              <h2 class="date" v-if="media['episodes']>0">{{ media['episodes'] + ' episodes' }} </h2>
+              <!--            <h2 class="date" v-if="data['content_rating'] && data['content_rating'].age">•</h2>-->
+              <h1 class="content_rating" v-if="media['content_rating'] && media['content_rating'].age">
+                +{{ media['content_rating'].age }}</h1>
+            </div>
           </div>
 
-          <div class="rating_box" v-if="media['scaled_public_rating']>0">
-            <h2 class="rating"> {{ Math.round(media['scaled_public_rating'] * 10) / 10 }}</h2>
-            <img :src="gold_star" alt="gold_star" class="gold_star">
+          <div class="badges">
+            <div class="rating_box">
+              <h2 class="rating"> {{ media['user_rating'] }}</h2>
+              <img :src="blue_star" alt="gold_star" class="gold_star">
+            </div>
+
+            <div class="rating_box" v-if="media['scaled_public_rating']>0">
+              <h2 class="rating"> {{ Math.round(media['scaled_public_rating'] * 10) / 10 }}</h2>
+              <img :src="gold_star" alt="gold_star" class="gold_star">
+            </div>
+
+            <rating-circle class="rating_circle" :text_size="(350)" v-if="media['scaled_public_rating']>0"
+                           :score="(media['user_rating'] + media['scaled_public_rating'])/2"></rating-circle>
           </div>
 
-          <rating-circle class="rating_circle" :text_size="(350)" v-if="media['scaled_public_rating']>0"
-                         :score="(media['user_rating'] + media['scaled_public_rating'])/2"></rating-circle>
-        </div>
-
-        <div v-if="media['overview']">
-          <h1 style="font-size: 1.2em;font-weight: 800;margin-bottom: 10px">Overview</h1>
-          <p class="overview" style="max-height: 100px;overflow-y: scroll">{{ media['overview'] }}</p>
-        </div>
-
-        <div style="display: flex;gap: 30px">
-          <div v-if="media['author']">
-            <p class="overview">Author</p>
-            <h1 style="font-size: 1em;font-weight: 800">{{ media['author'] }}</h1>
+          <div v-if="media['overview']">
+            <h1 style="font-size: 1.2em;font-weight: 800;margin-bottom: 10px">Overview</h1>
+            <p class="overview" style="max-height: 100px;overflow-y: scroll">{{ media['overview'] }}</p>
           </div>
-          <div v-if="media['studio']">
-            <p class="overview">Studio</p>
-            <h1 style="font-size: 1em;font-weight: 800">{{ media['studio'] }}</h1>
+
+          <div style="display: flex;gap: 30px">
+            <div v-if="media['author']">
+              <p class="overview">Author</p>
+              <h1 style="font-size: 1em;font-weight: 800">{{ media['author'] }}</h1>
+            </div>
+            <div v-if="media['studio']">
+              <p class="overview">Studio</p>
+              <h1 style="font-size: 1em;font-weight: 800">{{ media['studio'] }}</h1>
+            </div>
           </div>
+
         </div>
 
       </div>
 
+
+      <div class="bottom_container">
+
+        <div class="genres_list" v-if="media['genres'].length > 0">
+          <div class="genre_tag"
+               v-for="genre in media['genres']"
+               :key="genre['id']"
+          >{{ genre['name'] }}
+          </div>
+        </div>
+
+        <div class="tags_wrapper" v-if="media['tags']!==undefined && media['tags'].length > 0">
+          <div v-for="tag in media['tags']" :key="tag['id']">
+            <badge :data="tag" :min_size="200" :show_title="true"></badge>
+
+          </div>
+        </div>
+
+        <div style="display: flex;gap: 10px">
+          <div v-if="media['external_link']">
+            <img v-lazy="external_img" class="button_img" @click="open_link_new_tab(media['external_link'])">
+          </div>
+          <div v-if="media['video_link']">
+            <img v-lazy="youtube_img" class="button_img" @click="open_link_new_tab(media['video_link'])">
+          </div>
+        </div>
+
+
+      </div>
     </div>
-
-
-    <div class="bottom_container">
-
-      <div class="genres_list" v-if="media['genres'].length > 0">
-        <div class="genre_tag"
-             v-for="genre in media['genres']"
-             :key="genre['id']"
-        >{{ genre['name'] }}
-        </div>
-      </div>
-
-      <div class="tags_wrapper" v-if="media['tags']!==undefined && media['tags'].length > 0">
-        <div v-for="tag in media['tags']" :key="tag['id']">
-          <badge :data="tag" :min_size="200" :show_title="true"></badge>
-
-        </div>
-      </div>
-
-      <div style="display: flex;gap: 10px">
-        <div v-if="media['external_link']">
-          <img v-lazy="external_img" class="button_img" @click="open_link_new_tab(media['external_link'])">
-        </div>
-        <div v-if="media['video_link']">
-          <img v-lazy="youtube_img" class="button_img" @click="open_link_new_tab(media['video_link'])">
-        </div>
-      </div>
-
-
-    </div>
-
   </div>
 </template>
 
 <style scoped>
 .media_details_wrapper {
-
+  position: relative;
   margin: 0 auto 0 auto;
   max-width: 1000px;
   padding: 0 40px 0 40px;
 
   /*outline: 1px solid red;*/
   /*min-height: 100px;*/
-  overflow-y: scroll;
 
   height: 100%;
   /*outline: 1px solid red;*/
   display: flex;
   flex-flow: column;
   gap: 50px;
+}
+.overflow {
+  overflow-y: scroll;
 }
 
 .top_container {
@@ -373,6 +377,8 @@ onUnmounted(() => {
   right: 20px;
   top: 20px;
   width: 30px;
+  padding: 30px;
+  margin: -30px;
   object-fit: contain;
   z-index: 10;
 }
@@ -402,6 +408,15 @@ onUnmounted(() => {
     margin-left: 25px;
     height: 300px;
     margin-right: auto;
+  }
+
+  .close_pane_button {
+    /*outline: 1px solid red;*/
+    right: 0;
+    top: 0;
+    width: 20px;
+    padding: 30px;
+    margin: -30px;
   }
 }
 </style>
