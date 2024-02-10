@@ -7,12 +7,14 @@ import '@/assets/styles/dark.css'
 import {computed, inject, onMounted, provide, ref, watch} from "vue";
 import TooltipBadge from "@/components/tooltip/tooltipBadge.vue";
 import TooltipEditor from "@/components/tooltip/tooltipEditor.vue";
+import TooltipMediaDetails from "@/components/tooltip/tooltipMediaDetails.vue";
 
 const selected_media = ref({})
 const edit_media = ref(undefined)
 const edit_mode = inject('edit_mode')
 const edit_pane_open = ref(false)
 const add_pane_open = ref(false)
+const media_detail_pane_open = ref(false)
 let is_mobile = ref(false)
 let is_visible_navbar = ref(false)
 
@@ -45,6 +47,7 @@ provide('selected_media', selected_media)
 provide('edit_media', edit_media)
 provide('edit_pane_open', edit_pane_open)
 provide('add_pane_open', add_pane_open)
+provide('media_detail_pane_open', media_detail_pane_open)
 provide('is_mobile', is_mobile)
 provide('is_visible_navbar', is_visible_navbar)
 provide('media_scales', media_scales)
@@ -90,6 +93,10 @@ onMounted(() => {
     <tooltip-editor :edit="true"></tooltip-editor>
   </div>
 
+  <div class="tooltip_editor_top_wrapper" v-if="media_detail_pane_open">
+    <tooltip-media-details></tooltip-media-details>
+  </div>
+
   <button v-if="edit_mode" style="position: fixed;right: 10px;top: 70px;z-index: 10" @click="add_pane_open=true">add</button>
   <p v-if="edit_mode" style="position: fixed;right: 10px;top: 150px;font-size: 0.7em;z-index: 10;background-color: black">{{ curr_api }}</p>
 
@@ -111,7 +118,7 @@ onMounted(() => {
   margin: 0 auto 0 auto;
   max-width: 1000px;
   min-height: 80vh;
-  overflow-x: clip;
+  /*overflow-x: clip;*/
 
   padding: 0 40px 0 40px;
 }

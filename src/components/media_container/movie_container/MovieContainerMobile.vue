@@ -5,6 +5,7 @@ import blue_star from '/ui/blue_star.png'
 import RatingCircle from "@/components/media_container/movie_container/sub_components/RatingCircle.vue";
 import BadgeTooltip from "@/components/media_container/movie_container/sub_components/badgeExpanded.vue";
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
+import {useRouter} from 'vue-router'
 
 import external_img from '/ui/external_link.png'
 import youtube_img from '/ui/youtube.png'
@@ -16,6 +17,10 @@ let emits = defineEmits(["media_data"]);
 const curr_api = inject("curr_api");
 let media_scales = inject('media_scales')
 let vis_container_content_rating = inject('vis_container_content_rating')
+let selected_media = inject('selected_media')
+const media_detail_pane_open = inject("media_detail_pane_open");
+
+const router = useRouter()
 
 
 const media_type = computed(() => props['data']['media_type'])
@@ -50,11 +55,15 @@ function open_link_new_tab(path) {
   window.open(path, '_blank');
 }
 
+function push_to_details() {
+  selected_media.value = props['data']
+  media_detail_pane_open.value = true
+}
 </script>
 
 <template>
   <div>
-    <div class="movie_mobile_container_wrapper" :style="data['tags']!==undefined && data['tags'].length > 0 ?
+    <div class="movie_mobile_container_wrapper" @click="push_to_details" :style="data['tags']!==undefined && data['tags'].length > 0 ?
      'border-radius: 8px 8px 0 0' : 'border-radius: 8px'">
 
       <div class="poster_wrapper">
@@ -76,7 +85,7 @@ function open_link_new_tab(path) {
             <h2 class="date" v-if="data['runtime']>0">{{ ' • ' + convert_seconds_to_time(data['runtime']) }}</h2>
             <h2 class="date" v-if="data['seasons']>0">{{ ' • ' + data['seasons'] + ' seasons' }} </h2>
             <h2 class="date" v-if="data['episodes']>0">{{ ' • ' + data['episodes'] + ' episodes' }} </h2>
-<!--            <h2 class="date" v-if="data['content_rating'] && data['content_rating'].age">•</h2>-->
+            <!--            <h2 class="date" v-if="data['content_rating'] && data['content_rating'].age">•</h2>-->
             <h1 class="content_rating" v-if="data['content_rating'] && data['content_rating'].age">
               +{{ data['content_rating'].age }}</h1>
           </div>
@@ -156,7 +165,7 @@ function open_link_new_tab(path) {
   position: relative;
   width: v-bind(poster_size [0] + 'px');
   height: v-bind(poster_size [1] + 'px');
-  box-shadow: 1px 1px 7px rgba(0,0,0,0.5);
+  box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.5);
 
   border-radius: 8px;
   object-fit: scale-down;
@@ -210,6 +219,7 @@ function open_link_new_tab(path) {
   color: grey;
   border: 0.1em dimgrey solid;
 }
+
 .secondary_info {
   display: flex;
   flex-flow: row;
@@ -298,6 +308,7 @@ function open_link_new_tab(path) {
   background-color: #25222a;
   padding: 7px 0 7px 5px;
 }
+
 .edit_tools_wrapper {
   pointer-events: none;
 
@@ -332,6 +343,7 @@ function open_link_new_tab(path) {
   filter: invert() drop-shadow(0.07em 0 0.01em black) drop-shadow(0 0.07em 0.01em black) drop-shadow(-0.07em 0 0.01em black) drop-shadow(0 -0.07em 0.01em black);
   border-radius: 5px;
 }
+
 .tag {
   /*height: calc(v-bind(min_size) * 0.3px);*/
   position: relative;

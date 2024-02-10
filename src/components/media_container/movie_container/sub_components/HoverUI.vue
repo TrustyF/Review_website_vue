@@ -28,15 +28,23 @@ let edit_mode = inject('edit_mode')
 let edit_pane_open = inject('edit_pane_open')
 let add_pane_open = inject('add_pane_open')
 let selected_media = inject('selected_media')
+const media_detail_pane_open = inject("media_detail_pane_open");
+
 
 const curr_api = inject("curr_api");
 let vis_container_content_rating = inject('vis_container_content_rating')
 
-function emitted_media_to_edit_pane() {
+function emitted_media_to_edit_pane(e) {
+  e.preventDefault()
   if (!edit_pane_open.value && !add_pane_open.value) {
     edit_pane_open.value = true
   }
   selected_media.value = props.data
+}
+
+function push_to_details() {
+  selected_media.value = props['data']
+  media_detail_pane_open.value = true
 }
 
 function open_link_new_tab(path) {
@@ -70,11 +78,11 @@ function open_link_new_tab(path) {
   </div>
 
   <div class="edit_tools_wrapper">
-    <img v-if="edit_mode" class="edit_tool" :src="crayon_img" @click="emitted_media_to_edit_pane">
+    <img v-if="edit_mode" class="edit_tool" :src="crayon_img" @click.stop="emitted_media_to_edit_pane">
     <img v-if="data['video_link']" class="edit_tool" title="go to video" :src="youtube_img"
-         @click="open_link_new_tab(data['video_link'])">
-    <img v-if="data['external_link']" class="edit_tool" title="go to external website" :src="external_img"
-         @click="open_link_new_tab(data['external_link'])">
+         @click.stop="open_link_new_tab(data['video_link'])">
+    <img class="edit_tool" title="Open" :src="external_img"
+         @click.stop="push_to_details">
   </div>
 
   <!--  <input class="seen_checkbox" type="checkbox" title="mark as seen">-->
@@ -84,6 +92,7 @@ function open_link_new_tab(path) {
 
 <style scoped>
 .poster_overflow {
+  pointer-events: none;
   position: absolute;
   inset: 0;
   width: v-bind(poster_size [0]);

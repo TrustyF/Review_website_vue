@@ -40,6 +40,7 @@ let media_scales = inject('media_scales')
 let selected_media = inject('selected_media')
 
 const curr_api = inject("curr_api");
+const media_detail_pane_open = inject("media_detail_pane_open");
 const router = useRouter()
 
 const media_type = computed(() => props['data']['media_type'] || 'movie')
@@ -96,13 +97,14 @@ function format_image_path(f_path, f_id) {
 }
 
 function push_to_details() {
-  router.push({name: `${props.data['media_type']}_details`, params: {id: props.data['id']}})
+  selected_media.value = props['data']
+  media_detail_pane_open.value = true
 }
 
 </script>
 
 <template>
-  <div class="movie_container_wrapper" @click="push_to_details">
+  <div class="movie_container_wrapper">
 
     <!--    todo hide erotica by default -->
     <!--    todo panel for expanded movie -->
