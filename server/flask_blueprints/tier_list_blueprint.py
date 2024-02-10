@@ -1,4 +1,5 @@
 import json
+from dataclasses import asdict
 
 import sqlalchemy.exc
 from flask import Blueprint, request, Response, jsonify, send_file
@@ -13,8 +14,18 @@ bp = Blueprint('tier_list', __name__)
 
 @bp.route("/get", methods=['GET'])
 def get():
-    all_tier_lists = db.session.query(TierList).all()
-    return all_tier_lists, 200
+    # all_tier_lists = db.session.query(TierList).all()
+
+    tier_list_counts = (
+        db.session.query(TierList, func.count(Media.id).label('count'))
+        .outerjoin(TierList.media)
+        .group_by(TierList)
+        .all()
+    )
+
+    serialized_tier_lists = [{**asdict(tag), 'count': count} for tag, count in tier_list_counts]
+
+    return serialized_tier_lists, 200
 
 
 @bp.route("/add", methods=['GET'])

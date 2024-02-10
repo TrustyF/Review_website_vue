@@ -168,8 +168,14 @@ def get():
                     q = q.filter(cond)
 
         if tier_lists:
-            q = (q.join(Media.tier_lists).filter(TierList.name.in_(tier_lists))
-                 .group_by(Media.id).having(func.count(Media.id) == len(tier_lists)))
+            print(tier_lists)
+            if 'all' in tier_lists:
+                print('all')
+                q = q.filter(Media.tier_lists.any())
+            else:
+                q = (q.join(Media.tier_lists).filter(TierList.name.in_(tier_lists))
+                     .group_by(Media.id).having(func.count(Media.id) == len(tier_lists)))
+
         else:
             q = q.filter(~Media.tier_lists.any())
 
