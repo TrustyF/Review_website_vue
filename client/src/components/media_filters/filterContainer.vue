@@ -7,7 +7,7 @@ import axios from "axios";
 
 let props = defineProps({
   media_types: {
-    default: null,
+    default: () => [],
     type: Array
   },
   tier_lists: {
@@ -90,14 +90,24 @@ async function fetch_filters() {
   content_ratings.value = result['content_ratings']
   content_ratings.value.sort((a, b) => a['order'] > b['order'])
   content_ratings.value.map((x) => x['name'] += `: +${x['age']}`)
+
+  console.log(content_ratings.value)
+
 }
 
 function emit_filter(title, event) {
+  console.log(title,event.value)
   emits('filter', [title, event])
 }
 
 onMounted(() => {
   fetch_filters()
+
+ // hide erotica
+  if (props.media_types.includes('manga')){
+    emits('filter', ['content_ratings',[31,32]])
+  }
+
 })
 </script>
 

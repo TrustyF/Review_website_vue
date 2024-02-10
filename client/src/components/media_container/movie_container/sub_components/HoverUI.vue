@@ -81,8 +81,8 @@ function open_link_new_tab(path) {
     <img v-if="edit_mode" class="edit_tool" :src="crayon_img" @click.stop="emitted_media_to_edit_pane">
     <img v-if="data['video_link']" class="edit_tool" title="go to video" :src="youtube_img"
          @click.stop="open_link_new_tab(data['video_link'])">
-    <img class="edit_tool" title="Open" :src="external_img"
-         @click.stop="push_to_details">
+    <img v-if="data['external_link']" class="edit_tool" title="go to external website" :src="external_img"
+         @click.stop="open_link_new_tab(data['external_link'])">
   </div>
 
   <!--  <input class="seen_checkbox" type="checkbox" title="mark as seen">-->
