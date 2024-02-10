@@ -29,6 +29,7 @@ let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
 const session_seed = inject("session_seed");
 const is_mobile = inject("is_mobile");
+const rangeOfNumbers = (a,b) => [...Array(b+1).keys()].slice(a)
 
 let media = ref(new Array(10).fill().map((e, i) => {
   return {
@@ -46,6 +47,8 @@ async function get_media() {
     'types': props.media_types,
     'order': props.order,
     'ratings': props.ratings,
+    'content_ratings':rangeOfNumbers(20,39).filter((elem,i)=> ![33,34].includes(elem)),
+
     'tier_lists': props.tier_lists,
     'session_seed': session_seed,
     'user_rating_sort_override': true,
@@ -66,7 +69,7 @@ async function get_media() {
   console.log(result)
   if (result.status !== 200) return
 
-  media.value = result.data
+  media.value = result.data['media']
   // sort tags by color
   const priority = ['gold', 'green', 'purple', 'silver', 'red']
   media.value.forEach((entry, i) => {
