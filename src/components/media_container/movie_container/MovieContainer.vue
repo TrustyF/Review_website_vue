@@ -106,11 +106,8 @@ function push_to_details() {
 <template>
   <div class="movie_container_wrapper">
 
-    <!--    todo hide erotica by default -->
-    <!--    todo panel for expanded movie -->
-
-    <img v-if="lazy_poster && image_path" class="poster" alt="" v-lazy="image_path"/>
-    <img v-else-if="image_path" class="poster" alt="" :src="image_path"/>
+    <img @click="push_to_details" v-if="lazy_poster && image_path" class="poster" alt="" v-lazy="image_path"/>
+    <img @click="push_to_details" v-else-if="image_path" class="poster" alt="" :src="image_path"/>
     <div v-else class="poster"></div>
 
     <HoverUI :data="data" :poster_size="poster_size" :min_size="min_size"></HoverUI>
