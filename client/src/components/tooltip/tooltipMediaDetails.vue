@@ -1,5 +1,5 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed} from "vue";
+import {inject, onMounted, watch, ref, computed, onUnmounted} from "vue";
 import {useRoute} from 'vue-router';
 import axios from "axios";
 
@@ -8,6 +8,8 @@ import blue_star from '/ui/blue_star.png'
 import RatingCircle from "@/components/media_container/movie_container/sub_components/RatingCircle.vue";
 import BadgeTooltip from "@/components/media_container/movie_container/sub_components/badgeExpanded.vue";
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
+import external_img from '/ui/external_link.png'
+import youtube_img from '/ui/youtube.png'
 
 // let props = defineProps({
 //   id: {
@@ -17,47 +19,13 @@ import Badge from "@/components/media_container/movie_container/sub_components/b
 // });
 // let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
+const media = inject("selected_media");
+const media_detail_pane_open = inject("media_detail_pane_open");
 
 const route = useRoute()
 const media_id = route.params.id
 
 let is_image_loaded = ref(false)
-
-const media = ref()
-
-async function get_media() {
-
-  const url = new URL(`${curr_api}/media/get`)
-  const params = {
-    'id': media_id
-  }
-
-  const result = await axios(
-      {
-        method: 'POST',
-        url: url,
-        headers: {"Content-Type": "application/json"},
-        data: JSON.stringify(params)
-      })
-      .then(response => response.data)
-      .catch(error => {
-        console.log('get_media', error.response)
-        return []
-      })
-
-  console.log('res', result)
-
-  // sort tags by color
-  const priority = ['gold', 'green', 'purple', 'silver', 'red']
-
-  result.tags.sort((a, b) => {
-    const fi = priority.indexOf(a.tier)
-    const si = priority.indexOf(b.tier)
-    return fi - si
-  })
-
-  media.value = result
-}
 
 function convert_seconds_to_time(f_seconds) {
   let minutes = f_seconds % 60
@@ -79,17 +47,42 @@ function get_year_from_release_date(string) {
   }
 }
 
+function handle_pane_close() {
+  if (media_detail_pane_open.value) media_detail_pane_open.value = false
+}
+
+function imageHandler(event) {
+  is_image_loaded.value = true
+}
+
+function handle_key_press(e) {
+  if (e.keyCode === 27) handle_pane_close()
+}
+
+function open_link_new_tab(path) {
+  window.open(path, '_blank');
+}
+
 onMounted(() => {
-  get_media()
+  window.addEventListener('keydown', handle_key_press)
+  document.body.style.overflow = 'hidden';
+})
+onUnmounted(() => {
+  window.removeEventListener('keydown', handle_key_press)
+  document.body.style.overflow = 'scroll';
 })
 </script>
 
 <template>
+  <!--  <p style="margin-top: 200px">test</p>-->
   <div class="media_details_wrapper" v-if="media">
+
+    <img @click="handle_pane_close" class="close_pane_button" alt="close_edit_pane"
+         src="/ui/cross_button.png">
 
     <div class="top_container">
 
-      <img v-lazy="media['poster_path']" @load="is_image_loaded=true" class="poster" alt="poster">
+      <img :src="media['poster_path']" @load="imageHandler" class="poster" alt="poster">
 
       <!--      <img v-lazy="media['poster_path']" class="bg_poster" alt="poster">-->
 
@@ -100,12 +93,13 @@ onMounted(() => {
             <h1 class="title">{{ media['name'] }}</h1>
           </div>
           <div class="secondary_info">
-            <h2 class="date" v-if="media"> {{
-                get_year_from_release_date(media['release_date'])
-              }}</h2>
-            <h2 class="date" v-if="media['runtime']>0">{{ ' • ' + convert_seconds_to_time(media['runtime']) }}</h2>
-            <h2 class="date" v-if="media['seasons']>0">{{ ' • ' + media['seasons'] + ' seasons' }} </h2>
-            <h2 class="date" v-if="media['episodes']>0">{{ ' • ' + media['episodes'] + ' episodes' }} </h2>
+            <h2 class="date" v-if="media"> {{ get_year_from_release_date(media['release_date']) }}</h2>
+            <h2 class="date" v-if="media['runtime']>0">•</h2>
+            <h2 class="date" v-if="media['runtime']>0">{{ convert_seconds_to_time(media['runtime']) }}</h2>
+            <h2 class="date" v-if="media['seasons']>0">•</h2>
+            <h2 class="date" v-if="media['seasons']>0">{{ media['seasons'] + ' seasons' }} </h2>
+            <h2 class="date" v-if="media['episodes']>0">•</h2>
+            <h2 class="date" v-if="media['episodes']>0">{{ media['episodes'] + ' episodes' }} </h2>
             <!--            <h2 class="date" v-if="data['content_rating'] && data['content_rating'].age">•</h2>-->
             <h1 class="content_rating" v-if="media['content_rating'] && media['content_rating'].age">
               +{{ media['content_rating'].age }}</h1>
@@ -127,9 +121,9 @@ onMounted(() => {
                          :score="(media['user_rating'] + media['scaled_public_rating'])/2"></rating-circle>
         </div>
 
-        <div v-if="media['overview']" style="max-height: 100px;overflow-y: scroll">
+        <div v-if="media['overview']">
           <h1 style="font-size: 1.2em;font-weight: 800;margin-bottom: 10px">Overview</h1>
-          <p class="overview">{{ media['overview'] }}</p>
+          <p class="overview" style="max-height: 100px;overflow-y: scroll">{{ media['overview'] }}</p>
         </div>
 
         <div style="display: flex;gap: 30px">
@@ -146,6 +140,7 @@ onMounted(() => {
       </div>
 
     </div>
+
 
     <div class="bottom_container">
 
@@ -164,6 +159,16 @@ onMounted(() => {
         </div>
       </div>
 
+      <div style="display: flex;gap: 10px">
+        <div v-if="media['external_link']">
+          <img v-lazy="external_img" class="button_img" @click="open_link_new_tab(media['external_link'])">
+        </div>
+        <div v-if="media['video_link']">
+          <img v-lazy="youtube_img" class="button_img" @click="open_link_new_tab(media['video_link'])">
+        </div>
+      </div>
+
+
     </div>
 
   </div>
@@ -171,9 +176,16 @@ onMounted(() => {
 
 <style scoped>
 .media_details_wrapper {
+
+  margin: 0 auto 0 auto;
+  max-width: 1000px;
+  padding: 0 40px 0 40px;
+
   /*outline: 1px solid red;*/
-  min-height: 100px;
-  margin-top: 80px;
+  /*min-height: 100px;*/
+  overflow-y: scroll;
+
+  height: 100%;
   /*outline: 1px solid red;*/
   display: flex;
   flex-flow: column;
@@ -181,6 +193,8 @@ onMounted(() => {
 }
 
 .top_container {
+  /*outline: 1px solid red;*/
+
   height: 500px;
   width: 100%;
 
@@ -192,15 +206,22 @@ onMounted(() => {
 }
 
 .bottom_container {
+  /*outline: 1px solid red;*/
   /*height: 500px;*/
-  width: 100%;
+  /*width: 100%;*/
 
   position: relative;
   display: flex;
   flex-flow: column;
-  gap: 10px;
-  /*justify-items: center;*/
-  /*align-items: center;*/
+  gap: 20px;
+}
+
+.button_img {
+  height: 40px;
+  filter: invert();
+  border: 0.1em solid grey;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 .poster {
@@ -229,7 +250,7 @@ onMounted(() => {
 }
 
 .footer_wrapper {
-  overflow-x: hidden;
+  /*overflow-x: hidden;*/
   position: relative;
   padding: 10px 10px 10px 25px;
   display: flex;
@@ -336,7 +357,7 @@ onMounted(() => {
 
 .tags_wrapper {
   display: flex;
-  flex-flow: row;
+  flex-flow: row wrap;
   gap: 10px;
 }
 
@@ -345,9 +366,42 @@ onMounted(() => {
   line-height: 1.2em;
 }
 
+.close_pane_button {
+  cursor: pointer;
+  position: absolute;
+  filter: invert();
+  right: 20px;
+  top: 20px;
+  width: 30px;
+  object-fit: contain;
+  z-index: 10;
+}
+
 @media only screen and (max-width: 500px) {
   .media_details_wrapper {
-    outline: 1px solid greenyellow;
+    gap: 0;
+    margin: 0;
+    /*max-width: initial;*/
+    padding: 0;
+  }
+
+  .top_container {
+    flex-flow: column;
+    height: auto;
+  }
+
+  .bottom_container {
+    padding: 25px;
+  }
+
+  .footer_wrapper {
+    padding: 25px;
+  }
+
+  .poster {
+    margin-left: 25px;
+    height: 300px;
+    margin-right: auto;
   }
 }
 </style>

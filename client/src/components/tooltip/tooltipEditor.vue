@@ -236,16 +236,16 @@ onMounted(() => {
   updated.value = 'none'
   added.value = 'none'
   window.addEventListener('keydown', handle_key_press)
+  document.body.style.overflow = 'hidden';
 })
 onUnmounted(() => {
   window.removeEventListener('keydown', handle_key_press)
+  document.body.style.overflow = 'scroll';
 })
 </script>
 
 <template>
   <div class="edit_page_wrapper">
-
-    <p>{{ added }}</p>
 
     <img @click="handle_pane_close" class="close_pane_button" alt="close_edit_pane"
          src="/ui/cross_button.png">

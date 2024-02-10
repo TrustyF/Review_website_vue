@@ -7,6 +7,7 @@ import fever_ghost_img from "/tier_list_images/fever_the_ghost.jpg"
 import dont_thug_img from "/tier_list_images/dont_thug_me.jpg"
 import hazbin_img from "/tier_list_images/hazbin_hotel.jpg"
 import skeleton_vulvine_img from "/tier_list_images/skeleton_vulvina.jpg"
+import lemmino_plane_img from "/tier_list_images/lemmino_plane.jpg"
 
 let tier_lists = [
   {
@@ -30,6 +31,11 @@ let tier_lists = [
     'link':'/youtube/yt_music_videos'
   },
   {
+    'name': 'Documentaries',
+    'image': lemmino_plane_img,
+    'link':'/youtube/yt_documentaries'
+  },
+  {
     'name': 'Shows',
     'image': hazbin_img,
     'link':'/youtube/yt_shows'
@@ -42,5 +48,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <tier-feed :box_size="[700,500]" :box_scale="0.6" :data="tier_lists"></tier-feed>
+  <tier-feed :box_size="[700,500]" :box_scale="0.4" :data="tier_lists" :row_num="3"></tier-feed>
 </template>

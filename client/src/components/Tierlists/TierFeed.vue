@@ -2,14 +2,14 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import TierBox from "./TierBox.vue";
 
-let props = defineProps(["box_size", "box_scale", "data"]);
+let props = defineProps(["box_size", "box_scale","row_num", "data"]);
 let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
 const edit_mode = inject("edit_mode");
 
 let tier_box_height = computed(() => (props['box_size'][1] * props['box_scale']) + 'px')
 let tier_box_width = computed(() => (props['box_size'][0] * props['box_scale']) + 'px')
-let feed_width = computed(() => (props['box_size'][0] * props['box_scale'] + 25) * 2 + 'px')
+let feed_width = computed(() => (props['box_size'][0] * props['box_scale'] + 25) * props['row_num'] + 'px')
 
 let debug =   {
   'name': 'Youtube',
@@ -33,12 +33,14 @@ let debug =   {
 
 <style scoped>
 .tier_feed_wrapper {
-  outline: 1px solid greenyellow;
+  /*outline: 1px solid greenyellow;*/
 
   width: v-bind(feed_width);
 
-  display: flex;
-  flex-flow: row wrap;
+  /*display: flex;*/
+  /*flex-flow: row wrap;*/
+  display: grid;
+  grid-template-columns: repeat(v-bind(row_num),1fr);
 
   align-items: center;
   /*align-content: center;*/
@@ -48,7 +50,7 @@ let debug =   {
   margin: 100px auto auto auto;
   padding-bottom: 30px;
 
-  gap: 50px;
+  gap: 25px;
 }
 
 @media only screen and (max-width: 1000px) {
