@@ -1,4 +1,6 @@
 import datetime
+import math
+
 import dateutil.parser
 from dateutil.relativedelta import relativedelta
 
@@ -386,8 +388,6 @@ def map_from_igdb(medias, media_type):
 def map_from_youtube(medias, media_type):
     def convert_text_to_date(text):
 
-        print(text)
-
         if text is None:
             return None
 
@@ -422,6 +422,8 @@ def map_from_youtube(medias, media_type):
 
     def convert_text_to_runtime(text):
 
+        print(text)
+
         if text is None:
             return
 
@@ -441,7 +443,7 @@ def map_from_youtube(medias, media_type):
                 number = elem.split('second')[0]
                 total_time_min += int(number) / 60
 
-        return int(total_time_min)
+        return int(math.ceil(total_time_min))
 
     mapped_medias = []
 
