@@ -51,7 +51,7 @@ async function get_media() {
   console.log(result)
   if (result.status !== 200) return
 
-  media.value = result.data
+  media.value = result.data['media']
 
   // sort tags by color
   const priority = ['gold', 'green', 'purple', 'silver', 'red']

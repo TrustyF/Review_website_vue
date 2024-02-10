@@ -9,22 +9,22 @@ import spinner from '/ui/custom_spinner.webp'
 import axios from "axios";
 
 let props = defineProps({
-  media_types:{
-    default:null,
-    type:Array,
+  media_types: {
+    default: null,
+    type: Array,
   },
-  media_container_type:{
-    default:'movie',
-    type:String,
+  media_container_type: {
+    default: 'movie',
+    type: String,
   },
-  media_container_type_override:{
-    default:null,
-    type:String,
+  media_container_type_override: {
+    default: null,
+    type: String,
   },
-  tier_lists:{
-    default:null,
-    type:Array,
-  }
+  tier_lists: {
+    default: null,
+    type: Array,
+  },
 });
 
 const curr_api = inject("curr_api");
@@ -56,6 +56,7 @@ let media_page = ref(0)
 let media_filters = ref({})
 let filter_load_status = ref('none')
 let page_load_status = ref('none')
+let search_matched_field = ref('')
 
 let feed_container = ref()
 
@@ -67,7 +68,7 @@ provide('vis_container_content_rating', vis_container_content_rating)
 
 async function get_media(override) {
 
-  page_load_status.value = 'loading'
+  // page_load_status.value = 'loading'
 
   const url = new URL(`${curr_api}/media/get`)
   const params = {
@@ -103,17 +104,20 @@ async function get_media(override) {
 
   console.log('res', result)
 
+  let medias = result['media']
+  search_matched_field.value = result['matched_field']
+
   // mark page loaded if no data returned
-  if (result.length < 1) {
+  if (medias.length < 1) {
     is_page_loading.value = false
     is_page_loaded.value = true
   }
 
   if (override) {
-    media.value = result
+    media.value = medias
   } else {
     // concat result to media
-    result.forEach(entry => media.value.push(entry))
+    medias.forEach(entry => media.value.push(entry))
   }
 
   // sort tags by color
@@ -225,7 +229,9 @@ onMounted(() => {
   <div class="top_feed_container" ref="feed_container" v-if="media_grouped!==undefined">
 
     <media-feed-filter-bar @filter="handle_filter" :load_status="filter_load_status" :media_types="media_types"
-                           :tier_lists="tier_lists"></media-feed-filter-bar>
+                           :tier_lists="tier_lists"
+                           :matched_field="search_matched_field"
+    ></media-feed-filter-bar>
 
     <div class="rating_box" v-for="rating in Object.keys(media_grouped).reverse()" :key="rating">
 
@@ -239,7 +245,7 @@ onMounted(() => {
                    :key="med['id']"
                    :is="media_container"
                    :data="med"
-                   :media_container_type_override = props.media_container_type_override
+                   :media_container_type_override=props.media_container_type_override
         ></component>
       </div>
     </div>

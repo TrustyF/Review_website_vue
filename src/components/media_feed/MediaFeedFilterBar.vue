@@ -19,7 +19,11 @@ let props = defineProps({
   load_status: {
     default: null,
     type: String
-  }
+  },
+  matched_field: {
+    default: "",
+    type: String,
+  },
 });
 let emits = defineEmits(["filter"]);
 const curr_api = inject("curr_api");
@@ -76,6 +80,10 @@ onMounted(() => {
       <img alt="filters" @click="toggle_filters_box" class="filter_button"
            :src="filter_image">
       <filter-search @filter="emit_filter(['search',$event])"></filter-search>
+      <div class="match_field" v-if="matched_field">
+        <h1>Matched:</h1>
+        <p>{{matched_field}}</p>
+      </div>
       <img v-if="load_status==='loading'" :src="spinner" alt="spinner" class="filter_box_spinner">
     </div>
 
@@ -147,7 +155,7 @@ onMounted(() => {
   filter: opacity(50%);
   /*margin: auto;*/
   position: absolute;
-  right: 10px;
+  right: -25px;
 }
 
 .filter_wrapper {
@@ -166,6 +174,17 @@ onMounted(() => {
   transform: translate(0, -50px);
   transition: 500ms ease-in-out;
   background: linear-gradient(to bottom, #2c2c40 50%, #25222a 100%);
+}
+
+.match_field {
+  font-size: 0.6em;
+  color: grey;
+  display: flex;
+  flex-flow: column;
+  /*gap: 5px;*/
+  position: absolute;
+  /*left: 105%;*/
+  right: 15px;
 }
 
 .visible {

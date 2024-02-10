@@ -124,11 +124,14 @@ onUnmounted(() => {
           </div>
 
           <div v-if="media['overview']">
-            <h1 style="font-size: 1.2em;font-weight: 800;margin-bottom: 10px">Overview</h1>
+            <div style="display: flex;gap: 10px;align-items: center;margin-bottom: 10px">
+              <h1 style="font-size: 1.2em;font-weight: 800">Overview</h1>
+              <p style="font-size: 0.7em;color: grey">( Possible spoilers )</p>
+            </div>
             <p class="overview" style="max-height: 100px;overflow-y: scroll">{{ media['overview'] }}</p>
           </div>
 
-          <div style="display: flex;gap: 30px">
+          <div style="display: flex;flex-flow:row wrap;gap: 30px">
             <div v-if="media['author']">
               <p class="overview">Author</p>
               <h1 style="font-size: 1em;font-weight: 800">{{ media['author'] }}</h1>
@@ -136,6 +139,10 @@ onUnmounted(() => {
             <div v-if="media['studio']">
               <p class="overview">Studio</p>
               <h1 style="font-size: 1em;font-weight: 800">{{ media['studio'] }}</h1>
+            </div>
+            <div v-if="media['external_name']!==media['name']">
+              <p class="overview">Original title</p>
+              <h1 style="font-size: 1em;font-weight: 800">{{ media['external_name'] }}</h1>
             </div>
           </div>
 
@@ -184,6 +191,7 @@ onUnmounted(() => {
   height: 100%;
   /*outline: 1px solid red;*/
 }
+
 .overflow {
   height: 100%;
   margin: 0 auto 0 auto;
