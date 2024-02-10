@@ -179,21 +179,20 @@ onUnmounted(() => {
 <style scoped>
 .media_details_wrapper {
   position: relative;
+  /*outline: 1px solid red;*/
+  /*min-height: 100px;*/
+  height: 100%;
+  /*outline: 1px solid red;*/
+}
+.overflow {
+  height: 100%;
   margin: 0 auto 0 auto;
   max-width: 1000px;
   padding: 0 40px 0 40px;
-
-  /*outline: 1px solid red;*/
-  /*min-height: 100px;*/
-
-  height: 100%;
-  /*outline: 1px solid red;*/
+  overflow-y: scroll;
   display: flex;
   flex-flow: column;
   gap: 50px;
-}
-.overflow {
-  overflow-y: scroll;
 }
 
 .top_container {
@@ -384,7 +383,7 @@ onUnmounted(() => {
 }
 
 @media only screen and (max-width: 500px) {
-  .media_details_wrapper {
+  .overflow {
     gap: 0;
     margin: 0;
     /*max-width: initial;*/
