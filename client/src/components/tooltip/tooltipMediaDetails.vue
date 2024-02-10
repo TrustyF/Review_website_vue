@@ -25,6 +25,8 @@ const media_detail_pane_open = inject("media_detail_pane_open");
 const route = useRoute()
 const media_id = route.params.id
 
+const image_path = computed(() => format_image_path(media))
+
 let is_image_loaded = ref(false)
 
 function convert_seconds_to_time(f_seconds) {
@@ -53,6 +55,14 @@ function handle_pane_close() {
 
 function imageHandler(event) {
   is_image_loaded.value = true
+}
+
+function format_image_path(med) {
+  if (med.value['poster_path'] !== 'null' && med.value['poster_path'] !== undefined) {
+    return `${curr_api}/media/get_image?path=${med.value['poster_path']}&type=${med.value['media_type']}&id=${med.value['id']}`
+  } else {
+    return undefined
+  }
 }
 
 function handle_key_press(e) {
@@ -84,7 +94,7 @@ onUnmounted(() => {
 
       <div class="top_container">
 
-        <img :src="media['poster_path']" @load="imageHandler" class="poster" alt="poster">
+        <img :src="image_path" @load="imageHandler" class="poster" alt="poster">
 
         <!--      <img v-lazy="media['poster_path']" class="bg_poster" alt="poster">-->
 
