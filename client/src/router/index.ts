@@ -1,5 +1,15 @@
 import {createRouter, createWebHistory} from "vue-router";
 
+const media_types = ['movie', 'tv', 'short', 'youtube', 'anime', 'manga', 'game']
+
+const media_id_mappings = (med_type) => (
+    {
+        path: `/${med_type}/:id`,
+        name: med_type + '_details',
+        component: () => import(`../pages/MediaDetailsPage.vue`)
+    }
+)
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -19,18 +29,23 @@ const router = createRouter({
             component: () => import("../pages/InfoPage.vue")
         },
         {
-            path: "/movies",
-            name: "movies",
+            path: "/media/:id",
+            name: "media_details",
+            component: () => import("../pages/MediaDetailsPage.vue")
+        },
+        {
+            path: "/movie",
+            name: "movie",
             component: () => import("../pages/MoviePage.vue")
         },
         {
-            path: "/series",
-            name: "series",
+            path: "/tv",
+            name: "tv",
             component: () => import("../pages/SeriesPage.vue")
         },
         {
-            path: "/shorts",
-            name: "shorts",
+            path: "/short",
+            name: "short",
             component: () => import("../pages/ShortPage.vue")
         },
         {
@@ -80,10 +95,11 @@ const router = createRouter({
             component: () => import("../pages/MangaPage.vue")
         },
         {
-            path: "/games",
-            name: "games",
+            path: "/game",
+            name: "game",
             component: () => import("../pages/GamePage.vue")
         },
+        ...media_types.map(media_id_mappings),
     ]
 })
 

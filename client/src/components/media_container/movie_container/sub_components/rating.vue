@@ -24,16 +24,12 @@ const curr_api = inject("curr_api");
 
     <div class="rating_box" v-else-if="data['public_rating']">
       <h2 class="rating"> {{ Math.round(data['public_rating'] * 10) / 10 }}</h2>
-      <img :src="gold_star" alt="gold_star" class="gold_star">
     </div>
 
 
     <rating-circle class="rating_circle" v-if="data['scaled_public_rating']>0 && data['user_rating']"
                    :text_size="max_size*1.5"
                    :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
-
-
-<!--        <div class="debug_center_check" style="position:absolute;width: 100%"></div>-->
 
   </div>
 </template>

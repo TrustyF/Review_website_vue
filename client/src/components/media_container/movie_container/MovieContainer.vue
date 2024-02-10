@@ -51,16 +51,14 @@ const poster_size = computed(() => {
       props.size_override[0] * props['scale_mul'],
       props.size_override[1] * props['scale_mul']
     ]
-  }
-  else if (props.media_container_type_override) {
+  } else if (props.media_container_type_override) {
     return [
       (media_scales.value[props.media_container_type_override]['size'][0] *
           media_scales.value[props.media_container_type_override]['scale']) * props['scale_mul'],
       (media_scales.value[props.media_container_type_override]['size'][1] *
           media_scales.value[props.media_container_type_override]['scale']) * props['scale_mul'],
     ]
-  }
-  else {
+  } else {
     return [
       (media_scales.value[media_type.value]['size'][0] *
           media_scales.value[media_type.value]['scale']) * props['scale_mul'],
@@ -97,16 +95,14 @@ function format_image_path(f_path, f_id) {
   }
 }
 
-
-// onMounted(()=>{
-//   console.log('media scales',media_scales.value)
-//   console.log('media type',media_type.value)
-// })
+function push_to_details() {
+  router.push({name: `${props.data['media_type']}_details`, params: {id: props.data['id']}})
+}
 
 </script>
 
 <template>
-  <div class="movie_container_wrapper">
+  <div class="movie_container_wrapper" @click="push_to_details">
 
     <!--    todo hide erotica by default -->
     <!--    todo panel for expanded movie -->
