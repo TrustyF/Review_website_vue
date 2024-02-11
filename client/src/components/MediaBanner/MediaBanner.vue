@@ -48,7 +48,6 @@ async function get_media() {
     'order': props.order,
     'ratings': props.ratings,
     'content_ratings':rangeOfNumbers(20,39).filter((elem,i)=> ![33,34].includes(elem)),
-
     'tier_lists': props.tier_lists,
     'session_seed': session_seed,
     'user_rating_sort_override': true,

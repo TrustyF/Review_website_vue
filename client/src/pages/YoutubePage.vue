@@ -8,6 +8,8 @@ import dont_thug_img from "/tier_list_images/dont_thug_me.jpg"
 import hazbin_img from "/tier_list_images/hazbin_hotel.jpg"
 import skeleton_vulvine_img from "/tier_list_images/skeleton_vulvina.jpg"
 import lemmino_plane_img from "/tier_list_images/lemmino_plane.jpg"
+import sombra_img from "/tier_list_images/sombra_img.jpg"
+import hbomber_img from "/tier_list_images/hbomber_img.jpg"
 
 let tier_lists = [
   {
@@ -31,9 +33,24 @@ let tier_lists = [
     'link':'/youtube/yt_music_videos'
   },
   {
+    'name': 'Overwatch media',
+    'image': sombra_img,
+    'link':'/youtube/yt_overwatch_cinematics'
+  },
+  {
+    'name': 'Comedy',
+    'image': sombra_img,
+    'link':'/youtube/yt_comedy'
+  },
+  {
     'name': 'Documentaries',
     'image': lemmino_plane_img,
     'link':'/youtube/yt_documentaries'
+  },
+  {
+    'name': 'Video essays',
+    'image': hbomber_img,
+    'link':'/youtube/yt_essays'
   },
   {
     'name': 'Shows',
