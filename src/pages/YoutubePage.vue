@@ -10,6 +10,7 @@ import skeleton_vulvine_img from "/tier_list_images/skeleton_vulvina.jpg"
 import lemmino_plane_img from "/tier_list_images/lemmino_plane.jpg"
 import sombra_img from "/tier_list_images/sombra_img.jpg"
 import hbomber_img from "/tier_list_images/hbomber_img.jpg"
+import gus_img from "/tier_list_images/gus_jhonson.jpg"
 
 let tier_lists = [
   {
@@ -39,7 +40,7 @@ let tier_lists = [
   },
   {
     'name': 'Comedy',
-    'image': sombra_img,
+    'image': gus_img,
     'link':'/youtube/yt_comedy'
   },
   {
