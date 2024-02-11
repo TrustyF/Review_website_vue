@@ -68,7 +68,7 @@ provide('vis_container_content_rating', vis_container_content_rating)
 
 async function get_media(override) {
 
-  // page_load_status.value = 'loading'
+  page_load_status.value = 'loading'
 
   const url = new URL(`${curr_api}/media/get`)
   const params = {

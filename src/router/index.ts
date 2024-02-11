@@ -62,9 +62,24 @@ const router = createRouter({
             component: () => import("../pages/sub_pages/youtube/YTShortsPage.vue")
         },
         {
+            path: "/youtube/yt_overwatch_cinematics",
+            name: "youtube overwatch cinematics",
+            component: () => import("../pages/sub_pages/youtube/YTOverwatchPage.vue")
+        },
+        {
+            path: "/youtube/yt_comedy",
+            name: "youtube comedy",
+            component: () => import("../pages/sub_pages/youtube/YTComedyPage.vue")
+        },
+        {
             path: "/youtube/yt_documentaries",
             name: "youtube documentaries",
             component: () => import("../pages/sub_pages/youtube/YTDocumentaryPage.vue")
+        },
+        {
+            path: "/youtube/yt_essays",
+            name: "youtube essays",
+            component: () => import("../pages/sub_pages/youtube/YTVideoEssayPage.vue")
         },
         {
             path: "/youtube/yt_shows",

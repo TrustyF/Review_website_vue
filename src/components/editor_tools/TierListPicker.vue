@@ -17,7 +17,8 @@ async function fetch_tier_lists() {
   const url = new URL(`${curr_api}/tier_list/get`)
 
   const result = await fetch(url).then(response => response.json())
-  available_tier_lists.value = result
+
+  available_tier_lists.value = result.sort((a,b)=>b['count'] - a['count'])
 }
 
 async function add_new_list() {
@@ -85,6 +86,7 @@ onMounted(() => {
         <div class="tier_list_box" draggable="true" @dragstart="drag(t)" v-for="t in available_tier_lists"
              :key="t['id']">
           {{ t['name'] }}
+          <p style="font-size: 0.6em;position: absolute;left: 0;top: 0;padding: 3px">{{t['count']}}</p>
         </div>
       </div>
 
@@ -137,6 +139,7 @@ onMounted(() => {
 }
 
 .tier_list_box {
+  position: relative;
   text-align: center;
   font-size: 0.7em;
   cursor: grab;
