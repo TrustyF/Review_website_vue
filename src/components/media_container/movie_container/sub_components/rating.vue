@@ -3,6 +3,7 @@ import {inject, onMounted, watch, ref, computed} from "vue";
 import gold_star from '/ui/gold_star.png'
 import blue_star from '/ui/blue_star.png'
 import RatingCircle from "./RatingCircle.vue";
+import DifficultyGauge from "@/components/media_container/movie_container/sub_components/DifficultyGauge.vue";
 
 let props = defineProps(["data", "max_size"]);
 const curr_api = inject("curr_api");
@@ -26,10 +27,11 @@ const curr_api = inject("curr_api");
       <h2 class="rating"> {{ Math.round(data['public_rating'] * 10) / 10 }}</h2>
     </div>
 
-
     <rating-circle class="rating_circle" v-if="data['scaled_public_rating']>0 && data['user_rating']"
                    :text_size="max_size*1.5"
                    :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
+
+    <difficulty-gauge :diff="data['difficulty']"></difficulty-gauge>
 
   </div>
 </template>
