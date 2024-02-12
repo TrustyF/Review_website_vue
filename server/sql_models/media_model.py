@@ -104,6 +104,7 @@ class Media(db.Model):
 
     user_rating: int = db.Column(db.Integer, nullable=False)
     public_rating: float = db.Column(db.Float)
+    difficulty: int = db.Column(db.Integer)
 
     is_dropped: bool = db.Column(db.Boolean)
     is_deleted: bool = db.Column(db.Boolean)
