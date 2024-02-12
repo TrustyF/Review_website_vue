@@ -18,27 +18,27 @@ def insert_in_db():
     with open(r'D:\A_Main\A_Projects\WebDev\review_site\Review_website_server_BAK\database\movie_db.json',
               'r') as infile:
         movies = json.load(infile)['_default']
-        print(f'{len(movies)} movies')
+        # print(f'{len(movies)} movies')
 
     with open(r'D:\A_Main\A_Projects\WebDev\review_site\Review_website_server_BAK\database\tv_db.json',
               'r') as infile:
         tv = json.load(infile)['_default']
-        print(f'{len(tv)} tv')
+        # print(f'{len(tv)} tv')
 
     with open(r'D:\A_Main\A_Projects\WebDev\review_site\Review_website_server_BAK\database\anime_db.json',
               'r') as infile:
         anime = json.load(infile)['_default']
-        print(f'{len(anime)} anime')
+        # print(f'{len(anime)} anime')
 
     with open(r'D:\A_Main\A_Projects\WebDev\review_site\Review_website_server_BAK\database\manga_db.json',
               'r') as infile:
         manga = json.load(infile)['_default']
-        print(f'{len(manga)} manga')
+        # print(f'{len(manga)} manga')
 
     with open(r'D:\A_Main\A_Projects\WebDev\review_site\Review_website_server_BAK\database\game_db.json',
               'r') as infile:
         game = json.load(infile)['_default']
-        print(f'{len(game)} game')
+        # print(f'{len(game)} game')
 
     with open(r'D:\A_Main\A_Projects\WebDev\review_site\Review_website_server_BAK\database\presets_db.json',
               'r') as infile:
@@ -55,13 +55,13 @@ def insert_in_db():
     # create themes
     for entry in game:
         for theme in game[entry]['themes']:
-            print('theme', theme)
+            # print('theme', theme)
             if not db.session.query(Theme).filter_by(name=theme).first():
                 new_theme = Theme(name=theme, origin=game[entry]['media_type'])
                 db.session.add(new_theme)
 
         for genre in game[entry]['genres']:
-            print('genre', genre)
+            # print('genre', genre)
             if not db.session.query(Genre).filter_by(name=genre).first():
                 new_theme = Genre(name=genre, origin=game[entry]['media_type'])
                 db.session.add(new_theme)
@@ -84,7 +84,7 @@ def insert_in_db():
 
     # create media
     for media in [movies, tv, anime, manga, game]:
-        print(f'test {len(media)}')
+        # print(f'test {len(media)}')
         for i, entry in enumerate(media):
             mov = media[entry]
             # print(mov['title'])
@@ -128,18 +128,18 @@ def insert_in_db():
             new_mov.tags = tags
 
             db.session.add(new_mov)
-            print(f'adding {i} - {new_mov.name} - {mov["title"]}')
+            # print(f'adding {i} - {new_mov.name} - {mov["title"]}')
 
         db.session.commit()
     db.session.close()
 
 
 def update_existing_from_tmdb():
-    print('updating')
+    # print('updating')
 
     all_media = db.session.query(Media).filter(Media.updated_at == None).all()
 
-    print(len(all_media))
+    # print(len(all_media))
     for media_obj in all_media:
 
         if media_obj.media_type not in ['tv', 'anime']:
@@ -156,7 +156,7 @@ def update_existing_from_tmdb():
         if found_media is None:
             continue
 
-        print('attempting to update ', media_obj.name, ' to ', found_media.get('title') or found_media['name'])
+        # print('attempting to update ', media_obj.name, ' to ', found_media.get('title') or found_media['name'])
 
         db.session.query(Media).filter(Media.id == media_obj.id).update({'external_id': found_media['id']})
 
@@ -174,10 +174,10 @@ def update_all_records():
         except KeyError:
             return
 
-        print(record.name, record.release_date, ' vs ', selected['name'], record.release_date)
+        # print(record.name, record.release_date, ' vs ', selected['name'], record.release_date)
         # check if correct
         if selected['name'] != record.name or str(selected['release_date']) != str(record.release_date):
-            print("!!! ", record.name, ' vs ', selected['name'])
+            # print("!!! ", record.name, ' vs ', selected['name'])
             return
 
         selected['id'] = record.id
@@ -188,7 +188,7 @@ def update_all_records():
         Media.media_type == 'game', Media.content_rating_id.is_(None)).all())
     # , Media.updated_at < dateutil.parser.parse('2024-01-25')
 
-    print(len(all_records))
+    # print(len(all_records))
     with ThreadPoolExecutor() as executor:
         results = [executor.submit(update_record, x) for x in all_records]
 

@@ -78,7 +78,7 @@ def map_from_tmdb(medias, media_type):
                 if us_grouped:
                     for i in us_grouped:
                         if i[1]:
-                            print('us content')
+                            # print('us content')
                             content_rating = i[1]
                             break
 
@@ -87,14 +87,14 @@ def map_from_tmdb(medias, media_type):
                         equivalent = get_movie_content_rating_conversion_table(rating)
 
                         if rating in all_ratings:
-                            print('other content')
+                            # print('other content')
                             content_rating = rating
                             break
 
                         else:
                             for eq in equivalent:
                                 if eq in all_ratings:
-                                    print('equivalent content', rating, eq)
+                                    # print('equivalent content', rating, eq)
                                     content_rating = rating
                                     break
                             else:
@@ -158,7 +158,7 @@ def map_from_tmdb(medias, media_type):
             content_rating = ''
             if 'content_ratings' in entry:
                 grouped = [[y['iso_3166_1'], y['rating']] for y in entry['content_ratings']['results']]
-                print(grouped)
+                # print(grouped)
 
                 all_ratings = [x[1] for x in grouped if x[1] != '']
                 us_grouped = [x for x in grouped if x[0] == 'US' if x[1] != '']
@@ -166,7 +166,7 @@ def map_from_tmdb(medias, media_type):
                 if us_grouped:
                     for i in us_grouped:
                         if i[1]:
-                            print('us content')
+                            # print('us content')
                             content_rating = i[1]
                             break
 
@@ -175,14 +175,14 @@ def map_from_tmdb(medias, media_type):
                         equivalent = get_tv_content_rating_conversion_table(rating)
 
                         if rating in all_ratings:
-                            print('other content')
+                            # print('other content')
                             content_rating = rating
                             break
 
                         else:
                             for eq in equivalent:
                                 if eq in all_ratings:
-                                    print('equivalent content', rating, eq)
+                                    # print('equivalent content', rating, eq)
                                     content_rating = rating
                                     break
                             else:
@@ -422,7 +422,7 @@ def map_from_youtube(medias, media_type):
 
     def convert_text_to_runtime(text):
 
-        print(text)
+        # print(text)
 
         if text is None:
             return

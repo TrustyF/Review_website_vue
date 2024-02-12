@@ -25,10 +25,10 @@ database_uri = f'mysql+pymysql://{db_username}:{db_password}@TrustyFox.mysql.pyt
 local_database_uri = f'mysql+pymysql://root:{db_password}@127.0.0.1:3306/{db_name}'
 
 if dev_mode:
-    print('using local')
+    # print('using local')
     app.config["SQLALCHEMY_DATABASE_URI"] = local_database_uri
 else:
-    print('using cloud')
+#     print('using cloud')
     app.config["SQLALCHEMY_DATABASE_URI"] = database_uri
 
 CORS(app)

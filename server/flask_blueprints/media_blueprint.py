@@ -43,12 +43,12 @@ def handle_igdb_access_token(f_source):
         }
         token_response = requests.post(token_request, params=token_params).json()
         token_response['date_added'] = datetime.now().isoformat()
-        print('requesting new token')
+        # print('requesting new token')
 
         return token_response
 
     def make_new_token():
-        print('making new token')
+        # print('making new token')
         f_token = request_access_token()
 
         with open(file_path, 'w') as outfile:
@@ -79,8 +79,8 @@ def handle_igdb_access_token(f_source):
         return make_new_token()
     else:
         # return current token
-        print('token time left',
-              timedelta(seconds=old_token['expires_in'] - token_time_diff.total_seconds()))
+        # print('token time left',
+        #       timedelta(seconds=old_token['expires_in'] - token_time_diff.total_seconds()))
         return old_token
 
 
@@ -168,9 +168,9 @@ def get():
                     q = q.filter(cond)
 
         if tier_lists:
-            print(tier_lists)
+            # print(tier_lists)
             if 'all' in tier_lists:
-                print('all')
+#                 print('all')
                 q = q.filter(Media.tier_lists.any())
             else:
                 q = (q.join(Media.tier_lists).filter(TierList.name.in_(tier_lists))
@@ -671,6 +671,9 @@ def get_stats():
                 constructed[med_type][rating] = 0
 
                 for entry in arr:
+                    if entry[1] is None:
+                        continue
+
                     if (entry[1]) <= (rating + 0.5) and entry[1] >= (rating - 0.5) and entry[0] == med_type:
                         constructed[med_type][rating] += entry[2]
                         continue
@@ -708,7 +711,7 @@ def get_stats():
         all_runtimes = [x[1] for x in arr if x[1] is not None]
         min_run, max_run = min(all_runtimes), max(all_runtimes)
 
-        base = [x for x in range(min_run, max_run) if x % time_interval == 0]
+        base = [x for x in range(0, max_run + time_interval) if x % time_interval == 0]
         types = set([x[0] for x in arr])
 
         constructed = {}
@@ -748,13 +751,6 @@ def get_stats():
         .all()
     )
 
-    # release_date_count = (
-    #     db.session.query(Media.media_type, func.extract('year', Media.release_date).label('release_year'),
-    #                      func.count(Media.id).label('count'))
-    #     .filter(Media.is_deleted.is_(None))
-    #     .group_by(Media.media_type, 'release_year')
-    #     .all()
-    # )
     release_date_count = (
         db.session.query(Media.name, Media.media_type, func.extract('year', Media.release_date).label('release_year'))
         .filter(Media.is_deleted.is_(None))

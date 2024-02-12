@@ -34,7 +34,7 @@ def add():
 
     tier_list_name = request.args.get('name')
 
-    print(f'adding tier list {tier_list_name=}')
+    # print(f'adding tier list {tier_list_name=}')
 
     new_tier_list = TierList(name=tier_list_name)
     db.session.add(new_tier_list)

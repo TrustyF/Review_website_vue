@@ -88,7 +88,7 @@ def update():
     data = request.get_json()
     tag_id = data['id']
 
-    print(f'updating tag {data=}')
+    # print(f'updating tag {data=}')
 
     db.session.query(Tag).filter(Tag.id == tag_id).update({
         'name': data['name'],
@@ -109,7 +109,7 @@ def update():
 def delete():
     tag_id = request.args.get('id')
 
-    print(f'deleting tag {tag_id=}')
+    # print(f'deleting tag {tag_id=}')
 
     db.session.query(Tag).filter(Tag.id == tag_id).update({'is_deleted': True})
 
