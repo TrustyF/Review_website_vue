@@ -9,6 +9,7 @@ import {useRouter} from 'vue-router'
 
 import external_img from '/ui/external_link.png'
 import youtube_img from '/ui/youtube.png'
+import DifficultyGauge from "./sub_components/DifficultyGauge.vue";
 
 const image_path = computed(() => `${curr_api}/media/get_image?path=${props.data['poster_path']}&id=${props.data['id']}`)
 let props = defineProps(["data", "container_scale", "container_size"]);
@@ -62,76 +63,75 @@ function push_to_details() {
 </script>
 
 <template>
-  <div>
-    <div class="movie_mobile_container_wrapper" @click="push_to_details" :style="data['tags']!==undefined && data['tags'].length > 0 ?
-     'border-radius: 8px 8px 0 0' : 'border-radius: 8px'">
+  <div class="movie_mobile_container_wrapper" @click="push_to_details">
 
-      <div class="poster_wrapper">
-        <img @click="open_link_new_tab(data['external_link'])" class="poster" alt="poster" v-lazy="image_path"/>
-        <!--      <div class="poster_gradient"></div>-->
+    <div class="poster_wrapper">
+      <img @click="open_link_new_tab(data['external_link'])" class="poster" alt="poster" v-lazy="image_path"/>
+      <!--      <div class="poster_gradient"></div>-->
+    </div>
+
+    <div class="footer_wrapper">
+
+      <div class="header">
+        <div>
+          <h1 class="title">{{ data['name'] }}</h1>
+        </div>
+        <div class="secondary_info">
+          <h2 class="date" v-if="data['release_date']!==undefined"> {{
+              get_year_from_release_date(data['release_date'])
+            }}</h2>
+          <h2 class="date" v-if="data['runtime']>0">{{ ' • ' + convert_seconds_to_time(data['runtime']) }}</h2>
+          <h2 class="date" v-if="data['seasons']>0">{{ ' • ' + data['seasons'] + ' seasons' }} </h2>
+          <h2 class="date" v-if="data['episodes']>0">{{ ' • ' + data['episodes'] + ' episodes' }} </h2>
+          <!--            <h2 class="date" v-if="data['content_rating'] && data['content_rating'].age">•</h2>-->
+          <h1 class="content_rating" v-if="data['content_rating'] && data['content_rating'].age">
+            +{{ data['content_rating'].age }}</h1>
+        </div>
       </div>
 
-
-      <div class="footer_wrapper">
-
-        <div class="header">
-          <div>
-            <h1 class="title">{{ data['name'] }}</h1>
-          </div>
-          <div class="secondary_info">
-            <h2 class="date" v-if="data['release_date']!==undefined"> {{
-                get_year_from_release_date(data['release_date'])
-              }}</h2>
-            <h2 class="date" v-if="data['runtime']>0">{{ ' • ' + convert_seconds_to_time(data['runtime']) }}</h2>
-            <h2 class="date" v-if="data['seasons']>0">{{ ' • ' + data['seasons'] + ' seasons' }} </h2>
-            <h2 class="date" v-if="data['episodes']>0">{{ ' • ' + data['episodes'] + ' episodes' }} </h2>
-            <!--            <h2 class="date" v-if="data['content_rating'] && data['content_rating'].age">•</h2>-->
-            <h1 class="content_rating" v-if="data['content_rating'] && data['content_rating'].age">
-              +{{ data['content_rating'].age }}</h1>
-          </div>
+      <div class="badges">
+        <div class="rating_box">
+          <h2 class="rating"> {{ data['user_rating'] }}</h2>
+          <img :src="blue_star" alt="gold_star" class="gold_star">
         </div>
 
-        <div class="badges">
-          <div class="rating_box">
-            <h2 class="rating"> {{ data['user_rating'] }}</h2>
-            <img :src="blue_star" alt="gold_star" class="gold_star">
-          </div>
-
-          <div class="rating_box" v-if="data['scaled_public_rating']>0">
-            <h2 class="rating"> {{ Math.round(data['scaled_public_rating'] * 10) / 10 }}</h2>
-            <img :src="gold_star" alt="gold_star" class="gold_star">
-          </div>
-
-          <rating-circle class="rating_circle" :text_size="(150)" v-if="data['scaled_public_rating']>0"
-                         :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
+        <div class="rating_box" v-if="data['scaled_public_rating']>0">
+          <h2 class="rating"> {{ Math.round(data['scaled_public_rating'] * 10) / 10 }}</h2>
+          <img :src="gold_star" alt="gold_star" class="gold_star">
         </div>
 
-        <div class="genres_list" v-if="data['genres'].length > 0">
-          <div class="genre_tag"
-               v-for="genre in data['genres']"
-               :key="genre['id']"
-          >{{ genre['name'] }}
-          </div>
-        </div>
-
+        <rating-circle class="rating_circle" :text_size="(150)" v-if="data['scaled_public_rating']>0"
+                       :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
       </div>
 
-      <div class="edit_tools_wrapper">
-        <img v-if="data['video_link']" class="edit_tool" title="go to video" :src="youtube_img"
-             @click="open_link_new_tab(data['video_link'])">
-        <img v-if="data['external_link']" class="edit_tool" title="go to external website" :src="external_img"
-             @click="open_link_new_tab(data['external_link'])">
+      <div class="genres_list" v-if="data['genres'].length > 0">
+        <div class="genre_tag"
+             v-for="genre in data['genres']"
+             :key="genre['id']"
+        >{{ genre['name'] }}
+        </div>
       </div>
+
+      <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags'].length > 0">
+        <div v-for="tag in data['tags']" :key="tag['id']">
+          <!--          <badge-tooltip class="tag" :data="tag" :text_size="0.6"></badge-tooltip>-->
+          <badge :data="tag" :min_size="150"></badge>
+
+        </div>
+      </div>
+
 
     </div>
 
-    <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags'].length > 0">
-      <div v-for="tag in data['tags']" :key="tag['id']">
-        <!--          <badge-tooltip class="tag" :data="tag" :text_size="0.6"></badge-tooltip>-->
-        <badge :data="tag" :min_size="150" :show_title="true"></badge>
-
-      </div>
+    <div class="edit_tools_wrapper">
+      <img v-if="data['video_link']" class="edit_tool" title="go to video" :src="youtube_img"
+           @click="open_link_new_tab(data['video_link'])">
+      <img v-if="data['external_link']" class="edit_tool" title="go to external website" :src="external_img"
+           @click="open_link_new_tab(data['external_link'])">
     </div>
+
+    <difficulty-gauge class="diff" :diff="data['difficulty']"></difficulty-gauge>
+
   </div>
 </template>
 
@@ -143,7 +143,7 @@ function push_to_details() {
   flex-flow: row;
   justify-items: center;
   align-items: center;
-  /*border-radius: 8px 8px 0 0;*/
+  border-radius: 8px;
 
   /*box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);*/
   background-color: #25222a;
@@ -170,7 +170,12 @@ function push_to_details() {
   border-radius: 8px;
   object-fit: scale-down;
 }
-
+.diff {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 10px;
+}
 .poster_gradient {
   content: "";
   pointer-events: none;
@@ -302,11 +307,9 @@ function push_to_details() {
   flex-flow: row;
   gap: 10px;
 
-  border-radius: 0 0 8px 8px;
-
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-  background-color: #25222a;
-  padding: 7px 0 7px 5px;
+  /*box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);*/
+  /*background-color: #25222a;*/
+  /*padding: 7px 0 7px 5px;*/
 }
 
 .edit_tools_wrapper {

@@ -3,7 +3,6 @@ import {inject, onMounted, watch, ref, computed} from "vue";
 import gold_star from '/ui/gold_star.png'
 import blue_star from '/ui/blue_star.png'
 import RatingCircle from "./RatingCircle.vue";
-import DifficultyGauge from "@/components/media_container/movie_container/sub_components/DifficultyGauge.vue";
 
 let props = defineProps(["data", "max_size"]);
 const curr_api = inject("curr_api");
@@ -31,8 +30,6 @@ const curr_api = inject("curr_api");
                    :text_size="max_size*1.5"
                    :score="(data['user_rating'] + data['scaled_public_rating'])/2"></rating-circle>
 
-    <difficulty-gauge :diff="data['difficulty']"></difficulty-gauge>
-
   </div>
 </template>
 
@@ -49,12 +46,16 @@ const curr_api = inject("curr_api");
   flex-flow: row nowrap;
   /*width: calc(v-bind(max_size[0]) * 1px);*/
 
-  justify-content: flex-start;
-  justify-items: center;
-  align-content: center;
+  /*justify-content: flex-start;*/
+  /*justify-items: center;*/
+  /*align-content: center;*/
   align-items: center;
+  /*outline: 1px solid red;*/
 
   gap: 5px;
+}
+.diff_stars {
+  height: calc(v-bind(max_size) * 0.15px);
 }
 
 .gold_star {
@@ -66,7 +67,7 @@ const curr_api = inject("curr_api");
 .rating_box {
   border-radius: 5px;
 
-  box-shadow: 1px 1px 1px #000000,inset 1px 1px 0 #424052;
+  box-shadow: 1px 1px 1px #000000, inset 1px 1px 0 #424052;
   background-color: #2b2a34;
 
   padding: 4px 5px 4px 5px;
