@@ -110,6 +110,7 @@ def get():
     release_dates = data.get('release_dates')
     runtimes = data.get('runtimes')
     content_ratings = data.get('content_ratings')
+    difficulty = data.get('difficulty')
 
     # print(tier_lists, media_types)
     search = data.get('search')
@@ -191,6 +192,14 @@ def get():
                 Media.content_rating_id.in_(content_ratings),
                 Media.content_rating_id.is_(None),
             ))
+        if difficulty:
+            if 1 in difficulty:
+                q = q.filter(or_(
+                    Media.difficulty.in_(difficulty),
+                    Media.difficulty.is_(None),
+                ))
+            else:
+                q = q.filter(Media.difficulty.in_(difficulty))
 
         if ratings:
             q = q.filter(Media.user_rating >= ratings[0],
