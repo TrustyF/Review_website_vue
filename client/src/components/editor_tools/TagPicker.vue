@@ -10,7 +10,7 @@ let props = defineProps(["media_type"]);
 let emits = defineEmits(["tags"]);
 const curr_api = inject("curr_api");
 
-const tiers = ['gold', 'green', 'purple', 'grey', 'red']
+const tiers = ['gold', 'green', 'purple', 'silver', 'red']
 
 const tag_images = ref({})
 

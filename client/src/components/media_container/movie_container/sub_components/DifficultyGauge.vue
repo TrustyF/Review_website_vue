@@ -10,34 +10,71 @@ let props = defineProps({
 let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
 
+function parse_diff(index) {
+  if (index === undefined) return 'Accessible'
+  if (index === 1) return 'Accessible'
+  if (index === 2) return 'Involved'
+  if (index === 3) return 'Film Snob'
+  return 'Accessible'
+}
+
+
 </script>
 
 <template>
-  <div class="gauge_wrapper" v-if="diff">
-    <div v-if="diff >= 3" class="gauge_bar" style="background-color: #c0392b;border-radius: 10px 10px 0 0"></div>
-    <div v-if="diff >= 2" class="gauge_bar" style="background-color: #f1c40f"></div>
-    <div v-if="diff >= 1" class="gauge_bar" style="background-color: #1abc60;border-radius: 0 0 10px 10px"></div>
+  <div class="gauge_wrapper" :title="`Difficulty : ${parse_diff(diff)}`" v-if="diff">
+    <div v-if="diff >= 3" class="bg_dot"></div>
+    <div v-if="diff >= 2" class="bg_dot"></div>
+    <div v-if="diff >= 2" class="bg_dot"></div>
+    <!--    <div v-if="diff >= 1" class="gauge_bar" style="background-color: #c0392b"></div>-->
+    <!--    <div v-if="diff >= 1" class="gauge_bar" style="background-color: #f1c40f"></div>-->
+    <!--    <div v-if="diff >= 1" class="gauge_bar" style="background-color: #1abc60"></div>-->
   </div>
 </template>
 
 <style scoped>
 .gauge_wrapper {
-  width: 10px;
-  height: 30px;
-  outline: 2px solid #25222a;
-  background-color: #25222a;
-  border-radius: 10px;
-  /*gap: 2px;*/
-  /*clip-path: inset(0% 0% 0% 0% round 6px);*/
-
+  /*outline: 1px solid red;*/
+  padding: 10px;
+  position: relative;
   display: flex;
-  flex-flow: column;
-  justify-content: flex-end;
+  flex-flow: row;
+  gap: 3px;
 }
+.gauge_wrapper:hover::before {
+  content: attr(title);
+  background-color: #25222a;
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
+  position: absolute;
+  font-size: 0.8em;
+  white-space: nowrap;
+  transform: translate(-50%,-150%);
+  filter: drop-shadow(1px 1px 2px black);
+  z-index: 100;
+}
+.bg_dot {
+  width: 1px;
+  height: 5px;
+  background: white;
+  /*border-radius: 50%;*/
+  filter: opacity(50%);
+}
+
 .gauge_bar {
-  height: 33%;
+  position: absolute;
+  height: 100%;
   width: 100%;
+  border-radius: 50%;
   /*background:linear-gradient(to bottom,#c0392b 0%, #f1c40f 50%, #1abc9c 100%);*/
+}
+
+.gauge_text {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  font-size: 0.6em;
 }
 
 </style>

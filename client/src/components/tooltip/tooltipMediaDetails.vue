@@ -10,6 +10,11 @@ import BadgeTooltip from "@/components/media_container/movie_container/sub_compo
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
 import external_img from '/ui/external_link.png'
 import youtube_img from '/ui/youtube.png'
+import diff_gauge from '/ui/circle_gauge.png'
+import pen_img from '/ui/crayon.png'
+import studio_img from '/ui/studio.png'
+import DifficultyGauge from "@/components/media_container/movie_container/sub_components/DifficultyGauge.vue";
+import spinner from '/ui/custom_spinner.webp'
 
 // let props = defineProps({
 //   id: {
@@ -26,6 +31,7 @@ const route = useRoute()
 const media_id = route.params.id
 
 const image_path = computed(() => format_image_path(media))
+let image = ref()
 
 let is_image_loaded = ref(false)
 
@@ -54,6 +60,7 @@ function handle_pane_close() {
 }
 
 function imageHandler(event) {
+  console.log(event)
   is_image_loaded.value = true
 }
 
@@ -73,6 +80,14 @@ function open_link_new_tab(path) {
   window.open(path, '_blank');
 }
 
+function parse_diff(index) {
+  if (index === undefined) return 'Accessible'
+  if (index === 1) return 'Accessible'
+  if (index === 2) return 'Involved'
+  if (index === 3) return 'Film Snob'
+  return 'Accessible'
+}
+
 onMounted(() => {
   window.addEventListener('keydown', handle_key_press)
   document.body.style.overflow = 'hidden';
@@ -84,7 +99,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <!--  <p style="margin-top: 200px">test</p>-->
+
   <div class="media_details_wrapper" v-if="media">
 
     <img @click="handle_pane_close" class="close_pane_button" alt="close_edit_pane"
@@ -94,7 +109,9 @@ onUnmounted(() => {
 
       <div class="top_container">
 
-        <img :src="image_path" @load="imageHandler" class="poster" alt="poster">
+        <img :src="image_path" @load="imageHandler" class="poster" alt="">
+
+        <img v-if="!is_image_loaded" :src="spinner" class="spinner">
 
         <!--      <img v-lazy="media['poster_path']" class="bg_poster" alt="poster">-->
 
@@ -142,12 +159,30 @@ onUnmounted(() => {
           </div>
 
           <div style="display: flex;flex-flow:row wrap;gap: 30px">
+            <div>
+              <div style="display: flex;align-items: center;gap: 3px;">
+                <img :src="diff_gauge" class="overview_icon">
+                <p class="overview">Difficulty</p>
+              </div>
+              <div style="display:flex;align-items: center;gap: 5px">
+                <difficulty-gauge :diff="media['difficulty']"></difficulty-gauge>
+                <h1 style="font-size: 1em;font-weight: 800;height: fit-content">{{
+                    parse_diff(media['difficulty'])
+                  }}</h1>
+              </div>
+            </div>
             <div v-if="media['author']">
-              <p class="overview">Author</p>
+              <div style="display: flex;align-items: center;gap: 3px;">
+                <img :src="pen_img" class="overview_icon">
+                <p class="overview">Author</p>
+              </div>
               <h1 style="font-size: 1em;font-weight: 800">{{ media['author'] }}</h1>
             </div>
             <div v-if="media['studio']">
-              <p class="overview">Studio</p>
+              <div style="display: flex;align-items: center;gap: 3px;">
+                <img :src="studio_img" class="overview_icon">
+                <p class="overview">Studio</p>
+              </div>
               <h1 style="font-size: 1em;font-weight: 800">{{ media['studio'] }}</h1>
             </div>
             <div v-if="media['external_name']!==media['name']">
@@ -160,8 +195,7 @@ onUnmounted(() => {
 
       </div>
 
-
-      <div class="bottom_container">
+      <div class="bottom_container" v-if="is_image_loaded">
 
         <div class="genres_list" v-if="media['genres'].length > 0">
           <div class="genre_tag"
@@ -189,17 +223,30 @@ onUnmounted(() => {
 
 
       </div>
+
     </div>
+
   </div>
+
+
 </template>
 
 <style scoped>
 .media_details_wrapper {
   position: relative;
-  /*outline: 1px solid red;*/
+  outline: 1px solid red;
   /*min-height: 100px;*/
   height: 100%;
   /*outline: 1px solid red;*/
+}
+
+.spinner {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  height: 20%;
+  object-fit: cover;
+
 }
 
 .overflow {
@@ -383,8 +430,15 @@ onUnmounted(() => {
 }
 
 .overview {
+  color: lightgrey;
   font-size: 0.9em;
   line-height: 1.2em;
+  height: fit-content;
+}
+
+.overview_icon {
+  height: 30px;
+  filter: invert();
 }
 
 .close_pane_button {

@@ -87,6 +87,7 @@ async function get_media(override) {
     'search': media_filters.value['search'],
     'order': media_filters.value['order'],
     'content_ratings': media_filters.value['content_ratings'],
+    'difficulty': media_filters.value['difficulty'],
   }
 
   const result = await axios(

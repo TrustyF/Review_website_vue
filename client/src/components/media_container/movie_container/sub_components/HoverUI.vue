@@ -15,7 +15,7 @@ let props = defineProps({
   },
   poster_size: {
     type: Array,
-    default: [0, 0],
+    default: () => [0, 0],
   },
   min_size: {
     type: Number,
@@ -98,6 +98,12 @@ function open_link_new_tab(path) {
   width: v-bind(poster_size [0]);
   height: v-bind(poster_size [1]);
   clip-path: inset(0% 0% 0% 0% round 8px);
+}
+.diff_gauge_wrapper {
+  position: absolute;
+  width: 100%;
+  top: v-bind(poster_size [1] + 'px');
+  transform: translate(0,-30px);
 }
 
 .poster_gradient {

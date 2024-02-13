@@ -24,6 +24,11 @@ let genres = ref(null)
 let themes = ref(null)
 let tags = ref(null)
 let content_ratings = ref(null)
+let difficulty = ref([
+  {'id': 1, 'name': 'Accessible', 'value': 'name'},
+  {'id': 2, 'name': 'Involved', 'value': 'release_date'},
+  {'id': 3, 'name': 'Difficult', 'value': 'public_rating'},
+])
 
 let user_ratings = ref([0, 0])
 let public_ratings = ref([0, 0])
@@ -96,16 +101,16 @@ async function fetch_filters() {
 }
 
 function emit_filter(title, event) {
-  console.log(title,event.value)
+  console.log(title, event.value)
   emits('filter', [title, event])
 }
 
 onMounted(() => {
   fetch_filters()
 
- // hide erotica
-  if (props.media_types.includes('manga')){
-    emits('filter', ['content_ratings',[31,32]])
+  // hide erotica
+  if (props.media_types.includes('manga')) {
+    emits('filter', ['content_ratings', [31, 32]])
   }
 
 })
@@ -145,6 +150,9 @@ onMounted(() => {
       <filter-dropdown v-if="content_ratings!==null && content_ratings.length>0"
                        @id="emit_filter('content_ratings',$event)"
                        :data="content_ratings" title="Content rating"></filter-dropdown>
+      <filter-dropdown v-if="difficulty!==null && difficulty.length>0"
+                       @id="emit_filter('difficulty',$event)"
+                       :data="difficulty" title="Difficulty"></filter-dropdown>
     </div>
 
     <div class="col">
@@ -193,7 +201,7 @@ onMounted(() => {
 .col {
   /*outline: 2px solid red;*/
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 
   gap: 10px;
 }

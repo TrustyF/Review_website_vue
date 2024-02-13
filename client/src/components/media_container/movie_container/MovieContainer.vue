@@ -3,6 +3,7 @@ import {inject, onMounted, watch, ref, computed, provide} from "vue";
 import Rating from "@/components/media_container/movie_container/sub_components/rating.vue";
 import {useRouter} from 'vue-router'
 import HoverUI from "@/components/media_container/movie_container/sub_components/HoverUI.vue";
+import DifficultyGauge from "@/components/media_container/movie_container/sub_components/DifficultyGauge.vue";
 
 let props = defineProps({
   data: {
@@ -110,6 +111,8 @@ function push_to_details() {
     <img @click="push_to_details" v-else-if="image_path" class="poster" alt="" :src="image_path"/>
     <div v-else class="poster"></div>
 
+    <difficulty-gauge class="diff" :diff="data['difficulty']"></difficulty-gauge>
+
     <HoverUI :data="data" :poster_size="poster_size" :min_size="min_size"></HoverUI>
 
     <Rating v-if="data!==undefined" class="ratings" :data="data" :max_size="min_size"></Rating>
@@ -157,6 +160,8 @@ function push_to_details() {
   width: v-bind(poster_size [0] + 'px');
   height: v-bind(poster_size [1] + 'px');
 
+  cursor: pointer;
+
   padding: 0;
   margin: 0;
   inset: 0;
@@ -164,7 +169,11 @@ function push_to_details() {
   border-radius: 8px 8px 0 0;
   object-fit: cover;
 }
-
+.diff {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
 .ratings {
   position: absolute;
   margin-left: 5px;

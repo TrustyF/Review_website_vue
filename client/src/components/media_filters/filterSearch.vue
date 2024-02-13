@@ -10,8 +10,14 @@ let last_typed = ref('')
 let debounce_id = 0
 let throttle_id = 0
 
+let last_emit = undefined
+
 function emit_filter(event) {
+
+  if (event === last_emit) return
+
   emits('filter', event)
+  last_emit = event
 }
 
 function throttle_search(text) {
@@ -22,12 +28,12 @@ function throttle_search(text) {
 
   last_typed.value = text
 
-  if (text.length % 5 === 0)  emit_filter(last_typed.value)
+  if (text.length % 3 === 0) emit_filter(last_typed.value)
 
   clearTimeout(throttle_id)
 
   throttle_id = setTimeout(() => {
-      emit_filter(last_typed.value)
+    emit_filter(last_typed.value)
   }, 400)
 }
 
@@ -35,7 +41,7 @@ function throttle_search(text) {
 
 <template>
   <div>
-    <input class="search_bar_wrapper"  type="text" placeholder="🔍Search"
+    <input class="search_bar_wrapper" type="text" placeholder="🔍Search"
            @input="throttle_search($event.target.value)"
            @keydown.esc="$event.target.value='';emit_filter('')"
            @keydown.enter="emit_filter($event.target.value)"
