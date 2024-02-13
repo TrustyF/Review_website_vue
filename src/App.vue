@@ -142,6 +142,7 @@ onMounted(() => {
 @media only screen and (max-width: 500px) {
   .main {
     padding: 0 5px 0 5px;
+    overflow-x: clip;
   }
 }
 </style>

@@ -76,5 +76,10 @@ function parse_diff(index) {
   transform: translate(-50%);
   font-size: 0.6em;
 }
+@media only screen and (max-width: 500px) {
+  .gauge_wrapper:hover::before {
+    transform: translate(-100%,-150%);
+  }
+}
 
 </style>
