@@ -90,7 +90,7 @@ def get():
 
     # parameters
     data = request.get_json()
-    # print(data)
+    print(data)
 
     media_id = data.get('id')
 
@@ -135,7 +135,8 @@ def get():
         match = ''
 
         if media_types and len(media_types) > 0:
-            q = q.filter(Media.media_type.in_(media_types))
+            if 'all' not in media_types:
+                q = q.filter(Media.media_type.in_(media_types))
 
         if search:
             conditions = [
@@ -169,10 +170,7 @@ def get():
 
         if tier_lists:
             # print(tier_lists)
-            if 'all' in tier_lists:
-#                 print('all')
-                q = q.filter(Media.tier_lists.any())
-            else:
+            if 'all' not in tier_lists:
                 q = (q.join(Media.tier_lists).filter(TierList.name.in_(tier_lists))
                      .group_by(Media.id).having(func.count(Media.id) == len(tier_lists)))
 
