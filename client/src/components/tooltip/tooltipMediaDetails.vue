@@ -164,8 +164,8 @@ onUnmounted(() => {
                 <img :src="diff_gauge" class="overview_icon">
                 <p class="overview">Difficulty</p>
               </div>
-              <div style="display:flex;align-items: center;gap: 5px">
-                <difficulty-gauge :diff="media['difficulty']"></difficulty-gauge>
+              <div class="extra_info_wrapper">
+                <difficulty-gauge style="margin: -10px 0 -10px -10px" :diff="media['difficulty']"></difficulty-gauge>
                 <h1 style="font-size: 1em;font-weight: 800;height: fit-content">{{
                     parse_diff(media['difficulty'])
                   }}</h1>
@@ -234,7 +234,7 @@ onUnmounted(() => {
 <style scoped>
 .media_details_wrapper {
   position: relative;
-  outline: 1px solid red;
+  /*outline: 1px solid red;*/
   /*min-height: 100px;*/
   height: 100%;
   /*outline: 1px solid red;*/
@@ -247,6 +247,12 @@ onUnmounted(() => {
   height: 20%;
   object-fit: cover;
 
+}
+
+.extra_info_wrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px
 }
 
 .overflow {
