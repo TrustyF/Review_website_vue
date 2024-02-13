@@ -68,8 +68,6 @@ provide('vis_container_content_rating', vis_container_content_rating)
 
 async function get_media(override) {
 
-  page_load_status.value = 'loading'
-
   const url = new URL(`${curr_api}/media/get`)
   const params = {
     'limit': media_limit.value,
@@ -217,6 +215,7 @@ watch(edit_pane_open, (newV, oldV) => {
 })
 
 onMounted(() => {
+  page_load_status.value = 'loading'
   get_media()
   addEventListener("scroll", () => handleInfiniteScroll())
 })
