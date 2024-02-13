@@ -63,10 +63,10 @@ function push_to_details() {
 </script>
 
 <template>
-  <div class="movie_mobile_container_wrapper" @click="push_to_details">
+  <div class="movie_mobile_container_wrapper">
 
     <div class="poster_wrapper">
-      <img @click="open_link_new_tab(data['external_link'])" class="poster" alt="poster" v-lazy="image_path"/>
+      <img @click="push_to_details" class="poster" alt="poster" v-lazy="image_path"/>
       <!--      <div class="poster_gradient"></div>-->
     </div>
 
@@ -123,12 +123,12 @@ function push_to_details() {
 
     </div>
 
-    <div class="edit_tools_wrapper">
-      <img v-if="data['video_link']" class="edit_tool" title="go to video" :src="youtube_img"
-           @click="open_link_new_tab(data['video_link'])">
-      <img v-if="data['external_link']" class="edit_tool" title="go to external website" :src="external_img"
-           @click="open_link_new_tab(data['external_link'])">
-    </div>
+<!--    <div class="edit_tools_wrapper">-->
+<!--      <img v-if="data['video_link']" class="edit_tool" title="go to video" :src="youtube_img"-->
+<!--           @click="open_link_new_tab(data['video_link'])">-->
+<!--      <img v-if="data['external_link']" class="edit_tool" title="go to external website" :src="external_img"-->
+<!--           @click="open_link_new_tab(data['external_link'])">-->
+<!--    </div>-->
 
     <difficulty-gauge class="diff" :diff="data['difficulty']"></difficulty-gauge>
 
@@ -318,6 +318,7 @@ function push_to_details() {
   z-index: 100;
   /*width: v-bind(poster_size [0] + 'px');*/
   position: absolute;
+  padding-bottom: 5px;
 
   display: flex;
   flex-flow: column;
@@ -325,8 +326,8 @@ function push_to_details() {
 
   align-items: center;
 
-  right: 0;
-  top: 0;
+  left: 0;
+  bottom: 0;
 
 }
 
