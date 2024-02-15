@@ -47,6 +47,7 @@ const router = useRouter()
 const media_type = computed(() => props['data']['media_type'] || 'movie')
 
 const image_path = computed(() => format_image_path(props['data']['poster_path'], props['data']['external_id']))
+// const image_path = computed(() => props['data']['poster_path'])
 const poster_size = computed(() => {
   if (props.size_override) {
     return [
@@ -103,7 +104,7 @@ function push_to_details() {
 }
 
 </script>
-
+<!--todo allow leaving details from back key-->
 <template>
   <div class="movie_container_wrapper">
 
