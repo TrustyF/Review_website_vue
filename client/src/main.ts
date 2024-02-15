@@ -39,8 +39,8 @@ app.provide('tooltip_badge_pos', ref([0, 0]))
 app.provide('tooltip_badge_data', ref({}))
 
 axiosRetry(axios, {
-    retryDelay: ((count) => count * 2000),
-    retries: 5,
+    retryDelay: ((count) => count * 1000),
+    retries: 10,
     onRetry: (() => console.log('retry')),
     retryCondition: (() => true)
 });
