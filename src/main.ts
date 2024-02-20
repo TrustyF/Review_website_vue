@@ -40,14 +40,16 @@ app.provide('tooltip_badge_data', ref({}))
 
 axiosRetry(axios, {
     retryDelay: ((count) => count * 1000),
-    retries: 10,
+    retries: 20,
     onRetry: (() => console.log('retry')),
     retryCondition: (() => true)
 });
 
 app.use(VueLazyLoad, {
-    preLoad: 2,
-    attempt: 2,
+    preLoad: 0,
+    attempt: 10,
+    observer: true,
+    throttleWait: 1000,
 })
 app.directive('v-lazy')
 app.use(router)

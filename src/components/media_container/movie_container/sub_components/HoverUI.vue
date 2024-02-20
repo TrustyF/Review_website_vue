@@ -72,7 +72,7 @@ function open_link_new_tab(path) {
   </div>
 
   <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null">
-    <div v-for="tag in data['tags']" :key="tag['id']">
+    <div v-for="tag in data['tags']" :key="tag['id']" style="pointer-events: auto;width: fit-content">
       <badge :data="tag" :min_size="min_size" :show_title="false"></badge>
     </div>
   </div>
@@ -99,11 +99,12 @@ function open_link_new_tab(path) {
   height: v-bind(poster_size [1]);
   clip-path: inset(0% 0% 0% 0% round 8px);
 }
+
 .diff_gauge_wrapper {
   position: absolute;
   width: 100%;
   top: v-bind(poster_size [1] + 'px');
-  transform: translate(0,-30px);
+  transform: translate(0, -30px);
 }
 
 .poster_gradient {
@@ -255,6 +256,7 @@ function open_link_new_tab(path) {
 }
 
 .tags_wrapper {
+  pointer-events: none;
   /*outline: 1px solid red;*/
   width: v-bind(poster_size [0] + 'px');
   position: absolute;
