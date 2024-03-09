@@ -193,6 +193,8 @@ async function get_extra_posters() {
       'Content-Type': 'application/json',
     }
   }).then(response => response.json())
+
+  console.log(extra_posters.value)
 }
 
 function replace_from_search(event) {
@@ -223,6 +225,11 @@ function handle_key_press(e) {
 
 function switch_poster(event) {
   selected_media.value['poster_path'] = event
+}
+
+function proxy_image(path){
+  return `${curr_api}/media/get_image?path=${path}`
+
 }
 
 onMounted(() => {
@@ -395,7 +402,7 @@ onUnmounted(() => {
 
       <div class="extra_posters">
         <div class="extra_poster" v-for="poster in extra_posters" :key="poster">
-          <img :src="poster" alt="extra_poster" class="extra_poster_image" @click="switch_poster(poster)">
+          <img v-lazy="proxy_image(poster)" alt="extra_poster" class="extra_poster_image" @click="switch_poster(poster)">
         </div>
       </div>
 
