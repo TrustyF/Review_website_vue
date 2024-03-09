@@ -90,7 +90,7 @@ def get():
 
     # parameters
     data = request.get_json()
-    print(data)
+    # print(data)
 
     media_id = data.get('id')
 
@@ -485,7 +485,7 @@ def get_image():
         return [], 200
 
     file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches",
-                             media_id + f'_{media_type}_' + poster_id + '.jpg')
+                             f"{media_id}_{media_type}_{poster_id}.jpg")
 
     # return saved file if exists
     if os.path.exists(file_path):
