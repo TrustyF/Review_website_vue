@@ -113,14 +113,15 @@ onMounted(() => {
 
 <style scoped>
 .main {
+  /*outline: 1px solid red;*/
   position: relative;
 
   margin: 0 auto 0 auto;
-  max-width: 1000px;
+  max-width: 1080px;
   min-height: 80vh;
   /*overflow-x: clip;*/
 
-  padding: 0 40px 0 40px;
+  /*padding: 0 40px 0 40px;*/
 }
 
 .tooltip_editor_top_wrapper {

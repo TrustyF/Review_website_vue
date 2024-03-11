@@ -104,6 +104,7 @@ onMounted(() => {
   left: 0;
   right: 0;
   height: 170%;
+  filter: opacity(50%);
 }
 
 .scroll_container {

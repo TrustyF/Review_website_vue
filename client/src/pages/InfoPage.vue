@@ -23,7 +23,7 @@ onMounted(() => {
 <template>
   <div class="info_wrapper">
 
-    <h1>How does this work ?</h1>
+<!--    <h1>How does this work ?</h1>-->
 
     <div class="text_block">
       <h1>Ratings</h1>
@@ -104,7 +104,7 @@ onMounted(() => {
   flex-flow: column;
   gap: 20px;
   margin: 0 auto 0 auto;
-  padding: 120px 0 100px 0;
+  padding: 100px 0 100px 0;
   position: relative;
   min-height: 80vh;
 }
