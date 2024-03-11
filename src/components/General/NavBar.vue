@@ -92,6 +92,12 @@ onMounted(() => {
         <login-bar></login-bar>
       </div>
 
+      <div v-if="is_mobile" class="wrapper">
+        <RouterLink active-class="active" class="link" to="/movie">Movies</RouterLink>
+        <RouterLink active-class="active" class="link" to="/tv">TV</RouterLink>
+        <RouterLink active-class="active" class="link" to="/manga">Manga</RouterLink>
+      </div>
+
       <div v-if="is_mobile" @click="toggle_side_menu" class="mobile_wrapper">
         <img alt="menu" :src="triple_bars" class="triple_bars">
       </div>
@@ -140,7 +146,7 @@ onMounted(() => {
   display: flex;
   flex-flow: row;
   align-items: flex-start;
-  max-width: 1000px;
+  max-width: 1080px;
   margin: auto;
   gap: 20px;
   padding: 10px;

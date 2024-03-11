@@ -152,7 +152,7 @@ onMounted(() => {
   height: 100%;
   z-index: 5;
   position: absolute;
-  background: linear-gradient(to right, rgba(19, 18, 21, 0) 90%, rgba(19, 18, 21, 1) 100%);
+  background: linear-gradient(to right, rgba(19, 18, 21, 0) 98%, rgba(19, 18, 21, 1) 100%);
 }
 @media only screen and (max-width: 500px) {
   .scroll_container {
