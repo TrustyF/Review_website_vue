@@ -16,6 +16,7 @@ dev_mode = os.path.exists(os.path.join(MAIN_DIR, 'devmode.txt'))
 load_dotenv(os.path.join(MAIN_DIR, '.env'))
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 280, 'pool_pre_ping': True}
 
 db_username = os.getenv('MYSQL_DATABASE_USERNAME')
 db_password = os.getenv('MYSQL_DATABASE_PASSWORD')
@@ -25,10 +26,8 @@ database_uri = f'mysql+pymysql://{db_username}:{db_password}@TrustyFox.mysql.pyt
 local_database_uri = f'mysql+pymysql://root:{db_password}@127.0.0.1:3306/{db_name}'
 
 if dev_mode:
-    # print('using local')
     app.config["SQLALCHEMY_DATABASE_URI"] = local_database_uri
 else:
-#     print('using cloud')
     app.config["SQLALCHEMY_DATABASE_URI"] = database_uri
 
 CORS(app)
