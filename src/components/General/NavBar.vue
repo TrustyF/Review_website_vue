@@ -73,7 +73,7 @@ onMounted(() => {
 <template>
   <nav class="dark_accent navbar" id="navbar">
     <div class="nav_wrapper">
-      <img :src="logo" alt="website icon" style="height: 40px">
+      <RouterLink to="/"><img :src="logo" alt="website icon" style="height: 40px"></RouterLink>
 
       <div v-if="!is_mobile" class="wrapper">
         <RouterLink active-class="active" class="link" to="/">Home</RouterLink>

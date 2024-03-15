@@ -121,7 +121,7 @@ onMounted(() => {
   min-height: 80vh;
   /*overflow-x: clip;*/
 
-  /*padding: 0 40px 0 40px;*/
+  padding: 0 40px 0 40px;
 }
 
 .tooltip_editor_top_wrapper {
