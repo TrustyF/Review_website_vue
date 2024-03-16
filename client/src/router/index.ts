@@ -62,6 +62,11 @@ const router = createRouter({
             component: () => import("../pages/sub_pages/youtube/YTShortsPage.vue")
         },
         {
+            path: "/youtube/yt_anime_openings",
+            name: "youtube anime openings",
+            component: () => import("../pages/sub_pages/youtube/YTAnimeOpeningPage.vue")
+        },
+        {
             path: "/youtube/yt_overwatch_cinematics",
             name: "youtube overwatch cinematics",
             component: () => import("../pages/sub_pages/youtube/YTOverwatchPage.vue")
