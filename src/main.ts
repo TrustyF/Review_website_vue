@@ -42,7 +42,10 @@ axiosRetry(axios, {
     retryDelay: ((count) => count * 250),
     retries: 20,
     onRetry: ((retryCount,error) => console.log('retry',retryCount,error.message,error.code)),
-    retryCondition: (() => true)
+    retryCondition: ((error) => {
+        console.log(error)
+        return true
+    })
 });
 
 app.use(VueLazyLoad, {

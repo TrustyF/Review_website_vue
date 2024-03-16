@@ -11,6 +11,7 @@ import lemmino_plane_img from "/tier_list_images/lemmino_plane.jpg"
 import sombra_img from "/tier_list_images/sombra_img.jpg"
 import hbomber_img from "/tier_list_images/hbomber_img.jpg"
 import gus_img from "/tier_list_images/gus_jhonson.jpg"
+import death_parade from "/tier_list_images/death_parade.jpg"
 
 let tier_lists = [
   {
@@ -32,6 +33,11 @@ let tier_lists = [
     'name': 'Music videos',
     'image': fever_ghost_img,
     'link':'/youtube/yt_music_videos'
+  },
+  {
+    'name': 'Anime Openings',
+    'image': death_parade,
+    'link':'/youtube/yt_anime_openings'
   },
   {
     'name': 'Overwatch media',
