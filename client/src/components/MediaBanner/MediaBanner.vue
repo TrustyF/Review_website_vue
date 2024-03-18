@@ -39,6 +39,7 @@ let media = ref(new Array(10).fill().map((e, i) => {
 }))
 
 async function get_media() {
+  console.log("2. attempt to get banner media")
 
   const url = new URL(`${curr_api}/media/get`)
   const params = {
@@ -61,11 +62,10 @@ async function get_media() {
         data: JSON.stringify(params)
       })
       .catch(error => {
-        console.log('media_banner_get_media', error.response)
+        console.log('media_banner_get_media failed')
         return []
       })
 
-  console.log(result)
   if (result.status !== 200) return
 
   media.value = result.data['media']
@@ -81,6 +81,7 @@ async function get_media() {
 }
 
 onMounted(() => {
+  console.log("1. mounted media banner")
   get_media()
 })
 
