@@ -1,8 +1,6 @@
 import hashlib
 import json
 import os.path
-import pprint
-import time
 
 import requests
 from flask import Blueprint, request, send_file
@@ -14,7 +12,6 @@ from math import ceil, floor
 from youtubesearchpython import VideosSearch
 from flask_blueprints.login_blueprint import requires_auth
 
-from app import dev_mode
 from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY, IGDB_CLIENT_ID, IGDB_CLIENT_SECRET
 from data_mapper.media_mapper import map_from_tmdb, map_from_mangadex, map_from_igdb, map_from_youtube
 from db_loader import db

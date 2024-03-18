@@ -1,10 +1,10 @@
-Flask==2.3.3
-Flask-Cors==4.0.0
-requests~=2.31.0
-SQLAlchemy~=2.0.20
-flask_sqlalchemy==3.1.1
-python-dotenv==1.0.0
-PyMySQL~=1.1.0
+Flask
+Flask-Cors
+requests
+SQLAlchemy
+flask_sqlalchemy
+python-dotenv
 cryptography
 youtube-search-python
 python-dateutil
+pymysql
