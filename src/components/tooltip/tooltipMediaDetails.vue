@@ -1,5 +1,5 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed, onUnmounted} from "vue";
+import {inject, onMounted, watch, ref, computed, onUnmounted, onBeforeUnmount, onBeforeMount} from "vue";
 import {useRoute} from 'vue-router';
 import axios from "axios";
 
@@ -26,6 +26,7 @@ import spinner from '/ui/custom_spinner.webp'
 const curr_api = inject("curr_api");
 const media = inject("selected_media");
 const media_detail_pane_open = inject("media_detail_pane_open");
+const listener = 0;
 
 const route = useRoute()
 const media_id = route.params.id
@@ -55,12 +56,19 @@ function get_year_from_release_date(string) {
   }
 }
 
+const handle_back_key = (event) => {
+  window.history.pushState({isPopup: true}, 'Some Title');
+  window.history.back()
+  handle_pane_close()
+}
+
 function handle_pane_close() {
-  if (media_detail_pane_open.value) media_detail_pane_open.value = false
+  if (media_detail_pane_open.value) {
+    media_detail_pane_open.value = false
+  }
 }
 
 function imageHandler(event) {
-  console.log(event)
   is_image_loaded.value = true
 }
 
@@ -90,10 +98,15 @@ function parse_diff(index) {
 
 onMounted(() => {
   window.addEventListener('keydown', handle_key_press)
+
+  window.history.pushState({isPopup: true}, 'Some Title');
+  window.addEventListener('popstate', handle_back_key)
   document.body.style.overflow = 'hidden';
 })
+
 onUnmounted(() => {
   window.removeEventListener('keydown', handle_key_press)
+  window.removeEventListener('popstate', handle_back_key)
   document.body.style.overflow = 'scroll';
 })
 </script>
