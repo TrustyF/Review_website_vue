@@ -17,7 +17,7 @@ const edit_mode = ref(false)
 
 const session_seed = Math.round(Math.random() * 100)
 const firebaseConfig = {
-    apiKey: "AIzaSyCiUSfDjsau5Xa0lGRfPDxOnFePhr64yY0",
+    apiKey: "AIzaSyAqILHpiewzx86gRIZo_gFPNGBKNGBMdLo",
     authDomain: "vue-review-website.firebaseapp.com",
     projectId: "vue-review-website",
     storageBucket: "vue-review-website.appspot.com",
