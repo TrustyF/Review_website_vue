@@ -154,6 +154,11 @@ async function hard_delete() {
   selected_media.value = {}
 }
 
+function close_and_open_update_pane(){
+  handle_pane_close()
+
+}
+
 async function add_media() {
   const token = await get_current_user()
 
@@ -174,7 +179,8 @@ async function add_media() {
   }).then(response => response.json())
 
   added.value = result.ok ? 'true' : 'false'
-  setTimeout(()=>added.value = 'none',3000)
+  // setTimeout(()=>added.value = 'none',3000)
+  close_and_open_update_pane()
 }
 
 async function get_extra_posters() {

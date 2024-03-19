@@ -67,6 +67,7 @@ async function get_media() {
       })
 
   if (result.status !== 200) return
+  else console.log('result got for media banner')
 
   media.value = result.data['media']
   // sort tags by color
