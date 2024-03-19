@@ -5,6 +5,7 @@ import CreditsFooter from "@/components/General/CreditsFooter.vue";
 import MediaScrollBanner from "@/components/MediaBanner/MediaScrollBanner.vue";
 import MediaBanner from "@/components/MediaBanner/MediaBanner.vue";
 import logo from '/ui/logo.png'
+import {RouterLink} from "vue-router";
 
 const curr_api = inject("curr_api");
 const is_mobile = inject("is_mobile");
@@ -27,6 +28,8 @@ onMounted(() => {
       <h2 style="font-size: 2em;
       filter:drop-shadow(3px 3px 2px black)drop-shadow(1px 1px 8px black)drop-shadow(1px 1px 15px black)">
         Welcome to Trusty's Corner !</h2>
+      <RouterLink style="color: grey;filter:drop-shadow(2px 2px 2px black);text-underline-offset: 2px;margin: -10px 0 -20px 10px;font-size: 1em" to="/info">What is this ?</RouterLink>
+
       <media-scroll-banner></media-scroll-banner>
     </div>
 
