@@ -43,15 +43,9 @@ async function get_media() {
         method: 'POST',
         url: url,
         headers: {"Content-Type": "application/json"},
+        // signal: AbortSignal.timeout(2000),
         data: JSON.stringify(params)
       })
-      .catch(error => {
-        console.log('media_scroll_banner_get_media failed')
-        return []
-      })
-
-  if (result.status !== 200) return
-  else console.log('result got for media banner')
 
   media.value = result.data['media']
 

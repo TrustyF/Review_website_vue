@@ -58,16 +58,11 @@ async function get_media() {
       {
         method: 'POST',
         url: url,
+        // signal: AbortSignal.timeout(2000),
+        // timeout:2000,
         headers: {"Content-Type": "application/json"},
         data: JSON.stringify(params)
       })
-      .catch(error => {
-        console.log('media_banner_get_media failed')
-        return []
-      })
-
-  if (result.status !== 200) return
-  else console.log('result got for media banner')
 
   media.value = result.data['media']
   // sort tags by color
@@ -97,6 +92,7 @@ onMounted(() => {
             :data="med"
             :scale_mul="!is_mobile ? 0.3:0.25"
             :size_override="size_override"
+            :lazy_poster="false"
         ></movie-container>
       </div>
     </div>
