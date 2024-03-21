@@ -155,6 +155,7 @@ async function hard_delete() {
 }
 
 function close_and_open_update_pane(){
+  //todo swap to update pane after add
   handle_pane_close()
 
 }

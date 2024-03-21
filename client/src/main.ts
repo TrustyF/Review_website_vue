@@ -10,8 +10,8 @@ import axios from 'axios';
 const local_api = "http://192.168.1.11:5000"
 const server_api = "https://review-trustyfox.pythonanywhere.com"
 
-// const devMode = import.meta.env.DEV
-const devMode = false
+const devMode = import.meta.env.DEV
+// const devMode = false
 
 const edit_mode = ref(false)
 
@@ -39,12 +39,10 @@ app.provide('tooltip_badge_pos', ref([0, 0]))
 app.provide('tooltip_badge_data', ref({}))
 
 axiosRetry(axios, {
-    retryDelay: ((count) => count * 200),
-    retries: 50,
+    retryDelay: ((count) => count * 500),
+    retries: 20,
     onRetry: ((retryCount,error) => console.log('retry',retryCount,error.message,error.code)),
-    retryCondition: ((error) => {
-        return true
-    })
+    retryCondition: ((error) => true)
 });
 
 app.use(VueLazyLoad, {
