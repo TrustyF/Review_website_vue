@@ -5,7 +5,6 @@ import os.path
 import requests
 from flask import Blueprint, request, send_file
 from sqlalchemy import not_, and_, or_
-from sqlalchemy.orm import undefer, joinedload, lazyload
 from sqlalchemy.sql.expression import func
 from datetime import datetime, timedelta
 from math import ceil, floor
@@ -79,6 +78,12 @@ def handle_igdb_access_token(f_source):
         # print('token time left',
         #       timedelta(seconds=old_token['expires_in'] - token_time_diff.total_seconds()))
         return old_token
+
+
+@bp.route("/sleep_check", methods=['GET'])
+def sleep_check():
+    print('not sleeping', datetime.now())
+    return json.dumps({'ok': True}), 200, {'ContentType': 'application/json'}
 
 
 @bp.route("/get", methods=['POST'])
