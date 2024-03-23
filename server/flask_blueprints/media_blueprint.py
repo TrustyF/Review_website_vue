@@ -607,16 +607,19 @@ def get_scroll_banner():
     def make_collage(images, width, height):
         collage = Image.new("RGB", (width * len(images), height), color=(255, 255, 255, 255))
         for j, img in enumerate(images):
-            width_percent = (height / float(img.size[1]))
-            hsize = int((float(img.size[0]) * float(width_percent)))
-            resized = img.resize((hsize, height), Image.Resampling.LANCZOS)
+            # width_percent = (height / float(img.size[1]))
+            # hsize = int((float(img.size[0]) * float(width_percent)))
+            # resized = img.resize((hsize, height), Image.Resampling.LANCZOS)
 
-            size = resized.size
+            size = img.size
 
             left = (size[0] - width) / 2
             right = (size[0] + width) / 2
 
-            resized = resized.crop((left, 0, right, height))
+            top = (size[1] - height) / 2
+            bottom = (size[1] + height) / 2
+
+            resized = img.crop((left, top, right, bottom))
             collage.paste(resized, (j * width, 0))
 
         return collage
@@ -645,6 +648,8 @@ def get_scroll_banner():
     # make collage
     file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches")
     banner = make_collage([Image.open(os.path.join(file_path, x)) for x in posters], 500, 750)
+
+    # banner.show('test')
 
     mem_file = io.BytesIO()
     banner.save(mem_file, 'JPEG', quality=50)
