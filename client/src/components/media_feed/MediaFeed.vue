@@ -165,7 +165,7 @@ const handleInfiniteScroll = () => {
 
   let container_bot = container.getBoundingClientRect()
 
-  const endOfPage = (window.innerHeight + 400) >= container_bot.bottom;
+  const endOfPage = (window.innerHeight + 600) >= container_bot.bottom;
 
   if (endOfPage && !is_page_loading.value && !is_page_loaded.value) {
     is_page_loading.value = true

@@ -111,7 +111,13 @@ const router = createRouter({
             name: "game",
             component: () => import("../pages/GamePage.vue")
         },
-    ]
+    ],
 })
 
+router.beforeEach((to, from) => {
+    console.log(window.scrollY)
+    setTimeout(()=>{
+        window.scroll(0, 0)
+    },1)
+})
 export default router

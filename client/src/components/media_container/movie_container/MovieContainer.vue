@@ -34,7 +34,7 @@ let props = defineProps({
     default: null
   },
 });
-let emits = defineEmits(["media_data"]);
+let emits = defineEmits(["media_data", "is_full_loaded"]);
 
 let edit_mode = inject('edit_mode')
 let media_scales = inject('media_scales')
@@ -43,6 +43,8 @@ let selected_media = inject('selected_media')
 const curr_api = inject("curr_api");
 const media_detail_pane_open = inject("media_detail_pane_open");
 const router = useRouter()
+
+let poster_loaded = ref()
 
 const media_type = computed(() => props['data']['media_type'] || 'movie')
 
@@ -103,13 +105,24 @@ function push_to_details() {
   media_detail_pane_open.value = true
 }
 
+function emit_finished_loading() {
+  emits("is_full_loaded", true)
+  // poster_loaded.value = true
+}
+
+function test(event) {
+  console.log(event)
+}
+
 </script>
-<!--todo allow leaving details from back key-->
 <template>
   <div class="movie_container_wrapper">
+    <p>{{ poster_loaded }}</p>
 
-    <img @click="push_to_details" v-if="lazy_poster && image_path" class="poster" alt="" v-lazy="image_path"/>
-    <img @click="push_to_details" v-else-if="image_path" class="poster" alt="" :src="image_path"/>
+    <img @click="push_to_details" @loadeddata="emit_finished_loading" v-if="lazy_poster && image_path" class="poster"
+         alt="" v-lazy="image_path" lazy="loading"/>
+    <img @click="push_to_details" @load="emit_finished_loading" v-else-if="image_path" class="poster" alt=""
+         :src="image_path"/>
     <div v-else class="poster"></div>
 
     <difficulty-gauge class="diff" :diff="data['difficulty']"></difficulty-gauge>
@@ -155,6 +168,12 @@ function push_to_details() {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.75);
 
   border-radius: 8px;
+
+  -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 0.5s; /* Firefox < 16 */
+  -ms-animation: fadein 0.5s; /* Internet Explorer */
+  -o-animation: fadein 0.5s; /* Opera < 12.1 */
+  animation: fadein 0.5s;
 }
 
 .poster {
@@ -169,12 +188,21 @@ function push_to_details() {
 
   border-radius: 8px 8px 0 0;
   object-fit: cover;
+
+  opacity: 1;
+  transition: opacity 0.5s;
 }
+
+.poster[lazy=loading] {
+  opacity: 0;
+}
+
 .diff {
   position: absolute;
   bottom: 0;
   right: 0;
 }
+
 .ratings {
   position: absolute;
   margin-left: 5px;

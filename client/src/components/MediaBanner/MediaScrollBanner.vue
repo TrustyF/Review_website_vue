@@ -16,6 +16,8 @@ const is_mobile = inject("is_mobile");
 let med_limit = 30
 const rangeOfNumbers = (a, b) => [...Array(b + 1).keys()].slice(a)
 
+let img_loads = ref(0)
+
 let media = ref(new Array(med_limit).fill().map((e, i) => {
   return {
     name: '',
@@ -70,12 +72,14 @@ onMounted(() => {
 <template>
   <div class="banner_wrapper">
     <div class="banner_fade"></div>
-
-    <div class="scroll_content">
-      <img style="object-fit: contain;height: 100%;" :src="`${curr_api}/media/get_scroll_banner`">
-      <img style="object-fit: contain;height: 100%;" :src="`${curr_api}/media/get_scroll_banner`">
+    <div class="fade_anim" v-show="img_loads >= 2">
+      <div class="scroll_content">
+        <img style="object-fit: contain;height: 100%;" @load="img_loads+=1"
+             :src="`${curr_api}/media/get_scroll_banner`">
+        <img style="object-fit: contain;height: 100%;" @load="img_loads+=1"
+             :src="`${curr_api}/media/get_scroll_banner`">
+      </div>
     </div>
-
   </div>
 </template>
 
@@ -98,6 +102,16 @@ onMounted(() => {
   width: fit-content;
   animation: scroll_banner 150s linear infinite;
   will-change: transform;
+}
+
+.fade_anim {
+  height: 100%;
+
+  -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 1s; /* Firefox < 16 */
+  -ms-animation: fadein 1s; /* Internet Explorer */
+  -o-animation: fadein 1s; /* Opera < 12.1 */
+  animation: fadein 1s;
 }
 
 .banner_fade {

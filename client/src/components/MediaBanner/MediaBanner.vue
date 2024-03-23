@@ -22,21 +22,24 @@ let props = defineProps({
   },
   size_override: {
     type: Array(),
-    default: [500,750],
+    default: [500, 750],
   },
 });
 let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
 const session_seed = inject("session_seed");
 const is_mobile = inject("is_mobile");
-const rangeOfNumbers = (a,b) => [...Array(b+1).keys()].slice(a)
+const rangeOfNumbers = (a, b) => [...Array(b + 1).keys()].slice(a)
 
-let media = ref(new Array(10).fill().map((e, i) => {
-  return {
-    name: '',
-    release_date: '',
-  }
-}))
+let loaded_num = ref(0)
+
+let media = ref()
+// let media = ref(new Array(10).fill().map((e, i) => {
+//   return {
+//     name: '',
+//     release_date: '',
+//   }
+// }))
 
 async function get_media() {
   console.log("2. attempt to get banner media")
@@ -48,13 +51,13 @@ async function get_media() {
     'types': props.media_types,
     'order': props.order,
     'ratings': props.ratings,
-    'content_ratings':rangeOfNumbers(20,39).filter((elem,i)=> ![33,34].includes(elem)),
+    'content_ratings': rangeOfNumbers(20, 39).filter((elem, i) => ![33, 34].includes(elem)),
     'tier_lists': props.tier_lists,
     'session_seed': session_seed,
     'user_rating_sort_override': true,
   }
 
-   let result = await axios(
+  let result = await axios(
       {
         method: 'POST',
         url: url,
@@ -84,22 +87,22 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="banner_wrapper">
+  <div class="banner_wrapper" >
     <div class="banner_fade"></div>
-    <div class="scroll_container">
+    <div class="scroll_container" v-show="loaded_num >= 20">
       <div class="scroll_content" v-for="med in media" :key="med.id">
         <movie-container
             :data="med"
             :scale_mul="!is_mobile ? 0.3:0.25"
             :size_override="size_override"
-            :lazy_poster="true"
+            :lazy_poster="false"
+            @is_full_loaded="loaded_num+=1"
         ></movie-container>
       </div>
     </div>
-<!--    <div class="scroll_container" v-else>-->
-<!--      <img class="spinner" alt="spinner" :src="spinner">-->
-<!--    </div>-->
-
+    <div class="scroll_container" v-show="loaded_num < 20">
+      <div class="gradient_loader"></div>
+    </div>
   </div>
 </template>
 
@@ -116,6 +119,7 @@ onMounted(() => {
 
 .scroll_container {
   /*position: relative;*/
+  width: 100%;
   overflow-x: scroll;
   /*overflow-y: hidden;*/
   display: flex;
@@ -124,23 +128,52 @@ onMounted(() => {
   padding-bottom: 20px;
   /*white-space:nowrap;*/
   /*outline: 1px solid red;*/
+  min-height: 283.5px;
+
+  -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 1s; /* Firefox < 16 */
+  -ms-animation: fadein 1s; /* Internet Explorer */
+  -o-animation: fadein 1s; /* Opera < 12.1 */
+  animation: fadein 1s;
 }
+
 ::-webkit-scrollbar {
   background-color: #f5f5f5;
   border-radius: 10px;
   width: 7px;
   height: 2px;
 }
+
 ::-webkit-scrollbar-thumb {
   background-color: #000000;
   border-radius: 10px;
 }
 
-.spinner {
-  position: relative;
-  height: 50%;
-  /*object-fit: cover;*/
-  /*margin: 0 auto 0 auto;*/
+.gradient_loader {
+  width: 100%;
+
+  background: linear-gradient(to right, rgb(19, 18, 21) 30%, rgb(34, 33, 37) 50%, rgb(19, 18, 21) 70%);
+  background-size: 200% 400%;
+
+  -webkit-animation: AnimationName 2s ease infinite;
+  -moz-animation: AnimationName 2s ease infinite;
+  animation: AnimationName 2s ease infinite;
+}
+
+@-webkit-keyframes AnimationName {
+  0%{background-position:0 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0 50%}
+}
+@-moz-keyframes AnimationName {
+  0%{background-position:0 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0 50%}
+}
+@keyframes AnimationName {
+  0%{background-position:0 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0 50%}
 }
 
 .banner_fade {
@@ -152,6 +185,7 @@ onMounted(() => {
   position: absolute;
   background: linear-gradient(to right, rgba(19, 18, 21, 0) 98%, rgba(19, 18, 21, 1) 100%);
 }
+
 @media only screen and (max-width: 500px) {
   .scroll_container {
     gap: 10px;
