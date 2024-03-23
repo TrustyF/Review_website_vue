@@ -484,6 +484,8 @@ def get_image():
     media_path = request.args.get('path')
     media_type = request.args.get('type')
 
+    # print(media_id, media_path, media_type)
+
     poster_id = hashlib.shake_256(media_path.encode("utf-8")).hexdigest(5)
 
     # return not found image
@@ -602,38 +604,51 @@ def search_extra_posters():
 
 @bp.route("/get_scroll_banner", methods=['GET'])
 def get_scroll_banner():
-    def make_collage(images):
-        collage = Image.new("RGB", (500 * len(images), 750), color=(255, 255, 255, 255))
-        for i, img in enumerate(images):
-            resized = img.crop((0, 0, 500, 750))
-            # resized = img.resize((500, 750))
-            collage.paste(resized, (i * 500, 0))
+    def make_collage(images, width, height):
+        collage = Image.new("RGB", (width * len(images), height), color=(255, 255, 255, 255))
+        for j, img in enumerate(images):
+            width_percent = (height / float(img.size[1]))
+            hsize = int((float(img.size[0]) * float(width_percent)))
+            resized = img.resize((hsize, height), Image.Resampling.LANCZOS)
+
+            size = resized.size
+
+            left = (size[0] - width) / 2
+            right = (size[0] + width) / 2
+
+            resized = resized.crop((left, 0, right, height))
+            collage.paste(resized, (j * width, 0))
 
         return collage
 
     # get list of images
-    s1 = time.time()
+    query = (db.session.query(Media).filter(
+        or_(Media.is_deleted == 0, Media.is_deleted == None)))  # noqa
+    query = query.filter(Media.media_type.in_(['movie', 'tv', 'anime', 'manga', 'game']))
+    query = query.order_by(func.rand(time.time()))
+    query = query.limit(50)
 
-    file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches")
-    all_posters = os.listdir(file_path)
+    all_entries = query.all()
+    # aggregate posters
+    posters = []
+    for i, x in enumerate(all_entries):
 
-    if len(all_posters) < 20:
-        return [], 404
+        if len(posters) > 19:
+            break
 
-    # get random 20 posters
-    posters = random.sample(all_posters, 20)
+        path = os.path.join(MAIN_DIR, "assets", "poster_images_caches",
+                            f"{x.external_id}_{x.media_type}_{hashlib.shake_256(x.poster_path.encode('utf-8')).hexdigest(5)}.jpg")
+
+        if os.path.exists(path):
+            posters.append(path)
 
     # make collage
-    banner = make_collage([Image.open(os.path.join(file_path, x)) for x in posters])
+    file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches")
+    banner = make_collage([Image.open(os.path.join(file_path, x)) for x in posters], 500, 750)
 
-    # banner.show('test')
-    # save im
     mem_file = io.BytesIO()
     banner.save(mem_file, 'JPEG', quality=50)
     mem_file.seek(0)
-
-    s2 = time.time()
-    print('time taken', s2 - s1)
 
     return send_file(mem_file, mimetype='image/jpg')
 
