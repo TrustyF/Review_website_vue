@@ -1,14 +1,18 @@
 <script setup>
-import {computed, inject, onBeforeMount, onMounted, onUnmounted, ref} from "vue";
+import {computed,defineAsyncComponent, inject, onBeforeMount, onMounted, onUnmounted, ref} from "vue";
 
-import CreditsFooter from "@/components/General/CreditsFooter.vue";
-import MediaScrollBanner from "@/components/MediaBanner/MediaScrollBanner.vue";
-import MediaBanner from "@/components/MediaBanner/MediaBanner.vue";
+const CreditsFooter = defineAsyncComponent(() => import("../components/General/CreditsFooter.vue"));
+const MediaScrollBanner = defineAsyncComponent(() => import("../components/MediaBanner/MediaScrollBanner.vue"));
+const MediaBanner = defineAsyncComponent(() => import("../components/MediaBanner/MediaBanner.vue"));
 import logo from '/ui/logo.png'
 import {RouterLink} from "vue-router";
 
 const curr_api = inject("curr_api");
 const is_mobile = inject("is_mobile");
+
+function handler(comp){
+  console.log('showing')
+}
 
 </script>
 
@@ -29,35 +33,35 @@ const is_mobile = inject("is_mobile");
       <media-scroll-banner></media-scroll-banner>
     </div>
 
-    <div class="" style="margin-top: 5px">
+    <lazy-component @show="handler" class="" style="margin-top: 5px">
       <h1>Watched recently</h1>
-      <div style="margin: 10px 0 20px 0" class="separator"></div>
+      <div class="separator"></div>
       <media-banner :order="'date_added'" :media_types="['movie','tv']"></media-banner>
-    </div>
+    </lazy-component>
 
-    <div class="">
+    <lazy-component @show="handler" class="">
       <h1>Latest releases</h1>
-      <div style="margin: 10px 0 20px 0" class="separator"></div>
+      <div class="separator"></div>
       <media-banner :order="'release_date'" :media_types="['movie','tv']"></media-banner>
-    </div>
+    </lazy-component>
 
-    <div class="">
+    <lazy-component @show="handler" class="">
       <h1>Recommended movie</h1>
-      <div style="margin: 10px 0 20px 0" class="separator"></div>
+      <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['movie']"></media-banner>
-    </div>
+    </lazy-component>
 
-    <div class="">
+    <lazy-component @show="handler" class="">
       <h1>Recommended manga</h1>
-      <div style="margin: 10px 0 20px 0" class="separator"></div>
+      <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['manga']" :size_override="[512, 720]"></media-banner>
-    </div>
+    </lazy-component>
 
-    <div class="">
+    <lazy-component @show="handler" class="">
       <h1>Recommended games</h1>
-      <div style="margin: 10px 0 20px 0" class="separator"></div>
+      <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['game']" :size_override="[528, 704]"></media-banner>
-    </div>
+    </lazy-component>
 
     <credits-footer></credits-footer>
 
@@ -79,6 +83,7 @@ const is_mobile = inject("is_mobile");
 .separator {
   height: 1px;
   background-color: #2b2a34;
+  margin: 10px 0 20px 0
 }
 
 .top_banner {

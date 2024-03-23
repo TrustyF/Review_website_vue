@@ -31,7 +31,7 @@ function close_tooltip() {
 
 <template>
   <div class="tag_box" @mouseover="emit_tooltip_data" @mouseleave="close_tooltip">
-    <img v-if="data['tier']" ref="tag_container" class="tag_image" v-lazy="`${curr_api}/tag/get_image?tier=${data['tier']}&path=${data['image_path']}`">
+    <img v-if="data['tier']" ref="tag_container" lazy="loading" class="tag_image" v-lazy="`${curr_api}/tag/get_image?tier=${data['tier']}&path=${data['image_path']}`">
     <h1 v-if="show_title" class="tag_title">{{ data['name'] }}</h1>
   </div>
 </template>
@@ -52,12 +52,23 @@ function close_tooltip() {
   background-color: #2b2a34;
 
   overflow: hidden;
+
+  -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 0.5s; /* Firefox < 16 */
+  -ms-animation: fadein 0.5s; /* Internet Explorer */
+  -o-animation: fadein 0.5s; /* Opera < 12.1 */
+  animation: fadein 0.5s;
 }
 
 .tag_image {
   /*width: 100%;*/
   height: 100%;
   filter: drop-shadow(0 0 3px black);
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+.tag_image[lazy=loading] {
+  opacity: 0;
 }
 .tag_title {
   font-size: calc(v-bind(min_size) * 0.004em);
