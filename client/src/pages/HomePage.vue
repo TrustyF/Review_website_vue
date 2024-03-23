@@ -92,6 +92,9 @@ onMounted(() => {
 }
 
 @media only screen and (max-width: 500px) {
+  .top_banner {
+    margin-top: 20px;
+  }
   .home_wrapper {
     padding: 100px 20px 50px 20px;
   }
