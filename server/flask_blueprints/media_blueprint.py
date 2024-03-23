@@ -494,6 +494,8 @@ def get_image():
 
     file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches",
                              f"{media_id}_{media_type}_{poster_id}.jpg")
+    # file_path_low = os.path.join(MAIN_DIR, "assets", "poster_images_caches",
+    #                              f"{media_id}_{media_type}_{poster_id}_220w330.jpg")
 
     # return saved file if exists
     if os.path.exists(file_path):
@@ -505,10 +507,13 @@ def get_image():
 
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         response = requests.get(media_path)
-        # print('making poster request', media_id, media_type)
 
-        with open(file_path, 'wb') as outfile:
-            outfile.write(response.content)
+        image = Image.open(io.BytesIO(response.content))
+        # resized = image.resize((min(220, image.size[0]), min(330, image.size[1])), Image.Resampling.LANCZOS)
+
+        image.save(file_path, "JPEG", optimize=True, quality=50)
+        # resized.save(file_path_low, "JPEG", optimize=True, quality=50)
+
 
     else:
         # if preview return without saving
@@ -632,6 +637,7 @@ def get_scroll_banner():
     query = query.limit(50)
 
     all_entries = query.all()
+    # print(len(all_entries))
     # aggregate posters
     posters = []
     for i, x in enumerate(all_entries):
@@ -644,6 +650,10 @@ def get_scroll_banner():
 
         if os.path.exists(path):
             posters.append(path)
+
+    # print(len(posters))
+    if len(posters) < 1:
+        return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
 
     # make collage
     file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches")
