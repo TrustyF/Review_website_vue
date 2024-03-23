@@ -1,9 +1,9 @@
 <script setup>
 import {computed,defineAsyncComponent, inject, onBeforeMount, onMounted, onUnmounted, ref} from "vue";
 
-const CreditsFooter = defineAsyncComponent(() => import("../components/General/CreditsFooter.vue"));
-const MediaScrollBanner = defineAsyncComponent(() => import("../components/MediaBanner/MediaScrollBanner.vue"));
-const MediaBanner = defineAsyncComponent(() => import("../components/MediaBanner/MediaBanner.vue"));
+import CreditsFooter from "../components/General/CreditsFooter.vue";
+import MediaScrollBanner from "../components/MediaBanner/MediaScrollBanner.vue";
+import MediaBanner from "../components/MediaBanner/MediaBanner.vue";
 import logo from '/ui/logo.png'
 import {RouterLink} from "vue-router";
 
@@ -31,35 +31,35 @@ const is_mobile = inject("is_mobile");
       <media-scroll-banner></media-scroll-banner>
     </div>
 
-    <lazy-component class="" style="margin-top: 5px">
+    <div class="" style="margin-top: 5px">
       <h1>Watched recently</h1>
       <div class="separator"></div>
       <media-banner :order="'date_added'" :media_types="['movie','tv']"></media-banner>
-    </lazy-component>
+    </div>
 
-    <lazy-component class="">
+    <div class="">
       <h1>Latest releases</h1>
       <div class="separator"></div>
       <media-banner :order="'release_date'" :media_types="['movie','tv']"></media-banner>
-    </lazy-component>
+    </div>
 
-    <lazy-component class="">
+    <div class="">
       <h1>Recommended movie</h1>
       <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['movie']"></media-banner>
-    </lazy-component>
+    </div>
 
-    <lazy-component class="">
+    <div class="">
       <h1>Recommended manga</h1>
       <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['manga']" :size_override="[512, 720]"></media-banner>
-    </lazy-component>
+    </div>
 
-    <lazy-component class="">
+    <div class="">
       <h1>Recommended games</h1>
       <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['game']" :size_override="[528, 704]"></media-banner>
-    </lazy-component>
+    </div>
 
     <credits-footer></credits-footer>
 
