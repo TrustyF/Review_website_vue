@@ -66,7 +66,7 @@ function push_to_details() {
   <div class="movie_mobile_container_wrapper">
 
     <div class="poster_wrapper">
-      <img @click="push_to_details" class="poster" alt="poster" v-lazy="image_path"/>
+      <img @click="push_to_details" class="poster" alt="poster" v-lazy="image_path" lazy="loading"/>
       <!--      <div class="poster_gradient"></div>-->
     </div>
 
@@ -151,6 +151,11 @@ function push_to_details() {
 
   user-select: none;
   /*outline: 1px solid red;*/
+  -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 0.5s; /* Firefox < 16 */
+  -ms-animation: fadein 0.5s; /* Internet Explorer */
+  -o-animation: fadein 0.5s; /* Opera < 12.1 */
+  animation: fadein 0.5s;
 }
 
 .poster_wrapper {
@@ -169,6 +174,11 @@ function push_to_details() {
 
   border-radius: 8px;
   object-fit: scale-down;
+  transition: opacity 0.5s;
+}
+
+.poster[lazy=loading] {
+  opacity: 0;
 }
 .diff {
   position: absolute;
