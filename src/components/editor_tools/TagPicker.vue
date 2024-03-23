@@ -56,7 +56,7 @@ async function get_tier_images() {
   const result = await axios.get(url, {params: params})
       .then(response => response.data)
 
-  console.log(result)
+  // console.log(result)
   tag_images.value = result
 }
 

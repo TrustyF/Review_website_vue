@@ -46,7 +46,7 @@ let options = ref([
 ])
 
 function handle_options(event) {
-  console.log(event.value)
+  // console.log(event.value)
 
   if (event.value.length < 1) {
     options.value.forEach((option) => {
@@ -76,7 +76,7 @@ async function fetch_filters() {
       })
       .then(response => response.data)
       .catch(error => {
-        console.log('fetch_filters', error.response)
+        // console.log('fetch_filters', error.response)
         return []
       })
 
@@ -96,12 +96,12 @@ async function fetch_filters() {
   content_ratings.value.sort((a, b) => a['order'] > b['order'])
   content_ratings.value.map((x) => x['name'] += `: +${x['age']}`)
 
-  console.log(content_ratings.value)
+  // console.log(content_ratings.value)
 
 }
 
 function emit_filter(title, event) {
-  console.log(title, event.value)
+  // console.log(title, event.value)
   emits('filter', [title, event])
 }
 

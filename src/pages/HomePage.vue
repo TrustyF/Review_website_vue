@@ -10,9 +10,7 @@ import {RouterLink} from "vue-router";
 const curr_api = inject("curr_api");
 const is_mobile = inject("is_mobile");
 
-function handler(comp){
-  console.log('showing')
-}
+
 
 </script>
 
@@ -33,31 +31,31 @@ function handler(comp){
       <media-scroll-banner></media-scroll-banner>
     </div>
 
-    <lazy-component @show="handler" class="" style="margin-top: 5px">
+    <lazy-component class="" style="margin-top: 5px">
       <h1>Watched recently</h1>
       <div class="separator"></div>
       <media-banner :order="'date_added'" :media_types="['movie','tv']"></media-banner>
     </lazy-component>
 
-    <lazy-component @show="handler" class="">
+    <lazy-component class="">
       <h1>Latest releases</h1>
       <div class="separator"></div>
       <media-banner :order="'release_date'" :media_types="['movie','tv']"></media-banner>
     </lazy-component>
 
-    <lazy-component @show="handler" class="">
+    <lazy-component class="">
       <h1>Recommended movie</h1>
       <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['movie']"></media-banner>
     </lazy-component>
 
-    <lazy-component @show="handler" class="">
+    <lazy-component class="">
       <h1>Recommended manga</h1>
       <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['manga']" :size_override="[512, 720]"></media-banner>
     </lazy-component>
 
-    <lazy-component @show="handler" class="">
+    <lazy-component class="">
       <h1>Recommended games</h1>
       <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['game']" :size_override="[528, 704]"></media-banner>

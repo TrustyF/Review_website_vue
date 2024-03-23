@@ -110,10 +110,6 @@ function emit_finished_loading() {
   // poster_loaded.value = true
 }
 
-function test(event) {
-  console.log(event)
-}
-
 </script>
 <template>
   <div class="movie_container_wrapper">

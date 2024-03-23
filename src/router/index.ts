@@ -115,7 +115,6 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from) => {
-    console.log(window.scrollY)
     setTimeout(()=>{
         window.scroll(0, 0)
     },1)
