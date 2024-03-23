@@ -1,8 +1,12 @@
 import hashlib
 import json
 import os.path
+import time
 
 import requests
+import random
+from PIL import Image
+import io
 from flask import Blueprint, request, send_file
 from sqlalchemy import not_, and_, or_
 from sqlalchemy.sql.expression import func
@@ -594,6 +598,44 @@ def search_extra_posters():
         return posters, 200
     else:
         return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
+
+
+@bp.route("/get_scroll_banner", methods=['GET'])
+def get_scroll_banner():
+    def make_collage(images):
+        collage = Image.new("RGB", (500 * len(images), 750), color=(255, 255, 255, 255))
+        for i, img in enumerate(images):
+            resized = img.crop((0, 0, 500, 750))
+            # resized = img.resize((500, 750))
+            collage.paste(resized, (i * 500, 0))
+
+        return collage
+
+    # get list of images
+    s1 = time.time()
+
+    file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches")
+    all_posters = os.listdir(file_path)
+
+    if len(all_posters) < 20:
+        return [], 404
+
+    # get random 20 posters
+    posters = random.sample(all_posters, 20)
+
+    # make collage
+    banner = make_collage([Image.open(os.path.join(file_path, x)) for x in posters])
+
+    # banner.show('test')
+    # save im
+    mem_file = io.BytesIO()
+    banner.save(mem_file, 'JPEG', quality=50)
+    mem_file.seek(0)
+
+    s2 = time.time()
+    print('time taken', s2 - s1)
+
+    return send_file(mem_file, mimetype='image/jpg')
 
 
 @bp.route("/get_filters", methods=['POST'])
