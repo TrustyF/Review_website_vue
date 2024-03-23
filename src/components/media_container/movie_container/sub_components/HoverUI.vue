@@ -3,8 +3,6 @@ import {inject, onMounted, watch, ref, computed} from "vue";
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
 import crayon_img from '/ui/crayon.png'
 import external_img from '/ui/external_link.png'
-import dot_img from '/ui/simple_dot.png'
-import bookmark_img from '/ui/bookmark.png'
 import arrow_img from '/ui/single_arrow.png'
 import youtube_img from '/ui/youtube.png'
 

@@ -5,19 +5,20 @@ let props = defineProps(["b_width", "b_height", "box_data"]);
 let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
 
+let loaded = ref(false)
 
 </script>
 
 <template>
-  <RouterLink class="tier_box" :to="box_data['link']">
-    <div class="tier_box_wrapper">
+  <RouterLink class="tier_box" :to="box_data['link']" v-show="loaded">
+    <div class="tier_box_wrapper" >
       <div class="box_content">
         <h1>{{ box_data['name'] }}</h1>
       </div>
 
       <div class="box_gradient"></div>
       <div class="vignette"></div>
-      <img :src="box_data['image']" alt="tier_list_box_image" class="bg_image">
+      <img :src="box_data['image']" @load="loaded=true" alt="tier_list_box_image" class="bg_image">
     </div>
   </RouterLink>
 </template>
@@ -101,7 +102,11 @@ const curr_api = inject("curr_api");
   height: 100%;
   object-fit: cover;
 
-
+  -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 0.5s; /* Firefox < 16 */
+  -ms-animation: fadein 0.5s; /* Internet Explorer */
+  -o-animation: fadein 0.5s; /* Opera < 12.1 */
+  animation: fadein 0.5s;
   /*z-index: -1;*/
   /*opacity: 85%;*/
   transition: 150ms ease-in-out;
