@@ -102,7 +102,7 @@ onMounted(() => {
 
 <style scoped>
 .banner_wrapper {
-  /*outline: 1px solid red;*/
+  /*outline: 1px solid orange;*/
   /*border: 0.1em dotted #41404d;*/
   border-radius: 10px;
   /*padding: 15px 0 15px 15px;*/

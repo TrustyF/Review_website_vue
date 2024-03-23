@@ -47,9 +47,9 @@ axiosRetry(axios, {
 
 app.use(VueLazyLoad, {
     preLoad: 2,
-    lazyComponent: true,
+    // lazyComponent: true,
     // attempt: 3,
-    observer: true,
+    // observer: true,
     // observerOptions: {
     //     rootMargin: '0px',
     //     threshold: 0.1
