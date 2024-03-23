@@ -56,7 +56,7 @@ async function fetch_filters() {
   content_ratings.value.sort((a, b) => a['order'] > b['order'])
   all_content_ratings.value.sort((a, b) => a['order'] > b['order'])
 
-  console.log('content ratings', content_ratings.value)
+  // console.log('content ratings', content_ratings.value)
   // console.log(selected_media.value.content_rating)
 }
 
@@ -101,7 +101,7 @@ async function find_media() {
       'Content-Type': 'application/json',
     }
   }).then(response => response.json())
-  console.log(search_media.value)
+  // console.log(search_media.value)
   updated.value = 'none'
   added.value = 'none'
 }
@@ -111,7 +111,7 @@ async function update_media() {
 
   const token = await get_current_user()
 
-  console.log('updating', selected_media.value)
+  // console.log('updating', selected_media.value)
 
   const url = new URL(`${curr_api}/media/update`)
 
@@ -201,7 +201,7 @@ async function get_extra_posters() {
     }
   }).then(response => response.json())
 
-  console.log(extra_posters.value)
+  // console.log(extra_posters.value)
 }
 
 function replace_from_search(event) {

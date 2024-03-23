@@ -62,7 +62,7 @@ function close_filters_box() {
 
   if (!is_filter_box_open.value) return
 
-  console.log('closing')
+  // console.log('closing')
   classes.remove('visible')
   is_filter_box_open.value = false
 

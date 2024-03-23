@@ -28,8 +28,6 @@ let media = ref(new Array(med_limit).fill().map((e, i) => {
 }))
 
 async function get_media() {
-  console.log("2. attempt to get scroll banner media")
-
 
   const url = new URL(`${curr_api}/media/get`)
   const params = {
@@ -65,7 +63,6 @@ async function get_media() {
 }
 
 onMounted(() => {
-  console.log("1. mounted media scroll banner")
   get_media()
 })
 

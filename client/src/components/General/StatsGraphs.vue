@@ -311,7 +311,7 @@ async function get_stats() {
         return []
       })
   stats.value = result
-  console.log(result)
+  // console.log(result)
   // console.log('result', Object.values(stats.value['avg_rating_release_date'][stat_media_type.value]).map((e) => {
   //   return (e.reduce((a, b) => a + b, 0))
   // }))

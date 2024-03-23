@@ -101,7 +101,7 @@ async function get_media(override) {
         return []
       })
 
-  console.log('res', result['media'].map((e)=>e.name),params)
+  // console.log('res', result['media'].map((e)=>e.name),params)
   // console.log('res', result)
 
   let medias = result['media']

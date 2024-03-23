@@ -37,7 +37,6 @@ let loaded_num = ref(0)
 let media = ref()
 
 async function get_media() {
-  console.log("2. attempt to get banner media")
 
   const url = new URL(`${curr_api}/media/get`)
   const params = {
@@ -75,7 +74,6 @@ async function get_media() {
 }
 
 onMounted(() => {
-  console.log("1. mounted media banner")
   get_media()
 })
 
