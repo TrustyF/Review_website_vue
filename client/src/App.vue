@@ -84,6 +84,8 @@ onMounted(() => {
   addEventListener("resize", () => check_mobile())
 })
 
+//todo add watched by account
+
 </script>
 <template>
   <tooltip-badge></tooltip-badge>
