@@ -1,5 +1,5 @@
 <script setup>
-import {inject, onMounted, watch, provide, ref, computed} from "vue";
+import {inject, onMounted, watch, provide, ref, computed, onUnmounted} from "vue";
 import blue_star from '/ui/blue_star.png'
 import MovieContainer from "@/components/media_container/movie_container/MovieContainer.vue";
 import MovieContainerMobile from "@/components/media_container/movie_container/MovieContainerMobile.vue";
@@ -101,7 +101,8 @@ async function get_media(override) {
         return []
       })
 
-  console.log('res', result)
+  console.log('res', result['media'].map((e)=>e.name),params)
+  // console.log('res', result)
 
   let medias = result['media']
   search_matched_field.value = result['matched_field']
@@ -218,6 +219,9 @@ onMounted(() => {
   page_load_status.value = 'loading'
   get_media()
   addEventListener("scroll", () => handleInfiniteScroll())
+})
+onUnmounted(()=>{
+  removeEventListener("scroll", () => handleInfiniteScroll())
 })
 
 </script>

@@ -107,12 +107,6 @@ function emit_filter(title, event) {
 
 onMounted(() => {
   fetch_filters()
-
-  // hide erotica
-  if (props.media_types.includes('manga')) {
-    emits('filter', ['content_ratings', [31, 32]])
-  }
-
 })
 </script>
 

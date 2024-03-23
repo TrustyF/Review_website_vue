@@ -15,9 +15,6 @@ let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
 const is_mobile = inject("is_mobile");
 
-onMounted(() => {
-  window.scroll(0, 0)
-})
 </script>
 
 <template>
