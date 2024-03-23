@@ -1,5 +1,5 @@
 <script setup>
-import {computed, inject, onMounted, ref} from "vue";
+import {computed, inject, onBeforeMount, onMounted, onUnmounted, ref} from "vue";
 
 import CreditsFooter from "@/components/General/CreditsFooter.vue";
 import MediaScrollBanner from "@/components/MediaBanner/MediaScrollBanner.vue";
@@ -10,10 +10,6 @@ import {RouterLink} from "vue-router";
 const curr_api = inject("curr_api");
 const is_mobile = inject("is_mobile");
 
-
-onMounted(() => {
-  window.scroll(0, 0)
-})
 </script>
 
 <template>
