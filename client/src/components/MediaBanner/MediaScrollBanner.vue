@@ -2,6 +2,8 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import MovieContainer from '@/components/media_container/movie_container/MovieContainer.vue'
 import axios from "axios";
+import grad_loader from "/ui/gradient_loader.webp"
+
 
 let props = defineProps({
   media_type: {
@@ -80,6 +82,11 @@ onMounted(() => {
              :src="`${curr_api}/media/get_scroll_banner`">
       </div>
     </div>
+    <div class="fade_anim" v-show="img_loads < 2">
+      <div class="scroll_content">
+        <img :src="grad_loader" class="gradient_loader">
+      </div>
+    </div>
   </div>
 </template>
 
@@ -112,6 +119,11 @@ onMounted(() => {
   -ms-animation: fadein 1s; /* Internet Explorer */
   -o-animation: fadein 1s; /* Opera < 12.1 */
   animation: fadein 1s;
+}
+.gradient_loader {
+  width: 100%;
+  height: 100%;
+  opacity: 0.1;
 }
 
 .banner_fade {

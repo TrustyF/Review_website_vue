@@ -1,6 +1,7 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
 import MovieContainer from '@/components/media_container/movie_container/MovieContainer.vue'
+import grad_loader from "/ui/gradient_loader.webp"
 import axios from "axios";
 
 let props = defineProps({
@@ -34,12 +35,6 @@ const rangeOfNumbers = (a, b) => [...Array(b + 1).keys()].slice(a)
 let loaded_num = ref(0)
 
 let media = ref()
-// let media = ref(new Array(10).fill().map((e, i) => {
-//   return {
-//     name: '',
-//     release_date: '',
-//   }
-// }))
 
 async function get_media() {
   console.log("2. attempt to get banner media")
@@ -101,7 +96,8 @@ onMounted(() => {
       </div>
     </div>
     <div class="scroll_container" v-show="loaded_num < 20">
-      <div class="gradient_loader"></div>
+<!--      <div class="gradient_loader"></div>-->
+      <img :src="grad_loader" class="gradient_loader">
     </div>
   </div>
 </template>
@@ -128,7 +124,7 @@ onMounted(() => {
   padding-bottom: 20px;
   /*white-space:nowrap;*/
   /*outline: 1px solid red;*/
-  min-height: 283.5px;
+  height: 283.5px;
 
   -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 1s; /* Firefox < 16 */
@@ -148,32 +144,10 @@ onMounted(() => {
   background-color: #000000;
   border-radius: 10px;
 }
-
 .gradient_loader {
   width: 100%;
-
-  background: linear-gradient(to right, rgb(19, 18, 21) 30%, rgb(34, 33, 37) 50%, rgb(19, 18, 21) 70%);
-  background-size: 200% 400%;
-
-  -webkit-animation: AnimationName 2s ease infinite;
-  -moz-animation: AnimationName 2s ease infinite;
-  animation: AnimationName 2s ease infinite;
-}
-
-@-webkit-keyframes AnimationName {
-  0%{background-position:0 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0 50%}
-}
-@-moz-keyframes AnimationName {
-  0%{background-position:0 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0 50%}
-}
-@keyframes AnimationName {
-  0%{background-position:0 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0 50%}
+  height: 100%;
+  opacity: 0.05;
 }
 
 .banner_fade {
@@ -189,6 +163,7 @@ onMounted(() => {
 @media only screen and (max-width: 500px) {
   .scroll_container {
     gap: 10px;
+    height: 241.1px;
   }
 }
 
