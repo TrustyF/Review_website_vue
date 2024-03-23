@@ -14,7 +14,7 @@ const curr_api = inject("curr_api");
 const session_seed = inject("session_seed");
 const is_mobile = inject("is_mobile");
 let med_limit = 30
-const rangeOfNumbers = (a,b) => [...Array(b+1).keys()].slice(a)
+const rangeOfNumbers = (a, b) => [...Array(b + 1).keys()].slice(a)
 
 let media = ref(new Array(med_limit).fill().map((e, i) => {
   return {
@@ -31,9 +31,9 @@ async function get_media() {
   const params = {
     'limit': med_limit,
     'page': 0,
-    'types': ['movie','tv','manga','game'],
+    'types': ['movie', 'tv', 'manga', 'game'],
     'ratings': [5, 10],
-    'content_ratings':rangeOfNumbers(20,39).filter((elem,i)=> ![33,34].includes(elem)),
+    'content_ratings': rangeOfNumbers(20, 39).filter((elem, i) => ![33, 34].includes(elem)),
     'session_seed': session_seed,
     'user_rating_sort_override': true,
   }
@@ -70,27 +70,12 @@ onMounted(() => {
 <template>
   <div class="banner_wrapper">
     <div class="banner_fade"></div>
-    <div class="scroll_container" v-if="media.length > 0">
-      <div class="scroll_content" v-for="med in media" :key="med.id">
-        <movie-container
-            :data="med"
-            :scale_mul="!is_mobile ? 0.37:0.42"
-            :lazy_poster="true"
-            :size_override="[500,750]"
-        ></movie-container>
-      </div>
-      <div class="scroll_content" v-for="med in media" :key="med.id + 'over'">
-        <movie-container
-            :data="med"
-            :scale_mul="!is_mobile ? 0.37:0.42"
-            :lazy_poster="true"
-            :size_override="[500,750]"
-        ></movie-container>
-      </div>
+
+    <div class="scroll_content">
+      <img style="object-fit: contain;height: 100%;" :src="`${curr_api}/media/get_scroll_banner`">
+      <img style="object-fit: contain;height: 100%;" :src="`${curr_api}/media/get_scroll_banner`">
     </div>
-    <div class="scroll_container" v-else>
-      <img class="spinner" alt="spinner" :src="spinner">
-    </div>
+
   </div>
 </template>
 
@@ -100,30 +85,18 @@ onMounted(() => {
   z-index: -5;
   left: 0;
   right: 0;
-  height: 170%;
+  /*height: 170%;*/
+  height: 300px;
   filter: opacity(50%);
-}
-
-.scroll_container {
-
-  position: relative;
+  /*outline: 5px greenyellow solid;*/
   overflow-x: hidden;
-  height: 100%;
-  width: 100%;
-
-  display: flex;
-  flex-flow: row;
-
-  /*align-items: center;*/
-}
-
-.spinner {
-  position: relative;
-  height: 50%;
 }
 
 .scroll_content {
-  animation: scroll_banner 250s linear infinite;
+  display: flex;
+  height: 100%;
+  width: fit-content;
+  animation: scroll_banner 150s linear infinite;
   will-change: transform;
 }
 
@@ -139,14 +112,19 @@ onMounted(() => {
   linear-gradient(to top, rgba(19, 18, 21, 0) 50%, rgba(19, 18, 21, 1) 95%),
   linear-gradient(to bottom, rgba(19, 18, 21, 0) 50%, rgba(19, 18, 21, 1) 95%);
 }
+
 @media only screen and (max-width: 500px) {
+  /*.banner_wrapper {*/
+  /*  margin-top: 1px;*/
+  /*}*/
   .scroll_content {
-    animation: scroll_banner 250s linear infinite;
+    animation: scroll_banner 150s linear infinite;
   }
-  }
+}
+
 @keyframes scroll_banner {
   to {
-    transform: translate(calc((-100% - 20px) * v-bind(med_limit)));
+    transform: translate(calc(-50%));
   }
 }
 </style>
