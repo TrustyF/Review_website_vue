@@ -78,17 +78,17 @@ onMounted(() => {
       <div v-if="!is_mobile" class="wrapper">
         <RouterLink active-class="active" class="link" to="/">Home</RouterLink>
         <RouterLink active-class="active" class="link" to="/info">Info</RouterLink>
-        <h1>|</h1>
+        <h1 class="nav_separator">|</h1>
         <RouterLink active-class="active" class="link" to="/movie">Movies</RouterLink>
         <RouterLink active-class="active" class="link" to="/tv">TV</RouterLink>
         <RouterLink active-class="active" class="link" to="/short">Shorts</RouterLink>
         <RouterLink active-class="active" class="link" to="/youtube">Youtube</RouterLink>
-        <h1>•</h1>
+        <h1 class="nav_separator">•</h1>
         <RouterLink active-class="active" class="link" to="/anime">Anime</RouterLink>
         <RouterLink active-class="active" class="link" to="/manga">Manga</RouterLink>
-        <h1>•</h1>
+        <h1 class="nav_separator">•</h1>
         <RouterLink active-class="active" class="link" to="/game">Games</RouterLink>
-        <h1>•</h1>
+        <h1 class="nav_separator">•</h1>
         <login-bar></login-bar>
       </div>
 
@@ -214,13 +214,14 @@ nav ul li {
   color: white;
 }
 
-
 .wrapper {
   display: flex;
   flex-flow: row;
   align-items: center;
-  gap: 20px;
-  padding: 10px;
+  padding: 10px 0 10px 0;
+  /*outline: 1px solid red;*/
+  height: 20px;
+  /*gap: 20px;*/
 }
 
 .mobile_wrapper {
@@ -232,10 +233,14 @@ nav ul li {
   padding: 15px;
   cursor: pointer;
 }
-
+.nav_separator {
+  padding: 10px;
+}
 .link {
   /*font-weight: lighter;*/
   font-weight: 300;
+  /*outline: 1px solid red;*/
+  padding: 25px 10px 25px 10px;
 }
 
 .link, link:visited {

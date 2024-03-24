@@ -146,6 +146,11 @@ p {
   border: 2px solid #464646;
   /*border-radius: 20px;*/
   /*filter: drop-shadow(2px 2px 3px black) drop-shadow(2px 2px 2px black);*/
+  -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 1s; /* Firefox < 16 */
+  -ms-animation: fadein 1s; /* Internet Explorer */
+  -o-animation: fadein 1s; /* Opera < 12.1 */
+  animation: fadein 1s;
 }
 
 @media only screen and (max-width: 500px) {
