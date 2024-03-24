@@ -1,8 +1,9 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
 import TierBox from "./TierBox.vue";
+import dont_thug_img from "/tier_list_images/dont_thug_me.jpg"
 
-let props = defineProps(["box_size", "box_scale","row_num", "data"]);
+let props = defineProps(["box_size", "box_scale", "row_num", "data"]);
 let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
 const edit_mode = inject("edit_mode");
@@ -11,10 +12,10 @@ let tier_box_height = computed(() => (props['box_size'][1] * props['box_scale'])
 let tier_box_width = computed(() => (props['box_size'][0] * props['box_scale']) + 'px')
 let feed_width = computed(() => (props['box_size'][0] * props['box_scale'] + 25) * props['row_num'] + 'px')
 
-let debug =   {
-  'name': 'Youtube',
-  'image': undefined,
-  'link':'/youtube/youtube_debug'
+let debug = {
+  'name': 'Youtube Debug',
+  'image': dont_thug_img,
+  'link': '/youtube/youtube_debug'
 }
 
 </script>
@@ -40,7 +41,7 @@ let debug =   {
   /*display: flex;*/
   /*flex-flow: row wrap;*/
   display: grid;
-  grid-template-columns: repeat(v-bind(row_num),1fr);
+  grid-template-columns: repeat(v-bind(row_num), 1fr);
 
   align-items: center;
   /*align-content: center;*/
@@ -57,8 +58,8 @@ let debug =   {
   .tier_feed_wrapper {
     width: 90%;
     display: grid;
-    grid-template-columns: repeat(2,1fr);
-    margin:100px auto auto auto;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 100px auto auto auto;
 
     grid-gap: 30px;
   }
