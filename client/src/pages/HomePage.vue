@@ -44,21 +44,39 @@ const is_mobile = inject("is_mobile");
     </div>
 
     <div class="">
-      <h1>Recommended movie</h1>
+      <h1>Movies</h1>
       <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['movie']"></media-banner>
     </div>
 
     <div class="">
-      <h1>Recommended manga</h1>
+      <h1>Manga</h1>
       <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['manga']" :size_override="[512, 720]"></media-banner>
     </div>
 
     <div class="">
-      <h1>Recommended games</h1>
+      <h1>Games</h1>
       <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['game']" :size_override="[528, 704]"></media-banner>
+    </div>
+
+    <div class="">
+      <h1>Youtube shows</h1>
+      <div class="separator"></div>
+      <media-banner :ratings=[7,10] :media_types="['youtube']" :tier_lists="['tv-show']" :limit="10" :size_override="[910, 512]"></media-banner>
+    </div>
+
+    <div class="">
+      <h1>Youtube documentaries</h1>
+      <div class="separator"></div>
+      <media-banner :ratings=[7,10] :media_types="['youtube']" :tier_lists="['documentary']" :limit="10" :size_override="[910, 512]"></media-banner>
+    </div>
+
+    <div class="">
+      <h1>Youtube essays</h1>
+      <div class="separator"></div>
+      <media-banner :ratings=[7,10] :media_types="['youtube']" :tier_lists="['essay']" :limit="10" :size_override="[910, 512]"></media-banner>
     </div>
 
     <credits-footer></credits-footer>
@@ -79,8 +97,8 @@ const is_mobile = inject("is_mobile");
   /*background-color: #1c1b23;*/
 }
 .separator {
-  height: 1px;
-  background-color: #2b2a34;
+  /*height: 1px;*/
+  /*background-color: #2b2a34;*/
   margin: 10px 0 20px 0
 }
 

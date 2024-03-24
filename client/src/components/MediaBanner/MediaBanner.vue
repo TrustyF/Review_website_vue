@@ -17,6 +17,10 @@ let props = defineProps({
     type: Array,
     default: null,
   },
+  limit: {
+    type: Number,
+    default: 20,
+  },
   tier_lists: {
     type: Array,
     default: null,
@@ -33,14 +37,16 @@ const is_mobile = inject("is_mobile");
 const rangeOfNumbers = (a, b) => [...Array(b + 1).keys()].slice(a)
 
 let loaded_num = ref(0)
-
+let max_load = ref(100)
 let media = ref()
+
+const container_height = computed(()=> `${(props.size_override[1]*0.3)+80}px`)
 
 async function get_media() {
 
   const url = new URL(`${curr_api}/media/get`)
   const params = {
-    'limit': 20,
+    'limit': props.limit,
     'page': 0,
     'types': props.media_types,
     'order': props.order,
@@ -62,6 +68,7 @@ async function get_media() {
       })
 
   media.value = result.data['media']
+  max_load.value = media.value.length
   // sort tags by color
   const priority = ['gold', 'green', 'purple', 'silver', 'red']
   media.value.forEach((entry, i) => {
@@ -82,7 +89,7 @@ onMounted(() => {
 <template>
   <div class="banner_wrapper" >
     <div class="banner_fade"></div>
-    <div class="scroll_container" v-show="loaded_num >= 20">
+    <div class="scroll_container" v-show="loaded_num >= max_load">
       <div class="scroll_content" v-for="med in media" :key="med.id">
         <movie-container
             :data="med"
@@ -93,7 +100,7 @@ onMounted(() => {
         ></movie-container>
       </div>
     </div>
-    <div class="scroll_container" v-show="loaded_num < 20">
+    <div class="scroll_container" v-show="loaded_num < max_load">
 <!--      <div class="gradient_loader"></div>-->
       <img :src="grad_loader" class="gradient_loader">
     </div>
@@ -109,6 +116,8 @@ onMounted(() => {
   position: relative;
   display: flex;
   align-items: center;
+  /*outline: 1px solid red;*/
+  height: v-bind(container_height);
 }
 
 .scroll_container {
@@ -121,8 +130,6 @@ onMounted(() => {
   gap: 20px;
   padding-bottom: 20px;
   /*white-space:nowrap;*/
-  /*outline: 1px solid red;*/
-  height: 283.5px;
 
   -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 1s; /* Firefox < 16 */
@@ -145,7 +152,7 @@ onMounted(() => {
 .gradient_loader {
   width: 100%;
   height: 100%;
-  opacity: 0.05;
+  opacity: 0.15;
 }
 
 .banner_fade {
