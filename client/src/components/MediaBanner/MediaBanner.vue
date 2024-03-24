@@ -87,7 +87,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="banner_wrapper" >
+  <lazy-component class="banner_wrapper" >
     <div class="banner_fade"></div>
     <div class="scroll_container" v-show="loaded_num >= max_load">
       <div class="scroll_content" v-for="med in media" :key="med.id">
@@ -104,7 +104,7 @@ onMounted(() => {
 <!--      <div class="gradient_loader"></div>-->
       <img :src="grad_loader" class="gradient_loader">
     </div>
-  </div>
+  </lazy-component>
 </template>
 
 <style scoped>
