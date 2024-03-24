@@ -112,7 +112,7 @@ const is_mobile = inject("is_mobile");
 .text_wrapper {
   display: flex;
   flex-flow: column;
-  gap: 30px;
+  gap: 70px;
   /*width: 70%;*/
 }
 
@@ -127,9 +127,9 @@ const is_mobile = inject("is_mobile");
 h1 {
   font-size: 1.5em;
   font-weight: 600;
-  margin-bottom: 15px;
-  text-decoration: 0.025em #575757 underline;
-  text-underline-offset: 4px;
+  margin-bottom: 5px;
+  /*text-decoration: 0.025em #575757 underline;*/
+  /*text-underline-offset: 4px;*/
 }
 
 p {
@@ -142,8 +142,9 @@ p {
   /*height: 200px;*/
   margin: 15px 0 15px 0;
   width: 100%;
-  object-fit: contain;
+  object-fit: cover;
   border: 2px solid #464646;
+  height: 220px;
   /*border-radius: 20px;*/
   /*filter: drop-shadow(2px 2px 3px black) drop-shadow(2px 2px 2px black);*/
   -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */

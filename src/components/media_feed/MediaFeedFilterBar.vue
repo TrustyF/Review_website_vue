@@ -4,8 +4,7 @@ import FilterContainer from "../media_filters/filterContainer.vue";
 import FilterSearch from "../media_filters/filterSearch.vue";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 import spinner from '/ui/Loading_icon.gif'
-
-import filter_image from "/ui/filter_button.png"
+import filter_image from "/ui/filter_button.svg"
 
 let props = defineProps({
   media_types: {

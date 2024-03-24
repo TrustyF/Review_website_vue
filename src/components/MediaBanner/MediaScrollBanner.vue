@@ -79,11 +79,6 @@ onMounted(() => {
              :src="`${curr_api}/media/get_scroll_banner`">
       </div>
     </div>
-    <div class="fade_anim" v-show="img_loads < 2">
-      <div class="scroll_content">
-        <img :src="grad_loader" class="gradient_loader">
-      </div>
-    </div>
   </div>
 </template>
 
@@ -120,7 +115,7 @@ onMounted(() => {
 .gradient_loader {
   width: 100%;
   height: 100%;
-  opacity: 0.1;
+  opacity: 0.5;
 }
 
 .banner_fade {

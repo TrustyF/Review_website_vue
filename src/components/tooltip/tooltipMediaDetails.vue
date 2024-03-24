@@ -124,6 +124,15 @@ onUnmounted(() => {
 
         <img :src="image_path" @load="imageHandler" class="poster" alt="">
 
+        <div style="display: flex;gap: 10px;position: absolute;bottom: -50px">
+          <div v-if="media['external_link']">
+            <img v-lazy="external_img" class="button_img" @click="open_link_new_tab(media['external_link'])">
+          </div>
+          <div v-if="media['video_link']">
+            <img v-lazy="youtube_img" class="button_img" @click="open_link_new_tab(media['video_link'])">
+          </div>
+        </div>
+
         <img v-if="!is_image_loaded" :src="spinner" class="spinner">
 
         <!--      <img v-lazy="media['poster_path']" class="bg_poster" alt="poster">-->
@@ -204,38 +213,30 @@ onUnmounted(() => {
             </div>
           </div>
 
+          <div class="bottom_container" v-if="is_image_loaded">
+
+            <div class="genres_list" v-if="media['genres'].length > 0">
+              <div class="genre_tag"
+                   v-for="genre in media['genres']"
+                   :key="genre['id']"
+              >{{ genre['name'] }}
+              </div>
+            </div>
+
+            <div class="tags_wrapper" v-if="media['tags']!==undefined && media['tags'].length > 0">
+              <div v-for="tag in media['tags']" :key="tag['id']">
+                <badge :data="tag" :min_size="200" :show_title="true"></badge>
+
+              </div>
+            </div>
+
+          </div>
+
         </div>
 
       </div>
 
-      <div class="bottom_container" v-if="is_image_loaded">
 
-        <div class="genres_list" v-if="media['genres'].length > 0">
-          <div class="genre_tag"
-               v-for="genre in media['genres']"
-               :key="genre['id']"
-          >{{ genre['name'] }}
-          </div>
-        </div>
-
-        <div class="tags_wrapper" v-if="media['tags']!==undefined && media['tags'].length > 0">
-          <div v-for="tag in media['tags']" :key="tag['id']">
-            <badge :data="tag" :min_size="200" :show_title="true"></badge>
-
-          </div>
-        </div>
-
-        <div style="display: flex;gap: 10px">
-          <div v-if="media['external_link']">
-            <img v-lazy="external_img" class="button_img" @click="open_link_new_tab(media['external_link'])">
-          </div>
-          <div v-if="media['video_link']">
-            <img v-lazy="youtube_img" class="button_img" @click="open_link_new_tab(media['video_link'])">
-          </div>
-        </div>
-
-
-      </div>
 
     </div>
 
@@ -259,7 +260,6 @@ onUnmounted(() => {
   margin: auto;
   height: 20%;
   object-fit: cover;
-
 }
 
 .extra_info_wrapper {
@@ -289,7 +289,7 @@ onUnmounted(() => {
   display: flex;
   flex-flow: row;
   justify-items: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .bottom_container {
@@ -313,7 +313,8 @@ onUnmounted(() => {
 
 .poster {
   /*outline: 1px solid purple;*/
-  height: 100%;
+  max-height: 100%;
+  max-width: 50%;
   object-fit: contain;
   border-radius: 8px;
 }
@@ -337,6 +338,7 @@ onUnmounted(() => {
 }
 
 .footer_wrapper {
+  /*outline: 1px solid red;*/
   /*overflow-x: hidden;*/
   position: relative;
   padding: 10px 10px 10px 25px;
@@ -496,7 +498,8 @@ onUnmounted(() => {
 
   .poster {
     margin-left: 25px;
-    height: 300px;
+    max-height: 300px;
+    max-width: 85%;
     margin-right: auto;
   }
 

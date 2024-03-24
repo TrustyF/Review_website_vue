@@ -132,7 +132,7 @@ let loaded = ref(false)
   .vignette {
     height: 100%;
     width: auto;
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.5) 100%);
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0) 70%, rgba(0, 0, 0, 0.25) 100%);
   }
   .tier_box {
     width: 100%;
