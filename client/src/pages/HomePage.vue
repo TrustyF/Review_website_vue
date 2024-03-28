@@ -10,7 +10,17 @@ import {RouterLink} from "vue-router";
 const curr_api = inject("curr_api");
 const is_mobile = inject("is_mobile");
 
-
+const genre_number_list = [
+    ['Action',80],
+    ['Adventure',79],
+    ['Sci-Fi',78],
+    ['Mystery',92],
+    ['Crime',85],
+    ['Animation',88],
+    ['Horror',89],
+    ['Comedy',87],
+    ['Romance',90],
+]
 
 </script>
 
@@ -31,52 +41,55 @@ const is_mobile = inject("is_mobile");
       <media-scroll-banner></media-scroll-banner>
     </div>
 
-    <div class="" style="margin-top: 5px">
+    <div style="margin-top: 5px">
       <h1>Watched recently</h1>
-      <div class="separator"></div>
       <media-banner :order="'date_added'" :media_types="['movie','tv']"></media-banner>
     </div>
 
-    <div class="">
+    <div>
       <h1>Latest releases</h1>
-      <div class="separator"></div>
       <media-banner :order="'release_date'" :media_types="['movie','tv']"></media-banner>
     </div>
 
-    <div class="">
+    <div>
       <h1>Movies</h1>
-      <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['movie']"></media-banner>
     </div>
 
-    <div class="">
+    <div>
       <h1>Manga</h1>
-      <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['manga']" :size_override="[512, 720]"></media-banner>
     </div>
 
-    <div class="">
+    <div>
       <h1>Games</h1>
-      <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['game']" :size_override="[528, 704]"></media-banner>
     </div>
 
-    <div class="">
+    <div>
       <h1>Youtube shows</h1>
-      <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['youtube']" :tier_lists="['tv-show']" :limit="10" :size_override="[910, 512]"></media-banner>
     </div>
 
-    <div class="">
+    <div>
       <h1>Youtube documentaries</h1>
-      <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['youtube']" :tier_lists="['documentary']" :limit="10" :size_override="[910, 512]"></media-banner>
     </div>
 
-    <div class="">
+    <div>
       <h1>Youtube essays</h1>
-      <div class="separator"></div>
       <media-banner :ratings=[7,10] :media_types="['youtube']" :tier_lists="['essay']" :limit="10" :size_override="[910, 512]"></media-banner>
+    </div>
+
+    <div v-for="entry in genre_number_list" :key="entry[1]">
+      <h1>{{entry[0]}}</h1>
+      <media-banner :ratings=[6,10] :media_types="['movie']" :genres="[entry[1]]"></media-banner>
+    </div>
+
+
+    <div>
+      <h1>Wall of shame</h1>
+      <media-banner :ratings=[1,4] :media_types="['movie','tv']" :limit="20"></media-banner>
     </div>
 
     <credits-footer></credits-footer>
@@ -85,6 +98,9 @@ const is_mobile = inject("is_mobile");
 </template>
 
 <style scoped>
+h1 {
+  margin: 0 0 20px 0
+}
 .home_wrapper {
   display: flex;
   flex-flow: column;
@@ -95,11 +111,6 @@ const is_mobile = inject("is_mobile");
   /*outline: 1px solid red;*/
   min-height: 80vh;
   /*background-color: #1c1b23;*/
-}
-.separator {
-  /*height: 1px;*/
-  /*background-color: #2b2a34;*/
-  margin: 10px 0 20px 0
 }
 
 .top_banner {

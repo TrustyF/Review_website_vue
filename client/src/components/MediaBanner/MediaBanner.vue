@@ -25,6 +25,10 @@ let props = defineProps({
     type: Array,
     default: null,
   },
+  genres: {
+    type: Array,
+    default: null,
+  },
   size_override: {
     type: Array(),
     default: [500, 750],
@@ -49,6 +53,7 @@ async function get_media() {
     'limit': props.limit,
     'page': 0,
     'types': props.media_types,
+    'genres': props.genres,
     'order': props.order,
     'ratings': props.ratings,
     'content_ratings': rangeOfNumbers(20, 39).filter((elem, i) => ![33, 34].includes(elem)),

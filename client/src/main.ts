@@ -40,13 +40,13 @@ app.provide('tooltip_badge_data', ref({}))
 
 axiosRetry(axios, {
     retryDelay: ((count) => count * 500),
-    retries: 20,
+    retries: 5,
     onRetry: ((retryCount,error) => console.log('retry',retryCount,error.message,error.code)),
     retryCondition: ((error) => true)
 });
 
 app.use(VueLazyLoad, {
-    preLoad: 2,
+    preLoad: 1.5,
     lazyComponent: true,
 })
 app.directive('v-lazy')
