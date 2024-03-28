@@ -1,46 +1,57 @@
-# client_vite
 
-This template should help get you started developing with Vue 3 in Vite.
+# Trusty's Corner
+Welcome! This is my personal media review website / blog. It is published on [trustymovies.com](https://trustymovies.com/).
 
-## Recommended IDE Setup
+![Screenshot1](https://github.com/TrustyF/Review_website_vue/raw/master/public/home_images/readme_images/readme_screen_2.jpg)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+### Dev
 
-## Type Support for `.vue` Imports in TS
+* Vue 3
+* Python Flask
+* Mysql
+* Deployed with Firebase.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+## Features
+### Ratings
+Ratings are split into: my personal rating, public rating and the combined circle.
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+![Screenshot2](https://github.com/TrustyF/Review_website_vue/raw/master/public/home_images/rating_info.jpg)
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+ The public rating is visually remapped to better match my personal rating distribution.
 
-## Customize configuration
+ The combined circle takes the average of both ratings to provide an easy shorthand of the overall consensus between my personal assessment and the public opinion but also serves as a valuable reference for decision-making. This collaborative approach ensures a more comprehensive and balanced evaluation, taking into account both personal preference and the collective sentiment
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
 
-## Project Setup
+### Tags
+Medias are annotated with various tags. These are meant to provide a simple breakdown of my opinion, and to help you decide what to pick.
 
-```sh
-npm install
-```
+![Screenshot3](https://github.com/TrustyF/Review_website_vue/raw/master/public/home_images/tags_info.jpg)
 
-### Compile and Hot-Reload for Development
+Tags are categorized into different colors representing their sentiment:
 
-```sh
-npm run dev
-```
+* Gold: the highest honors, the best at what it does
+* Green: Positive
+* Purple: Caveat or disclaimer
+* Red: Negative
+* Grey: Gripe or light criticism
 
-### Type-Check, Compile and Minify for Production
+### Searchbar
+Features a flexible keyword-matching search.
 
-```sh
-npm run build
-```
+![Screenshot4](https://github.com/TrustyF/Review_website_vue/raw/master/public/home_images/search_info.jpg)
 
-### Lint with [ESLint](https://eslint.org/)
+Various Filters can also be applied to match specific attributes like: runtime, release date, rating, etc..
+Search fields are matched sequentially:
+- name
+- genre
+- tags
+- studio
+- author 
+Each field attempt to find as much as it can and moves to the next if nothing is returned. This allows for a more intuitive user experience.
 
-```sh
-npm run lint
-```
+### Stats
+These are really just to satisfy my own curiosity. Each media category can be graphed if the necessary values are available.
+
+![Screenshot5](https://github.com/TrustyF/Review_website_vue/raw/master/public/home_images/readme_images/readme_screen_3.jpg)
+
+If possible the average personal rating and public rating will be plotted against the specified category.
