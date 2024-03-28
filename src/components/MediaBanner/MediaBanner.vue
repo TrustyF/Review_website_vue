@@ -123,12 +123,14 @@ onMounted(() => {
 .scroll_container {
   /*position: relative;*/
   width: 100%;
+  height: 100%;
+  /*outline: 1px solid red;*/
   overflow-x: scroll;
   /*overflow-y: hidden;*/
   display: flex;
   flex-flow: row;
   gap: 20px;
-  padding-bottom: 20px;
+  padding: -20px 0 20px 0;
   /*white-space:nowrap;*/
 
   -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
@@ -152,7 +154,8 @@ onMounted(() => {
 .gradient_loader {
   width: 100%;
   height: 100%;
-  opacity: 0.15;
+  object-fit: cover;
+  opacity: 0.1;
 }
 
 .banner_fade {
