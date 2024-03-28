@@ -30,7 +30,7 @@ const is_mobile = inject("is_mobile");
       <div class="text_block">
         <h1>Ratings</h1>
         <p>Ratings are split into: my personal rating, public rating and the combined circle.</p>
-        <img :src="ratings_info" alt="search_info" class="image_block">
+        <img :src="ratings_info" alt="" class="image_block">
         <p>The public rating is visually remapped to better match my personal rating distribution.</p>
         <br>
         <p>The combined circle takes the average of both ratings to provide an easy shorthand of the overall consensus
@@ -63,7 +63,7 @@ const is_mobile = inject("is_mobile");
 
           <p>: Gripe or light criticism</p>
         </div>
-        <img :src="tags_info" alt="search_info" class="image_block">
+        <img :src="tags_info" alt="" class="image_block">
 
 
       </div>
@@ -79,7 +79,7 @@ const is_mobile = inject("is_mobile");
             - author
           </p>
         </div>
-        <img :src="search_info" alt="search_info" class="image_block">
+        <img :src="search_info" alt="" class="image_block">
 
         <p>Filters can also be found next to the search bar and are applied additively.</p>
 
@@ -144,7 +144,7 @@ p {
   width: 100%;
   object-fit: cover;
   border: 2px solid #464646;
-  height: 220px;
+  height: 250px;
   /*border-radius: 20px;*/
   /*filter: drop-shadow(2px 2px 3px black) drop-shadow(2px 2px 2px black);*/
   -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
