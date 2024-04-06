@@ -167,6 +167,7 @@ onMounted(() => {
   height: 100%;
   object-fit: cover;
   opacity: 0.1;
+  border-radius: 10px;
 }
 
 .banner_fade {
