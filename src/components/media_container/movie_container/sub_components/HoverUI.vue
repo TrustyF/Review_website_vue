@@ -62,7 +62,7 @@ function open_link_new_tab(path) {
   </div>
 
   <div class="poster_overflow">
-    <img v-if="data['tags'] && data['tags'].length > 0" class="tag_indicator" :src="arrow_img">
+<!--    <img v-if="data['tags'] && data['tags'].length > 0" class="tag_indicator" :src="arrow_img">-->
   </div>
 
   <div v-if="data['is_dropped']" class="dropped_banner_wrapper">

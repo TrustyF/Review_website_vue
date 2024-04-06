@@ -15,6 +15,7 @@ const tiers = ['gold', 'green', 'purple', 'silver', 'red']
 const tag_images = ref({})
 
 let available_badges = ref()
+let unique_badges = ref([])
 let constructed_badges = ref([])
 let dragged_badge = ref()
 
@@ -28,22 +29,29 @@ const temp_tag_template = {
 let temp_tag = ref(temp_tag_template)
 
 async function get_tags() {
+
+  function order_stuff(arr) {
+    arr.value = Object.groupBy(arr.value, ({tier}) => tier)
+    arr.value = Object.values(arr.value)
+    const priority = ['gold', 'green', 'purple', 'silver', 'red']
+    arr.value.sort((a, b) => {
+      const fi = priority.indexOf(a[0].tier)
+      const si = priority.indexOf(b[0].tier)
+      return fi - si
+    })
+    return arr.value
+  }
+
   const url = new URL(`${curr_api}/tag/get`)
 
   let result = await fetch(url).then(response => response.json())
 
-  // available_badges.value = result.sort((a, b) => a['image_path'] > b['image_path'])
   available_badges.value = result.sort((a, b) => a['count'] < b['count'])
-  available_badges.value = Object.groupBy(result, ({tier}) => tier)
-  available_badges.value = Object.values(available_badges.value)
-
-  // sort tags by color
-  const priority = ['gold', 'green', 'purple', 'silver', 'red']
-  available_badges.value.sort((a, b) => {
-    const fi = priority.indexOf(a[0].tier)
-    const si = priority.indexOf(b[0].tier)
-    return fi - si
-  })
+  unique_badges.value = result.sort((a, b) => a['count'] < b['count'])
+  available_badges.value = available_badges.value.filter((e)=>!e.is_unique)
+  unique_badges.value = unique_badges.value.filter((e)=>e.is_unique)
+  available_badges.value = order_stuff(available_badges)
+  unique_badges.value = order_stuff(unique_badges)
 }
 
 async function get_tier_images() {
@@ -175,7 +183,7 @@ onMounted(() => {
                  :min_size="200"
                  :show_title="true"></badge>
         </div>
-        <button @click="emit">Push to media</button>
+        <!--        <button @click="emit">Push to media</button>-->
       </div>
 
       <div class="tag_editor" @dragover="allowDrop" @drop="add_dragged_badge_to_editor">
@@ -195,6 +203,9 @@ onMounted(() => {
               <option v-for="tier in tiers" :key="tier" :selected="tier.indexOf(temp_tag['tier'])+1">{{ tier }}</option>
             </select>
 
+            <label for="tag_unique">Unique</label>
+            <input style="width: 20px;height: 20px" type="checkbox" id="tag_unique" v-model="temp_tag['is_unique']">
+
           </div>
 
         </div>
@@ -206,11 +217,23 @@ onMounted(() => {
       </div>
 
       <div class="badges_wrapper">
-        <div style="display:flex;flex-flow: row wrap;gap: 2px;" v-for="tier in available_badges" :key="tier.id">
+        <div style="display:flex;flex-flow: row wrap;gap: 2px;" v-for="tier in available_badges"
+             :key="tier.id+'available'">
 
           <div v-for="badge in tier" :key="'available'+badge.id">
             <div class="badge_count">{{ badge.count }}</div>
             <badge @dragstart="drag(badge)" :data="badge"
+                   :min_size="200"></badge>
+          </div>
+
+        </div>
+        <div style="border: 1px solid #5b5b5b"></div>
+        <div style="display:flex;flex-flow: row wrap;gap: 2px;" v-for="tier_u in unique_badges"
+             :key="tier_u.id+'unique'">
+
+          <div v-for="badge_u in tier_u" :key="'unique'+badge_u.id">
+            <div class="badge_count">{{ badge_u.count }}</div>
+            <badge @dragstart="drag(badge_u)" :data="badge_u"
                    :min_size="200"></badge>
           </div>
 
@@ -292,8 +315,8 @@ onMounted(() => {
   flex-flow: column;
   gap: 10px;
   width: 50%;
-  /*height: 200px;*/
-  /*overflow-y: scroll;*/
+  max-height: 600px;
+  overflow-y: scroll;
 }
 
 .badge_count {
