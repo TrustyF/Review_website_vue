@@ -42,30 +42,29 @@ const genre_number_list = [
 
       <media-scroll-banner></media-scroll-banner>
     </div>
-
     <div class="banner" style="margin-top: 5px">
       <h1>Watched recently</h1>
-      <media-banner :order="'date_added'" :media_types="['movie','tv']" v-if="load_number>=-1" @loaded="load_number+=1"></media-banner>
+      <media-banner :order="'date_added'" :media_types="['movie','tv']" :limit="10" v-show="load_number>=-1" @loaded="load_number+=1"></media-banner>
     </div>
 
     <div class="banner">
       <h1>Latest releases</h1>
-      <media-banner :order="'release_date'" :media_types="['movie','tv']" v-if="load_number>=0" @loaded="load_number+=1"></media-banner>
+      <media-banner :order="'release_date'" :media_types="['movie','tv']" :limit="10" v-show="load_number>=0" @loaded="load_number+=1"></media-banner>
     </div>
 
     <div class="banner">
       <h1>Movies</h1>
-      <media-banner :ratings=[7,10] :media_types="['movie']" v-if="load_number>=1" @loaded="load_number+=1"></media-banner>
+      <media-banner :ratings=[7,10] :media_types="['movie']" v-show="load_number>=1" @loaded="load_number+=1"></media-banner>
     </div>
 
     <div class="banner">
       <h1>Manga</h1>
-      <media-banner :ratings=[7,10] :media_types="['manga']" :size_override="[512, 720]" v-if="load_number>=2" @loaded="load_number+=1"></media-banner>
+      <media-banner :ratings=[7,10] :media_types="['manga']" :size_override="[512, 720]" v-show="load_number>=2" @loaded="load_number+=1"></media-banner>
     </div>
 
     <div class="banner">
       <h1>Games</h1>
-      <media-banner :ratings=[7,10] :media_types="['game']" :size_override="[528, 704]" v-if="load_number>=3" @loaded="load_number+=1"></media-banner>
+      <media-banner :ratings=[7,10] :media_types="['game']" :size_override="[528, 704]" v-show="load_number>=3" @loaded="load_number+=1"></media-banner>
     </div>
 
     <div class="banner">

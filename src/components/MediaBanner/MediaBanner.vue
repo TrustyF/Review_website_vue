@@ -44,7 +44,7 @@ let loaded_num = ref(0)
 let max_load = ref(100)
 let media = ref()
 
-const container_height = computed(()=> `${(props.size_override[1]*0.3)+80}px`)
+const container_height = computed(() => `${(props.size_override[1] * 0.3) + 80}px`)
 
 async function get_media() {
 
@@ -86,19 +86,20 @@ async function get_media() {
 }
 
 watch(loaded_num,(oldV,newV)=>{
-  if (loaded_num.value >= max_load.value) {
+  if (loaded_num.value === 1) {
     emits('loaded', true);
   }
 })
 
 onMounted(() => {
   get_media()
+  // setTimeout(() => emits('loaded', true),500)
 })
 
 </script>
 
 <template>
-  <lazy-component class="banner_wrapper" >
+  <lazy-component class="banner_wrapper">
     <div class="banner_fade"></div>
     <div class="scroll_container" v-show="loaded_num >= max_load">
       <div class="scroll_content" v-for="med in media" :key="med.id">
@@ -112,7 +113,6 @@ onMounted(() => {
       </div>
     </div>
     <div class="scroll_container" v-show="loaded_num < max_load">
-<!--      <div class="gradient_loader"></div>-->
       <img :src="grad_loader" class="gradient_loader">
     </div>
   </lazy-component>
@@ -132,7 +132,7 @@ onMounted(() => {
 }
 
 .scroll_container {
-  /*position: relative;*/
+  position: absolute;
   width: 100%;
   height: 100%;
   /*outline: 1px solid red;*/
@@ -143,6 +143,7 @@ onMounted(() => {
   gap: 20px;
   padding: -20px 0 20px 0;
   /*white-space:nowrap;*/
+  /*outline: 1px solid red;*/
 
   -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 1s; /* Firefox < 16 */
@@ -162,7 +163,10 @@ onMounted(() => {
   background-color: #000000;
   border-radius: 10px;
 }
+
 .gradient_loader {
+  position: absolute;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
