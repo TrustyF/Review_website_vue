@@ -100,7 +100,7 @@ onMounted(() => {
   </div>
 
   <button v-if="edit_mode && curr_api!=='http://192.168.1.11:5000'" style="position: fixed;right: 10px;top: 70px;z-index: 10" @click="add_pane_open=true">add</button>
-  <p v-if="edit_mode" style="position: fixed;right: 10px;top: 150px;font-size: 0.7em;z-index: 10;background-color: black">{{ curr_api }}</p>
+<!--  <p v-if="edit_mode" style="position: fixed;right: 10px;top: 150px;font-size: 0.7em;z-index: 10;background-color: black">{{ curr_api }}</p>-->
 
   <div class="tooltip_editor_top_wrapper" v-if="add_pane_open && edit_mode">
     <tooltip-editor :add="true"></tooltip-editor>
