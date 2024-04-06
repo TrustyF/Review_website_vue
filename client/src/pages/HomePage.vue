@@ -10,6 +10,8 @@ import {RouterLink} from "vue-router";
 const curr_api = inject("curr_api");
 const is_mobile = inject("is_mobile");
 
+const load_number = ref(-1)
+
 const genre_number_list = [
     ['Action',80],
     ['Adventure',79],
@@ -41,55 +43,55 @@ const genre_number_list = [
       <media-scroll-banner></media-scroll-banner>
     </div>
 
-    <div style="margin-top: 5px">
+    <div class="banner" style="margin-top: 5px">
       <h1>Watched recently</h1>
-      <media-banner :order="'date_added'" :media_types="['movie','tv']"></media-banner>
+      <media-banner :order="'date_added'" :media_types="['movie','tv']" v-if="load_number>=-1" @loaded="load_number+=1"></media-banner>
     </div>
 
-    <div>
+    <div class="banner">
       <h1>Latest releases</h1>
-      <media-banner :order="'release_date'" :media_types="['movie','tv']"></media-banner>
+      <media-banner :order="'release_date'" :media_types="['movie','tv']" v-if="load_number>=0" @loaded="load_number+=1"></media-banner>
     </div>
 
-    <div>
+    <div class="banner">
       <h1>Movies</h1>
-      <media-banner :ratings=[7,10] :media_types="['movie']"></media-banner>
+      <media-banner :ratings=[7,10] :media_types="['movie']" v-if="load_number>=1" @loaded="load_number+=1"></media-banner>
     </div>
 
-    <div>
+    <div class="banner">
       <h1>Manga</h1>
-      <media-banner :ratings=[7,10] :media_types="['manga']" :size_override="[512, 720]"></media-banner>
+      <media-banner :ratings=[7,10] :media_types="['manga']" :size_override="[512, 720]" v-if="load_number>=2" @loaded="load_number+=1"></media-banner>
     </div>
 
-    <div>
+    <div class="banner">
       <h1>Games</h1>
-      <media-banner :ratings=[7,10] :media_types="['game']" :size_override="[528, 704]"></media-banner>
+      <media-banner :ratings=[7,10] :media_types="['game']" :size_override="[528, 704]" v-if="load_number>=3" @loaded="load_number+=1"></media-banner>
     </div>
 
-    <div>
+    <div class="banner">
       <h1>Youtube shows</h1>
-      <media-banner :ratings=[7,10] :media_types="['youtube']" :tier_lists="['tv-show']" :limit="10" :size_override="[910, 512]"></media-banner>
+      <media-banner :ratings=[7,10] :media_types="['youtube']" :tier_lists="['tv-show']" :limit="10" :size_override="[910, 512]" v-if="load_number>=4" @loaded="load_number+=1"></media-banner>
     </div>
 
-    <div>
+    <div class="banner">
       <h1>Youtube documentaries</h1>
-      <media-banner :ratings=[7,10] :media_types="['youtube']" :tier_lists="['documentary']" :limit="10" :size_override="[910, 512]"></media-banner>
+      <media-banner :ratings=[7,10] :media_types="['youtube']" :tier_lists="['documentary']" :limit="10" :size_override="[910, 512]" v-if="load_number>=5" @loaded="load_number+=1"></media-banner>
     </div>
 
-    <div>
+    <div class="banner">
       <h1>Youtube essays</h1>
-      <media-banner :ratings=[7,10] :media_types="['youtube']" :tier_lists="['essay']" :limit="10" :size_override="[910, 512]"></media-banner>
+      <media-banner :ratings=[7,10] :media_types="['youtube']" :tier_lists="['essay']" :limit="10" :size_override="[910, 512]" v-if="load_number>=6" @loaded="load_number+=1"></media-banner>
     </div>
 
-    <div v-for="entry in genre_number_list" :key="entry[1]">
+    <div class="banner" v-for="(entry,index) in genre_number_list" :key="entry[1]">
       <h1>{{entry[0]}}</h1>
-      <media-banner :ratings=[6,10] :media_types="['movie']" :genres="[entry[1]]"></media-banner>
+      <media-banner :ratings=[6,10] :media_types="['movie']" :genres="[entry[1]]" v-if="load_number>=6+index" @loaded="load_number+=1"></media-banner>
     </div>
 
 
-    <div>
+    <div class="banner">
       <h1>Wall of shame</h1>
-      <media-banner :ratings=[1,4] :media_types="['movie','tv']" :limit="20"></media-banner>
+      <media-banner :ratings=[1,4] :media_types="['movie','tv']" :limit="20" v-if="load_number>=16" @loaded="load_number+=1"></media-banner>
     </div>
 
     <credits-footer></credits-footer>
@@ -111,6 +113,10 @@ h1 {
   /*outline: 1px solid red;*/
   min-height: 80vh;
   /*background-color: #1c1b23;*/
+}
+.banner {
+  /*outline: 1px solid red;*/
+  min-height: 341px;
 }
 
 .top_banner {

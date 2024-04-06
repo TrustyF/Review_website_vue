@@ -34,7 +34,7 @@ let props = defineProps({
     default: [500, 750],
   },
 });
-let emits = defineEmits(["test"]);
+let emits = defineEmits(["loaded"]);
 const curr_api = inject("curr_api");
 const session_seed = inject("session_seed");
 const is_mobile = inject("is_mobile");
@@ -84,6 +84,12 @@ async function get_media() {
     })
   })
 }
+
+watch(loaded_num,(oldV,newV)=>{
+  if (loaded_num.value >= max_load.value) {
+    emits('loaded', true);
+  }
+})
 
 onMounted(() => {
   get_media()
