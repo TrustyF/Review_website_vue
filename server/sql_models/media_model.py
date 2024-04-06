@@ -67,6 +67,7 @@ class Tag(db.Model):
     tier: str = db.Column(db.String(100))
     origin: str = db.Column(db.String(50), nullable=False)
 
+    is_unique: bool = db.Column(db.Boolean)
     is_deleted: bool = db.Column(db.Boolean)
 
     media = db.relationship("Media", back_populates='tags', secondary=media_tag_association)

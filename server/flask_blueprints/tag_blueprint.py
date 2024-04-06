@@ -68,6 +68,7 @@ def add():
         'image_path': data['image_path'],
         'tier': data['tier'],
         'origin': data['origin'],
+        'is_unique': data['is_unique'],
     })
     db.session.add(new_tag)
 
@@ -96,6 +97,7 @@ def update():
         'image_path': data['image_path'],
         'tier': data['tier'],
         'origin': data['origin'],
+        'is_unique': data['is_unique'],
     })
 
     db.session.commit()

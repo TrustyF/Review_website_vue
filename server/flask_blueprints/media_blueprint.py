@@ -176,7 +176,6 @@ def get():
                     q = q.filter(cond)
 
         if tier_lists:
-            # print(tier_lists)
             if 'all' not in tier_lists:
                 q = (q.join(Media.tier_lists).filter(TierList.name.in_(tier_lists))
                      .group_by(Media.id).having(func.count(Media.id) == len(tier_lists)))
