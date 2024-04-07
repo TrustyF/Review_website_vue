@@ -44,12 +44,12 @@ const genre_number_list = [
     </div>
     <div class="banner" style="margin-top: 5px">
       <h1>Watched recently</h1>
-      <media-banner :order="'date_added'" :media_types="['movie','tv']" :limit="10" v-show="load_number>=-1" @loaded="load_number+=1"></media-banner>
+      <media-banner :order="'date_added'" :media_types="['movie','tv']" v-show="load_number>=-1" @loaded="load_number+=1"></media-banner>
     </div>
 
     <div class="banner">
       <h1>Latest releases</h1>
-      <media-banner :order="'release_date'" :media_types="['movie','tv']" :limit="10" v-show="load_number>=0" @loaded="load_number+=1"></media-banner>
+      <media-banner :order="'release_date'" :media_types="['movie','tv']" v-show="load_number>=0" @loaded="load_number+=1"></media-banner>
     </div>
 
     <div class="banner">

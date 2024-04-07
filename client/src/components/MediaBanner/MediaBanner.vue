@@ -85,15 +85,15 @@ async function get_media() {
   })
 }
 
-watch(loaded_num,(oldV,newV)=>{
-  if (loaded_num.value === 1) {
-    emits('loaded', true);
-  }
-})
+// watch(loaded_num,(oldV,newV)=>{
+//   if (loaded_num.value === 1) {
+//     emits('loaded', true);
+//   }
+// })
 
 onMounted(() => {
   get_media()
-  // setTimeout(() => emits('loaded', true),500)
+  setTimeout(() => emits('loaded', true),5)
 })
 
 </script>
