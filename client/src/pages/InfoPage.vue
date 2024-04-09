@@ -1,7 +1,5 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
-import MovieContainer from '@/components/media_container/movie_container/MovieContainer.vue'
-import rating_arrows from '/home_images/rating_arrows.png'
 import CreditsFooter from "@/components/General/CreditsFooter.vue";
 import StatsGraphs from '@/components/General/StatsGraphs.vue'
 
