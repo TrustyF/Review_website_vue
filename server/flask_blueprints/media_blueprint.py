@@ -762,7 +762,7 @@ def get_stats():
 
     def construct_release_date_list(arr):
         all_dates = [x[2] for x in arr]
-        min_date, max_date = min(all_dates), max(all_dates)
+        min_date, max_date = min(all_dates)-1, max(all_dates)+1
         base = [x for x in range(min_date, max_date)]
         types = set([x[1] for x in arr])
 
