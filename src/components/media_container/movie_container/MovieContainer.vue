@@ -138,8 +138,8 @@ function emit_finished_loading() {
         <h2 class="date" v-if="data['runtime']>0">•</h2>
         <h2 class="date" v-if="data['runtime']>0">{{ convert_seconds_to_time(data['runtime']) }}</h2>
         <h2 class="date" v-if="data['seasons']>0">•</h2>
-        <h2 class="date" v-if="data['seasons']>0">{{ data['seasons'] + ' s' }} </h2>
-        <h2 class="date" v-if="data['episodes']>0">{{ data['episodes'] + ' ep' }} </h2>
+        <h2 class="date" v-if="data['seasons']>0">{{ data['seasons'] + " " + 's' }} </h2>
+        <h2 class="date" v-if="data['episodes']>0 && data['episodes']>0">{{ Math.round(data['episodes']/data['seasons']) + ' ep' }} </h2>
         <!--        <h2 class="date" v-if="data['content_rating'] && data['content_rating'].name">•</h2>-->
         <!--        <h2 class="date" v-if="data['content_rating'] && data['content_rating'].name">-->
         <!--          {{ data['content_rating'].name }}</h2>-->
