@@ -91,8 +91,24 @@ const genre_number_list = [
     </div>
 
     <div class="banner">
+      <h1>Read recently</h1>
+      <media-banner :ratings=[7,10]
+                    :order="'date_added'"
+                    :media_types="['manga']"
+                    :size_override="[512, 720]"></media-banner>
+    </div>
+
+    <div class="banner">
       <h1>Games</h1>
       <media-banner :ratings=[7,10]
+                    :media_types="['game']"
+                    :size_override="[528, 704]"></media-banner>
+    </div>
+
+    <div class="banner">
+      <h1>Played recently</h1>
+      <media-banner :ratings=[7,10]
+                    :order="'date_added'"
                     :media_types="['game']"
                     :size_override="[528, 704]"></media-banner>
     </div>
