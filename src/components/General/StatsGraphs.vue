@@ -72,7 +72,7 @@ let date_stats = computed(() => {
         type: 'line',
         label: 'Average rating',
         data: Object.values(stats.value['avg_rating_release_date'][stat_media_type.value]).map((e) => {
-          if (e.length >= 3) return e.reduce((a, b) => a + b, 0) / e.length
+          if (e.length >= 5) return e.reduce((a, b) => a + b, 0) / e.length
           else return undefined
         }),
         backgroundColor: [stat_media_type_colors[0]],
@@ -86,7 +86,7 @@ let date_stats = computed(() => {
         type: 'line',
         label: 'Average public rating',
         data: Object.values(stats.value['avg_pub_rating_release_date'][stat_media_type.value]).map((e) => {
-          if (e.length >= 3) return (e.reduce((a, b) => a + b, 0) / e.length)
+          if (e.length >= 5) return (e.reduce((a, b) => a + b, 0) / e.length)
           else return undefined
         }),
         backgroundColor: [stat_media_type_colors[3]],
@@ -127,7 +127,7 @@ let runtime_stats = computed(() => {
         type: 'line',
         label: 'Average rating',
         data: Object.values(stats.value['avg_rating_runtimes'][stat_media_type.value]).map((e) => {
-          if (e.length >= 3) return e.reduce((a, b) => a + b, 0) / e.length
+          if (e.length >= 10) return e.reduce((a, b) => a + b, 0) / e.length
           else return undefined
         }),
         backgroundColor: [stat_media_type_colors[0]],
@@ -141,7 +141,7 @@ let runtime_stats = computed(() => {
         type: 'line',
         label: 'Average public rating',
         data: Object.values(stats.value['avg_pub_rating_runtimes'][stat_media_type.value]).map((e) => {
-          if (e.length >= 3) return (e.reduce((a, b) => a + b, 0) / e.length)
+          if (e.length >= 10) return (e.reduce((a, b) => a + b, 0) / e.length)
           else return undefined
         }),
         backgroundColor: [stat_media_type_colors[3]],
