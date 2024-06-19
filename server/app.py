@@ -15,9 +15,9 @@ dev_mode = os.path.exists(os.path.join(MAIN_DIR, 'devmode.txt'))
 load_dotenv(os.path.join(MAIN_DIR, '.env'))
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-    "pool_recycle": 280, "pool_timeout": 10, "pool_pre_ping": True
-}
+# app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+#     "pool_recycle": 280, "pool_timeout": 10, "pool_pre_ping": True
+# }
 
 db_username = os.getenv('MYSQL_DATABASE_USERNAME')
 db_password = os.getenv('MYSQL_DATABASE_PASSWORD')
