@@ -1,7 +1,6 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed} from "vue";
+import {inject, onMounted, watch, ref, computed,getCurrentInstance} from "vue";
 import MovieContainer from '@/components/media_container/movie_container/MovieContainer.vue'
-import grad_loader from "/ui/gradient_loader.webp"
 import axios from "axios";
 
 let props = defineProps({
@@ -40,14 +39,12 @@ const session_seed = inject("session_seed");
 const is_mobile = inject("is_mobile");
 const rangeOfNumbers = (a, b) => [...Array(b + 1).keys()].slice(a)
 
-let loaded_num = ref(0)
-let max_load = ref(100)
 let media = ref()
 
 const container_height = computed(() => `${(props.size_override[1] * 0.3) + 80}px`)
 
 async function get_media() {
-
+  // console.log('getting banner media')
   const url = new URL(`${curr_api}/media/get`)
   const params = {
     'limit': props.limit,
@@ -73,7 +70,6 @@ async function get_media() {
       })
 
   media.value = result.data['media']
-  max_load.value = media.value.length
   // sort tags by color
   const priority = ['gold', 'green', 'purple', 'silver', 'red']
   media.value.forEach((entry, i) => {
@@ -85,37 +81,27 @@ async function get_media() {
   })
 }
 
-// watch(loaded_num,(oldV,newV)=>{
-//   if (loaded_num.value === 1) {
-//     emits('loaded', true);
-//   }
-// })
-
 onMounted(() => {
+  console.log('loaded banner')
   get_media()
-  setTimeout(() => emits('loaded', true),5)
 })
 
 </script>
 
 <template>
-  <lazy-component class="banner_wrapper">
+  <div class="banner_wrapper">
     <div class="banner_fade"></div>
-    <div class="scroll_container" v-show="loaded_num >= max_load">
+    <div class="scroll_container">
       <div class="scroll_content" v-for="med in media" :key="med.id">
         <movie-container
             :data="med"
             :scale_mul="!is_mobile ? 0.3:0.25"
             :size_override="size_override"
             :lazy_poster="false"
-            @is_full_loaded="loaded_num+=1"
         ></movie-container>
       </div>
     </div>
-    <div class="scroll_container" v-show="loaded_num < max_load">
-      <img :src="grad_loader" class="gradient_loader">
-    </div>
-  </lazy-component>
+  </div>
 </template>
 
 <style scoped>
@@ -145,6 +131,13 @@ onMounted(() => {
   /*white-space:nowrap;*/
   /*outline: 1px solid red;*/
 
+  /*-webkit-animation: fadein 1s; !* Safari, Chrome and Opera > 12.1 *!*/
+  /*-moz-animation: fadein 1s; !* Firefox < 16 *!*/
+  /*-ms-animation: fadein 1s; !* Internet Explorer *!*/
+  /*-o-animation: fadein 1s; !* Opera < 12.1 *!*/
+  /*animation: fadein 1s;*/
+}
+.scroll_content {
   -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 1s; /* Firefox < 16 */
   -ms-animation: fadein 1s; /* Internet Explorer */
