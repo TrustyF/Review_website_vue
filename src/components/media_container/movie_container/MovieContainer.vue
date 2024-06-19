@@ -44,8 +44,6 @@ const curr_api = inject("curr_api");
 const media_detail_pane_open = inject("media_detail_pane_open");
 const router = useRouter()
 
-let poster_loaded = ref()
-
 const media_type = computed(() => props['data']['media_type'] || 'movie')
 
 const image_path = computed(() => format_image_path(props['data']['poster_path'], props['data']['external_id']))
@@ -113,7 +111,6 @@ function emit_finished_loading() {
 </script>
 <template>
   <div class="movie_container_wrapper">
-    <p>{{ poster_loaded }}</p>
 
     <img @click="push_to_details" @loadeddata="emit_finished_loading" v-if="lazy_poster && image_path" class="poster"
          alt="" v-lazy="image_path" lazy="loading"/>
@@ -165,11 +162,11 @@ function emit_finished_loading() {
 
   border-radius: 8px;
 
-  -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
-  -moz-animation: fadein 0.5s; /* Firefox < 16 */
-  -ms-animation: fadein 0.5s; /* Internet Explorer */
-  -o-animation: fadein 0.5s; /* Opera < 12.1 */
-  animation: fadein 0.5s;
+  -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 1s; /* Firefox < 16 */
+  -ms-animation: fadein 1s; /* Internet Explorer */
+  -o-animation: fadein 1s; /* Opera < 12.1 */
+  animation: fadein 1s;
 }
 
 .poster {
@@ -186,7 +183,7 @@ function emit_finished_loading() {
   object-fit: cover;
 
   opacity: 1;
-  transition: opacity 0.5s;
+  transition: opacity 1s;
 }
 
 .poster[lazy=loading] {

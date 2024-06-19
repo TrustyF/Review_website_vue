@@ -111,6 +111,11 @@ const router = createRouter({
             name: "game",
             component: () => import("../pages/GamePage.vue")
         },
+        {
+            path: "/debug_sql",
+            name: "debug_sql",
+            component: () => import("../pages/sub_pages/debug/test-sql.vue")
+        },
     ],
 })
 

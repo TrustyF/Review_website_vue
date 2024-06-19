@@ -46,109 +46,106 @@ const genre_number_list = [
       <media-scroll-banner></media-scroll-banner>
     </div>
 
-    <div class="banner" style="min-height: 341px;margin-top: 5px;">
+    <lazy-component class="banner" style="min-height: 341px;margin-top: 5px;">
       <h1>Recommended movies</h1>
       <media-banner :ratings=[7,10]
                     :media_types="['movie']"
-                    v-show="load_number>=-1" @loaded="load_number+=1"></media-banner>
-    </div>
+                    ></media-banner>
+    </lazy-component>
 
-    <div class="banner" style="min-height: 341px;">
+    <lazy-component class="banner" style="min-height: 341px;">
       <h1>Watched recently</h1>
       <media-banner :order="'date_added'"
                     :media_types="['movie','tv']"
-                    v-show="load_number>=0" @loaded="load_number+=1"></media-banner>
-    </div>
+                    ></media-banner>
+    </lazy-component>
 
-    <div class="banner" style="min-height: 341px;">
+    <lazy-component class="banner" style="min-height: 341px;">
       <h1>Latest releases</h1>
       <media-banner :order="'release_date'"
                     :media_types="['movie','tv']"
-                    v-show="load_number>=1" @loaded="load_number+=1"></media-banner>
-    </div>
+                    ></media-banner>
+    </lazy-component>
 
-    <div class="banner" style="min-height: 332px;">
+    <lazy-component class="banner" style="min-height: 332px;">
       <h1>TV</h1>
       <media-banner :ratings=[6,10]
                     :media_types="['Tv']"
                     :size_override="[512, 720]"
-                    v-show="load_number>=2" @loaded="load_number+=1"></media-banner>
-    </div>
+                    ></media-banner>
+    </lazy-component>
 
-    <div class="banner" v-for="(entry,index) in genre_number_list" :key="entry[1]" style="min-height: 341px;">
+    <lazy-component class="banner" v-for="(entry) in genre_number_list" :key="entry[1]" style="min-height: 341px;">
       <h1>{{ entry[0] }}</h1>
       <media-banner :ratings=[6,10]
                     :media_types="['movie']"
                     :genres="[entry[1]]"
-                    v-if="load_number>=2+index" @loaded="load_number+=1"></media-banner>
-    </div>
+                    ></media-banner>
+    </lazy-component>
 
-    <div class="banner">
+    <lazy-component class="banner">
       <h1>Manga</h1>
       <media-banner :ratings=[7,10]
                     :media_types="['manga']"
                     :size_override="[512, 720]"></media-banner>
-    </div>
+    </lazy-component>
 
-    <div class="banner">
+    <lazy-component class="banner">
       <h1>Read recently</h1>
       <media-banner :ratings=[7,10]
                     :order="'date_added'"
                     :media_types="['manga']"
                     :size_override="[512, 720]"></media-banner>
-    </div>
+    </lazy-component>
 
-    <div class="banner">
+    <lazy-component class="banner">
       <h1>Games</h1>
       <media-banner :ratings=[7,10]
                     :media_types="['game']"
                     :size_override="[528, 704]"></media-banner>
-    </div>
+    </lazy-component>
 
-    <div class="banner">
+    <lazy-component class="banner">
       <h1>Played recently</h1>
       <media-banner :ratings=[7,10]
                     :order="'date_added'"
                     :media_types="['game']"
                     :size_override="[528, 704]"></media-banner>
-    </div>
+    </lazy-component>
 
-    <div class="banner">
+    <lazy-component class="banner">
       <h1>Youtube shows</h1>
       <media-banner :ratings=[7,10]
                     :media_types="['youtube']"
                     :tier_lists="['tv-show']"
                     :limit="10"
                     :size_override="[910, 512]"></media-banner>
-    </div>
+    </lazy-component>
 
-    <div class="banner">
+    <lazy-component class="banner">
       <h1>Youtube documentaries</h1>
       <media-banner :ratings=[7,10]
                     :media_types="['youtube']"
                     :tier_lists="['documentary']"
                     :limit="10"
                     :size_override="[910, 512]"></media-banner>
-    </div>
+    </lazy-component>
 
-    <div class="banner">
+    <lazy-component class="banner">
       <h1>Youtube essays</h1>
       <media-banner :ratings=[7,10]
                     :media_types="['youtube']"
                     :tier_lists="['essay']"
                     :limit="10"
                     :size_override="[910, 512]"></media-banner>
-    </div>
+    </lazy-component>
 
-
-
-
-    <div class="banner">
+    <lazy-component class="banner">
       <h1>Wall of shame</h1>
       <media-banner :ratings=[1,4]
                     :media_types="['movie','tv']"
                     :limit="20"></media-banner>
-    </div>
+    </lazy-component>
 
     <credits-footer></credits-footer>
 
