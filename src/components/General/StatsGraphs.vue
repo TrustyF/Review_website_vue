@@ -2,9 +2,10 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import {BarChart, LineChart} from 'vue-chart-3';
 import {Chart, registerables} from "chart.js";
+import chartTrendline from 'chartjs-plugin-trendline';
 import axios from "axios";
 
-Chart.register(...registerables);
+Chart.register(...registerables, chartTrendline);
 
 let props = defineProps(["test"]);
 let emits = defineEmits(["test"]);
@@ -65,41 +66,58 @@ let date_stats = computed(() => {
         }]
     }
   }
+
+  let filtered_avg_rating = Object.values(stats.value['avg_rating_release_date'][stat_media_type.value]).map((e) => {
+    if (e.length >= 1) return e.reduce((a, b) => a + b, 0) / e.length
+    else return undefined
+  })
+
+  let filtered_avg_pub_rating = Object.values(stats.value['avg_pub_rating_release_date'][stat_media_type.value]).map((e) => {
+    if (e.length >= 1) return (e.reduce((a, b) => a + b, 0) / e.length)
+    else return undefined
+  })
+
+  let dates = Object.values(stats.value['release_dates'][stat_media_type.value]).map((e) => e.length)
+
+  // check any values are left
+
   return {
     labels: Object.keys(stats.value['release_dates'][stat_media_type.value]),
     datasets: [
       {
         type: 'line',
         label: 'Average rating',
-        data: Object.values(stats.value['avg_rating_release_date'][stat_media_type.value]).map((e) => {
-          if (e.length >= 5) return e.reduce((a, b) => a + b, 0) / e.length
-          else return undefined
-        }),
+        data: !filtered_avg_rating.every(element => element === undefined) ? filtered_avg_rating : [],
         backgroundColor: [stat_media_type_colors[0]],
         borderColor: [stat_media_type_colors[0]],
         pointRadius: 0,
         cubicInterpolationMode: 'monotone',
-        spanGaps: true,
+        spanGaps: false,
         yAxisID: 'y1',
+        trendlineLinear: {
+          lineStyle: "dotted",
+          width: 1
+        }
       },
       {
         type: 'line',
         label: 'Average public rating',
-        data: Object.values(stats.value['avg_pub_rating_release_date'][stat_media_type.value]).map((e) => {
-          if (e.length >= 5) return (e.reduce((a, b) => a + b, 0) / e.length)
-          else return undefined
-        }),
+        data: !filtered_avg_pub_rating.every(element => element === undefined) ? filtered_avg_pub_rating : [],
         backgroundColor: [stat_media_type_colors[3]],
         borderColor: [stat_media_type_colors[3]],
         pointRadius: 0,
         cubicInterpolationMode: 'monotone',
-        spanGaps: true,
+        spanGaps: false,
         yAxisID: 'y1',
+        trendlineLinear: {
+          lineStyle: "dotted",
+          width: 1
+        }
       },
       {
         type: 'bar',
         label: 'Release date',
-        data: Object.values(stats.value['release_dates'][stat_media_type.value]).map((e) => e.length),
+        data: dates,
         backgroundColor: [stat_media_type_colors[1]],
         yAxisID: 'y',
         barPercentage: 1,
@@ -120,36 +138,49 @@ let runtime_stats = computed(() => {
         }]
     }
   }
+
+  let filtered_avg_runtime = Object.values(stats.value['avg_rating_runtimes'][stat_media_type.value]).map((e) => {
+    if (e.length >= 10) return e.reduce((a, b) => a + b, 0) / e.length
+    else return undefined
+  })
+
+  let filtered_avg_pub_runtime = Object.values(stats.value['avg_pub_rating_runtimes'][stat_media_type.value]).map((e) => {
+    if (e.length >= 10) return (e.reduce((a, b) => a + b, 0) / e.length)
+    else return undefined
+  })
+
   return {
     labels: Object.keys(stats.value['runtimes'][stat_media_type.value]),
     datasets: [
       {
         type: 'line',
         label: 'Average rating',
-        data: Object.values(stats.value['avg_rating_runtimes'][stat_media_type.value]).map((e) => {
-          if (e.length >= 10) return e.reduce((a, b) => a + b, 0) / e.length
-          else return undefined
-        }),
+        data: filtered_avg_runtime,
         backgroundColor: [stat_media_type_colors[0]],
         borderColor: [stat_media_type_colors[0]],
         pointRadius: 0,
         cubicInterpolationMode: 'monotone',
         spanGaps: true,
         yAxisID: 'y1',
+        trendlineLinear: {
+          lineStyle: "dotted",
+          width: 1
+        }
       },
       {
         type: 'line',
         label: 'Average public rating',
-        data: Object.values(stats.value['avg_pub_rating_runtimes'][stat_media_type.value]).map((e) => {
-          if (e.length >= 10) return (e.reduce((a, b) => a + b, 0) / e.length)
-          else return undefined
-        }),
+        data: filtered_avg_pub_runtime,
         backgroundColor: [stat_media_type_colors[3]],
         borderColor: [stat_media_type_colors[3]],
         pointRadius: 0,
         cubicInterpolationMode: 'monotone',
         spanGaps: true,
         yAxisID: 'y1',
+        trendlineLinear: {
+          lineStyle: "dotted",
+          width: 1
+        }
       },
       {
         label: 'Runtime (minutes)',
@@ -329,6 +360,7 @@ function switch_media(event) {
 
 onMounted(() => {
   get_stats()
+  // window.scrollTo(0, 20000)
 })
 </script>
 
@@ -395,7 +427,6 @@ onMounted(() => {
 .chart {
   /*outline: 1px solid red;*/
   /*position: relative;*/
-  /*height: 100%;*/
   /*max-height: 200px;*/
 }
 
