@@ -404,12 +404,13 @@ def add():
     data = request.get_json()
     # print('add', data['name'])
 
-    # pprint(data)
-
-    exist_check = db.session.query(Media).filter(Media.external_id == data['external_id']).one_or_none()
+    exist_check = (db.session.query(Media)
+                   .filter(Media.external_id == data['external_id'], Media.media_type == data['media_type'])
+                   .one_or_none())
 
     # cancel if already present
     if exist_check is not None:
+        print('media already exists!')
         return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
 
     media_obj = Media(**deserialize_media(data))
@@ -762,7 +763,7 @@ def get_stats():
 
     def construct_release_date_list(arr):
         all_dates = [x[2] for x in arr]
-        min_date, max_date = min(all_dates)-1, max(all_dates)+1
+        min_date, max_date = min(all_dates) - 1, max(all_dates) + 1
         base = [x for x in range(min_date, max_date)]
         types = set([x[1] for x in arr])
 
