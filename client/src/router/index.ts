@@ -1,4 +1,5 @@
 import {createRouter, createWebHistory} from "vue-router";
+import { getAnalytics, logEvent } from "firebase/analytics";
 
 const media_types = ['movie', 'tv', 'short', 'youtube', 'anime', 'manga', 'game']
 
@@ -123,5 +124,10 @@ router.beforeEach((to, from) => {
     setTimeout(()=>{
         window.scroll(0, 0)
     },1)
+
+    const analytics = getAnalytics();
+    logEvent(analytics, 'changed_page', {
+        page_title: to.toString(),
+    });
 })
 export default router
