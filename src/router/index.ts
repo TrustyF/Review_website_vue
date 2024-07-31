@@ -127,7 +127,7 @@ router.beforeEach((to, from) => {
 
     const analytics = getAnalytics();
     logEvent(analytics, 'changed_page', {
-        page_title: to.toString(),
+        page_title: to.name,
     });
 })
 export default router
