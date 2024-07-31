@@ -3,7 +3,10 @@ import router from './router/index'
 import App from './App.vue'
 
 import VueLazyLoad from "vue-lazyload";
+
 import {initializeApp} from 'firebase/app';
+import { getAnalytics } from "firebase/analytics";
+
 import axiosRetry from 'axios-retry';
 import axios from 'axios';
 
@@ -22,10 +25,14 @@ const firebaseConfig = {
     projectId: "vue-review-website",
     storageBucket: "vue-review-website.appspot.com",
     messagingSenderId: "832888321299",
-    appId: "1:832888321299:web:7a93c03b654f01516d56e6"
+    appId: "1:832888321299:web:7a93c03b654f01516d56e6",
+    measurementId: "G-9X1XSGRPFG"
 };
 
-initializeApp(firebaseConfig);
+
+const firebase = initializeApp(firebaseConfig);
+const analytics = getAnalytics(firebase);
+
 const app = createApp(App)
 
 app.provide('curr_api', devMode ? local_api : server_api)
@@ -41,7 +48,7 @@ app.provide('tooltip_badge_data', ref({}))
 axiosRetry(axios, {
     retryDelay: ((count) => count * 500),
     retries: 5,
-    onRetry: ((retryCount,error) => console.log('retry',retryCount,error.message,error.code)),
+    onRetry: ((retryCount, error) => console.log('retry', retryCount, error.message, error.code)),
     retryCondition: ((error) => true)
 });
 

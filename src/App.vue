@@ -8,6 +8,7 @@ import {computed, inject, onMounted, provide, ref, watch} from "vue";
 import TooltipBadge from "@/components/tooltip/tooltipBadge.vue";
 import TooltipEditor from "@/components/tooltip/tooltipEditor.vue";
 import TooltipMediaDetails from "@/components/tooltip/tooltipMediaDetails.vue";
+import {getAnalytics, logEvent} from "firebase/analytics";
 
 const selected_media = ref({})
 const edit_media = ref(undefined)
@@ -80,6 +81,10 @@ watch(is_visible_navbar, (oldV, newV) => {
 })
 
 onMounted(() => {
+
+  const analytics = getAnalytics();
+  logEvent(analytics, 'visited_trusty_corner');
+
   check_mobile()
   addEventListener("resize", () => check_mobile())
 })
