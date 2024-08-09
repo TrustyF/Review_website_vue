@@ -1,6 +1,6 @@
 
 # Trusty's Corner
-Welcome! This is my personal media review website / blog. It is published on [trustymovies.com](https://trustymovies.com/).
+Welcome! This is my personal media review website / blog. It is published on [trusty-corner.me](https://trusty-corner.me/).
 
 ![Screenshot1](https://github.com/TrustyF/Review_website_vue/raw/master/public/home_images/readme_images/readme_screen_2.jpg)
 
