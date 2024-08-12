@@ -493,13 +493,13 @@ def get_image():
         return [], 200
 
     file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches",
-                             f"{media_id}_{media_type}_{poster_id}.jpg")
+                             f"{media_id}_{media_type}_{poster_id}.webp")
     # file_path_low = os.path.join(MAIN_DIR, "assets", "poster_images_caches",
     #                              f"{media_id}_{media_type}_{poster_id}_220w330.jpg")
 
     # return saved file if exists
     if os.path.exists(file_path):
-        return send_file(file_path, mimetype='image/jpg')
+        return send_file(file_path, mimetype='image/webp')
 
     # check if the requested image is part of a db entry and save if true
     if db.session.query(Media).filter(Media.external_id == media_id,
@@ -511,7 +511,7 @@ def get_image():
         image = Image.open(io.BytesIO(response.content))
         # resized = image.resize((min(220, image.size[0]), min(330, image.size[1])), Image.Resampling.LANCZOS)
 
-        image.save(file_path, "JPEG", optimize=True, quality=50)
+        image.save(file_path, "webp", optimize=True, quality=10)
         # resized.save(file_path_low, "JPEG", optimize=True, quality=50)
 
 
@@ -520,7 +520,7 @@ def get_image():
         response = requests.get(media_path)
         return response.content
 
-    return send_file(file_path, mimetype='image/jpg')
+    return send_file(file_path, mimetype='image/webp')
 
 
 @bp.route("/get_extra_posters", methods=['GET'])
