@@ -646,7 +646,7 @@ def get_scroll_banner():
             break
 
         path = os.path.join(MAIN_DIR, "assets", "poster_images_caches",
-                            f"{x.external_id}_{x.media_type}_{hashlib.shake_256(x.poster_path.encode('utf-8')).hexdigest(5)}.jpg")
+                            f"{x.external_id}_{x.media_type}_{hashlib.shake_256(x.poster_path.encode('utf-8')).hexdigest(5)}.webp")
 
         if os.path.exists(path):
             posters.append(path)
@@ -662,10 +662,10 @@ def get_scroll_banner():
     # banner.show('test')
 
     mem_file = io.BytesIO()
-    banner.save(mem_file, 'JPEG', quality=50)
+    banner.save(mem_file, 'webp', quality=10)
     mem_file.seek(0)
 
-    return send_file(mem_file, mimetype='image/jpg')
+    return send_file(mem_file, mimetype='image/webp')
 
 
 @bp.route("/get_filters", methods=['POST'])
