@@ -31,7 +31,7 @@ def get():
 
 @bp.route("/get_image", methods=['GET'])
 def get_image():
-    path = request.args.get('path')
+    path = request.args.get('path').split('.')[0]
     tier = request.args.get('tier')
 
     # print('get tier image', path,tier)
@@ -39,8 +39,8 @@ def get_image():
     if path == 'null':
         return [], 200
 
-    file_path = os.path.join(MAIN_DIR, 'assets', 'static', 'tags', 'icons', tier, path)
-    return send_file(file_path, mimetype='image/png')
+    file_path = os.path.join(MAIN_DIR, 'assets', 'static', 'tags', 'icons', tier, path + '.webp')
+    return send_file(file_path, mimetype='image/webp')
 
 
 @bp.route("/get_tier_images", methods=['GET'])
