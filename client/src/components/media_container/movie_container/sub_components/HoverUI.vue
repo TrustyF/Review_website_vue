@@ -5,6 +5,7 @@ import crayon_img from '/ui/crayon.png'
 import external_img from '/ui/external_link.png'
 import arrow_img from '/ui/single_arrow.png'
 import youtube_img from '/ui/youtube.png'
+import {log_event} from "@/log_events.js";
 
 let props = defineProps({
   data: {
@@ -47,6 +48,7 @@ function push_to_details() {
 
 function open_link_new_tab(path) {
   window.open(path, '_blank');
+  log_event('open_external', 'nav', props.data.name)
 }
 
 </script>

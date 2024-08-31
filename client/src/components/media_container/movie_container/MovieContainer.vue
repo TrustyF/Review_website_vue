@@ -4,6 +4,7 @@ import Rating from "@/components/media_container/movie_container/sub_components/
 import {useRouter} from 'vue-router'
 import HoverUI from "@/components/media_container/movie_container/sub_components/HoverUI.vue";
 import DifficultyGauge from "@/components/media_container/movie_container/sub_components/DifficultyGauge.vue";
+import {log_event} from "@/log_events.js";
 
 let props = defineProps({
   data: {
@@ -101,6 +102,7 @@ function format_image_path(f_path, f_id) {
 function push_to_details() {
   selected_media.value = props['data']
   media_detail_pane_open.value = true
+  log_event('open_movie','int',selected_media.value.name)
 }
 
 function emit_finished_loading() {

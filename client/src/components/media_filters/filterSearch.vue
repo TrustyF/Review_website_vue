@@ -1,5 +1,6 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
+import {log_event} from "@/log_events.js";
 
 let props = defineProps(["auto_search"]);
 let emits = defineEmits(["filter"]);
@@ -18,6 +19,8 @@ function emit_filter(event) {
 
   emits('filter', event)
   last_emit = event
+
+  if (event !== '') log_event('search_use', 'int', event)
 }
 
 function throttle_search(text) {
