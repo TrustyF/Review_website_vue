@@ -4,6 +4,7 @@ import FilterDropdown from "@/components/media_filters/filterDropdown.vue";
 import FilterRange from "@/components/media_filters/filterRange.vue";
 import FilterRadio from "@/components/media_filters/filterRadio.vue";
 import axios from "axios";
+import {log_event} from "../../log_events.js";
 
 let props = defineProps({
   media_types: {
@@ -103,6 +104,7 @@ async function fetch_filters() {
 function emit_filter(title, event) {
   // console.log(title, event.value)
   emits('filter', [title, event])
+  log_event('filter_use','int',[title,event])
 }
 
 onMounted(() => {

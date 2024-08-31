@@ -1,10 +1,14 @@
 import {createRouter, createWebHistory} from "vue-router";
-import { getAnalytics, logEvent } from "firebase/analytics";
+import {getAnalytics, logEvent} from "firebase/analytics";
+import {log_event} from "@/log_events";
 
 const media_types = ['movie', 'tv', 'short', 'youtube', 'anime', 'manga', 'game']
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
+    scrollBehavior(to, from, savedPosition) {
+        return {top: 0}
+    },
     routes: [
         {
             path: "/all",
@@ -121,13 +125,6 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from) => {
-    setTimeout(()=>{
-        window.scroll(0, 0)
-    },1)
-
-    const analytics = getAnalytics();
-    logEvent(analytics, 'changed_page', {
-        page_title: to.name,
-    });
+    log_event('page_nav', 'nav', to.name)
 })
 export default router
