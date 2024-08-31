@@ -1,6 +1,7 @@
 import {createApp, ref, defineComponent, provide} from 'vue'
 import router from './router/index'
 import App from './App.vue'
+import {session_seed} from "@/session";
 
 import VueLazyLoad from "vue-lazyload";
 
@@ -18,7 +19,6 @@ const devMode = false
 
 const edit_mode = ref(false)
 
-const session_seed = Math.round(Math.random() * 100)
 const firebaseConfig = {
     apiKey: "AIzaSyAqILHpiewzx86gRIZo_gFPNGBKNGBMdLo",
     authDomain: "vue-review-website.firebaseapp.com",
