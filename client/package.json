@@ -13,7 +13,7 @@
   "dependencies": {
     "@mahdikhashan/vue3-click-outside": "^0.1.2",
     "axios": "^1.6.7",
-    "axios-retry": "^4.0.0",
+    "axios-retry": "^4.5.0",
     "body-scroll-lock": "^4.0.0-beta.0",
     "chart.js": "^3.9.1",
     "chartjs-plugin-trendline": "^2.1.0",
