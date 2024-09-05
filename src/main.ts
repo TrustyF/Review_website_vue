@@ -47,7 +47,7 @@ app.provide('tooltip_badge_data', ref({}))
 
 axiosRetry(axios, {
     retryDelay: ((count) => count * 500),
-    retries: 5,
+    retries: 3,
     onRetry: ((retryCount, error) => console.log('retry', retryCount, error.message, error.code)),
     retryCondition: ((error) => true)
 });

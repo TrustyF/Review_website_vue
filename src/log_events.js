@@ -5,14 +5,12 @@ import {geo_location, session_seed} from "@/session.js";
 // let local_url = 'http://192.168.1.11:5000'
 let server_url = ' https://analytics-trustyfox.pythonanywhere.com'
 
-export async function log_event(name, type, info) {
 
-    //dont log event if admin logged in
+export async function log_event(name, type, info = null) {
+
     if (await check_admin("https://review-trustyfox.pythonanywhere.com")) return
 
-    if (import.meta.env.DEV) console.log(name, {'info': String(info)}, session_seed)
-
-    const url = `${server_url}/event/add`
+    let url = `${server_url}/event/add`
 
     let params = {
         name: String(name),
@@ -20,11 +18,14 @@ export async function log_event(name, type, info) {
         type: String(type),
         info: String(info),
         uid: session_seed,
-        geo: geo_location,
+        geo: await geo_location,
     }
 
+    // console.log(params)
 
     axios.post(url, params)
-        .then()
+        .then(resp => {
+            console.log('successfully logged event')
+        })
         .catch(error => null)
 }
