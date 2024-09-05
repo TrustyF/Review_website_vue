@@ -22,6 +22,10 @@ let stat_media_type_colors = [
   '#690d87',
 ]
 
+function cleanArray(arr) {
+  return arr.every(item => item === undefined) ? [] : arr;
+}
+
 let rating_stats = computed(() => {
   if (stats.value === undefined) {
     return {
@@ -155,7 +159,7 @@ let runtime_stats = computed(() => {
       {
         type: 'line',
         label: 'Average rating',
-        data: filtered_avg_runtime,
+        data: cleanArray(filtered_avg_runtime),
         backgroundColor: [stat_media_type_colors[0]],
         borderColor: [stat_media_type_colors[0]],
         pointRadius: 0,
@@ -170,7 +174,7 @@ let runtime_stats = computed(() => {
       {
         type: 'line',
         label: 'Average public rating',
-        data: filtered_avg_pub_runtime,
+        data: cleanArray(filtered_avg_pub_runtime),
         backgroundColor: [stat_media_type_colors[3]],
         borderColor: [stat_media_type_colors[3]],
         pointRadius: 0,
