@@ -4,7 +4,7 @@ import FilterDropdown from "@/components/media_filters/filterDropdown.vue";
 import FilterRange from "@/components/media_filters/filterRange.vue";
 import FilterRadio from "@/components/media_filters/filterRadio.vue";
 import axios from "axios";
-import {log_event} from "../../log_events.js";
+import {log_event} from "/src/scripts/log_events";
 
 let props = defineProps({
   media_types: {

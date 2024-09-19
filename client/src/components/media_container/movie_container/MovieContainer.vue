@@ -4,7 +4,7 @@ import Rating from "@/components/media_container/movie_container/sub_components/
 import {useRouter} from 'vue-router'
 import HoverUI from "@/components/media_container/movie_container/sub_components/HoverUI.vue";
 import DifficultyGauge from "@/components/media_container/movie_container/sub_components/DifficultyGauge.vue";
-import {log_event} from "@/log_events.js";
+import {log_event} from "/src/scripts/log_events";
 
 let props = defineProps({
   data: {

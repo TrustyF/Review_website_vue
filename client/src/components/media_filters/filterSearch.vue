@@ -1,6 +1,6 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
-import {log_event} from "@/log_events.js";
+import {log_event} from "/src/scripts/log_events";
 
 let props = defineProps(["auto_search"]);
 let emits = defineEmits(["filter"]);

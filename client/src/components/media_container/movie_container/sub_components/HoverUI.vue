@@ -5,7 +5,7 @@ import crayon_img from '/ui/crayon.png'
 import external_img from '/ui/external_link.png'
 import arrow_img from '/ui/single_arrow.png'
 import youtube_img from '/ui/youtube.png'
-import {log_event} from "@/log_events.js";
+import {log_event} from "/src/scripts/log_events";
 
 let props = defineProps({
   data: {
