@@ -1,7 +1,7 @@
 import {createApp, ref, defineComponent, provide} from 'vue'
 import router from './router/index'
 import App from './App.vue'
-import {session_seed} from "@/session";
+import {session_seed} from "@/scripts/session";
 
 import VueLazyLoad from "vue-lazyload";
 
@@ -29,9 +29,7 @@ const firebaseConfig = {
     measurementId: "G-9X1XSGRPFG"
 };
 
-
 const firebase = initializeApp(firebaseConfig);
-const analytics = getAnalytics(firebase);
 
 const app = createApp(App)
 
