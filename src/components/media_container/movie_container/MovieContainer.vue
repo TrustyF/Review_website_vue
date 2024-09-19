@@ -149,7 +149,6 @@ function emit_finished_loading() {
 
 <style scoped>
 .movie_container_wrapper {
-  /*outline: 1px solid red;*/
   /*cursor: pointer;*/
   position: relative;
   display: flex;
@@ -174,6 +173,7 @@ function emit_finished_loading() {
 .poster {
   width: v-bind(poster_size [0] + 'px');
   height: v-bind(poster_size [1] + 'px');
+  /*outline: 1px solid red;*/
 
   cursor: pointer;
 
