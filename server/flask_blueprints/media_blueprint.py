@@ -620,8 +620,13 @@ def get_scroll_banner():
 
         return collage
 
+    def is_valid_media(entry):
+        media_type = entry.split('_')[1]
+        return media_type in ['movie', 'game', 'manga', 'tv']
+
     poster_images_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches")
     poster_paths = os.listdir(poster_images_path)
+    poster_paths = list(filter(is_valid_media, poster_paths))
     random.shuffle(poster_paths)
 
     posters = []
