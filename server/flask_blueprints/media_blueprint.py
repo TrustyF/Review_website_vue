@@ -2,7 +2,6 @@ import hashlib
 import json
 import os.path
 import time
-
 import requests
 import random
 from PIL import Image
@@ -14,6 +13,7 @@ from datetime import datetime, timedelta
 from math import ceil, floor
 from youtubesearchpython import VideosSearch
 from flask_blueprints.login_blueprint import requires_auth
+from concurrent.futures import ThreadPoolExecutor
 
 from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY, IGDB_CLIENT_ID, IGDB_CLIENT_SECRET
 from data_mapper.media_mapper import map_from_tmdb, map_from_mangadex, map_from_igdb, map_from_youtube
@@ -609,60 +609,43 @@ def search_extra_posters():
 
 @bp.route("/get_scroll_banner", methods=['GET'])
 def get_scroll_banner():
-    def make_collage(images, width, height):
-        collage = Image.new("RGB", (width * len(images), height), color=(255, 255, 255, 255))
-        for j, img in enumerate(images):
-            # width_percent = (height / float(img.size[1]))
-            # hsize = int((float(img.size[0]) * float(width_percent)))
-            # resized = img.resize((hsize, height), Image.Resampling.LANCZOS)
+    def resize_image(img, width, height):
+        # Resize the image to the target width and height
+        return img.resize((width, height), Image.Resampling.LANCZOS)
 
-            size = img.size
+    def make_collage(img_array, width, height):
+        collage = Image.new("RGB", (width * len(img_array), height), color=(255, 255, 255, 255))
 
-            left = (size[0] - width) / 2
-            right = (size[0] + width) / 2
+        with ThreadPoolExecutor() as executor:
+            resized_images = list(
+                executor.map(resize_image, img_array, [width] * len(img_array), [height] * len(img_array)))
 
-            top = (size[1] - height) / 2
-            bottom = (size[1] + height) / 2
-
-            resized = img.crop((left, top, right, bottom))
-            collage.paste(resized, (j * width, 0))
+        for j, img in enumerate(resized_images):
+            collage.paste(img, (j * width, 0))
 
         return collage
 
-    # get list of images
-    query = (db.session.query(Media).filter(
-        or_(Media.is_deleted == 0, Media.is_deleted == None)))  # noqa
-    query = query.filter(Media.media_type.in_(['movie', 'tv', 'anime', 'manga', 'game']))
-    query = query.order_by(func.rand(time.time()))
-    query = query.limit(50)
+    poster_images_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches")
+    poster_paths = os.listdir(poster_images_path)
+    random.shuffle(poster_paths)
 
-    all_entries = query.all()
-    # print(len(all_entries))
-    # aggregate posters
     posters = []
-    for i, x in enumerate(all_entries):
+    for i, poster in enumerate(poster_paths):
 
-        if len(posters) > 19:
+        if i > 10:
             break
 
-        path = os.path.join(MAIN_DIR, "assets", "poster_images_caches",
-                            f"{x.external_id}_{x.media_type}_{hashlib.shake_256(x.poster_path.encode('utf-8')).hexdigest(5)}.webp")
-
-        if os.path.exists(path):
-            posters.append(path)
+        posters.append(os.path.join(poster_images_path, poster))
 
     # print(len(posters))
     if len(posters) < 1:
         return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
 
     # make collage
-    file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches")
-    banner = make_collage([Image.open(os.path.join(file_path, x)) for x in posters], 500, 750)
-
-    # banner.show('test')
+    banner = make_collage([Image.open(i) for i in posters], 500, 750)
 
     mem_file = io.BytesIO()
-    banner.save(mem_file, 'webp', quality=10)
+    banner.save(mem_file, 'jpeg', quality=80)
     mem_file.seek(0)
 
     return send_file(mem_file, mimetype='image/webp')
