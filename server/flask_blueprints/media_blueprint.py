@@ -494,8 +494,6 @@ def get_image():
 
     file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches",
                              f"{media_id}_{media_type}_{poster_id}.webp")
-    # file_path_low = os.path.join(MAIN_DIR, "assets", "poster_images_caches",
-    #                              f"{media_id}_{media_type}_{poster_id}_220w330.jpg")
 
     # return saved file if exists
     if os.path.exists(file_path):
@@ -509,11 +507,8 @@ def get_image():
         response = requests.get(media_path)
 
         image = Image.open(io.BytesIO(response.content))
-        # resized = image.resize((min(220, image.size[0]), min(330, image.size[1])), Image.Resampling.LANCZOS)
 
-        image.save(file_path, "webp", optimize=True, quality=10)
-        # resized.save(file_path_low, "JPEG", optimize=True, quality=50)
-
+        image.save(file_path, "webp", quality=10)
 
     else:
         # if preview return without saving
@@ -642,7 +637,7 @@ def get_scroll_banner():
         return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
 
     # make collage
-    banner = make_collage([Image.open(i) for i in posters], 500, 750)
+    banner = make_collage([Image.open(i) for i in posters], int(500), int(750))
 
     mem_file = io.BytesIO()
     banner.save(mem_file, 'jpeg', quality=80)
