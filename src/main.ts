@@ -51,7 +51,7 @@ axiosRetry(axios, {
 });
 
 app.use(VueLazyLoad, {
-    preLoad: 1.5,
+    // preLoad: 1.5,
     lazyComponent: true,
 })
 app.directive('v-lazy')

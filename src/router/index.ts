@@ -125,6 +125,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from) => {
+    // track page changes
     log_event('page_nav', 'nav', to.name)
 })
 export default router
