@@ -8,7 +8,7 @@ let curr_api = server_url
 let project = 'trusty_corner'
 
 
-export async function log_event(name, type, info = null) {
+export async function log_event(name, type, info) {
 
     if (await check_admin("https://review-trustyfox.pythonanywhere.com")) return
 

@@ -2,6 +2,7 @@
 import {inject, onMounted, watch, ref, computed,getCurrentInstance} from "vue";
 import MovieContainer from '@/components/media_container/movie_container/MovieContainer.vue'
 import axios from "axios";
+import {log_event} from "/src/scripts/log_events.js";
 
 let props = defineProps({
   media_types: {
@@ -31,6 +32,10 @@ let props = defineProps({
   size_override: {
     type: Array(),
     default: [500, 750],
+  },
+  title: {
+    type: String,
+    default: null,
   },
 });
 let emits = defineEmits(["loaded"]);
@@ -82,13 +87,14 @@ async function get_media() {
 }
 
 onMounted(() => {
-  console.log('loaded banner')
   get_media()
+  log_event('anchor_in_view', 'scroll', props.title)
 })
 
 </script>
 
 <template>
+  <h1>{{title}}</h1>
   <div class="banner_wrapper">
     <div class="banner_fade"></div>
     <div class="scroll_container">
@@ -105,6 +111,9 @@ onMounted(() => {
 </template>
 
 <style scoped>
+h1 {
+  margin: 0 0 20px 0
+}
 .banner_wrapper {
   /*outline: 1px solid orange;*/
   /*border: 0.1em dotted #41404d;*/
@@ -130,12 +139,6 @@ onMounted(() => {
   padding: -20px 0 20px 0;
   /*white-space:nowrap;*/
   /*outline: 1px solid red;*/
-
-  /*-webkit-animation: fadein 1s; !* Safari, Chrome and Opera > 12.1 *!*/
-  /*-moz-animation: fadein 1s; !* Firefox < 16 *!*/
-  /*-ms-animation: fadein 1s; !* Internet Explorer *!*/
-  /*-o-animation: fadein 1s; !* Opera < 12.1 *!*/
-  /*animation: fadein 1s;*/
 }
 .scroll_content {
   -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
@@ -180,7 +183,10 @@ onMounted(() => {
 @media only screen and (max-width: 500px) {
   .scroll_container {
     gap: 10px;
-    height: 241.1px;
+    /*height: 250px;*/
+  }
+  .banner_wrapper {
+    height: calc(v-bind(container_height) * 0.85);
   }
 }
 

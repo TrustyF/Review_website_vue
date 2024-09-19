@@ -71,51 +71,30 @@ onMounted(() => {
 <template>
   <div class="banner_wrapper">
     <div class="banner_fade"></div>
-    <div class="fade_anim" v-show="img_loads >= 2">
-      <div class="scroll_content">
-        <img style="object-fit: contain;height: 100%;" @load="img_loads+=1"
-             :src="`${curr_api}/media/get_scroll_banner`">
-        <img style="object-fit: contain;height: 100%;" @load="img_loads+=1"
-             :src="`${curr_api}/media/get_scroll_banner`">
-      </div>
-    </div>
+    <img class="banner_img" @load="img_loads+=1"
+         :src="`${curr_api}/media/get_scroll_banner`">
   </div>
 </template>
 
 <style scoped>
 .banner_wrapper {
+  z-index: -1;
   position: absolute;
-  z-index: -5;
-  left: 0;
-  right: 0;
-  /*height: 170%;*/
+
+  left: 50%;
+  top: 60px;
+
+  transform: translate(-50%);
+
+  width: 100vw;
   height: 300px;
-  filter: opacity(50%);
-  /*outline: 5px greenyellow solid;*/
+  opacity: 0.5;
   overflow-x: hidden;
 }
-
-.scroll_content {
-  display: flex;
-  height: 100%;
-  width: fit-content;
-  animation: scroll_banner 150s linear infinite;
-  will-change: transform;
-}
-
-.fade_anim {
-  height: 100%;
-
-  -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
-  -moz-animation: fadein 1s; /* Firefox < 16 */
-  -ms-animation: fadein 1s; /* Internet Explorer */
-  -o-animation: fadein 1s; /* Opera < 12.1 */
-  animation: fadein 1s;
-}
-.gradient_loader {
+.banner_img {
   width: 100%;
   height: 100%;
-  opacity: 0.5;
+  object-fit: cover;
 }
 
 .banner_fade {
@@ -125,24 +104,10 @@ onMounted(() => {
   height: 100%;
   z-index: 5;
   position: absolute;
-  background: linear-gradient(to right, rgba(19, 18, 21, 0) 80%, rgba(19, 18, 21, 1) 100%),
-  linear-gradient(to left, rgba(19, 18, 21, 0) 80%, rgba(19, 18, 21, 1) 100%),
-  linear-gradient(to top, rgba(19, 18, 21, 0) 50%, rgba(19, 18, 21, 1) 95%),
-  linear-gradient(to bottom, rgba(19, 18, 21, 0) 50%, rgba(19, 18, 21, 1) 95%);
+  background:
+  linear-gradient(to bottom, transparent 60%, rgba(19, 18, 21, 1) 100%);
 }
 
 @media only screen and (max-width: 500px) {
-  /*.banner_wrapper {*/
-  /*  margin-top: 1px;*/
-  /*}*/
-  .scroll_content {
-    animation: scroll_banner 150s linear infinite;
-  }
-}
-
-@keyframes scroll_banner {
-  to {
-    transform: translate(calc(-50%));
-  }
 }
 </style>
