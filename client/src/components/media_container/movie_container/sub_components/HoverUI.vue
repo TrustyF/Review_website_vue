@@ -68,7 +68,7 @@ function open_link_new_tab(path) {
   </div>
 
   <div v-if="data['is_dropped']" class="dropped_banner_wrapper">
-    <div class="dropped_banner">Dropped</div>
+    <img src="/ui/stop.png" class="dropped_banner" alt="" title="dropped">
   </div>
 
   <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null">
@@ -158,26 +158,26 @@ function open_link_new_tab(path) {
 }
 
 .dropped_banner_wrapper {
-  pointer-events: none;
+  /*pointer-events: none;*/
   position: absolute;
-  left: 0;
+  right: 0;
   top: 0;
-  width: v-bind(poster_size [0] + 'px');
-  height: v-bind(poster_size [1] + 'px');
-  clip-path: inset(0% 0% 0% 0% round 5%);
+  padding: 3px;
+  /*clip-path: inset(0% 0% 0% 0% round 5%);*/
 }
 
 .dropped_banner {
-  pointer-events: none;
-  height: 30px;
-  background-color: #c41717;
-  transform: translate(v-bind(poster_size [0]/2 + 'px'), 0) rotate(45deg) translate(-10px, 30px);
+  /*pointer-events: none;*/
+  height: 15px;
+  width: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 0.8em;
-  text-shadow: 1px 1px 1px black, 1px 1px 3px black;
-  filter: drop-shadow(1px 1px 3px black);
+  border-radius: 50%;
+  /*opacity: 0.6;*/
+  /*filter: saturate(0);*/
+  /*filter: drop-shadow(0 0 3px black);*/
 }
 
 .content_rating {

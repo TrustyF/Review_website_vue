@@ -23,12 +23,12 @@ function parse_diff(index) {
 
 <template>
   <div class="gauge_wrapper" :title="`Difficulty : ${parse_diff(diff)}`" v-if="diff">
-    <div v-if="diff >= 3" class="bg_dot"></div>
-    <div v-if="diff >= 2" class="bg_dot"></div>
-    <div v-if="diff >= 2" class="bg_dot"></div>
-    <!--    <div v-if="diff >= 1" class="gauge_bar" style="background-color: #c0392b"></div>-->
-    <!--    <div v-if="diff >= 1" class="gauge_bar" style="background-color: #f1c40f"></div>-->
-    <!--    <div v-if="diff >= 1" class="gauge_bar" style="background-color: #1abc60"></div>-->
+<!--    <div v-if="diff >= 3" class="bg_dot"></div>-->
+<!--    <div v-if="diff >= 2" class="bg_dot"></div>-->
+<!--    <div v-if="diff >= 2" class="bg_dot"></div>-->
+        <div v-if="diff === 3" class="gauge_bar" style="background-color: #e64432"></div>
+        <div v-if="diff === 2" class="gauge_bar" style="background-color: #f1c40f"></div>
+<!--        <div v-if="diff >= 2" class="gauge_bar" style="background-color: #1abc60"></div>-->
   </div>
 </template>
 
@@ -63,10 +63,11 @@ function parse_diff(index) {
 }
 
 .gauge_bar {
-  position: absolute;
-  height: 100%;
-  width: 100%;
+  /*position: absolute;*/
+  height: 5px;
+  width: 5px;
   border-radius: 50%;
+  opacity: 0.7;
   /*background:linear-gradient(to bottom,#c0392b 0%, #f1c40f 50%, #1abc9c 100%);*/
 }
 

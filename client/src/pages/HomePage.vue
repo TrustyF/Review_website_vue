@@ -172,13 +172,14 @@ const genre_number_list = [
   min-height: 340px;
 }
 .whats_this {
-  color: #808080;
-  filter: drop-shadow(2px 2px 2px black);
+  color: #969696;
+  filter: drop-shadow(2px 2px 2px #464646);
   text-decoration: none;
   border: 1px solid #5b5b5b;
   font-size: 1em;
   border-radius: 8px;
   padding: 5px;
+  margin-top: 5px;
   transition: 100ms ease;
   backdrop-filter: blur(5px);
 }

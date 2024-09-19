@@ -71,7 +71,7 @@ onMounted(() => {
 <template>
   <div class="banner_wrapper">
     <div class="banner_fade"></div>
-    <img class="banner_img" @load="img_loads+=1"
+    <img class="banner_img fade_anim" v-show="img_loads>=1" @load="img_loads+=1"
          :src="`${curr_api}/media/get_scroll_banner`">
   </div>
 </template>
@@ -88,13 +88,14 @@ onMounted(() => {
 
   width: 100vw;
   height: 300px;
-  opacity: 0.5;
   overflow-x: hidden;
+  opacity: 0.25;
 }
 .banner_img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /*filter: blur(5px);*/
 }
 
 .banner_fade {
@@ -106,6 +107,16 @@ onMounted(() => {
   position: absolute;
   background:
   linear-gradient(to bottom, transparent 60%, rgba(19, 18, 21, 1) 100%);
+}
+
+.fade_anim {
+  height: 100%;
+
+  -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 1s; /* Firefox < 16 */
+  -ms-animation: fadein 1s; /* Internet Explorer */
+  -o-animation: fadein 1s; /* Opera < 12.1 */
+  animation: fadein 1s;
 }
 
 @media only screen and (max-width: 500px) {

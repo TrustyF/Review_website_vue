@@ -103,7 +103,7 @@ onMounted(() => {
             :data="med"
             :scale_mul="!is_mobile ? 0.3:0.25"
             :size_override="size_override"
-            :lazy_poster="false"
+            :lazy_poster="true"
         ></movie-container>
       </div>
     </div>
