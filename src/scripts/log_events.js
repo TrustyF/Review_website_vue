@@ -4,7 +4,7 @@ import {geo_location, session_seed} from "/src/scripts/session.js";
 
 let local_url = 'http://192.168.1.11:5000'
 let server_url = 'https://analytics-trustyfox.pythonanywhere.com'
-let curr_api = server_url
+let curr_api = local_url
 let project = 'trusty_corner'
 
 
@@ -21,6 +21,7 @@ export async function log_event(name, type, info) {
         info: String(info),
         uid: session_seed,
         geo: await geo_location,
+        timestamp: Date.now()
     }
 
     if (import.meta.env.DEV && curr_api !== local_url) {
@@ -45,6 +46,7 @@ export async function ping_user_leave() {
         source: project,
         uid: session_seed,
         geo: await geo_location,
+        timestamp: Date.now()
     }
 
     if (import.meta.env.DEV && curr_api !== local_url) {

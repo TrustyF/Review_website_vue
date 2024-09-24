@@ -37,6 +37,10 @@ let props = defineProps({
     type: String,
     default: null,
   },
+  defaultInView: {
+    type: Boolean,
+    default: false,
+  },
 });
 let emits = defineEmits(["loaded"]);
 const curr_api = inject("curr_api");
@@ -88,7 +92,7 @@ async function get_media() {
 
 onMounted(() => {
   get_media()
-  log_event('anchor_in_view', 'scroll', props.title)
+  if (!props.defaultInView) log_event('anchor_in_view', 'scroll', props.title)
 })
 
 </script>
