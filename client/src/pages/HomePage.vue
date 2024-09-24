@@ -51,6 +51,7 @@ const genre_number_list = [
       <media-banner :ratings=[7,10]
                     title="Recommended movies"
                     :media_types="['movie']"
+                    :default-in-view="true"
       ></media-banner>
     </lazy-component>
 
@@ -58,6 +59,7 @@ const genre_number_list = [
       <media-banner :order="'date_added'"
                     title="Watched recently"
                     :media_types="['movie','tv']"
+                    :default-in-view="true"
       ></media-banner>
     </lazy-component>
 
@@ -65,6 +67,7 @@ const genre_number_list = [
       <media-banner :order="'release_date'"
                     title="Latest releases"
                     :media_types="['movie','tv']"
+                    :default-in-view="true"
       ></media-banner>
     </lazy-component>
 
@@ -73,6 +76,7 @@ const genre_number_list = [
                     title="TV"
                     :media_types="['Tv']"
                     :size_override="[512, 720]"
+                    :default-in-view="true"
       ></media-banner>
     </lazy-component>
 
