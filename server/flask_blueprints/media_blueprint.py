@@ -123,6 +123,7 @@ def get():
 
     user_rating_sort_override = data.get('user_rating_sort_override')
     random_sort_override = data.get('random_sort_override')
+    special = data.get('special')
 
     # setup query
     query = (db.session.query(Media).filter(
@@ -223,6 +224,11 @@ def get():
                          Media.release_date <= datetime(day=1, month=1, year=int(release_dates[1])))
         if runtimes:
             q = q.filter(Media.runtime >= int(runtimes[0]), Media.runtime <= int(runtimes[1]))
+
+        if special:
+            match special:
+                case 'controversial':
+                    q = q.filter(func.abs(Media.user_rating - Media.public_rating) > 4)
 
         return q, match
 
