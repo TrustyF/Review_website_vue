@@ -17,7 +17,7 @@ const curr_api = inject("curr_api");
       <img :src="blue_star" alt="gold_star" class="gold_star">
     </div>
 
-    <div class="rating_box" v-if="data['scaled_public_rating']">
+    <div class="rating_box" :title="`Unscaled: ${Math.round(data['public_rating']*10)/10}`" v-if="data['scaled_public_rating']">
       <h2 class="rating"> {{ Math.round(data['scaled_public_rating'] * 10) / 10 }}</h2>
       <img :src="gold_star" alt="gold_star" class="gold_star">
     </div>
@@ -36,6 +36,7 @@ const curr_api = inject("curr_api");
 <style scoped>
 
 .rating_circle {
+  user-select: none;
   height: calc(v-bind(max_size) * 0.2px)
 }
 
@@ -65,6 +66,7 @@ const curr_api = inject("curr_api");
 }
 
 .rating_box {
+  user-select: none;
   border-radius: 5px;
 
   box-shadow: 1px 1px 1px #000000, inset 1px 1px 0 #424052;

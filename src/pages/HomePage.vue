@@ -72,6 +72,14 @@ const genre_number_list = [
     </lazy-component>
 
     <lazy-component class="banner">
+      <media-banner title="Controversial"
+                    special="controversial"
+                    :media_types="['movie','tv','game','manga']"
+                    :default-in-view="true"
+      ></media-banner>
+    </lazy-component>
+
+    <lazy-component class="banner">
       <media-banner :ratings=[6,10]
                     title="TV"
                     :media_types="['Tv']"
@@ -96,8 +104,7 @@ const genre_number_list = [
     </lazy-component>
 
     <lazy-component class="banner">
-      <media-banner :ratings=[7,10]
-                    title="Read recently"
+      <media-banner title="Read recently"
                     :order="'date_added'"
                     :media_types="['manga']"
                     :size_override="[512, 720]"></media-banner>
@@ -111,45 +118,17 @@ const genre_number_list = [
     </lazy-component>
 
     <lazy-component class="banner">
-      <media-banner :ratings=[7,10]
-                    title="Played recently"
+      <media-banner title="Played recently"
                     :order="'date_added'"
                     :media_types="['game']"
                     :size_override="[528, 704]"></media-banner>
     </lazy-component>
 
     <lazy-component class="banner">
-      <media-banner :ratings=[7,10]
-                    title="Youtube shows"
-                    :media_types="['youtube']"
-                    :tier_lists="['tv-show']"
-                    :limit="10"
-                    :size_override="[910, 512]"></media-banner>
-    </lazy-component>
-
-    <lazy-component class="banner">
-      <media-banner :ratings=[7,10]
-                    title="Youtube documentaries"
-                    :media_types="['youtube']"
-                    :tier_lists="['documentary']"
-                    :limit="10"
-                    :size_override="[910, 512]"></media-banner>
-    </lazy-component>
-
-    <lazy-component class="banner">
-      <media-banner :ratings=[7,10]
-                    title="Youtube essays"
-                    :media_types="['youtube']"
-                    :tier_lists="['essay']"
-                    :limit="10"
-                    :size_override="[910, 512]"></media-banner>
-    </lazy-component>
-
-    <lazy-component class="banner">
       <media-banner :ratings=[1,4]
+                    :public_ratings="[1,6]"
                     title="Wall of shame"
-                    :media_types="['movie','tv']"
-                    :limit="20"></media-banner>
+                    :media_types="['movie','tv']"></media-banner>
     </lazy-component>
 
     <credits-footer></credits-footer>
@@ -175,6 +154,7 @@ const genre_number_list = [
   /*outline: 1px solid red;*/
   min-height: 340px;
 }
+
 .whats_this {
   color: #969696;
   filter: drop-shadow(2px 2px 2px #464646);
@@ -192,6 +172,7 @@ const genre_number_list = [
   background-color: #969696;
   color: black;
 }
+
 .top_banner {
   /*outline: 1px solid red;*/
   display: flex;
