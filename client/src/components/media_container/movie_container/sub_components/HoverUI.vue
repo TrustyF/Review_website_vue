@@ -29,6 +29,12 @@ let add_pane_open = inject('add_pane_open')
 let selected_media = inject('selected_media')
 const media_detail_pane_open = inject("media_detail_pane_open");
 
+let dropped_badge = {
+  image_path: "103201.webp",
+  name: "Dropped",
+  overview: "Didn't care enough to finish it",
+  tier: "red"
+}
 
 const curr_api = inject("curr_api");
 let vis_container_content_rating = inject('vis_container_content_rating')
@@ -51,29 +57,40 @@ function open_link_new_tab(path) {
   log_event('open_external', 'nav', props.data.name)
 }
 
+function sort_tags(arr) {
+  // sort tags by color
+  const priority = ['gold', 'green', 'purple', 'silver', 'red']
+  arr.sort((a, b) => {
+    const fi = priority.indexOf(a.tier)
+    const si = priority.indexOf(b.tier)
+    return fi - si
+  })
+
+  return arr
+}
+
 </script>
 
 <template>
   <div class="poster_gradient"></div>
-
-  <!--  <div class="blackout_hover"></div>-->
 
   <div class="content_rating" v-if="vis_container_content_rating && data['content_rating']!==undefined">
     <h1 style="font-size: 0.8em;margin-top: 2px">+</h1>
     <h2 style="color: white">{{ data['content_rating']['age'] }}</h2>
   </div>
 
-  <div class="poster_overflow">
-<!--    <img v-if="data['tags'] && data['tags'].length > 0" class="tag_indicator" :src="arrow_img">-->
-  </div>
-
-  <div v-if="data['is_dropped']" class="dropped_banner_wrapper">
-    <img src="/ui/stop.png" class="dropped_banner" alt="" title="dropped">
-  </div>
+  <!--  <div v-if="data['is_dropped']" class="dropped_banner_wrapper">-->
+  <!--    <img src="/ui/stop.png" class="dropped_banner" alt="" title="dropped">-->
+  <!--  </div>-->
 
   <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null">
-    <div v-for="tag in data['tags']" :key="tag['id']" style="pointer-events: auto;width: fit-content">
+
+    <div v-for="tag in sort_tags(data['tags'])" :key="tag['id']" style="pointer-events: auto;width: fit-content">
       <badge :data="tag" :min_size="min_size" :show_title="false"></badge>
+    </div>
+
+    <div style="pointer-events: auto;width: fit-content">
+      <badge v-if="data['is_dropped']" :data="dropped_badge" :min_size="min_size" :show_title="false"></badge>
     </div>
   </div>
 
@@ -116,45 +133,6 @@ function open_link_new_tab(path) {
   top: 0;
   width: v-bind(poster_size [0] + 'px');
   height: v-bind(poster_size [1] + 'px');
-}
-
-.blackout_hover {
-  pointer-events: none;
-  content: "";
-  position: absolute;
-  background: rgba(0, 0, 0, 0.2);
-  left: 0;
-  top: 0;
-  width: v-bind(poster_size [0] + 'px');
-  height: v-bind(poster_size [1] + 'px');
-
-  visibility: hidden;
-  opacity: 0;
-  transition: 400ms;
-  transition-delay: 700ms;
-}
-
-.tag_indicator {
-  position: absolute;
-  margin: 5px;
-  width: calc(v-bind(min_size) * 0.004em);
-  height: calc(v-bind(min_size) * 0.004em);
-  padding: 2px;
-  border-radius: 4px;
-
-  left: 0;
-  top: 0;
-
-  background-color: #d8dbd3;
-
-  filter: invert();
-
-  transform: translate(0);
-
-  visibility: visible;
-  opacity: 100%;
-  transition: 600ms;
-  transition-delay: 700ms;
 }
 
 .dropped_banner_wrapper {

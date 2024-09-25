@@ -1,5 +1,5 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed,getCurrentInstance} from "vue";
+import {inject, onMounted, watch, ref, computed, getCurrentInstance} from "vue";
 import MovieContainer from '@/components/media_container/movie_container/MovieContainer.vue'
 import axios from "axios";
 import {log_event} from "/src/scripts/log_events.js";
@@ -17,9 +17,13 @@ let props = defineProps({
     type: Array,
     default: null,
   },
+  public_ratings: {
+    type: Array,
+    default: null,
+  },
   limit: {
     type: Number,
-    default: 20,
+    default: 10,
   },
   tier_lists: {
     type: Array,
@@ -32,6 +36,10 @@ let props = defineProps({
   size_override: {
     type: Array(),
     default: [500, 750],
+  },
+  special: {
+    type: String,
+    default: null,
   },
   title: {
     type: String,
@@ -48,7 +56,9 @@ const session_seed = inject("session_seed");
 const is_mobile = inject("is_mobile");
 const rangeOfNumbers = (a, b) => [...Array(b + 1).keys()].slice(a)
 
-let media = ref()
+let media = ref([])
+let seed = ref(session_seed)
+let page = ref(0)
 
 const container_height = computed(() => `${(props.size_override[1] * 0.3) + 80}px`)
 
@@ -57,15 +67,17 @@ async function get_media() {
   const url = new URL(`${curr_api}/media/get`)
   const params = {
     'limit': props.limit,
-    'page': 0,
+    'page': page.value,
     'types': props.media_types,
     'genres': props.genres,
     'order': props.order,
     'ratings': props.ratings,
+    'public_ratings': props.public_ratings,
     'content_ratings': rangeOfNumbers(20, 39).filter((elem, i) => ![33, 34].includes(elem)),
     'tier_lists': props.tier_lists,
-    'session_seed': session_seed,
+    'session_seed': seed.value,
     'user_rating_sort_override': true,
+    'special': props.special,
   }
 
   let result = await axios(
@@ -78,28 +90,35 @@ async function get_media() {
         data: JSON.stringify(params)
       })
 
-  media.value = result.data['media']
-  // sort tags by color
-  const priority = ['gold', 'green', 'purple', 'silver', 'red']
-  media.value.forEach((entry, i) => {
-    media.value[i].tags.sort((a, b) => {
-      const fi = priority.indexOf(a.tier)
-      const si = priority.indexOf(b.tier)
-      return fi - si
-    })
-  })
+  return result.data['media']
+}
+
+async function set_media() {
+  media.value = await get_media()
+}
+
+async function refresh() {
+  // seed.value = Math.round(Math.random() * 10000000)
+  page.value += 1
+  await set_media()
+
+  if (media.value.length < 1){
+    page.value = 0
+    await set_media()
+  }
 }
 
 onMounted(() => {
-  get_media()
+  set_media()
   if (!props.defaultInView) log_event('anchor_in_view', 'scroll', props.title)
 })
 
 </script>
 
 <template>
-  <h1>{{title}}</h1>
+  <h1>{{ title }}</h1>
   <div class="banner_wrapper">
+    <img src="/ui/rewind.png" @click="refresh" :class="`refresh ${is_mobile ? 'visible':''}`" alt="">
     <div class="banner_fade"></div>
     <div class="scroll_container">
       <div class="scroll_content" v-for="med in media" :key="med.id">
@@ -118,6 +137,7 @@ onMounted(() => {
 h1 {
   margin: 0 0 20px 0
 }
+
 .banner_wrapper {
   /*outline: 1px solid orange;*/
   /*border: 0.1em dotted #41404d;*/
@@ -129,7 +149,37 @@ h1 {
   /*outline: 1px solid red;*/
   height: v-bind(container_height);
 }
+.refresh {
+  border: 0.1rem solid #1a1a1a;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  height: 15px;
+  padding: 10px;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 25%;
+  z-index: 1000;
+  cursor: pointer;
 
+  filter: brightness(3);
+  background-color: #0b0a0d;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: 200ms ease;
+  transition-delay: 1000ms;
+}
+.visible {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0ms;
+}
+.banner_wrapper:hover .refresh {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0ms;
+}
 .scroll_container {
   position: absolute;
   width: 100%;
@@ -144,6 +194,7 @@ h1 {
   /*white-space:nowrap;*/
   /*outline: 1px solid red;*/
 }
+
 .scroll_content {
   -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 1s; /* Firefox < 16 */
@@ -189,6 +240,7 @@ h1 {
     gap: 10px;
     /*height: 250px;*/
   }
+
   .banner_wrapper {
     height: calc(v-bind(container_height) * 0.85);
   }

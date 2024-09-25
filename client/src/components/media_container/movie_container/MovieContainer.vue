@@ -102,7 +102,7 @@ function format_image_path(f_path, f_id) {
 function push_to_details() {
   selected_media.value = props['data']
   media_detail_pane_open.value = true
-  log_event('open_movie','int',selected_media.value.name)
+  log_event('open_movie', 'int', selected_media.value.name)
 }
 
 function emit_finished_loading() {
@@ -138,7 +138,8 @@ function emit_finished_loading() {
         <h2 class="date" v-if="data['runtime']>0">{{ convert_seconds_to_time(data['runtime']) }}</h2>
         <h2 class="date" v-if="data['seasons']>0">•</h2>
         <h2 class="date" v-if="data['seasons']>0">{{ data['seasons'] + " " + 's' }} </h2>
-        <h2 class="date" v-if="data['episodes']>0 && data['episodes']>0">{{ Math.round(data['episodes']/data['seasons']) + ' ep' }} </h2>
+        <h2 class="date" v-if="data['episodes']>0 && data['episodes']>0">
+          {{ Math.round(data['episodes'] / data['seasons']) + ' ep' }} </h2>
         <!--        <h2 class="date" v-if="data['content_rating'] && data['content_rating'].name">•</h2>-->
         <!--        <h2 class="date" v-if="data['content_rating'] && data['content_rating'].name">-->
         <!--          {{ data['content_rating'].name }}</h2>-->
@@ -223,6 +224,7 @@ function emit_finished_loading() {
 }
 
 .secondary_info {
+  user-select: none;
   display: flex;
   gap: 5px;
 }
