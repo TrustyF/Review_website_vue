@@ -228,10 +228,12 @@ def get():
 
         if rating_spacing:
             if rating_spacing < 0:
-                q = q.filter(func.abs(Media.user_rating - Media.public_rating) < abs(rating_spacing))
+                q = q.filter(func.abs(Media.user_rating - Media.public_rating) >= rating_spacing and
+                             Media.user_rating >= Media.public_rating)
 
             if rating_spacing > 0:
-                q = q.filter(func.abs(Media.user_rating - Media.public_rating) > abs(rating_spacing))
+                q = q.filter(func.abs(Media.user_rating - Media.public_rating) >= rating_spacing and
+                             Media.user_rating <= Media.public_rating)
 
         return q, match
 
