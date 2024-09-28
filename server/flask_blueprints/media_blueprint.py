@@ -123,7 +123,8 @@ def get():
 
     user_rating_sort_override = data.get('user_rating_sort_override')
     random_sort_override = data.get('random_sort_override')
-    special = data.get('special')
+
+    rating_spacing = data.get('rating_spacing')
 
     # setup query
     query = (db.session.query(Media).filter(
@@ -225,10 +226,8 @@ def get():
         if runtimes:
             q = q.filter(Media.runtime >= int(runtimes[0]), Media.runtime <= int(runtimes[1]))
 
-        if special:
-            match special:
-                case 'controversial':
-                    q = q.filter(func.abs(Media.user_rating - Media.public_rating) > 4)
+        if rating_spacing:
+            q = q.filter(func.abs(Media.user_rating - Media.public_rating) > rating_spacing)
 
         return q, match
 
