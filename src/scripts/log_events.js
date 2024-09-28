@@ -2,7 +2,7 @@ import axios from "axios";
 import {check_admin} from "@/firebase_auth.js";
 import {geo_location, session_seed} from "/src/scripts/session.js";
 
-let local_url = 'http://192.168.1.11:5000'
+let local_url = 'http://127.0.0.1:8080'
 let server_url = 'https://analytics-trustyfox.pythonanywhere.com'
 let curr_api = server_url
 let project = 'trusty_corner'

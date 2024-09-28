@@ -14,8 +14,8 @@ import axios from 'axios';
 const local_api = "http://192.168.1.11:5000"
 const server_api = "https://review-trustyfox.pythonanywhere.com"
 
-// const devMode = import.meta.env.DEV
-const devMode = false
+const devMode = import.meta.env.DEV
+// const devMode = false
 
 const edit_mode = ref(false)
 

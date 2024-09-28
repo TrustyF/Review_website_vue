@@ -37,8 +37,8 @@ let props = defineProps({
     type: Array(),
     default: [500, 750],
   },
-  special: {
-    type: String,
+  rating_spacing: {
+    type: Number,
     default: null,
   },
   title: {
@@ -77,7 +77,7 @@ async function get_media() {
     'tier_lists': props.tier_lists,
     'session_seed': seed.value,
     'user_rating_sort_override': true,
-    'special': props.special,
+    'rating_spacing': props.rating_spacing,
   }
 
   let result = await axios(
