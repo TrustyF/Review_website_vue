@@ -227,7 +227,11 @@ def get():
             q = q.filter(Media.runtime >= int(runtimes[0]), Media.runtime <= int(runtimes[1]))
 
         if rating_spacing:
-            q = q.filter(func.abs(Media.user_rating - Media.public_rating) > rating_spacing)
+            if rating_spacing < 0:
+                q = q.filter(func.abs(Media.user_rating - Media.public_rating) < abs(rating_spacing))
+
+            if rating_spacing > 0:
+                q = q.filter(func.abs(Media.user_rating - Media.public_rating) > abs(rating_spacing))
 
         return q, match
 
