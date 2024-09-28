@@ -120,12 +120,43 @@ let date_stats = computed(() => {
       },
       {
         type: 'bar',
-        label: 'Release date',
+        label: 'Amount of movies',
         data: dates,
         backgroundColor: [stat_media_type_colors[1]],
         yAxisID: 'y',
         barPercentage: 1,
         categoryPercentage: 1,
+      },
+
+    ],
+  }
+})
+let added_date_stats = computed(() => {
+  if (stats.value === undefined) {
+    return {
+      labels: [],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: []
+        }]
+    }
+  }
+
+  let dates = Object.values(stats.value['added_dates'][stat_media_type.value]).map((e) => e.length)
+
+  // check any values are left
+
+  return {
+    labels: Object.keys(stats.value['added_dates'][stat_media_type.value]),
+    datasets: [
+      {
+        type: 'bar',
+        label: 'Movies added',
+        data: dates,
+        backgroundColor: [stat_media_type_colors[3]],
+        yAxisID: 'y',
+        barPercentage: 1,
       },
 
     ],
@@ -187,7 +218,7 @@ let runtime_stats = computed(() => {
         }
       },
       {
-        label: 'Runtime (minutes)',
+        label: 'Amount of movies',
         data: Object.values(stats.value['runtimes'][stat_media_type.value]).map((e) => e.length),
         backgroundColor: [stat_media_type_colors[2]],
         barPercentage: 1,
@@ -243,7 +274,7 @@ const release_date_stats_options = ref({
   plugins: {
     title: {
       display: true,
-      text: 'Release distribution',
+      text: 'Release date distribution',
       // position:'top',
       font: {
         weight: 'normal',
@@ -280,6 +311,47 @@ const release_date_stats_options = ref({
       min: 1,
       max: 10,
     }
+  },
+
+});
+const added_date_stats_options = ref({
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    title: {
+      display: true,
+      text: 'Added date distribution',
+      // position:'top',
+      font: {
+        weight: 'normal',
+        color: 'white',
+      }
+    },
+    legend: {
+      position: 'top',
+      display: true,
+      labels: {
+        color: "white",
+      },
+    },
+    tooltip: {
+      callbacks: {
+        footer: ((elems) => {
+          return stats.value['release_dates'][stat_media_type.value][elems[0].label].slice(0, 5)
+        }),
+      }
+    }
+  },
+  scales: {
+    x: {
+      display: true,
+    },
+    y: {
+      display: true,
+      position:'right',
+      // min: 1,
+      // max: 100,
+    },
   },
 
 });
@@ -336,7 +408,7 @@ async function get_stats() {
 
   const url = new URL(`${curr_api}/media/get_stats`)
 
-  let result = await axios(
+  stats.value = await axios(
       {
         method: 'GET',
         url: url,
@@ -345,7 +417,7 @@ async function get_stats() {
         console.log('get_stats', error.response)
         return []
       })
-  stats.value = result
+
   // console.log(result)
   // console.log('result', Object.values(stats.value['avg_rating_release_date'][stat_media_type.value]).map((e) => {
   //   return (e.reduce((a, b) => a + b, 0))
@@ -387,6 +459,9 @@ onMounted(() => {
     </div>
     <div class="chart">
       <bar-chart :chartData="date_stats" :options="release_date_stats_options"></bar-chart>
+    </div>
+    <div class="chart">
+      <bar-chart :chartData="added_date_stats" :options="added_date_stats_options"></bar-chart>
     </div>
     <div class="chart">
       <bar-chart :chartData="runtime_stats" :options="runtime_stats_options"></bar-chart>
