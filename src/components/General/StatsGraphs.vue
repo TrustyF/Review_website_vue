@@ -337,7 +337,7 @@ const added_date_stats_options = ref({
     tooltip: {
       callbacks: {
         footer: ((elems) => {
-          return stats.value['release_dates'][stat_media_type.value][elems[0].label].slice(0, 5)
+          return stats.value['added_dates'][stat_media_type.value][elems[0].label].slice(0, 5)
         }),
       }
     }
