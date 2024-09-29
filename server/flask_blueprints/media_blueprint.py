@@ -877,6 +877,22 @@ def get_stats():
         .all()
     )
 
+    avg_rating_radded_date_count = (
+        db.session.query(Media.user_rating, Media.media_type,
+                         func.extract('year', Media.created_at).label('added_year'))
+        .filter(Media.is_deleted.is_(None))
+        .group_by(Media.user_rating, Media.media_type, 'added_year')
+        .all()
+    )
+
+    avg_pub_rating_added_date_count = (
+        db.session.query(Media.public_rating, Media.media_type,
+                         func.extract('year', Media.created_at).label('added_year'))
+        .filter(Media.is_deleted.is_(None))
+        .group_by(Media.public_rating, Media.media_type, 'added_year')
+        .all()
+    )
+
     # print(added_date_count)
 
     stats = {
@@ -888,7 +904,9 @@ def get_stats():
         'runtimes': construct_runtime_list(runtime_count),
         'avg_rating_runtimes': construct_runtime_list(avg_rating_runtime_count),
         'avg_pub_rating_runtimes': construct_runtime_list(avg_pub_rating_runtime_count),
-        'added_dates': construct_release_date_list(added_date_count),
+        'added_date': construct_release_date_list(added_date_count),
+        'avg_rating_added_date': construct_release_date_list(avg_rating_radded_date_count),
+        'avg_pub_rating_added_date': construct_release_date_list(avg_pub_rating_added_date_count),
     }
 
     return stats, 200
