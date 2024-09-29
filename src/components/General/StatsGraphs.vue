@@ -15,10 +15,10 @@ let stats = ref()
 let stat_media_type = ref("movie")
 let stat_media_type_colors = [
   '#DA073B',
-  '#755800',
+  '#664d00',
   '#004139',
   '#0D6A87',
-  '#07475A',
+  '#053240',
   '#690d87',
 ]
 
@@ -132,31 +132,70 @@ let date_stats = computed(() => {
   }
 })
 let added_date_stats = computed(() => {
-  if (stats.value === undefined) {
-    return {
-      labels: [],
-      datasets: [
-        {
-          data: [],
-          backgroundColor: []
-        }]
-    }
-  }
-
-  let dates = Object.values(stats.value['added_dates'][stat_media_type.value]).map((e) => e.length)
-
-  // check any values are left
-
-  return {
-    labels: Object.keys(stats.value['added_dates'][stat_media_type.value]),
+  let empty = {
+    labels: [],
     datasets: [
       {
-        type: 'bar',
-        label: 'Movies added',
-        data: dates,
+        data: [],
+        backgroundColor: []
+      }]
+  }
+  if (stats.value === undefined) {
+    return empty
+  }
+
+  let filtered_avg_rating = Object.values(stats.value['avg_rating_added_date'][stat_media_type.value]).map((e) => {
+    if (e.length >= 1) return e.reduce((a, b) => a + b, 0) / e.length
+    else return undefined
+  })
+
+  let filtered_avg_pub_rating = Object.values(stats.value['avg_pub_rating_added_date'][stat_media_type.value]).map((e) => {
+    if (e.length >= 1) return (e.reduce((a, b) => a + b, 0) / e.length)
+    else return undefined
+  })
+
+  let dates = Object.values(stats.value['added_date'][stat_media_type.value]).map((e) => e.length)
+
+  return {
+    labels: Object.keys(stats.value['added_date'][stat_media_type.value]),
+    datasets: [
+      {
+        type: 'line',
+        label: 'Average rating',
+        data: !(filtered_avg_rating.filter(item => item !== undefined).length < 2) ? filtered_avg_rating : [],
+        backgroundColor: [stat_media_type_colors[0]],
+        borderColor: [stat_media_type_colors[0]],
+        pointRadius: 0,
+        cubicInterpolationMode: 'monotone',
+        spanGaps: false,
+        yAxisID: 'y1',
+        trendlineLinear: {
+          lineStyle: "dotted",
+          width: 1
+        }
+      },
+      {
+        type: 'line',
+        label: 'Average public rating',
+        data: !(filtered_avg_pub_rating.filter(item => item !== undefined).length < 2) ? filtered_avg_pub_rating : [],
         backgroundColor: [stat_media_type_colors[3]],
+        borderColor: [stat_media_type_colors[3]],
+        pointRadius: 0,
+        cubicInterpolationMode: 'monotone',
+        spanGaps: false,
+        yAxisID: 'y1',
+        trendlineLinear: {
+          lineStyle: "dotted",
+          width: 1
+        }
+      },
+      {
+        type: 'bar',
+        label: 'Amount of movies',
+        data: dates,
+        backgroundColor: [stat_media_type_colors[4]],
         yAxisID: 'y',
-        barPercentage: 1,
+        categoryPercentage: 1,
       },
 
     ],
@@ -274,7 +313,7 @@ const release_date_stats_options = ref({
   plugins: {
     title: {
       display: true,
-      text: 'Release date distribution',
+      text: 'Date released distribution',
       // position:'top',
       font: {
         weight: 'normal',
@@ -301,7 +340,7 @@ const release_date_stats_options = ref({
       display: true,
     },
     y: {
-      display: false,
+      display: true,
       // min: 1,
       // max: 100,
     },
@@ -320,7 +359,7 @@ const added_date_stats_options = ref({
   plugins: {
     title: {
       display: true,
-      text: 'Added date distribution',
+      text: 'Date rated distribution',
       // position:'top',
       font: {
         weight: 'normal',
@@ -337,7 +376,7 @@ const added_date_stats_options = ref({
     tooltip: {
       callbacks: {
         footer: ((elems) => {
-          return stats.value['added_dates'][stat_media_type.value][elems[0].label].slice(0, 5)
+          return stats.value['added_date'][stat_media_type.value][elems[0].label].slice(0, 5)
         }),
       }
     }
@@ -348,10 +387,15 @@ const added_date_stats_options = ref({
     },
     y: {
       display: true,
-      position:'right',
       // min: 1,
       // max: 100,
     },
+    y1: {
+      display: true,
+      position: 'right',
+      min: 1,
+      max: 10,
+    }
   },
 
 });
@@ -389,7 +433,7 @@ const runtime_stats_options = ref({
       display: true,
     },
     y: {
-      display: false,
+      display: true,
       // min: 1,
       // max: 100,
     },
@@ -417,11 +461,7 @@ async function get_stats() {
         console.log('get_stats', error.response)
         return []
       })
-
-  // console.log(result)
-  // console.log('result', Object.values(stats.value['avg_rating_release_date'][stat_media_type.value]).map((e) => {
-  //   return (e.reduce((a, b) => a + b, 0))
-  // }))
+  console.log(stats.value)
 }
 
 function switch_media(event) {
