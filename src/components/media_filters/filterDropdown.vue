@@ -37,8 +37,8 @@ function toggle_checkbox(id) {
   is_changed.value = true
 }
 
-function log_use(filter){
-  log_event('filter_use', 'int',filter['name'])
+function log_use(filter) {
+  log_event('filter_use', 'int', [props.title, filter['name']])
 }
 
 function reset() {
@@ -53,7 +53,8 @@ function reset() {
 
     <div class="title">
       <h1>{{ title }}</h1>
-      <img v-if="checked_ids.length > 0" src="/ui/rewind.png" style="filter: brightness(1000%)" class="clear" alt="clear"
+      <img v-if="checked_ids.length > 0" src="/ui/rewind.png" style="filter: brightness(1000%)" class="clear"
+           alt="clear"
            @click="reset">
     </div>
     <div style="border-bottom: 1px solid white;margin-top: 2px"></div>
