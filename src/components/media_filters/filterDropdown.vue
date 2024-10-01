@@ -1,6 +1,7 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
+import {log_event} from "../../scripts/log_events.js";
 
 let props = defineProps(["data", "title"]);
 let emits = defineEmits(["id"]);
@@ -36,6 +37,10 @@ function toggle_checkbox(id) {
   is_changed.value = true
 }
 
+function log_use(filter){
+  log_event('filter_use', 'int',filter['name'])
+}
+
 function reset() {
   clear_checkboxes()
   setTimeout(() => is_changed.value = false, 0.1)
@@ -61,7 +66,7 @@ function reset() {
         <badge v-if="filter['image_path']!==undefined" :data="filter" :min_size="170"
                :show_title="true"></badge>
         <label class="label" v-else>{{ filter['name'] }}</label>
-        <div class="checkbox_click_box" @click="toggle_checkbox(filter['id'])"></div>
+        <div class="checkbox_click_box" @click="toggle_checkbox(filter['id']);log_use(filter)"></div>
 
       </div>
 
