@@ -34,6 +34,9 @@ def serialize_media(media):
             new_value = (((value - old_min) * new_range) / old_range) + new_min
             return new_value
 
+        if media.media_type not in pub_ratings:
+            return 0
+
         pub_min = pub_ratings[media.media_type][0]
         pub_max = pub_ratings[media.media_type][1]
         user_min = user_ratings[media.media_type][0]

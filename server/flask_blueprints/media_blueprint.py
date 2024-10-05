@@ -1,6 +1,7 @@
 import hashlib
 import json
 import os.path
+import pprint
 import time
 import requests
 import random
@@ -15,8 +16,9 @@ from youtubesearchpython import VideosSearch
 from flask_blueprints.login_blueprint import requires_auth
 from concurrent.futures import ThreadPoolExecutor
 
-from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY, IGDB_CLIENT_ID, IGDB_CLIENT_SECRET
-from data_mapper.media_mapper import map_from_tmdb, map_from_mangadex, map_from_igdb, map_from_youtube
+from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY, IGDB_CLIENT_ID, IGDB_CLIENT_SECRET, COMIC_VINE_KEY
+from data_mapper.media_mapper import map_from_tmdb, map_from_mangadex, map_from_igdb, map_from_youtube, \
+    map_from_comic_vine
 from db_loader import db
 from sql_models.media_model import Media, Genre, Theme, Tag, media_genre_association, media_tag_association, TierList, \
     ContentRating
@@ -340,6 +342,20 @@ def find():
         # pprint(all_found)
         return all_found
 
+    def request_comic_vine():
+
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0'
+        }
+        media_request = requests.get(
+            url=f"https://comicvine.gamespot.com/api/search?api_key={COMIC_VINE_KEY}&query={media_name}"
+                f"&format=json&resources=volume&limit=5",
+            headers=headers).json()
+
+        all_found = media_request['results']
+
+        return all_found
+
     def request_igdb():  # noqa
 
         token = handle_igdb_access_token('igdb_token')
@@ -387,6 +403,12 @@ def find():
 
         if len(full_medias) > 0:
             mapped_media = map_from_mangadex(full_medias, media_type)
+
+    elif media_type in ['comic']:
+        full_medias = request_comic_vine()
+
+        if len(full_medias) > 0:
+            mapped_media = map_from_comic_vine(full_medias, media_type)
 
     elif media_type in ['game']:
         full_medias = request_igdb()
@@ -536,7 +558,7 @@ def search_extra_posters():
     media_external_id = request.args.get('external_id')
     media_type = request.args.get('type')
 
-    # print(f'extra posters {media_name=} {media_type=} {media_external_id=}')
+    print(f'extra posters {media_name=} {media_type=} {media_external_id=}')
 
     search_category = get_search_category_from_type(media_type)
 
@@ -572,6 +594,21 @@ def search_extra_posters():
 
         return clean_links
 
+    def request_comic_vine_posters():
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0'
+        }
+        extra_request = requests.get(
+            url=f"https://comicvine.gamespot.com/api/issues?api_key={COMIC_VINE_KEY}&filter=volume:{media_external_id}"
+                f"&format=json&field_list=image&sort=cover_date:asc",
+            headers=headers).json()
+        aggregated_links = []
+
+        for comic in extra_request['results']:
+            aggregated_links.append(comic.get('image').get('medium_url'))
+
+        return aggregated_links
+
     def request_igdb_posters():
 
         token = handle_igdb_access_token('igdb_token')
@@ -599,6 +636,9 @@ def search_extra_posters():
 
     if media_type in ['manga']:
         posters = request_mangadex_posters()
+
+    if media_type in ['comic']:
+        posters = request_comic_vine_posters()
 
     if media_type in ['game']:
         posters = request_igdb_posters()

@@ -296,6 +296,31 @@ def map_from_mangadex(medias, media_type):
     return mapped_medias
 
 
+def map_from_comic_vine(medias, media_type):
+    mapped_medias = []
+
+    for media in medias:
+        mapping = {
+            'name': media.get('name'),
+            'external_name': media.get('name'),
+            'release_date': dateutil.parser.parse(f"{media.get('start_year')}-01-01").date(),
+            'overview': media.get('description'),
+            'poster_path': media.get('image').get('medium_url'),
+            'media_type': media_type,
+            'user_rating': None,
+            'public_rating': 0,
+            'external_id': media.get('id'),
+            'external_link': media.get('site_detail_url'),
+            'author': media.get('publisher').get('name'),
+            # 'content_rating': db.session.query(ContentRating),
+            # 'genres': map_associations(Genre, get_genres(media), media_type),
+        }
+
+        mapped_medias.append(Media(**mapping))
+
+    return mapped_medias
+
+
 def map_from_igdb(medias, media_type):
     mapped_medias = []
 
