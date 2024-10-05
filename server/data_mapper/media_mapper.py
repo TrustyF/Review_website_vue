@@ -303,7 +303,7 @@ def map_from_comic_vine(medias, media_type):
         mapping = {
             'name': media.get('name'),
             'external_name': media.get('name'),
-            'release_date': dateutil.parser.parse(f"{media.get('start_year')}-01-01").date(),
+            'release_date': dateutil.parser.parse(f"{media.get('start_year') or 100}-01-01").date(),
             'overview': media.get('description'),
             'poster_path': media.get('image').get('medium_url'),
             'media_type': media_type,
