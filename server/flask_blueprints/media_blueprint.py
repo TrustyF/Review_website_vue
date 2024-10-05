@@ -349,7 +349,7 @@ def find():
         }
         media_request = requests.get(
             url=f"https://comicvine.gamespot.com/api/search?api_key={COMIC_VINE_KEY}&query={media_name}"
-                f"&format=json&resources=volume&limit=5",
+                f"&format=json&resources=volume&limit=5&page={media_page+1}",
             headers=headers).json()
 
         all_found = media_request['results']
