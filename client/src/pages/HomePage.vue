@@ -80,15 +80,6 @@ const genre_number_list = [
     </lazy-component>
 
     <lazy-component class="banner">
-      <media-banner title="Kinda good actually ?"
-                    :rating_spacing="-1.5"
-                    :public_ratings="[0,7]"
-                    :media_types="['movie','tv','game','manga']"
-                    :default-in-view="true"
-      ></media-banner>
-    </lazy-component>
-
-    <lazy-component class="banner">
       <media-banner :ratings=[6,10]
                     title="TV"
                     :media_types="['Tv']"
@@ -131,6 +122,13 @@ const genre_number_list = [
                     :order="'date_added'"
                     :media_types="['game']"
                     :size_override="[528, 704]"></media-banner>
+    </lazy-component>
+
+    <lazy-component class="banner">
+      <media-banner :ratings=[7,10]
+                    title="Comics"
+                    :media_types="['comic']"
+                    :size_override="[512, 702]"></media-banner>
     </lazy-component>
 
     <lazy-component class="banner">
