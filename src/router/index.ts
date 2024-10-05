@@ -2,8 +2,6 @@ import {createRouter, createWebHistory} from "vue-router";
 import {getAnalytics, logEvent} from "firebase/analytics";
 import {log_event} from "@/scripts/log_events";
 
-const media_types = ['movie', 'tv', 'short', 'youtube', 'anime', 'manga', 'game']
-
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     scrollBehavior(to, from, savedPosition) {
@@ -112,14 +110,19 @@ const router = createRouter({
             component: () => import("../pages/MangaPage.vue")
         },
         {
+            path: "/comic",
+            name: "comic",
+            component: () => import("../pages/ComicPage.vue")
+        },
+        {
             path: "/game",
             name: "game",
             component: () => import("../pages/GamePage.vue")
         },
         {
-            path: "/debug_sql",
-            name: "debug_sql",
-            component: () => import("../pages/sub_pages/debug/test-sql.vue")
+            path: "/pauline",
+            name: "custom_pauline",
+            component: () => import("../pages/custom_pages/PaulinePage.vue")
         },
     ],
 })

@@ -185,6 +185,8 @@ async function add_media() {
 }
 
 async function get_extra_posters() {
+  if(selected_media.value['name']===undefined) return
+
   const token = await get_current_user()
 
   const url = new URL(`${curr_api}/media/get_extra_posters`)
@@ -256,6 +258,9 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handle_key_press)
   document.body.style.overflow = 'scroll';
 })
+watch(selected_media,(oldV,newV)=>{
+  if (add_pane_open.value) get_extra_posters()
+})
 </script>
 
 <template>
@@ -287,6 +292,7 @@ onUnmounted(() => {
             <option value="youtube" :selected="search_type">youtube</option>
             <option value="manga" :selected="search_type">manga</option>
             <option value="game" :selected="search_type">game</option>
+            <option value="comic" :selected="search_type">comic</option>
           </select>
           <input v-model="search_page" type="number" style="margin-left: 10px;width: 50px" @change="find_media">
         </div>

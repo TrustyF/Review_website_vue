@@ -451,7 +451,7 @@ const runtime_stats_options = ref({
 async function get_stats() {
 
   const url = new URL(`${curr_api}/media/get_stats`)
-
+  // todo fix comics stats
   stats.value = await axios(
       {
         method: 'GET',
@@ -490,7 +490,7 @@ onMounted(() => {
       </div>
       <div class="graph_nav">
         <h1 :class="media !== stat_media_type ? 'graph_nav_button':'graph_nav_button selected'" @click="switch_media"
-            v-for="media in ['movie','tv','youtube','manga','game']" :key="media">{{ media }}</h1>
+            v-for="media in ['movie','tv','youtube','manga','game','comic']" :key="media">{{ media }}</h1>
       </div>
     </div>
 

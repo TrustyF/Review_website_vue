@@ -5,6 +5,7 @@ import {useRouter} from 'vue-router'
 import HoverUI from "@/components/media_container/movie_container/sub_components/HoverUI.vue";
 import DifficultyGauge from "@/components/media_container/movie_container/sub_components/DifficultyGauge.vue";
 import {log_event} from "/src/scripts/log_events";
+import axios from "axios";
 
 let props = defineProps({
   data: {
@@ -99,6 +100,12 @@ function format_image_path(f_path, f_id) {
   }
 }
 
+async function download_poster(image_path){
+
+  return await axios.get(image_path)
+    .then(response => response.data)
+}
+
 function push_to_details() {
   selected_media.value = props['data']
   media_detail_pane_open.value = true
@@ -114,10 +121,10 @@ function emit_finished_loading() {
 <template>
   <div class="movie_container_wrapper">
 
-    <img @click="push_to_details" @loadeddata="emit_finished_loading" v-if="lazy_poster && image_path" class="poster"
+    <img datatype="img" @click="push_to_details" @loadeddata="emit_finished_loading" v-if="lazy_poster && image_path" class="poster"
          alt="" v-lazy="image_path" lazy="loading"/>
-    <img @click="push_to_details" @load="emit_finished_loading" v-else-if="image_path" class="poster" alt=""
-         :src="image_path"/>
+<!--    <img @click="push_to_details" @load="emit_finished_loading" v-else-if="image_path" class="poster" alt=""-->
+<!--         :src="image_path"/>-->
     <div v-else class="poster"></div>
 
     <difficulty-gauge class="diff" :diff="data['difficulty']"></difficulty-gauge>

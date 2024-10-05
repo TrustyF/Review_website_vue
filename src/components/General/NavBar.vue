@@ -86,6 +86,7 @@ onMounted(() => {
         <h1 class="nav_separator">•</h1>
         <RouterLink active-class="active" class="link" to="/anime">Anime</RouterLink>
         <RouterLink active-class="active" class="link" to="/manga">Manga</RouterLink>
+        <RouterLink active-class="active" class="link" to="/comic">Comics</RouterLink>
         <h1 class="nav_separator">•</h1>
         <RouterLink active-class="active" class="link" to="/game">Games</RouterLink>
         <h1 class="nav_separator">•</h1>
@@ -119,6 +120,7 @@ onMounted(() => {
     <div class="horiz_separator"></div>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/anime">Anime</RouterLink>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/manga">Manga</RouterLink>
+    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/comic">Comics</RouterLink>
     <div class="horiz_separator"></div>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/game">Games</RouterLink>
   </div>

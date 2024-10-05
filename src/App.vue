@@ -33,6 +33,10 @@ const media_scales = computed(() => {
       'size': [256, 360],
       'scale': !is_mobile.value ? 0.7 : 0.5,
     },
+    'comic': {
+      'size': [256, 351],
+      'scale': !is_mobile.value ? 0.7 : 0.5,
+    },
     'youtube': {
       'size': [1280, 720],
       'scale': !is_mobile.value ? 0.2 : 0.14,
@@ -102,7 +106,7 @@ onMounted(() => {
     <tooltip-media-details></tooltip-media-details>
   </div>
 
-  <button v-if="edit_mode && curr_api!=='http://192.168.1.11:5000'" style="position: fixed;right: 10px;top: 70px;z-index: 10" @click="add_pane_open=true">add</button>
+  <button v-if="edit_mode" style="position: fixed;right: 10px;top: 70px;z-index: 10" @click="add_pane_open=true">add</button>
 <!--  <p v-if="edit_mode" style="position: fixed;right: 10px;top: 150px;font-size: 0.7em;z-index: 10;background-color: black">{{ curr_api }}</p>-->
 
   <div class="tooltip_editor_top_wrapper" v-if="add_pane_open && edit_mode">
