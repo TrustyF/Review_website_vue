@@ -2,19 +2,16 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import {get_current_user} from "@/firebase_auth.js";
 
-// let props = defineProps(["media_ref"]);
-// let emits = defineEmits(["tier_lists"]);
 const curr_api = inject("curr_api");
 let selected_media = inject('selected_media')
 
 let available_tier_lists = ref([])
-// let current_tier_lists = ref([])
 let dragged_tier_list = ref()
 
 let new_list_name = ref()
 
 async function fetch_tier_lists() {
-  const url = new URL(`${curr_api}/tier_list/get`)
+  const url = new URL(`${curr_api}/user_list/get`)
 
   const result = await fetch(url).then(response => response.json())
 
@@ -27,7 +24,7 @@ async function add_new_list() {
   const token = await get_current_user()
 
 
-  const url = new URL(`${curr_api}/tier_list/add`)
+  const url = new URL(`${curr_api}/user_list/add`)
   url.searchParams.set('name', new_list_name.value)
 
   await fetch(url, {
@@ -46,17 +43,15 @@ function allowDrop(event) {
 
 function add_drop_to_media() {
 
-  if (selected_media.value['tier_lists'].map((e) => e.id).includes(dragged_tier_list.value['id'])) return
-  selected_media.value['tier_lists'].push(dragged_tier_list.value)
-  // emits('tier_lists', selected_media['tier_lists'].value)
+  if (selected_media.value['user_lists'].map((e) => e.id).includes(dragged_tier_list.value['id'])) return
+  selected_media.value['user_lists'].push(dragged_tier_list.value)
 }
 
 function remove_drop_from_media() {
-  let index = selected_media.value['tier_lists'].map((elem) => elem['id']).indexOf(dragged_tier_list.value['id'])
+  let index = selected_media.value['user_lists'].map((elem) => elem['id']).indexOf(dragged_tier_list.value['id'])
 
   if (index > -1) {
-    selected_media.value['tier_lists'].splice(index, 1)
-    // emits('tier_lists', current_tier_lists.value)
+    selected_media.value['user_lists'].splice(index, 1)
   }
 }
 
@@ -76,7 +71,7 @@ onMounted(() => {
 
       <div class="current_tier_lists" @dragover="allowDrop" @drop="add_drop_to_media"
            @dragleave="remove_drop_from_media">
-        <div class="tier_list_box" draggable="true" @dragstart="drag(t)" v-for="t in selected_media['tier_lists']"
+        <div class="tier_list_box" draggable="true" @dragstart="drag(t)" v-for="t in selected_media['user_lists']"
              :key="t['id']">
           {{ t['name'] }}
         </div>
@@ -93,7 +88,7 @@ onMounted(() => {
     </div>
 
     <div class="tier_list_updates">
-      <input v-model="new_list_name" placeholder="new list">
+      <input v-model="new_list_name" placeholder="new user">
       <button @click="add_new_list()">Add</button>
     </div>
 

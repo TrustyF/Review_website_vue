@@ -5,7 +5,8 @@ import MediaFeed from "@/components/media_feed/MediaFeed.vue";
 </script>
 
 <template>
-  <media-feed :tier_lists="['pauline']"
+  <media-feed :user_lists="['pauline']"
               :media_container_type="'movie'"
+              :group_rating="false"
   ></media-feed>
 </template>
