@@ -20,8 +20,7 @@ from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY, IGDB_CLIENT_ID,
 from data_mapper.media_mapper import map_from_tmdb, map_from_mangadex, map_from_igdb, map_from_youtube, \
     map_from_comic_vine
 from db_loader import db
-from sql_models.media_model import Media, Genre, Theme, Tag, media_genre_association, media_tag_association, TierList, \
-    ContentRating
+from sql_models.media_model import Media, Genre, Theme, Tag, TierList, ContentRating, UserList
 from data_mapper.serializer import serialize_media, deserialize_media
 
 bp = Blueprint('media', __name__)
@@ -112,6 +111,7 @@ def get():
     themes = data.get('themes')
     tags = data.get('tags')
     tier_lists = data.get('tier_lists')
+    user_lists = data.get('user_lists')
 
     ratings = data.get('ratings')
     public_ratings = data.get('public_ratings')
@@ -183,9 +183,14 @@ def get():
             if 'all' not in tier_lists:
                 q = (q.join(Media.tier_lists).filter(TierList.name.in_(tier_lists))
                      .group_by(Media.id).having(func.count(Media.id) == len(tier_lists)))
-
         else:
             q = q.filter(~Media.tier_lists.any())
+
+        if user_lists:
+            print(user_lists)
+            if 'all' not in user_lists:
+                q = (q.join(Media.user_lists).filter(UserList.name.in_(user_lists))
+                     .group_by(Media.id).having(func.count(Media.id) == len(user_lists)))
 
         if genres:
             q = (q.join(Media.genres).filter(Genre.id.in_(genres))
@@ -349,7 +354,7 @@ def find():
         }
         media_request = requests.get(
             url=f"https://comicvine.gamespot.com/api/search?api_key={COMIC_VINE_KEY}&query={media_name}"
-                f"&format=json&resources=volume&limit=5&page={media_page+1}",
+                f"&format=json&resources=volume&limit=5&page={media_page + 1}",
             headers=headers).json()
 
         all_found = media_request['results']
@@ -438,7 +443,7 @@ def add():
     # print('add', data['name'])
 
     exist_check = (db.session.query(Media)
-                   .filter(Media.external_id == data['external_id'], Media.media_type == data['media_type'])
+                   .filter(Media.external_id == data.get('external_id'), Media.media_type == data['media_type'])
                    .one_or_none())
 
     # cancel if already present
@@ -453,6 +458,7 @@ def add():
     media_obj.themes = [db.session.query(Theme).filter_by(id=x['id']).one() for x in data.get('themes', [])]
     media_obj.tags = [db.session.query(Tag).filter_by(id=x['id']).one() for x in data.get('tags', [])]
     media_obj.tier_lists = [db.session.query(TierList).filter_by(id=x['id']).one() for x in data.get('tier_lists', [])]
+    media_obj.user_lists = [db.session.query(UserList).filter_by(id=x['id']).one() for x in data.get('user_lists', [])]
     if data.get('content_rating').get('id'):
         media_obj.content_rating = (db.session.query(ContentRating)
                                     .filter_by(id=data.get('content_rating').get('id')).one())
@@ -483,10 +489,13 @@ def update():
     # associations
     media_obj = query.one()
 
+    print(data.get('user_lists', []))
+
     media_obj.genres = [db.session.query(Genre).filter_by(id=x['id']).one() for x in data.get('genres', [])]
     media_obj.themes = [db.session.query(Theme).filter_by(id=x['id']).one() for x in data.get('themes', [])]
     media_obj.tags = [db.session.query(Tag).filter_by(id=x['id']).one() for x in data.get('tags', [])]
     media_obj.tier_lists = [db.session.query(TierList).filter_by(id=x['id']).one() for x in data.get('tier_lists', [])]
+    media_obj.user_lists = [db.session.query(UserList).filter_by(id=x['id']).one() for x in data.get('user_lists', [])]
     if data.get('content_rating').get('id'):
         media_obj.content_rating = (db.session.query(ContentRating)
                                     .filter_by(id=data.get('content_rating').get('id')).one())
@@ -558,7 +567,7 @@ def search_extra_posters():
     media_external_id = request.args.get('external_id')
     media_type = request.args.get('type')
 
-    print(f'extra posters {media_name=} {media_type=} {media_external_id=}')
+    # print(f'extra posters {media_name=} {media_type=} {media_external_id=}')
 
     search_category = get_search_category_from_type(media_type)
 

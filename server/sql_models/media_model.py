@@ -22,6 +22,12 @@ media_tier_list_association = db.Table('media_tier_list_assoc', db.Model.metadat
                                        db.Column('tier_list_id', db.Integer,
                                                  db.ForeignKey('tier_lists.id', ondelete='CASCADE'))
                                        )
+media_user_list_association = db.Table('media_user_list_assoc', db.Model.metadata,
+                                       db.Column('media_id', db.Integer,
+                                                 db.ForeignKey('medias.id', ondelete='CASCADE')),
+                                       db.Column('user_list_id', db.Integer,
+                                                 db.ForeignKey('user_lists.id', ondelete='CASCADE'))
+                                       )
 
 
 @dataclass
@@ -87,6 +93,16 @@ class TierList(db.Model):
 
 
 @dataclass
+class UserList(db.Model):
+    __tablename__ = "user_lists"
+
+    id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name: str = db.Column(db.String(50), nullable=False, unique=True)
+
+    media = db.relationship("Media", back_populates='user_lists', secondary=media_user_list_association)
+
+
+@dataclass
 class Media(db.Model):
     __tablename__ = "medias"
 
@@ -128,3 +144,4 @@ class Media(db.Model):
     themes = db.relationship("Theme", secondary=media_theme_association, lazy='joined')
     tags = db.relationship("Tag", secondary=media_tag_association, lazy='joined')
     tier_lists = db.relationship("TierList", secondary=media_tier_list_association, lazy='joined')
+    user_lists = db.relationship("UserList", secondary=media_user_list_association, lazy='joined')

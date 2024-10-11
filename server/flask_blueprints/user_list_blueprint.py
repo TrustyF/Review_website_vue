@@ -6,37 +6,34 @@ from flask import Blueprint, request
 from sqlalchemy import func
 
 from db_loader import db
-from sql_models.media_model import Media, TierList
+from sql_models.media_model import Media, UserList
 from flask_blueprints.login_blueprint import requires_auth
 
-bp = Blueprint('tier_list', __name__)
+bp = Blueprint('user_list', __name__)
 
 
 @bp.route("/get", methods=['GET'])
 def get():
-    # all_tier_lists = db.session.query(TierList).all()
 
-    tier_list_counts = (
-        db.session.query(TierList, func.count(Media.id).label('count'))
-        .outerjoin(TierList.media)
-        .group_by(TierList)
+    user_counts = (
+        db.session.query(UserList, func.count(Media.id).label('count'))
+        .outerjoin(UserList.media)
+        .group_by(UserList)
         .all()
     )
 
-    serialized_tier_lists = [{**asdict(tag), 'count': count} for tag, count in tier_list_counts]
+    serialized_user = [{**asdict(user), 'count': count} for user, count in user_counts]
 
-    return serialized_tier_lists, 200
+    return serialized_user, 200
 
 
 @bp.route("/add", methods=['GET'])
 @requires_auth
 def add():
-    tier_list_name = request.args.get('name')
+    user_name = request.args.get('name')
 
-    # print(f'adding tier list {tier_list_name=}')
-
-    new_tier_list = TierList(name=tier_list_name)
-    db.session.add(new_tier_list)
+    new_user = UserList(name=user_name)
+    db.session.add(new_user)
     db.session.commit()
 
     try:

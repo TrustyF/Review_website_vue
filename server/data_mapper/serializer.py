@@ -80,6 +80,7 @@ def serialize_media(media):
         'themes': media.themes,
         'tags': [x for x in media.tags if x.is_deleted is not True],
         'tier_lists': media.tier_lists,
+        'user_lists': media.user_lists,
     }
 
 
