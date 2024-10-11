@@ -4,6 +4,7 @@ import FilterSearch from "@/components/media_filters/filterSearch.vue";
 import MovieContainer from "@/components/media_container/movie_container/MovieContainer.vue";
 import TagPicker from "@/components/editor_tools/TagPicker.vue";
 import TierListPicker from "@/components/editor_tools/TierListPicker.vue";
+import UserListPicker from "@/components/editor_tools/UserListPicker.vue";
 import {get_current_user} from "@/firebase_auth.js";
 
 let props = defineProps(["edit", "add"]);
@@ -409,22 +410,28 @@ watch(selected_media,(oldV,newV)=>{
 
       </div>
 
-      <div class="tier_list_area">
-        <tier-list-picker></tier-list-picker>
-      </div>
+      <div style="display: grid;grid-template-rows: 50% 50%;gap: 10px;height: 590px">
 
-      <div class="extra_posters">
-        <div class="extra_poster" v-for="poster in extra_posters" :key="poster">
-          <img v-lazy="proxy_image(poster)" alt="extra_poster" class="extra_poster_image" @click="switch_poster(poster)">
+        <div class="extra_posters">
+          <div class="extra_poster" v-for="poster in extra_posters" :key="poster">
+            <img v-lazy="proxy_image(poster)" alt="extra_poster" class="extra_poster_image"
+                 @click="switch_poster(poster)">
+          </div>
+        </div>
+
+        <div class="tier_list_area">
+          <tier-list-picker/>
+          <user-list-picker/>
         </div>
       </div>
+
 
     </div>
 
     <div class="tags_area">
       <tag-picker :media_type="search_type"></tag-picker>
     </div>
-
+    
   </div>
 </template>
 
@@ -435,7 +442,7 @@ watch(selected_media,(oldV,newV)=>{
   padding: 10px;
   display: flex;
   flex-flow: column nowrap;
-  /*gap: 10px;*/
+  gap: 10px;
   height: 100%;
 
 }
@@ -456,7 +463,7 @@ watch(selected_media,(oldV,newV)=>{
 .preview_area {
   padding: 20px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr 2fr 3fr;
   /*flex-flow: row;*/
   gap: 20px;
 }
@@ -469,10 +476,11 @@ watch(selected_media,(oldV,newV)=>{
 }
 
 .tier_list_area {
+  height: 100%;
   display: flex;
   flex-flow: column wrap;
   gap: 10px;
-  /*justify-content: space-between;*/
+  /*height: 300px;*/
 }
 
 .form_box {
@@ -490,7 +498,7 @@ watch(selected_media,(oldV,newV)=>{
   flex-flow: row wrap;
   gap: 5px;
   overflow-y: scroll;
-  height: 500px;
+  /*height: 300px;*/
 }
 
 .extra_poster_image {

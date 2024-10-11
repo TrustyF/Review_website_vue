@@ -25,6 +25,14 @@ let props = defineProps({
     default: null,
     type: Array,
   },
+  user_lists: {
+    default: null,
+    type: Array,
+  },
+  group_rating: {
+    default: true,
+    type: Boolean,
+  },
 });
 
 const curr_api = inject("curr_api");
@@ -50,6 +58,7 @@ const element_width = computed(() => {
 
 let media = ref([])
 let media_grouped = ref([])
+let media_ungrouped = ref([])
 
 let media_limit = ref(20)
 let media_page = ref(0)
@@ -78,6 +87,7 @@ async function get_media(override) {
     'themes': media_filters.value['themes'],
     'tags': media_filters.value['tags'],
     'tier_lists': props['tier_lists'],
+    'user_lists': props['user_lists'],
     'ratings': media_filters.value['ratings'],
     'public_ratings': media_filters.value['public_ratings'],
     'release_dates': media_filters.value['release_dates'],
@@ -130,14 +140,18 @@ async function get_media(override) {
     })
   })
 
-  // group media by rating
-  media_grouped.value = media.value.reduce((r, e, index) => {
-    if (!r[e['user_rating']]) r[e['user_rating']] = [e]
-    else r[e['user_rating']].push(e)
-    return r;
-  }, {})
+  if (props.group_rating) {
+    // group media by rating
+    media_grouped.value = media.value.reduce((r, e, index) => {
+      if (!r[e['user_rating']]) r[e['user_rating']] = [e]
+      else r[e['user_rating']].push(e)
+      return r;
+    }, {})
+  } else {
+    media_ungrouped.value = media.value
+  }
 
-  // console.log(media_grouped.value)
+  console.log(media_ungrouped.value)
 
   // cleanup
   is_page_loading.value = false
@@ -220,7 +234,7 @@ onMounted(() => {
   get_media()
   addEventListener("scroll", () => handleInfiniteScroll())
 })
-onUnmounted(()=>{
+onUnmounted(() => {
   removeEventListener("scroll", () => handleInfiniteScroll())
 })
 
@@ -237,22 +251,38 @@ onUnmounted(()=>{
                            :matched_field="search_matched_field"
     ></media-feed-filter-bar>
 
-    <div class="rating_box" v-for="rating in Object.keys(media_grouped).reverse()" :key="rating">
+    <div v-if="group_rating">
+      <div class="rating_box" v-for="rating in Object.keys(media_grouped).reverse()" :key="rating">
 
-      <div class="rating_separator sticky_nav">
-        <h1 style="font-weight: 500;font-size: 1em"> {{ rating }} </h1>
-        <img :src="blue_star" alt="blue_star" style="width: 15px">
-      </div>
+        <div class="rating_separator sticky_nav">
+          <h1 style="font-weight: 500;font-size: 1em"> {{ rating }} </h1>
+          <img :src="blue_star" alt="blue_star" style="width: 15px">
+        </div>
 
-      <div class="media_container_wrapper">
-        <component v-for="med in media_grouped[rating]"
-                   :key="med['id']"
-                   :is="media_container"
-                   :data="med"
-                   :media_container_type_override=props.media_container_type_override
-        ></component>
+        <div class="media_container_wrapper">
+          <component v-for="med in media_grouped[rating]"
+                     :key="med['id']"
+                     :is="media_container"
+                     :data="med"
+                     :media_container_type_override=props.media_container_type_override
+          ></component>
+        </div>
       </div>
     </div>
+
+    <div v-if="!group_rating">
+      <div class="rating_box" style="margin-top: 60px">
+        <div class="media_container_wrapper">
+          <component v-for="med in media_ungrouped"
+                     :key="med['id']"
+                     :is="media_container"
+                     :data="med"
+                     :media_container_type_override=props.media_container_type_override
+          ></component>
+        </div>
+      </div>
+    </div>
+
 
     <img v-if="page_load_status==='loading'" class="spinner" alt="spinner" :src="spinner">
     <div v-else-if="media.length < 1" class="empty_result">No result</div>
