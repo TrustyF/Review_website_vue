@@ -111,9 +111,6 @@ async function get_media(override) {
         return []
       })
 
-  // console.log('res', result['media'].map((e)=>e.name),params)
-  // console.log('res', result)
-
   let medias = result['media']
   search_matched_field.value = result['matched_field']
 
@@ -150,8 +147,6 @@ async function get_media(override) {
   } else {
     media_ungrouped.value = media.value
   }
-
-  console.log(media_ungrouped.value)
 
   // cleanup
   is_page_loading.value = false
