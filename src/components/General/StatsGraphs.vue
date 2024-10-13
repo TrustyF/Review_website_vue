@@ -72,12 +72,12 @@ let date_stats = computed(() => {
   }
 
   let filtered_avg_rating = Object.values(stats.value['avg_rating_release_date'][stat_media_type.value]).map((e) => {
-    if (e.length >= 1) return e.reduce((a, b) => a + b, 0) / e.length
+    if (e.length >= 2) return e.reduce((a, b) => a + b, 0) / e.length
     else return undefined
   })
 
   let filtered_avg_pub_rating = Object.values(stats.value['avg_pub_rating_release_date'][stat_media_type.value]).map((e) => {
-    if (e.length >= 1) return (e.reduce((a, b) => a + b, 0) / e.length)
+    if (e.length >= 2) return (e.reduce((a, b) => a + b, 0) / e.length)
     else return undefined
   })
 
@@ -91,7 +91,7 @@ let date_stats = computed(() => {
       {
         type: 'line',
         label: 'Average rating',
-        data: !filtered_avg_rating.every(element => element === undefined) ? filtered_avg_rating : [],
+        data: !filtered_avg_rating.every(element => element === undefined || element === 0) ? filtered_avg_rating : [],
         backgroundColor: [stat_media_type_colors[0]],
         borderColor: [stat_media_type_colors[0]],
         pointRadius: 0,
@@ -106,7 +106,7 @@ let date_stats = computed(() => {
       {
         type: 'line',
         label: 'Average public rating',
-        data: !filtered_avg_pub_rating.every(element => element === undefined) ? filtered_avg_pub_rating : [],
+        data: !filtered_avg_pub_rating.every(element => element === undefined || element === 0) ? filtered_avg_pub_rating : [],
         backgroundColor: [stat_media_type_colors[3]],
         borderColor: [stat_media_type_colors[3]],
         pointRadius: 0,
@@ -162,7 +162,7 @@ let added_date_stats = computed(() => {
       {
         type: 'line',
         label: 'Average rating',
-        data: !(filtered_avg_rating.filter(item => item !== undefined).length < 2) ? filtered_avg_rating : [],
+        data: !(filtered_avg_rating.filter(item => item !== undefined || item === 0).length < 2) ? filtered_avg_rating : [],
         backgroundColor: [stat_media_type_colors[0]],
         borderColor: [stat_media_type_colors[0]],
         pointRadius: 0,
@@ -177,7 +177,7 @@ let added_date_stats = computed(() => {
       {
         type: 'line',
         label: 'Average public rating',
-        data: !(filtered_avg_pub_rating.filter(item => item !== undefined).length < 2) ? filtered_avg_pub_rating : [],
+        data: !(filtered_avg_pub_rating.filter(item => item !== undefined || item === 0).length < 2) ? filtered_avg_pub_rating : [],
         backgroundColor: [stat_media_type_colors[3]],
         borderColor: [stat_media_type_colors[3]],
         pointRadius: 0,
@@ -504,7 +504,7 @@ onMounted(() => {
       <bar-chart :chartData="added_date_stats" :options="added_date_stats_options"></bar-chart>
     </div>
     <div class="chart">
-      <bar-chart :chartData="runtime_stats" :options="runtime_stats_options"></bar-chart>
+            <bar-chart :chartData="runtime_stats" :options="runtime_stats_options"></bar-chart>
     </div>
 
 
