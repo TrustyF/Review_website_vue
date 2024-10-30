@@ -25,6 +25,7 @@ const temp_tag_template = {
   'tier': null,
   'origin': props['media_type'],
   'image_path': null,
+  'is_unique': null,
 }
 let temp_tag = ref(temp_tag_template)
 

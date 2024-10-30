@@ -461,7 +461,7 @@ async function get_stats() {
         console.log('get_stats', error.response)
         return []
       })
-  console.log(stats.value)
+  // console.log(stats.value)
 }
 
 function switch_media(event) {
