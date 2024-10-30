@@ -366,18 +366,11 @@ def find():
             'Authorization': f"{token['token_type']} {token['access_token']}",
         }
 
-        find_request = f'https://api.igdb.com/v4/search'
-        find_data = f'search "{media_name}"; limit 5; offset {media_page * 5}; fields *;'
-
-        find_response = requests.post(find_request, data=find_data, headers=title_headers).json()
-
-        print(find_response)
-
         title_request = f'https://api.igdb.com/v4/games'
         title_data = f'search "{media_name}"; limit 5; offset {media_page * 5};' \
-                     f' fields name,release_dates.y,genres.name,themes.name,rating,total_rating' \
+                     f'fields name,release_dates.y,genres.name,themes.name,rating,total_rating' \
                      f',category,url,summary,cover.url,involved_companies.developer,involved_companies.company.name' \
-                     f',age_ratings.rating,age_ratings.category;where id = {find_response[0]["id"]} & rating != null;'
+                     f',age_ratings.rating,age_ratings.category;'
 
         title_response = requests.post(title_request, data=title_data, headers=title_headers).json()
 
