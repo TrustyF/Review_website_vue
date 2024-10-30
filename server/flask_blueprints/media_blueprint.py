@@ -1,8 +1,6 @@
 import hashlib
 import json
 import os.path
-import pprint
-import time
 import requests
 import random
 from PIL import Image
@@ -187,7 +185,6 @@ def get():
             q = q.filter(~Media.tier_lists.any())
 
         if user_lists:
-            print(user_lists)
             if 'all' not in user_lists:
                 q = (q.join(Media.user_lists).filter(UserList.name.in_(user_lists))
                      .group_by(Media.id).having(func.count(Media.id) == len(user_lists)))
@@ -364,16 +361,24 @@ def find():
     def request_igdb():  # noqa
 
         token = handle_igdb_access_token('igdb_token')
+        title_headers = {
+            'Client-ID': IGDB_CLIENT_ID,
+            'Authorization': f"{token['token_type']} {token['access_token']}",
+        }
+
+        find_request = f'https://api.igdb.com/v4/search'
+        find_data = f'search "{media_name}"; limit 5; offset {media_page * 5}; fields *;'
+
+        find_response = requests.post(find_request, data=find_data, headers=title_headers).json()
+
+        print(find_response)
 
         title_request = f'https://api.igdb.com/v4/games'
         title_data = f'search "{media_name}"; limit 5; offset {media_page * 5};' \
                      f' fields name,release_dates.y,genres.name,themes.name,rating,total_rating' \
                      f',category,url,summary,cover.url,involved_companies.developer,involved_companies.company.name' \
-                     f',age_ratings.rating,age_ratings.category;where rating != null;'
-        title_headers = {
-            'Client-ID': IGDB_CLIENT_ID,
-            'Authorization': f"{token['token_type']} {token['access_token']}",
-        }
+                     f',age_ratings.rating,age_ratings.category;where id = {find_response[0]["id"]} & rating != null;'
+
         title_response = requests.post(title_request, data=title_data, headers=title_headers).json()
 
         return title_response
