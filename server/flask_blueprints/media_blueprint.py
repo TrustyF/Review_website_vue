@@ -141,6 +141,15 @@ def get():
 
     def apply_filters(q):
 
+        def find_largest_index(arr):
+            if not arr:
+                return None  # Return None if the array is empty
+            largest_index = 0
+            for k in range(1, len(arr)):
+                if arr[k] > arr[largest_index]:
+                    largest_index = k
+            return largest_index
+
         match = ''
 
         if media_types and len(media_types) > 0:
@@ -167,15 +176,25 @@ def get():
                 'overview',
             ]
 
-            for i, cond in enumerate(conditions):
-                res = q.filter(cond).first()
-                if res is not None:
-                    q = q.filter(cond)
-                    match = matches[i]
-                    break
+            cond_result_amount = []
 
-                if i >= len(conditions) - 1:
-                    q = q.filter(cond)
+            for i, cond in enumerate(conditions):
+                cond_result_amount.append(int(len(q.filter(cond).all())))
+
+            best_condition_index = find_largest_index(cond_result_amount)
+
+            q = q.filter(conditions[best_condition_index])
+            match = matches[best_condition_index]
+
+            # for i, cond in enumerate(conditions):
+            #     res = q.filter(cond).first()
+            #     if res is not None:
+            #         q = q.filter(cond)
+            #         match = matches[i]
+            #         break
+            #
+            #     if i >= len(conditions) - 1:
+            #         q = q.filter(cond)
 
         if tier_lists:
             if 'all' not in tier_lists:
