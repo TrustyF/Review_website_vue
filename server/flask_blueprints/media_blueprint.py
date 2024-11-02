@@ -176,25 +176,25 @@ def get():
                 'overview',
             ]
 
-            cond_result_amount = []
+            # cond_result_amount = []
+            #
+            # for i, cond in enumerate(conditions):
+            #     cond_result_amount.append(int(len(q.filter(cond).all())))
+            #
+            # best_condition_index = find_largest_index(cond_result_amount)
+            #
+            # q = q.filter(conditions[best_condition_index])
+            # match = matches[best_condition_index]
 
             for i, cond in enumerate(conditions):
-                cond_result_amount.append(int(len(q.filter(cond).all())))
+                res = q.filter(cond).first()
+                if res is not None:
+                    q = q.filter(cond)
+                    match = matches[i]
+                    break
 
-            best_condition_index = find_largest_index(cond_result_amount)
-
-            q = q.filter(conditions[best_condition_index])
-            match = matches[best_condition_index]
-
-            # for i, cond in enumerate(conditions):
-            #     res = q.filter(cond).first()
-            #     if res is not None:
-            #         q = q.filter(cond)
-            #         match = matches[i]
-            #         break
-            #
-            #     if i >= len(conditions) - 1:
-            #         q = q.filter(cond)
+                if i >= len(conditions) - 1:
+                    q = q.filter(cond)
 
         if tier_lists:
             if 'all' not in tier_lists:
