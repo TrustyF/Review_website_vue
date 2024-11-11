@@ -14,6 +14,7 @@ let feed_width = computed(() => (props['box_size'][0] * props['box_scale'] + 25)
 
 let debug = {
   'name': 'Youtube Debug',
+  'desc': 'Youtube Debug',
   'image': dont_thug_img,
   'link': '/youtube/youtube_debug'
 }

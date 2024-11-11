@@ -81,8 +81,9 @@ onMounted(() => {
         <h1 class="nav_separator">|</h1>
         <RouterLink active-class="active" class="link" to="/movie">Movies</RouterLink>
         <RouterLink active-class="active" class="link" to="/tv">TV</RouterLink>
-        <RouterLink active-class="active" class="link" to="/short">Shorts</RouterLink>
         <RouterLink active-class="active" class="link" to="/youtube">Youtube</RouterLink>
+        <h1 class="nav_separator">•</h1>
+        <RouterLink active-class="active" class="link" to="/movie_lists">Lists</RouterLink>
         <h1 class="nav_separator">•</h1>
         <RouterLink active-class="active" class="link" to="/anime">Anime</RouterLink>
         <RouterLink active-class="active" class="link" to="/manga">Manga</RouterLink>
@@ -115,8 +116,8 @@ onMounted(() => {
     <div style="height: 20px"></div>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/movie">Movies</RouterLink>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/tv">TV</RouterLink>
-    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/short">Shorts</RouterLink>
-    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/youtube">Youtube</RouterLink>
+    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/movie_lists">Lists</RouterLink>
+<!--    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/youtube">Youtube</RouterLink>-->
     <div class="horiz_separator"></div>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/anime">Anime</RouterLink>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/manga">Manga</RouterLink>
