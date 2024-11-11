@@ -30,20 +30,16 @@ const is_mobile = inject("is_mobile");
         <p>Ratings are split into: my personal rating, public rating and the combined circle.</p>
         <img :src="ratings_info" alt="" class="image_block">
         <p>The public rating is visually remapped to better match my personal rating distribution.</p>
-        <br>
-        <p>The combined circle takes the average of both ratings to provide an easy shorthand of the overall consensus
-          between my personal assessment and the public opinion but also serves as a valuable reference for
-          decision-making.</p>
-        <br>
-        <p>This collaborative approach ensures a more comprehensive and balanced evaluation, taking into
-          account both personal preference and the collective sentiment</p>
+        <p>The combined circle takes the average of both ratings to provide an approximate consensus rating.</p>
       </div>
 
 
       <div class="text_block">
         <h1>Tags</h1>
         <p>Medias are annotated with various tags. These are meant to provide a simple breakdown of my opinion,
-          and to help you decide what to pick. Tags are categorized into different colors representing their
+          and to help you decide what to pick.</p>
+        <img :src="tags_info" alt="" class="image_block">
+        <p>Tags are categorized into different colors representing their
           sentiment:</p>
 
         <div
@@ -61,7 +57,6 @@ const is_mobile = inject("is_mobile");
 
           <p>: Gripe or light criticism</p>
         </div>
-        <img :src="tags_info" alt="" class="image_block">
 
 
       </div>
@@ -69,15 +64,10 @@ const is_mobile = inject("is_mobile");
       <div class="text_block">
         <h1>Searching</h1>
         <div>
-          <p>The search bar can search for many different fields including:</p>
-          <p style="margin-left: 20px"> - name<br>
-            - genre<br>
-            - tags<br>
-            - studio<br>
-            - author
-          </p>
+          <p>The search bar is flexible and will try to match whichever fields yields the best results:</p>
         </div>
         <img :src="search_info" alt="" class="image_block">
+
 
         <p>Filters can also be found next to the search bar and are applied additively.</p>
 
@@ -100,12 +90,12 @@ const is_mobile = inject("is_mobile");
   display: flex;
   flex-flow: column;
   margin: 100px 0 50px 0;
-  padding: 40px 50px 100px 50px;
+  padding: 40px 0 0 0;
   position: relative;
   min-height: 80vh;
   /*width: 600px;*/
-  border: 1px solid #3d3d3d;
-  border-radius: 10px;
+  /*border: 1px solid #3d3d3d;*/
+  /*border-radius: 10px;*/
 }
 .text_wrapper {
   display: flex;
@@ -123,9 +113,9 @@ const is_mobile = inject("is_mobile");
 }
 
 h1 {
-  font-size: 1.5em;
-  font-weight: 600;
-  margin-bottom: 5px;
+  font-size: 1.8em;
+  font-weight: 700;
+  margin-bottom: 15px;
   /*text-decoration: 0.025em #575757 underline;*/
   /*text-underline-offset: 4px;*/
 }
