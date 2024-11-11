@@ -14,7 +14,7 @@ function parse_diff(index) {
   if (index === undefined) return 'Accessible'
   if (index === 1) return 'Accessible'
   if (index === 2) return 'Involved'
-  if (index === 3) return 'Film Snob'
+  if (index === 3) return 'Hard'
   return 'Accessible'
 }
 
