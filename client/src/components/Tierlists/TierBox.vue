@@ -11,9 +11,10 @@ let loaded = ref(false)
 
 <template>
   <RouterLink class="tier_box" :to="box_data['link']" v-show="loaded">
-    <div class="tier_box_wrapper" >
+    <div class="tier_box_wrapper">
       <div class="box_content">
         <h1>{{ box_data['name'] }}</h1>
+        <h3>{{ box_data['desc'] }}</h3>
       </div>
 
       <div class="box_gradient"></div>
@@ -75,6 +76,13 @@ let loaded = ref(false)
   filter: drop-shadow(0 0 3px black) drop-shadow(0 0 2px black);
 }
 
+.box_content h1 {
+
+}
+.box_content h3 {
+
+}
+
 .box_gradient {
   position: absolute;
   height: 100%;
@@ -120,6 +128,7 @@ let loaded = ref(false)
 .tier_box:hover .vignette {
   opacity: 0;
 }
+
 .tier_box:hover {
   outline: 0.1em solid #464646;
 }
@@ -129,11 +138,13 @@ let loaded = ref(false)
   .bg_image {
     opacity: 100%;
   }
+
   .vignette {
     height: 100%;
     width: auto;
     background: radial-gradient(circle at center, rgba(255, 255, 255, 0) 70%, rgba(0, 0, 0, 0.25) 100%);
   }
+
   .tier_box {
     width: 100%;
     clip-path: inset(0% 0% 0% 0% round 20px);
