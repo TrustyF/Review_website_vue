@@ -17,7 +17,7 @@ let tier_lists = [
   {
     'name': 'Riot games media',
     'image': riot_games_img,
-    'link': '/youtube/riot_games_media'
+    'link': '/youtube/yt_riot_games'
   },
   // {
   //   'name': 'Short films',
