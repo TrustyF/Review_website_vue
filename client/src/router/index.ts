@@ -35,80 +35,82 @@ const router = createRouter({
         },
         {
             path: "/movie_lists",
-            name: "movie lists",
-            component: () => import("../pages/sub_pages/movie_lists/MovieListsPage.vue")
-        },
-        {
-            path: "/movie_lists/best_of_the_worst",
-            name: "best of the worst",
-            component: () => import("../pages/sub_pages/movie_lists/pages/BOTWPage.vue")
-        },
-        {
-            path: "/movie_lists/shorts",
-            name: "shorts",
-            component: () => import("../pages/sub_pages/movie_lists/pages/ShortPage.vue")
+            name: "movie_lists_home",
+            children: [
+                {
+                    path: '',
+                    name: 'movie_lists',
+                    component: () => import("../pages/sub_pages/movie_lists/MovieListsPage.vue")
+                },
+                {
+                    path: "best_of_the_worst",
+                    name: "best of the worst",
+                    component: () => import("../pages/sub_pages/movie_lists/pages/BOTWPage.vue")
+                },
+                {
+                    path: "shorts",
+                    name: "shorts",
+                    component: () => import("../pages/sub_pages/movie_lists/pages/ShortPage.vue")
+                },
+            ]
         },
         {
             path: "/youtube",
-            name: "youtube",
-            component: () => import("../pages/sub_pages/youtube/YoutubePage.vue")
-        },
-        {
-            path: "/youtube/riot_games_media",
-            name: "riot games media",
-            component: () => import("../pages/sub_pages/youtube/pages/YTRiotPage.vue")
+            name: "youtube_home",
+            children: [
+                {
+                    path: '',
+                    name: 'youtube',
+                    component: () => import("../pages/sub_pages/youtube/YoutubePage.vue")
+                },
+                {
+                    path: "yt_riot_games",
+                    component: () => import("../pages/sub_pages/youtube/pages/YTRiotPage.vue")
 
+                },
+                {
+                    path: "yt_animations",
+                    component: () => import("../pages/sub_pages/youtube/pages/YTAnimationsPage.vue")
+                },
+                {
+                    path: "yt_music_videos",
+                    component: () => import("../pages/sub_pages/youtube/pages/YTMusicVideoPage.vue")
+                },
+                {
+                    path: "yt_short_films",
+                    component: () => import("../pages/sub_pages/youtube/pages/YTShortsPage.vue")
+                },
+                {
+                    path: "yt_anime_openings",
+                    component: () => import("../pages/sub_pages/youtube/pages/YTAnimeOpeningPage.vue")
+                },
+                {
+                    path: "yt_overwatch_cinematics",
+                    component: () => import("../pages/sub_pages/youtube/pages/YTOverwatchPage.vue")
+                },
+                {
+                    path: "yt_comedy",
+                    component: () => import("../pages/sub_pages/youtube/pages/YTComedyPage.vue")
+                },
+                {
+                    path: "yt_documentaries",
+                    component: () => import("../pages/sub_pages/youtube/pages/YTDocumentaryPage.vue")
+                },
+                {
+                    path: "yt_essays",
+                    component: () => import("../pages/sub_pages/youtube/pages/YTVideoEssayPage.vue")
+                },
+                {
+                    path: "yt_shows",
+                    component: () => import("../pages/sub_pages/youtube/pages/YTShowsPage.vue")
+                },
+                {
+                    path: "yt_debug",
+                    component: () => import("../pages/sub_pages/youtube/pages/YoutubeDebug.vue")
+                },
+            ],
         },
-        {
-            path: "/youtube/yt_animations",
-            name: "youtube animations",
-            component: () => import("../pages/sub_pages/youtube/pages/YTAnimationsPage.vue")
-        },
-        {
-            path: "/youtube/yt_music_videos",
-            name: "youtube music videos",
-            component: () => import("../pages/sub_pages/youtube/pages/YTMusicVideoPage.vue")
-        },
-        {
-            path: "/youtube/yt_short_films",
-            name: "youtube short films",
-            component: () => import("../pages/sub_pages/youtube/pages/YTShortsPage.vue")
-        },
-        {
-            path: "/youtube/yt_anime_openings",
-            name: "youtube anime openings",
-            component: () => import("../pages/sub_pages/youtube/pages/YTAnimeOpeningPage.vue")
-        },
-        {
-            path: "/youtube/yt_overwatch_cinematics",
-            name: "youtube overwatch cinematics",
-            component: () => import("../pages/sub_pages/youtube/pages/YTOverwatchPage.vue")
-        },
-        {
-            path: "/youtube/yt_comedy",
-            name: "youtube comedy",
-            component: () => import("../pages/sub_pages/youtube/pages/YTComedyPage.vue")
-        },
-        {
-            path: "/youtube/yt_documentaries",
-            name: "youtube documentaries",
-            component: () => import("../pages/sub_pages/youtube/pages/YTDocumentaryPage.vue")
-        },
-        {
-            path: "/youtube/yt_essays",
-            name: "youtube essays",
-            component: () => import("../pages/sub_pages/youtube/pages/YTVideoEssayPage.vue")
-        },
-        {
-            path: "/youtube/yt_shows",
-            name: "youtube shows",
-            component: () => import("../pages/sub_pages/youtube/pages/YTShowsPage.vue")
-        },
-        {
-            path: "/youtube/youtube_debug",
-            name: "youtube debug",
-            component: () => import("../pages/sub_pages/youtube/pages/YoutubeDebug.vue")
-        },
+
         {
             path: "/anime",
             name: "anime",
