@@ -36,7 +36,6 @@ let loaded = ref(false)
   text-decoration: none;
 
   width: v-bind(b_width);
-  border-radius: 10px;
 
   filter: drop-shadow(5px 5px 6px black);
   transition: 50ms ease-in-out;
@@ -45,28 +44,21 @@ let loaded = ref(false)
 .tier_box_wrapper {
   position: relative;
   display: flex;
-  flex-flow: column wrap;
-
-  border: 0 solid #464646;
-
-  background-color: #2b2a34;
+  flex-flow: column;
   transition: 150ms ease-in-out;
-  clip-path: inset(0% 0% 0% 0% round 10px);
 }
 
 .box_content {
-  padding: 14px 10px 14px 14px;
-
+  padding: 10px;
+  margin-top: -10px;
   display: flex;
   flex-flow: column;
+
   gap: 5px;
+  transition: 100ms ease-out;
 
   background-color: #25222a;
-  transition: 100ms ease-out;
-}
-
-.tier_box:hover .box_content {
-  background-color: #36204a;
+  border-radius: 10px;
 }
 
 .box_content h1 {
@@ -86,15 +78,15 @@ let loaded = ref(false)
   color: rgba(255, 255, 255, 0.5);
 }
 
-.top_content {
-  width: 100%;
-  height: v-bind(b_height);
+.tier_box:hover .tier_box_wrapper {
+  background-color: #36204a;
 }
 
 .bg_image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 10px 10px 0 0;
 
   -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.5s; /* Firefox < 16 */
@@ -104,19 +96,5 @@ let loaded = ref(false)
 }
 
 @media only screen and (max-width: 1000px) {
-  .bg_image {
-    opacity: 100%;
-  }
-
-  .vignette {
-    height: 100%;
-    width: auto;
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0) 70%, rgba(0, 0, 0, 0.25) 100%);
-  }
-
-  .tier_box {
-    width: 100%;
-    clip-path: inset(0% 0% 0% 0% round 20px);
-  }
 }
 </style>
