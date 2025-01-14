@@ -19,21 +19,16 @@ let tier_lists = [
     'image': riot_games_img,
     'link': '/youtube/yt_riot_games'
   },
-  // {
-  //   'name': 'Short films',
-  //   'image': skeleton_vulvine_img,
-  //   'link':'/youtube/yt_short_films'
-  // },
-  // {
-  //   'name': 'Animations',
-  //   'image': dont_thug_img,
-  //   'link':'/youtube/yt_animations'
-  // },
-  // {
-  //   'name': 'Music videos',
-  //   'image': fever_ghost_img,
-  //   'link':'/youtube/yt_music_videos'
-  // },
+  {
+    'name': 'Animations',
+    'image': dont_thug_img,
+    'link':'/youtube/yt_animations'
+  },
+  {
+    'name': 'Music videos',
+    'image': fever_ghost_img,
+    'link':'/youtube/yt_music_videos'
+  },
   {
     'name': 'Anime Openings',
     'image': death_parade,
@@ -44,21 +39,21 @@ let tier_lists = [
     'image': sombra_img,
     'link': '/youtube/yt_overwatch_cinematics'
   },
-  // {
-  //   'name': 'Comedy',
-  //   'image': gus_img,
-  //   'link':'/youtube/yt_comedy'
-  // },
+  {
+    'name': 'Comedy',
+    'image': gus_img,
+    'link':'/youtube/yt_comedy'
+  },
   {
     'name': 'Documentaries',
     'image': lemmino_plane_img,
     'link': '/youtube/yt_documentaries'
   },
-  // {
-  //   'name': 'Video essays',
-  //   'image': hbomber_img,
-  //   'link':'/youtube/yt_essays'
-  // },
+  {
+    'name': 'Video essays',
+    'image': hbomber_img,
+    'link':'/youtube/yt_essays'
+  },
   {
     'name': 'Shows',
     'image': hazbin_img,

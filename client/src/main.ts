@@ -2,7 +2,8 @@ import {createApp, ref, defineComponent, provide} from 'vue'
 import router from './router/index'
 import App from './App.vue'
 import {session_seed} from "@/scripts/session";
-
+import 'bootstrap-icons/font/bootstrap-icons';
+import 'bootstrap-icons/font/bootstrap-icons.css'
 import VueLazyLoad from "vue-lazyload";
 
 import {initializeApp} from 'firebase/app';

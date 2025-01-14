@@ -77,18 +77,17 @@ onMounted(() => {
 
       <div v-if="!is_mobile" class="wrapper">
         <RouterLink active-class="active" class="link" to="/">Home</RouterLink>
-        <RouterLink active-class="active" class="link" to="/info">Info</RouterLink>
+<!--        <RouterLink active-class="active" class="link" to="/info">Info</RouterLink>-->
         <h1 class="nav_separator">|</h1>
         <RouterLink active-class="active" class="link" to="/movie">Movies</RouterLink>
         <RouterLink active-class="active" class="link" to="/tv">TV</RouterLink>
-        <RouterLink active-class="active" class="link" to="/youtube">Youtube</RouterLink>
+        <RouterLink active-class="active" class="link" to="/anime">Anime</RouterLink>
+        <!--        <RouterLink active-class="active" class="link" to="/youtube">Youtube</RouterLink>-->
         <h1 class="nav_separator">•</h1>
         <RouterLink active-class="active" class="link" to="/movie_lists">Lists</RouterLink>
         <h1 class="nav_separator">•</h1>
-        <RouterLink active-class="active" class="link" to="/anime">Anime</RouterLink>
         <RouterLink active-class="active" class="link" to="/manga">Manga</RouterLink>
         <RouterLink active-class="active" class="link" to="/comic">Comics</RouterLink>
-        <h1 class="nav_separator">•</h1>
         <RouterLink active-class="active" class="link" to="/game">Games</RouterLink>
         <h1 class="nav_separator">•</h1>
         <login-bar></login-bar>
@@ -117,7 +116,7 @@ onMounted(() => {
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/movie">Movies</RouterLink>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/tv">TV</RouterLink>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/movie_lists">Lists</RouterLink>
-<!--    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/youtube">Youtube</RouterLink>-->
+    <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/youtube">Youtube</RouterLink>
     <div class="horiz_separator"></div>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/anime">Anime</RouterLink>
     <RouterLink active-class="active" @click="toggle_side_menu" class="link_side" to="/manga">Manga</RouterLink>
@@ -129,13 +128,14 @@ onMounted(() => {
 
 <style scoped>
 .navbar {
+  /*outline: 1px solid red;*/
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 500;
 
-  overflow-x: scroll;
+  /*overflow-x: scroll;*/
 
   font-size: 1.2em;
 
@@ -174,7 +174,7 @@ onMounted(() => {
   top: 0;
   bottom: 0;
   display: flex;
-  flex-flow: column;
+  flex-flow: column wrap;
   z-index: 500;
   background-color: #36204b;
   filter: drop-shadow(2px 0 10px black);

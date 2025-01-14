@@ -11,7 +11,7 @@ onMounted(() => {
 <template>
   <media-feed-header
       title="Best of the worst"
-      desc="A list of extremely entertaining bad movies"
+      desc="A list of extremely entertaining bad and weird movies"
   />
   <media-feed :media_types="['movie']"
               :tier_lists="['best of the worst']"
