@@ -141,15 +141,6 @@ def get():
 
     def apply_filters(q):
 
-        def find_largest_index(arr):
-            if not arr:
-                return None  # Return None if the array is empty
-            largest_index = 0
-            for k in range(1, len(arr)):
-                if arr[k] > arr[largest_index]:
-                    largest_index = k
-            return largest_index
-
         match = ''
 
         if media_types and len(media_types) > 0:
@@ -175,16 +166,6 @@ def get():
                 'author',
                 'overview',
             ]
-
-            # cond_result_amount = []
-            #
-            # for i, cond in enumerate(conditions):
-            #     cond_result_amount.append(int(len(q.filter(cond).all())))
-            #
-            # best_condition_index = find_largest_index(cond_result_amount)
-            #
-            # q = q.filter(conditions[best_condition_index])
-            # match = matches[best_condition_index]
 
             for i, cond in enumerate(conditions):
                 res = q.filter(cond).first()
@@ -252,11 +233,11 @@ def get():
         if rating_spacing:
             if rating_spacing < 0:
                 q = q.filter(func.abs(Media.user_rating - Media.public_rating) >= abs(rating_spacing),
-                             Media.public_rating <= Media.user_rating)
+                             Media.public_rating <= Media.user_rating, Media.public_rating >= 6.5)
 
             if rating_spacing > 0:
                 q = q.filter(func.abs(Media.user_rating - Media.public_rating) >= abs(rating_spacing),
-                             Media.public_rating >= Media.user_rating)
+                             Media.public_rating >= Media.user_rating, Media.public_rating >= 6.5)
 
         return q, match
 

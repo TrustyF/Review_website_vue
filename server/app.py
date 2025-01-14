@@ -15,9 +15,6 @@ dev_mode = os.path.exists(os.path.join(MAIN_DIR, 'devmode.txt'))
 load_dotenv(os.path.join(MAIN_DIR, '.env'))
 
 app = Flask(__name__)
-# app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-#     "pool_recycle": 280, "pool_timeout": 10, "pool_pre_ping": True
-# }
 
 db_username = os.getenv('MYSQL_DATABASE_USERNAME')
 db_password = os.getenv('MYSQL_DATABASE_PASSWORD')
@@ -38,8 +35,8 @@ CORS(app)
 with app.app_context():
     db.init_app(app)
 
-    from sql_models.media_model import *
-    db.create_all()
+    # from sql_models.media_model import *
+    # db.create_all()
 
     from flask_blueprints import media_blueprint, tag_blueprint, tier_list_blueprint, login_blueprint,user_list_blueprint
 
