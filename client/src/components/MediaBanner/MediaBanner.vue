@@ -5,50 +5,26 @@ import axios from "axios";
 import {log_event} from "/src/scripts/log_events.js";
 
 let props = defineProps({
-  media_types: {
-    type: Array,
-    default: null,
-  },
-  order: {
-    type: String,
-    default: null,
-  },
-  ratings: {
-    type: Array,
-    default: null,
-  },
-  public_ratings: {
-    type: Array,
-    default: null,
-  },
+  media_types: Array,
+  order: String,
+  ratings: Array,
+  public_ratings: Array,
   limit: {
     type: Number,
-    default: 5,
+    default: 20,
   },
   tier_lists: {
     type: Array,
     default: "all",
   },
-  genres: {
-    type: Array,
-    default: null,
-  },
+  genres: Array,
   size_override: {
     type: Array(),
     default: [500, 750],
   },
-  rating_spacing: {
-    type: Number,
-    default: null,
-  },
-  title: {
-    type: String,
-    default: null,
-  },
-  defaultInView: {
-    type: Boolean,
-    default: false,
-  },
+  rating_spacing: Number,
+  title: String,
+  defaultInView: Boolean,
 });
 let emits = defineEmits(["loaded"]);
 const curr_api = inject("curr_api");
@@ -59,11 +35,14 @@ const rangeOfNumbers = (a, b) => [...Array(b + 1).keys()].slice(a)
 let media = ref([])
 let seed = ref(session_seed)
 let page = ref(0)
+let scroll_banner = ref()
+let scroll_position = ref(0)
+let scroll_elements = ref(5)
 
 const container_height = computed(() => `${(props.size_override[1] * 0.3) + 60}px`)
 
 async function get_media() {
-  // console.log('getting banner media')
+  console.log('getting banner media')
   const url = new URL(`${curr_api}/media/get`)
   const params = {
     'limit': props.limit,
@@ -90,19 +69,37 @@ async function get_media() {
         data: JSON.stringify(params)
       })
 
-  return result.data['media']
+  media.value = result.data['media']
 }
 
-async function paginate(value){
-  page.value += value
-  page.value = Math.max(page.value,0)
+async function paginate(value) {
+  let children = scroll_banner.value.children
+  scroll_position.value = Math.max(0, Math.min(20, scroll_position.value + (value * scroll_elements.value)))
 
-  media.value = await get_media()
+  if (scroll_position.value === 15) {
+    children[19].scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'end'
+    })
+  } else if (scroll_position.value >= 20) {
+    scroll_position.value = 0
+    page.value += 1
+    await get_media()
+    await paginate(0)
+  } else {
+    children[scroll_position.value].scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'start'
+    })
+  }
+
+
 }
-
 
 onMounted(() => {
-  paginate(0)
+  get_media()
   if (!props.defaultInView) log_event('anchor_in_view', 'scroll', props.title)
 })
 
@@ -113,25 +110,26 @@ onMounted(() => {
   <div class="banner_wrapper">
 
     <div class="nav_container">
-      <div class="paginate">
-        <div class="arrow_gradient"></div>
-        <div @click="paginate(-1)" class="bi-arrow-left paginate-arrow" v-show="!is_mobile"/>
+      <div :class="`paginate ${scroll_position>1 ? 'visible':''}`" @click="paginate(-1)">
+        <div class="bi-arrow-left paginate-arrow">
+          <div class="arrow_gradient"/>
+        </div>
       </div>
-      <div class="paginate">
-        <div class="arrow_gradient" style="transform: rotate(180deg)"></div>
-        <div @click="paginate(1)" class="bi-arrow-right paginate-arrow" v-show="!is_mobile"/>
+      <div class="paginate visible" @click="paginate(1)" style="transform: scaleX(-1)">
+        <div class="bi-arrow-left paginate-arrow">
+          <div class="arrow_gradient"/>
+        </div>
       </div>
     </div>
 
-    <div class="scroll_container">
-      <div class="scroll_content" v-for="med in media" :key="med.id">
-        <movie-container
-            :data="med"
-            :scale_mul="!is_mobile ? 0.3:0.25"
-            :size_override="size_override"
-            :lazy_poster="true"
-        ></movie-container>
-      </div>
+    <div ref="scroll_banner" class="scroll_container">
+      <movie-container
+          v-for="med in media" :key="med.id"
+          :data="med"
+          :scale_mul="!is_mobile ? 0.3:0.25"
+          :size_override="size_override"
+          :lazy_poster="true"
+      ></movie-container>
     </div>
 
   </div>
@@ -146,67 +144,93 @@ h1 {
   position: relative;
   height: v-bind(container_height);
 }
+
 .nav_container {
+  pointer-events: none;
   position: absolute;
   width: 100%;
   height: 100%;
-  outline: 1px solid red;
   display: flex;
   flex-flow: row;
   justify-content: space-between;
   z-index: 100;
 }
+
 .paginate {
-  /*border: 1px solid blue;*/
+  position: relative;
+  pointer-events: auto;
   z-index: 10;
-  width: 4rem;
+  width: 6rem;
   cursor: pointer;
   height: 100%;
   display: flex;
-}
 
-.paginate-arrow {
-  text-align: center;
-  font-size: 1em;
-  padding: 10px;
-  display: flex;
-  flex-flow: column;
   justify-content: center;
-  z-index: 10;
-}
-.arrow_gradient {
-  position: absolute;
-  height: 100%;
-  width: 4rem;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.8), transparent);
-  transition: 250ms ease-in-out;
+  align-items: center;
+
   opacity: 0;
   visibility: hidden;
 }
-.paginate:hover .arrow_gradient{
+
+.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.paginate-arrow {
+  /*outline: 1px solid red;*/
+  font-size: 1em;
+  height: 1em;
+  padding: 10px;
+  margin-left: -30px;
+  border-radius: 10px;
+  text-shadow: black 2px 2px 2px;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  z-index: 5;
+  transition: 150ms ease-in-out;
+}
+
+.arrow_gradient {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  /*background: linear-gradient(to right, rgba(0, 0, 0, 0.5) 0%, transparent 100%);*/
+  transition: 150ms ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+  z-index: -1;
+}
+
+.paginate:hover .arrow_gradient {
   transition: 100ms;
   opacity: 1;
   visibility: visible;
 }
+
+.paginate:hover .paginate-arrow {
+  transition: 100ms;
+  background: rgba(26, 26, 26, 0.9);
+}
+
 .scroll_container {
   position: absolute;
   width: 100%;
   height: 100%;
   display: flex;
   flex-flow: row;
-  /*align-items: center;*/
-  /*justify-content: space-between;*/
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
   gap: 20px;
 }
 
-.scroll_content {
-  -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
-  -moz-animation: fadein 1s; /* Firefox < 16 */
-  -ms-animation: fadein 1s; /* Internet Explorer */
-  -o-animation: fadein 1s; /* Opera < 12.1 */
-  animation: fadein 1s;
+.scroll_container::-webkit-scrollbar {
+  display: none;
 }
-
 
 @media only screen and (max-width: 500px) {
   .scroll_container {
