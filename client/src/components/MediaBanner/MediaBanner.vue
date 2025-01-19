@@ -37,7 +37,6 @@ let seed = ref(session_seed)
 let page = ref(0)
 let scroll_banner = ref()
 let scroll_position = ref(0)
-let scroll_elements = ref(5)
 
 const container_height = computed(() => `${(props.size_override[1] * 0.3) + 60}px`)
 
@@ -73,11 +72,53 @@ async function get_media() {
 }
 
 async function paginate(value) {
+
+  function countElementsInView(children) {
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+
+    return Array.from(children).filter(child => {
+      const rect = child.getBoundingClientRect();
+      const parent = child.parentElement;
+
+      // Check if the element is within the viewport
+      const isWithinViewport =
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <= viewportHeight &&
+          rect.right <= viewportWidth;
+
+      if (!isWithinViewport) return false;
+
+      // Check if the element is within its parent's bounds (handling overflow hidden)
+      if (parent) {
+        const parentRect = parent.getBoundingClientRect();
+        const isWithinParentBounds =
+            rect.top >= parentRect.top &&
+            rect.left >= parentRect.left &&
+            rect.bottom <= parentRect.bottom &&
+            rect.right <= parentRect.right;
+
+        return isWithinParentBounds;
+      }
+
+      return true;
+    }).length;
+  }
+
   let children = scroll_banner.value.children
-  scroll_position.value = Math.max(0, Math.min(20, scroll_position.value + (value * scroll_elements.value)))
+  let scroll_amount = 5
+
+  scroll_amount = countElementsInView(children)
+  console.log(countElementsInView(children))
+
+
+  scroll_position.value = Math.max(0, Math.min(20, scroll_position.value + (value * scroll_amount)))
+
+  log_event('paginate banner', 'int', `${props['title']} ${scroll_position.value}-${page.value}`)
 
   if (scroll_position.value === 15) {
-    children[19].scrollIntoView({
+    children[20].scrollIntoView({
       behavior: 'smooth',
       block: 'nearest',
       inline: 'end'
@@ -110,14 +151,14 @@ onMounted(() => {
   <div class="banner_wrapper">
 
     <div class="nav_container">
-      <div :class="`paginate ${scroll_position>1 ? 'visible':''}`" @click="paginate(-1)">
-        <div class="bi-arrow-left paginate-arrow">
-          <div class="arrow_gradient"/>
+      <div class="paginate">
+        <div class="bi-arrow-left-short paginate-arrow">
+          <div class="paginate-arrow-hitbox" @click="paginate(-1)"/>
         </div>
       </div>
-      <div class="paginate visible" @click="paginate(1)" style="transform: scaleX(-1)">
-        <div class="bi-arrow-left paginate-arrow">
-          <div class="arrow_gradient"/>
+      <div class="paginate" style="transform: scaleX(-1)">
+        <div class="bi-arrow-left-short paginate-arrow">
+          <div class="paginate-arrow-hitbox" @click="paginate(1)"/>
         </div>
       </div>
     </div>
@@ -158,61 +199,56 @@ h1 {
 
 .paginate {
   position: relative;
-  pointer-events: auto;
   z-index: 10;
-  width: 6rem;
-  cursor: pointer;
   height: 100%;
   display: flex;
 
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 
+  transition: 100ms;
   opacity: 0;
   visibility: hidden;
-}
-
-.visible {
-  opacity: 1;
-  visibility: visible;
+  transform: translate(5px);
 }
 
 .paginate-arrow {
-  /*outline: 1px solid red;*/
-  font-size: 1em;
-  height: 1em;
-  padding: 10px;
-  margin-left: -30px;
-  border-radius: 10px;
-  text-shadow: black 2px 2px 2px;
+  position: relative;
+  font-size: 1.5em;
+  /*-webkit-text-stroke: 1px white;*/
+  height: fit-content;
+  padding: 10px 5px 10px 5px;
+  margin: 5px;
+  text-shadow: black 1px 1px 3px;
   display: flex;
   flex-flow: column;
   justify-content: center;
   z-index: 5;
-  transition: 150ms ease-in-out;
+  border-radius: 10px;
+  transition: 200ms;
 }
 
-.arrow_gradient {
+.paginate-arrow-hitbox {
   position: absolute;
-  inset: 0;
-  height: 100%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  border-radius: 10px;
   width: 100%;
-  /*background: linear-gradient(to right, rgba(0, 0, 0, 0.5) 0%, transparent 100%);*/
-  transition: 150ms ease-in-out;
-  opacity: 0;
-  visibility: hidden;
-  z-index: -1;
+  height: 100%;
+  padding: 25px 15px 25px 15px;
+  cursor: pointer;
+  pointer-events: auto;
 }
 
-.paginate:hover .arrow_gradient {
+.banner_wrapper:hover .paginate {
+  transform: translate(0px);
   transition: 100ms;
   opacity: 1;
   visibility: visible;
 }
 
-.paginate:hover .paginate-arrow {
-  transition: 100ms;
-  background: rgba(26, 26, 26, 0.9);
+.paginate-arrow:hover {
+  background-color: rgba(29, 27, 36, 1);
 }
 
 .scroll_container {

@@ -76,19 +76,17 @@ onMounted(() => {
       <RouterLink to="/"><img :src="logo" alt="website icon" style="height: 40px"></RouterLink>
 
       <div v-if="!is_mobile" class="wrapper">
-        <RouterLink active-class="active" class="link" to="/">Home</RouterLink>
-<!--        <RouterLink active-class="active" class="link" to="/info">Info</RouterLink>-->
+        <RouterLink active-class="active" class="link" draggable="false" to="/">Home</RouterLink>
         <h1 class="nav_separator">|</h1>
-        <RouterLink active-class="active" class="link" to="/movie">Movies</RouterLink>
-        <RouterLink active-class="active" class="link" to="/tv">TV</RouterLink>
-        <RouterLink active-class="active" class="link" to="/anime">Anime</RouterLink>
-        <!--        <RouterLink active-class="active" class="link" to="/youtube">Youtube</RouterLink>-->
+        <RouterLink active-class="active" class="link" draggable="false" to="/movie">Movies</RouterLink>
+        <RouterLink active-class="active" class="link" draggable="false" to="/tv">TV</RouterLink>
+        <RouterLink active-class="active" class="link" draggable="false" to="/anime">Anime</RouterLink>
         <h1 class="nav_separator">•</h1>
-        <RouterLink active-class="active" class="link" to="/movie_lists">Lists</RouterLink>
+        <RouterLink active-class="active" class="link" draggable="false" to="/movie_lists">Lists</RouterLink>
         <h1 class="nav_separator">•</h1>
-        <RouterLink active-class="active" class="link" to="/manga">Manga</RouterLink>
-        <RouterLink active-class="active" class="link" to="/comic">Comics</RouterLink>
-        <RouterLink active-class="active" class="link" to="/game">Games</RouterLink>
+        <RouterLink active-class="active" class="link" draggable="false" to="/manga">Manga</RouterLink>
+        <RouterLink active-class="active" class="link" draggable="false" to="/comic">Comics</RouterLink>
+        <RouterLink active-class="active" class="link" draggable="false" to="/game">Games</RouterLink>
         <h1 class="nav_separator">•</h1>
         <login-bar></login-bar>
       </div>
@@ -136,7 +134,7 @@ onMounted(() => {
   z-index: 500;
 
   /*overflow-x: scroll;*/
-
+  user-select: none;
   font-size: 1.2em;
 
   transition: 250ms;

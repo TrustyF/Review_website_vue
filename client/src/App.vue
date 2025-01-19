@@ -1,14 +1,14 @@
 <script setup>
-// import {inject, onMounted} from 'vue'
 import {RouterView} from 'vue-router'
-import NavBar from "@/components/General/NavBar.vue";
 import '@/assets/styles/globals.css'
 import '@/assets/styles/dark.css'
-import {computed, inject, onMounted, provide, ref, watch} from "vue";
-import TooltipBadge from "@/components/tooltip/tooltipBadge.vue";
-import TooltipEditor from "@/components/tooltip/tooltipEditor.vue";
-import TooltipMediaDetails from "@/components/tooltip/tooltipMediaDetails.vue";
+import {computed, defineAsyncComponent, inject, onMounted, provide, ref, watch} from "vue";
 import {ping_user_leave} from "@/scripts/log_events.js";
+
+const NavBar = defineAsyncComponent(()=> import("@/components/General/NavBar.vue"))
+const TooltipBadge = defineAsyncComponent(()=> import("@/components/tooltip/tooltipBadge.vue"))
+const TooltipEditor = defineAsyncComponent(()=> import("@/components/tooltip/tooltipEditor.vue"))
+const TooltipMediaDetails = defineAsyncComponent(()=> import("@/components/tooltip/tooltipMediaDetails.vue"))
 
 const selected_media = ref({})
 const edit_media = ref(undefined)

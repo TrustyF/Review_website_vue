@@ -1,5 +1,4 @@
 import {createRouter, createWebHistory} from "vue-router";
-import {getAnalytics, logEvent} from "firebase/analytics";
 import {log_event} from "@/scripts/log_events";
 
 const router = createRouter({
