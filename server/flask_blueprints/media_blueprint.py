@@ -92,7 +92,7 @@ def sleep_check():
 
 @bp.route("/get", methods=['POST'])
 def get():
-    start = time.time()
+    # start = time.time()
 
     # parameters
     data = request.get_json()
@@ -276,8 +276,8 @@ def get():
     media = query.all()
     serialized_media = [serialize_media(x) for x in media]
 
-    end = time.time()
-    print(end - start)
+    # end = time.time()
+    # print(end - start)
 
     return {
         'media': serialized_media,
@@ -534,11 +534,11 @@ def get_image():
         return [], 200
 
     file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches",
-                             f"{media_id}_{media_type}_{poster_id}.webp")
+                             f"{media_id}_{media_type}_{poster_id}.jpeg")
 
     # return saved file if exists
     if os.path.exists(file_path):
-        return send_file(file_path, mimetype='image/webp')
+        return send_file(file_path, mimetype='image/jpeg')
 
     # check if the requested image is part of a db entry and save if true
     if db.session.query(Media).filter(Media.external_id == media_id,
@@ -549,14 +549,14 @@ def get_image():
 
         image = Image.open(io.BytesIO(response.content))
 
-        image.save(file_path, "webp", quality=10)
+        image.save(file_path, "jpeg", quality=30)
 
     else:
         # if preview return without saving
         response = requests.get(media_path)
         return response.content
 
-    return send_file(file_path, mimetype='image/webp')
+    return send_file(file_path, mimetype='image/jpeg')
 
 
 @bp.route("/get_extra_posters", methods=['GET'])
@@ -665,10 +665,10 @@ def search_extra_posters():
 def get_scroll_banner():
     def resize_image(img, width, height):
         # Resize the image to the target width and height
-        return img.resize((width, height), Image.Resampling.LANCZOS)
+        return img.resize((width, height), Image.Resampling.BOX)
 
     def make_collage(img_array, width, height):
-        collage = Image.new("RGB", (width * len(img_array), height), color=(255, 255, 255, 255))
+        collage = Image.new("RGB", (width * len(img_array), height))
 
         with ThreadPoolExecutor() as executor:
             resized_images = list(
@@ -704,10 +704,10 @@ def get_scroll_banner():
     banner = make_collage([Image.open(i) for i in posters], int(500), int(750))
 
     mem_file = io.BytesIO()
-    banner.save(mem_file, 'jpeg', quality=80)
+    banner.save(mem_file, 'jpeg', quality=10)
     mem_file.seek(0)
 
-    return send_file(mem_file, mimetype='image/webp')
+    return send_file(mem_file, mimetype='image/jpeg')
 
 
 @bp.route("/get_filters", methods=['POST'])
