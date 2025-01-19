@@ -23,7 +23,11 @@ db_name = 'TrustyFox$review_site'
 database_uri = f'mysql+pymysql://{db_username}:{db_password}@TrustyFox.mysql.pythonanywhere-services.com:3306/{db_name}'
 local_database_uri = f'mysql+pymysql://root:{db_password}@127.0.0.1:3306/{db_name}'
 
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 280, 'pool_pre_ping': True}
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    'pool_recycle': 280,
+    'pool_pre_ping': True,
+    'echo':False
+}
 
 if dev_mode:
     print('using local')
@@ -39,6 +43,8 @@ with app.app_context():
 
     # from sql_models.media_model import *
     # db.create_all()
+    logging.disable(logging.WARNING)
+
 
     from flask_blueprints import media_blueprint, tag_blueprint, tier_list_blueprint, login_blueprint, \
         user_list_blueprint

@@ -13,6 +13,7 @@ from math import ceil, floor
 from youtubesearchpython import VideosSearch
 from flask_blueprints.login_blueprint import requires_auth
 from concurrent.futures import ThreadPoolExecutor
+import time
 
 from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY, IGDB_CLIENT_ID, IGDB_CLIENT_SECRET, COMIC_VINE_KEY
 from data_mapper.media_mapper import map_from_tmdb, map_from_mangadex, map_from_igdb, map_from_youtube, \
@@ -91,7 +92,7 @@ def sleep_check():
 
 @bp.route("/get", methods=['POST'])
 def get():
-    # start = time.time()
+    start = time.time()
 
     # parameters
     data = request.get_json()
@@ -275,8 +276,8 @@ def get():
     media = query.all()
     serialized_media = [serialize_media(x) for x in media]
 
-    # end = time.time()
-    # print(end - start)
+    end = time.time()
+    print(end - start)
 
     return {
         'media': serialized_media,
