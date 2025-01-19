@@ -79,18 +79,14 @@ function sort_tags(arr) {
     <h2 style="color: white">{{ data['content_rating']['age'] }}</h2>
   </div>
 
-  <!--  <div v-if="data['is_dropped']" class="dropped_banner_wrapper">-->
-  <!--    <img src="/ui/stop.png" class="dropped_banner" alt="" title="dropped">-->
-  <!--  </div>-->
-
-  <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null">
+  <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null && data['tags'].length > 0">
 
     <div v-for="tag in sort_tags(data['tags'])" :key="tag['id']" style="pointer-events: auto;width: fit-content">
       <badge :data="tag" :min_size="min_size" :show_title="false"></badge>
     </div>
 
-    <div style="pointer-events: auto;width: fit-content">
-      <badge v-if="data['is_dropped']" :data="dropped_badge" :min_size="min_size" :show_title="false"></badge>
+    <div style="pointer-events: auto;width: fit-content" v-if=" data['is_dropped']">
+      <badge :data="dropped_badge" :min_size="min_size" :show_title="false"></badge>
     </div>
   </div>
 
@@ -102,27 +98,9 @@ function sort_tags(arr) {
          @click.stop="open_link_new_tab(data['external_link'])">
   </div>
 
-  <!--  <input class="seen_checkbox" type="checkbox" title="mark as seen">-->
-
-
 </template>
 
 <style scoped>
-.poster_overflow {
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  width: v-bind(poster_size [0]);
-  height: v-bind(poster_size [1]);
-  clip-path: inset(0% 0% 0% 0% round 8px);
-}
-
-.diff_gauge_wrapper {
-  position: absolute;
-  width: 100%;
-  top: v-bind(poster_size [1] + 'px');
-  transform: translate(0, -30px);
-}
 
 .poster_gradient {
   pointer-events: none;
@@ -135,28 +113,6 @@ function sort_tags(arr) {
   height: v-bind(poster_size [1] + 'px');
 }
 
-.dropped_banner_wrapper {
-  /*pointer-events: none;*/
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 3px;
-  /*clip-path: inset(0% 0% 0% 0% round 5%);*/
-}
-
-.dropped_banner {
-  /*pointer-events: none;*/
-  height: 15px;
-  width: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.8em;
-  border-radius: 50%;
-  /*opacity: 0.6;*/
-  /*filter: saturate(0);*/
-  /*filter: drop-shadow(0 0 3px black);*/
-}
 
 .content_rating {
   pointer-events: none;
@@ -181,16 +137,6 @@ function sort_tags(arr) {
   color: lightgrey;
   background-color: black;
   filter: drop-shadow(1px 1px 2px black) drop-shadow(0px 0px 4px black);
-}
-
-.seen_checkbox {
-  cursor: pointer;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  margin: 5px;
-  width: calc(v-bind(min_size) * 0.15px);
-  height: calc(v-bind(min_size) * 0.15px);
 }
 
 .edit_tools_wrapper {
@@ -236,7 +182,7 @@ function sort_tags(arr) {
 .tags_wrapper {
   pointer-events: none;
   /*outline: 1px solid red;*/
-  width: v-bind(poster_size [0] + 'px');
+  /*width: v-bind(poster_size [0] + 'px');*/
   position: absolute;
 
   left: 0;

@@ -122,7 +122,7 @@ function emit_finished_loading() {
   <div class="movie_container_wrapper">
 
     <img datatype="img" @click="push_to_details" @loadeddata="emit_finished_loading" v-if="lazy_poster && image_path" class="poster"
-         alt="" v-lazy="image_path" lazy="loading"/>
+         alt="" v-lazy="image_path" lazy="loading" draggable="false"/>
 <!--    <img @click="push_to_details" @load="emit_finished_loading" v-else-if="image_path" class="poster" alt=""-->
 <!--         :src="image_path"/>-->
     <div v-else class="poster"></div>
@@ -158,6 +158,7 @@ function emit_finished_loading() {
 <style scoped>
 .movie_container_wrapper {
   /*cursor: pointer;*/
+  /*outline: 1px solid red;*/
   position: relative;
   display: flex;
   flex-flow: column nowrap;
@@ -171,11 +172,11 @@ function emit_finished_loading() {
 
   border-radius: 8px;
 
-  -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
-  -moz-animation: fadein 1s; /* Firefox < 16 */
-  -ms-animation: fadein 1s; /* Internet Explorer */
-  -o-animation: fadein 1s; /* Opera < 12.1 */
-  animation: fadein 1s;
+  -webkit-animation: fadein 0.25s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 0.25s; /* Firefox < 16 */
+  -ms-animation: fadein 0.25s; /* Internet Explorer */
+  -o-animation: fadein 0.25s; /* Opera < 12.1 */
+  animation: fadein 0.25s;
 }
 
 .poster {
@@ -184,6 +185,7 @@ function emit_finished_loading() {
   /*outline: 1px solid red;*/
 
   cursor: pointer;
+  user-select: none;
 
   padding: 0;
   margin: 0;
