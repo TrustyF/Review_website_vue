@@ -23,6 +23,8 @@ db_name = 'TrustyFox$review_site'
 database_uri = f'mysql+pymysql://{db_username}:{db_password}@TrustyFox.mysql.pythonanywhere-services.com:3306/{db_name}'
 local_database_uri = f'mysql+pymysql://root:{db_password}@127.0.0.1:3306/{db_name}'
 
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_recycle': 280}
+
 if dev_mode:
     print('using local')
     app.config["SQLALCHEMY_DATABASE_URI"] = local_database_uri
