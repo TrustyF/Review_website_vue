@@ -111,12 +111,6 @@ onMounted(() => {
 
 .fade_anim {
   height: 100%;
-
-  -webkit-animation: fadein 1s; /* Safari, Chrome and Opera > 12.1 */
-  -moz-animation: fadein 1s; /* Firefox < 16 */
-  -ms-animation: fadein 1s; /* Internet Explorer */
-  -o-animation: fadein 1s; /* Opera < 12.1 */
-  animation: fadein 1s;
 }
 
 @media only screen and (max-width: 500px) {
