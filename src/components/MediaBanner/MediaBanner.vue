@@ -15,7 +15,7 @@ let props = defineProps({
   },
   tier_lists: {
     type: Array,
-    default: "all",
+    default: ()=>["all"],
   },
   genres: Array,
   size_override: {

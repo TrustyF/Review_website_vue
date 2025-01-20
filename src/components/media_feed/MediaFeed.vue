@@ -330,11 +330,11 @@ onUnmounted(() => {
   transition: top 250ms;
   transition-delay: 250ms;
 
-  -webkit-animation: fadein 0.5s; /* Safari, Chrome and Opera > 12.1 */
-  -moz-animation: fadein 0.5s; /* Firefox < 16 */
-  -ms-animation: fadein 0.5s; /* Internet Explorer */
-  -o-animation: fadein 0.5s; /* Opera < 12.1 */
-  animation: fadein 0.5s;
+  /*-webkit-animation: fadein 0.5s; !* Safari, Chrome and Opera > 12.1 *!*/
+  /*-moz-animation: fadein 0.5s; !* Firefox < 16 *!*/
+  /*-ms-animation: fadein 0.5s; !* Internet Explorer *!*/
+  /*-o-animation: fadein 0.5s; !* Opera < 12.1 *!*/
+  /*animation: fadein 0.5s;*/
 }
 
 .spinner {

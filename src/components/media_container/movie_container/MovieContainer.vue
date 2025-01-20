@@ -195,7 +195,7 @@ function emit_finished_loading() {
   object-fit: cover;
 
   opacity: 1;
-  transition: opacity 1s;
+  transition: opacity 0.5s;
 }
 
 .poster[lazy=loading] {
