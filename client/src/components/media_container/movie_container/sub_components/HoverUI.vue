@@ -3,7 +3,6 @@ import {inject, onMounted, watch, ref, computed, defineAsyncComponent} from "vue
 import {log_event} from "/src/scripts/log_events";
 
 const badge = defineAsyncComponent(() => import("@/components/media_container/movie_container/sub_components/badge.vue"))
-const badgeDot = defineAsyncComponent(() => import("@/components/media_container/movie_container/sub_components/badgeDot.vue"))
 
 let props = defineProps({
   data: {
@@ -25,7 +24,7 @@ let edit_mode = inject('edit_mode')
 let edit_pane_open = inject('edit_pane_open')
 let add_pane_open = inject('add_pane_open')
 let selected_media = inject('selected_media')
-const media_detail_pane_open = inject("media_detail_pane_open");
+let media_detail_pane_open = inject("media_detail_pane_open");
 
 let dropped_badge = {
   image_path: "103201.webp",
@@ -85,12 +84,6 @@ function sort_tags(arr) {
 
     <div style="pointer-events: auto;width: fit-content" v-if=" data['is_dropped']">
       <badge :data="dropped_badge" :min_size="min_size" :show_title="false"></badge>
-    </div>
-  </div>
-
-  <div class="tags_dot_wrapper" v-if="data['tags']!==undefined && data['tags']!==null && data['tags'].length > 0">
-    <div v-for="tag in sort_tags(data['tags'])" :key="tag['id']" class="tag_dot_vis_container">
-      <badge-dot :color="tag['tier']"></badge-dot>
     </div>
   </div>
 
@@ -212,34 +205,6 @@ function sort_tags(arr) {
   transition-delay: 700ms;
 }
 
-.tags_dot_wrapper {
-  pointer-events: none;
-  /*outline: 1px solid red;*/
-  /*width: v-bind(poster_size [0] + 'px');*/
-  position: absolute;
-
-  left: 0;
-  top:0;
-
-  display: flex;
-  flex-flow: column wrap;
-  gap: 3px;
-  padding: 5px;
-  z-index: 15;
-}
-
-
-.tag_dot_vis_container {
-  pointer-events: auto;
-  width: fit-content;
-
-  visibility: visible;
-  opacity: 100%;
-  transform: translate(0, 0);
-
-  transition: 400ms;
-  transition-delay: 700ms;
-}
 
 .movie_container_wrapper:hover .tag_dot_vis_container {
   transform: translate(-3px,0);

@@ -1,10 +1,10 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed, onUnmounted, toRef} from "vue";
-import FilterSearch from "@/components/media_filters/filterSearch.vue";
-import MovieContainer from "@/components/media_container/movie_container/MovieContainer.vue";
-import TagPicker from "@/components/editor_tools/TagPicker.vue";
-import TierListPicker from "@/components/editor_tools/TierListPicker.vue";
-import UserListPicker from "@/components/editor_tools/UserListPicker.vue";
+import {inject, onMounted, watch, ref, computed, onUnmounted,defineAsyncComponent, toRef} from "vue";
+const FilterSearch = defineAsyncComponent(() => import('@/components/media_filters/filterSearch.vue'));
+const MovieContainer = defineAsyncComponent(() => import('@/components/media_container/movie_container/MovieContainer.vue'));
+const TagPicker = defineAsyncComponent(() => import('@/components/editor_tools/TagPicker.vue'));
+const TierListPicker = defineAsyncComponent(() => import('@/components/editor_tools/TierListPicker.vue'));
+const UserListPicker = defineAsyncComponent(() => import('@/components/editor_tools/UserListPicker.vue'));
 import {get_current_user} from "@/firebase_auth.js";
 
 let props = defineProps(["edit", "add"]);
