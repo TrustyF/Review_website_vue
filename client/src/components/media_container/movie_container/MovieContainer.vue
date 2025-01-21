@@ -123,8 +123,6 @@ function emit_finished_loading() {
 
     <img datatype="img" @click="push_to_details" @loadeddata="emit_finished_loading" v-if="lazy_poster && image_path" class="poster"
          alt="" v-lazy="image_path" lazy="loading" draggable="false"/>
-<!--    <img @click="push_to_details" @load="emit_finished_loading" v-else-if="image_path" class="poster" alt=""-->
-<!--         :src="image_path"/>-->
     <div v-else class="poster"></div>
 
     <difficulty-gauge class="diff" :diff="data['difficulty']"></difficulty-gauge>
