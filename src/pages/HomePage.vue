@@ -1,9 +1,10 @@
 <script setup>
 import {computed, defineAsyncComponent, inject, onBeforeMount, onMounted, onUnmounted, ref} from "vue";
 
-import CreditsFooter from "../components/General/CreditsFooter.vue";
+const CreditsFooter  = defineAsyncComponent(() => import('../components/General/CreditsFooter.vue'));
 import MediaScrollBanner from "../components/MediaBanner/MediaScrollBanner.vue";
 import MediaBanner from "../components/MediaBanner/MediaBanner.vue";
+
 import logo from '/ui/logo.png'
 import {RouterLink} from "vue-router";
 

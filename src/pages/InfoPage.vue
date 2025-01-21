@@ -1,12 +1,11 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed} from "vue";
-import CreditsFooter from "@/components/General/CreditsFooter.vue";
-import StatsGraphs from '@/components/General/StatsGraphs.vue'
-
+import {inject, onMounted, watch, ref, computed, defineAsyncComponent} from "vue";
 import ratings_info from '/home_images/rating_info.jpg'
 import tags_info from '/home_images/tags_info.jpg'
 import search_info from '/home_images/search_info.jpg'
 
+const StatsGraphs = defineAsyncComponent(() => import('@/components/General/StatsGraphs.vue'));
+const CreditsFooter = defineAsyncComponent(() => import('@/components/General/CreditsFooter.vue'));
 
 let props = defineProps(["test"]);
 let emits = defineEmits(["test"]);

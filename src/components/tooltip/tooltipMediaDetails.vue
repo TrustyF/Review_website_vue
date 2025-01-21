@@ -1,28 +1,21 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed, onUnmounted, onBeforeUnmount, onBeforeMount} from "vue";
+import {inject, onMounted, watch, ref, computed, onUnmounted, defineAsyncComponent} from "vue";
 import {useRoute} from 'vue-router';
 import axios from "axios";
 
 import gold_star from '/ui/gold_star.png'
 import blue_star from '/ui/blue_star.png'
-import RatingCircle from "@/components/media_container/movie_container/sub_components/RatingCircle.vue";
-import BadgeTooltip from "@/components/media_container/movie_container/sub_components/badgeExpanded.vue";
-import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
+
+const RatingCircle = defineAsyncComponent(() => import('@/components/media_container/movie_container/sub_components/RatingCircle.vue'));
+const Badge = defineAsyncComponent(() => import('@/components/media_container/movie_container/sub_components/badge.vue'));
+const DifficultyGauge = defineAsyncComponent(() => import('@/components/media_container/movie_container/sub_components/DifficultyGauge.vue'));
 import external_img from '/ui/external_link.png'
 import youtube_img from '/ui/youtube.png'
 import diff_gauge from '/ui/circle_gauge.png'
 import pen_img from '/ui/crayon.png'
 import studio_img from '/ui/studio.png'
-import DifficultyGauge from "@/components/media_container/movie_container/sub_components/DifficultyGauge.vue";
 import spinner from '/ui/custom_spinner.webp'
 
-// let props = defineProps({
-//   id: {
-//     type: Number,
-//     default: null,
-//   },
-// });
-// let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
 const media = inject("selected_media");
 const media_detail_pane_open = inject("media_detail_pane_open");
@@ -235,7 +228,6 @@ onUnmounted(() => {
         </div>
 
       </div>
-
 
 
     </div>

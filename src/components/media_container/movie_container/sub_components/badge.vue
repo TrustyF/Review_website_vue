@@ -12,7 +12,6 @@ const tooltip_hover = inject("tooltip_badge_hover");
 const tag_container = ref()
 
 function emit_tooltip_data() {
-
   let tag_box = tag_container.value.getBoundingClientRect()
   let tag_position = [tag_box.x + (tag_box.width / 2), tag_box.y + (tag_box.height / 2) + document.documentElement.scrollTop]
 

@@ -39,10 +39,6 @@ router.beforeEach((to, from) => {
   position_tooltip()
 })
 
-onMounted(() => {
-  // const resizer = new ResizeObserver(position_tooltip)
-  // resizer.observe(tooltip_container.value)
-})
 </script>
 
 <template>
@@ -65,7 +61,8 @@ onMounted(() => {
 
   opacity: 0;
   visibility: hidden;
-  transition: opacity 200ms;
+  transition: 100ms opacity;
+  transition-delay: 100ms;
 
   pointer-events: none;
   user-select: none;
@@ -74,6 +71,8 @@ onMounted(() => {
 .visible {
   opacity: 100%;
   visibility: visible;
+  transition-delay: 0ms;
+  transition: 100ms opacity;
 }
 
 .badge {

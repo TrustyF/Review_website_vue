@@ -1,6 +1,6 @@
 <script setup>
-import {ref, onMounted, inject, provide, onUnmounted} from 'vue'
-import MediaFeed from "@/components/media_feed/MediaFeed.vue";
+import {ref, onMounted, inject, provide, onUnmounted, defineAsyncComponent} from 'vue'
+const MediaFeed = defineAsyncComponent(() => import('@/components/media_feed/MediaFeed.vue'));
 
 </script>
 

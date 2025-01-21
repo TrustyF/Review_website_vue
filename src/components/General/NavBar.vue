@@ -1,10 +1,10 @@
 <script setup>
 import {RouterLink} from "vue-router";
 import logo from '/ui/logo.png'
-import {inject, onMounted, ref} from 'vue'
-import LoginBar from "@/components/General/LoginBar.vue";
-import triple_bars from "/ui/triple_bars.png";
+import {defineAsyncComponent, inject, onMounted, ref} from 'vue'
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
+
+const LoginBar = defineAsyncComponent(()=> import("@/components/General/LoginBar.vue"))
 
 const curr_api = inject("curr_api");
 let is_mobile = inject("is_mobile")
@@ -98,7 +98,7 @@ onMounted(() => {
       </div>
 
       <div v-if="is_mobile" @click="toggle_side_menu" class="mobile_wrapper">
-        <img alt="menu" :src="triple_bars" class="triple_bars">
+        <div class="triple_bars bi-list"/>
       </div>
 
     </div>
@@ -159,8 +159,7 @@ onMounted(() => {
 }
 
 .triple_bars {
-  height: 30px;
-  filter: invert();
+  font-size: 30px;
   cursor: pointer;
 }
 

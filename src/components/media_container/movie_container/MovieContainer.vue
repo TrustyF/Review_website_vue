@@ -1,11 +1,12 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed, provide} from "vue";
-import Rating from "@/components/media_container/movie_container/sub_components/rating.vue";
+import {inject, onMounted, watch, ref, computed, provide, defineAsyncComponent} from "vue";
 import {useRouter} from 'vue-router'
-import HoverUI from "@/components/media_container/movie_container/sub_components/HoverUI.vue";
-import DifficultyGauge from "@/components/media_container/movie_container/sub_components/DifficultyGauge.vue";
 import {log_event} from "/src/scripts/log_events";
 import axios from "axios";
+
+const HoverUI = defineAsyncComponent(()=> import("@/components/media_container/movie_container/sub_components/HoverUI.vue"))
+const DifficultyGauge = defineAsyncComponent(() => import("@/components/media_container/movie_container/sub_components/DifficultyGauge.vue"));
+const Rating = defineAsyncComponent(() => import('@/components/media_container/movie_container/sub_components/rating.vue'));
 
 let props = defineProps({
   data: {
@@ -125,7 +126,7 @@ function emit_finished_loading() {
          alt="" v-lazy="image_path" lazy="loading" draggable="false"/>
     <div v-else class="poster"></div>
 
-    <difficulty-gauge class="diff" :diff="data['difficulty']"></difficulty-gauge>
+    <difficulty-gauge :diff="data['difficulty']"></difficulty-gauge>
 
     <HoverUI :data="data" :poster_size="poster_size" :min_size="min_size"></HoverUI>
 
@@ -198,12 +199,6 @@ function emit_finished_loading() {
 
 .poster[lazy=loading] {
   opacity: 0;
-}
-
-.diff {
-  position: absolute;
-  bottom: 0;
-  right: 0;
 }
 
 .ratings {

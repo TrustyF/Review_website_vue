@@ -1,5 +1,4 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed} from "vue";
 
 let props = defineProps({
   diff: {
@@ -30,10 +29,13 @@ function parse_diff(index) {
 .gauge_wrapper {
   /*outline: 1px solid red;*/
   /*padding: 10px;*/
-  position: relative;
   display: flex;
   flex-flow: row;
   gap: 3px;
+
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 .gauge_wrapper:hover::before {
   content: attr(title);
