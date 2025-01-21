@@ -1,11 +1,9 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed} from "vue";
-import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
-import crayon_img from '/ui/crayon.png'
-import external_img from '/ui/external_link.png'
-import arrow_img from '/ui/single_arrow.png'
-import youtube_img from '/ui/youtube.png'
+import {inject, onMounted, watch, ref, computed, defineAsyncComponent} from "vue";
 import {log_event} from "/src/scripts/log_events";
+
+const badge = defineAsyncComponent(() => import("@/components/media_container/movie_container/sub_components/badge.vue"))
+const badgeDot = defineAsyncComponent(() => import("@/components/media_container/movie_container/sub_components/badgeDot.vue"))
 
 let props = defineProps({
   data: {
@@ -81,7 +79,7 @@ function sort_tags(arr) {
 
   <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null && data['tags'].length > 0">
 
-    <div v-for="tag in sort_tags(data['tags'])" :key="tag['id']" style="pointer-events: auto;width: fit-content">
+    <div v-for="tag in sort_tags(data['tags'])" :key="tag['id']" class="tag_vis_container">
       <badge :data="tag" :min_size="min_size" :show_title="false"></badge>
     </div>
 
@@ -90,12 +88,18 @@ function sort_tags(arr) {
     </div>
   </div>
 
+  <div class="tags_dot_wrapper" v-if="data['tags']!==undefined && data['tags']!==null && data['tags'].length > 0">
+    <div v-for="tag in sort_tags(data['tags'])" :key="tag['id']" class="tag_dot_vis_container">
+      <badge-dot :color="tag['tier']"></badge-dot>
+    </div>
+  </div>
+
   <div class="edit_tools_wrapper">
-    <img v-if="edit_mode" class="edit_tool" :src="crayon_img" @click.stop="emitted_media_to_edit_pane">
-    <img v-if="data['video_link']" class="edit_tool" title="go to video" :src="youtube_img"
-         @click.stop="open_link_new_tab(data['video_link'])">
-    <img v-if="data['external_link']" class="edit_tool" title="go to external website" :src="external_img"
-         @click.stop="open_link_new_tab(data['external_link'])">
+    <div v-if="edit_mode" class="edit_tool bi-pencil-fill" @click.stop="emitted_media_to_edit_pane"/>
+    <div v-if="data['video_link']" class="edit_tool bi-play-fill" title="go to video"
+         @click.stop="open_link_new_tab(data['video_link'])"/>
+    <div v-if="data['external_link']" class="edit_tool bi-box-arrow-up-right" title="go to external website"
+         @click.stop="open_link_new_tab(data['external_link'])"/>
   </div>
 
 </template>
@@ -163,19 +167,20 @@ function sort_tags(arr) {
 }
 
 .edit_tool {
+  /*outline: 1px solid red;*/
   border: unset;
-  /*margin: 5px;*/
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 5px;
   pointer-events: auto;
   cursor: pointer;
+  font-size: 0.8em;
 
   width: calc(v-bind(min_size) * 0.15px);
   height: calc(v-bind(min_size) * 0.15px);
 
-  /*background-color: #d8dbd3;*/
-  /*box-shadow: 1px 1px 1px white, inset 1px 1px 0 #bdc0bb;*/
-
-  filter: invert() drop-shadow(0.05em 0 0.01em black) drop-shadow(0 0.05em 0.01em black) drop-shadow(-0.05em 0 0.01em black) drop-shadow(0 -0.05em 0.01em black) drop-shadow(1px 1px 3px black);
+  filter: drop-shadow(0.05em 0 0.01em black) drop-shadow(0 0.05em 0.01em black) drop-shadow(-0.05em 0 0.01em black) drop-shadow(0 -0.05em 0.01em black) drop-shadow(1px 1px 3px black);
   border-radius: 5px;
 }
 
@@ -191,20 +196,62 @@ function sort_tags(arr) {
   display: flex;
   flex-flow: column wrap;
   gap: 5px;
-
   padding: 5px;
+  z-index: 20;
+}
+
+.tag_vis_container {
+  pointer-events: auto;
+  width: fit-content;
+
   transform: translate(-10px, 0);
   visibility: hidden;
   opacity: 0;
-  z-index: 20;
 
   transition: 400ms;
   transition-delay: 700ms;
 }
 
+.tags_dot_wrapper {
+  pointer-events: none;
+  /*outline: 1px solid red;*/
+  /*width: v-bind(poster_size [0] + 'px');*/
+  position: absolute;
+
+  left: 0;
+  top:0;
+
+  display: flex;
+  flex-flow: column wrap;
+  gap: 3px;
+  padding: 5px;
+  z-index: 15;
+}
+
+
+.tag_dot_vis_container {
+  pointer-events: auto;
+  width: fit-content;
+
+  visibility: visible;
+  opacity: 100%;
+  transform: translate(0, 0);
+
+  transition: 400ms;
+  transition-delay: 700ms;
+}
+
+.movie_container_wrapper:hover .tag_dot_vis_container {
+  transform: translate(-3px,0);
+  visibility: hidden;
+  opacity: 0;
+
+  transition-delay: 0ms;
+  transition: 150ms;
+}
+
 .movie_container_wrapper:hover .edit_tools_wrapper,
-.movie_container_wrapper:hover .tags_wrapper,
-.movie_container_wrapper:hover .blackout_hover {
+.movie_container_wrapper:hover .tag_vis_container {
   visibility: visible;
   opacity: 100%;
   transform: translate(0, 0);
@@ -212,11 +259,4 @@ function sort_tags(arr) {
   transition: 50ms;
 }
 
-.movie_container_wrapper:hover .tag_indicator {
-  visibility: hidden;
-  opacity: 0;
-  transform: translate(0, -5px);
-  transition-delay: 0ms;
-  transition: 50ms;
-}
 </style>

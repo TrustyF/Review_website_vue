@@ -54,7 +54,7 @@ function parse_diff(index) {
   height: 10px;
   width: 10px;
   clip-path: polygon(100% 0, 100% 100%, 0 100%, 50% 50%);
-  border-radius: 0 0 5px 0;
+  border-radius: 0 0 3px 0;
   opacity: 0.7;
   /*background:linear-gradient(to bottom,#c0392b 0%, #f1c40f 50%, #1abc9c 100%);*/
 }

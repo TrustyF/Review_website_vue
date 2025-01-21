@@ -217,8 +217,8 @@ h1 {
   font-size: 1.5em;
   /*-webkit-text-stroke: 1px white;*/
   height: fit-content;
-  padding: 10px 5px 10px 5px;
-  margin: 5px;
+  padding: 7px 2px 7px 2px;
+  margin: 3px;
   text-shadow: black 1px 1px 3px;
   display: flex;
   flex-flow: column;
@@ -231,11 +231,11 @@ h1 {
 .paginate-arrow-hitbox {
   position: absolute;
   left: 50%;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, 10%);
   border-radius: 10px;
   width: 100%;
   height: 100%;
-  padding: 25px 15px 25px 15px;
+  padding: 10px 15px 25px 15px;
   cursor: pointer;
   pointer-events: auto;
 }
