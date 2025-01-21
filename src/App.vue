@@ -4,9 +4,9 @@ import '@/assets/styles/globals.css'
 import '@/assets/styles/dark.css'
 import {computed, defineAsyncComponent, inject, onMounted, provide, ref, watch} from "vue";
 import {ping_user_leave} from "@/scripts/log_events.js";
+import TooltipBadge from "@/components/tooltip/tooltipBadge.vue";
 
 const NavBar = defineAsyncComponent(()=> import("@/components/General/NavBar.vue"))
-const TooltipBadge = defineAsyncComponent(()=> import("@/components/tooltip/tooltipBadge.vue"))
 const TooltipEditor = defineAsyncComponent(()=> import("@/components/tooltip/tooltipEditor.vue"))
 const TooltipMediaDetails = defineAsyncComponent(()=> import("@/components/tooltip/tooltipMediaDetails.vue"))
 
