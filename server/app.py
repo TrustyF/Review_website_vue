@@ -4,7 +4,7 @@ import os
 from flask import Flask
 from flask_cors import CORS
 from dotenv import load_dotenv
-
+from flask_caching import Cache
 from constants import MAIN_DIR, FLASK_SECRET
 from db_loader import db
 import logging
@@ -29,6 +29,14 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'echo':False
 }
 
+cache_config = {
+    "DEBUG": True,
+    "CACHE_TYPE": "SimpleCache",
+    "CACHE_DEFAULT_TIMEOUT": 300
+}
+app.config.from_mapping(cache_config)
+cache = Cache(app)
+
 if dev_mode:
     print('using local')
     app.config["SQLALCHEMY_DATABASE_URI"] = local_database_uri
@@ -43,7 +51,7 @@ with app.app_context():
 
     # from sql_models.media_model import *
     # db.create_all()
-    logging.disable(logging.WARNING)
+    # logging.disable(logging.WARNING)
 
 
     from flask_blueprints import media_blueprint, tag_blueprint, tier_list_blueprint, login_blueprint, \

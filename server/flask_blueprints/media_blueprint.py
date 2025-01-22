@@ -11,6 +11,8 @@ from sqlalchemy.sql.expression import func
 from datetime import datetime, timedelta
 from math import ceil, floor
 from youtubesearchpython import VideosSearch
+
+from app import cache
 from flask_blueprints.login_blueprint import requires_auth
 from concurrent.futures import ThreadPoolExecutor
 import time
@@ -662,6 +664,7 @@ def search_extra_posters():
 
 
 @bp.route("/get_scroll_banner", methods=['GET'])
+@cache.cached(timeout=3600)
 def get_scroll_banner():
     def resize_image(img, width, height):
         # Resize the image to the target width and height
@@ -711,6 +714,7 @@ def get_scroll_banner():
 
 
 @bp.route("/get_filters", methods=['POST'])
+@cache.cached()
 def get_filters():
     params = request.get_json()
 
@@ -778,6 +782,7 @@ def get_filters():
 
 
 @bp.route("/get_stats", methods=['GET'])
+@cache.cached()
 def get_stats():
     def construct_rating_list(arr):
         base = [x for x in range(1, 11)]

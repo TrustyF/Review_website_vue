@@ -5,6 +5,7 @@ import sqlalchemy.exc
 from flask import Blueprint, request
 from sqlalchemy import func
 
+from app import cache
 from db_loader import db
 from sql_models.media_model import Media, UserList
 from flask_blueprints.login_blueprint import requires_auth
@@ -13,6 +14,7 @@ bp = Blueprint('user_list', __name__)
 
 
 @bp.route("/get", methods=['GET'])
+@cache.cached()
 def get():
 
     user_counts = (

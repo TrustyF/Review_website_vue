@@ -5,6 +5,7 @@ import sqlalchemy.exc
 from flask import Blueprint, request
 from sqlalchemy import func
 
+from app import cache
 from db_loader import db
 from sql_models.media_model import Media, TierList
 from flask_blueprints.login_blueprint import requires_auth
@@ -13,6 +14,7 @@ bp = Blueprint('tier_list', __name__)
 
 
 @bp.route("/get", methods=['GET'])
+@cache.cached()
 def get():
     # all_tier_lists = db.session.query(TierList).all()
 

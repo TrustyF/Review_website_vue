@@ -6,6 +6,7 @@ import sqlalchemy.exc
 from flask import Blueprint, request, Response, jsonify, send_file
 from sqlalchemy import func
 
+from app import cache
 from constants import MAIN_DIR
 from db_loader import db
 from flask_blueprints.login_blueprint import requires_auth
@@ -15,6 +16,7 @@ bp = Blueprint('tag', __name__)
 
 
 @bp.route("/get", methods=['GET'])
+@cache.cached()
 def get():
     tag_counts = (
         db.session.query(Tag, func.count(Media.id).label('count'))

@@ -9,3 +9,4 @@ youtube-search-python
 python-dateutil
 pymysql
 pillow
+Flask-Caching

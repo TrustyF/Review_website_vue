@@ -107,24 +107,24 @@ class Media(db.Model):
     __tablename__ = "medias"
 
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name: str = db.Column(db.String(255), nullable=False)
-    external_name: str = db.Column(db.String(255))
-    release_date: datetime.date = db.Column(db.Date)
+    name: str = db.Column(db.String(255), nullable=False, index=True)
+    external_name: str = db.Column(db.String(255), index=True)
+    release_date: datetime.date = db.Column(db.Date, index=True)
     overview: str = db.Column(db.String(1000))
     poster_path: str = db.Column(db.String(200))
 
     author: str = db.Column(db.String(200))
     studio: str = db.Column(db.String(200))
 
-    media_type: str = db.Column(db.String(50), nullable=False)
+    media_type: str = db.Column(db.String(50), nullable=False, index=True)
     media_medium: str = db.Column(db.String(50))
 
-    user_rating: int = db.Column(db.Integer, nullable=False)
-    public_rating: float = db.Column(db.Float)
+    user_rating: int = db.Column(db.Integer, nullable=False, index=True)
+    public_rating: float = db.Column(db.Float, index=True)
     difficulty: int = db.Column(db.Integer)
 
     is_dropped: bool = db.Column(db.Boolean)
-    is_deleted: bool = db.Column(db.Boolean)
+    is_deleted: bool = db.Column(db.Boolean, index=True)
 
     created_at: datetime.datetime = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     updated_at: datetime.datetime = db.Column(db.DateTime, onupdate=datetime.datetime.utcnow)
@@ -137,7 +137,7 @@ class Media(db.Model):
     episodes: int = db.Column(db.Integer)
     seasons: int = db.Column(db.Integer)
 
-    content_rating_id = db.Column(db.Integer, db.ForeignKey('content_rating.id'))
+    content_rating_id = db.Column(db.Integer, db.ForeignKey('content_rating.id'), index=True)
     content_rating = db.relationship("ContentRating", lazy='joined')
 
     genres = db.relationship("Genre", secondary=media_genre_association, lazy='joined')
