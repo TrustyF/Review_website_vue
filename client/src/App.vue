@@ -1,7 +1,6 @@
 <script setup>
 import {RouterView} from 'vue-router'
 import '@/assets/styles/globals.css'
-import '@/assets/styles/dark.css'
 import {computed, defineAsyncComponent, inject, onMounted, provide, ref, watch} from "vue";
 import {ping_user_leave} from "@/scripts/log_events.js";
 import TooltipBadge from "@/components/tooltip/tooltipBadge.vue";

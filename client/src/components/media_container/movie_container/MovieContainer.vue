@@ -2,7 +2,7 @@
 import {inject, onMounted, watch, ref, computed, provide, defineAsyncComponent} from "vue";
 import {useRouter} from 'vue-router'
 import {log_event} from "/src/scripts/log_events";
-import axios from "axios";
+import {axios} from '@bundled-es-modules/axios';
 
 const HoverUI = defineAsyncComponent(()=> import("@/components/media_container/movie_container/sub_components/HoverUI.vue"))
 const DifficultyGauge = defineAsyncComponent(() => import("@/components/media_container/movie_container/sub_components/DifficultyGauge.vue"));

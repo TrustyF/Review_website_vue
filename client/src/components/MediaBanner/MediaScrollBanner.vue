@@ -1,6 +1,6 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
-import axios from "axios";
+import {axios} from '@bundled-es-modules/axios';
 
 let props = defineProps({
   media_type: {

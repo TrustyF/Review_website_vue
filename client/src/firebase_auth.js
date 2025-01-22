@@ -1,5 +1,5 @@
 import {getAuth, GoogleAuthProvider, signOut, signInWithPopup, onAuthStateChanged} from "firebase/auth";
-import axios from "axios";
+import {axios} from '@bundled-es-modules/axios';
 
 export async function login() {
     const provider = new GoogleAuthProvider()

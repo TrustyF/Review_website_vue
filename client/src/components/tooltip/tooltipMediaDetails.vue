@@ -1,20 +1,15 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed, onUnmounted, defineAsyncComponent} from "vue";
 import {useRoute} from 'vue-router';
-import axios from "axios";
 
-import gold_star from '/ui/gold_star.png'
-import blue_star from '/ui/blue_star.png'
+import gold_star from '/ui/gold_star.webp'
+import blue_star from '/ui/blue_star.webp'
 
 const RatingCircle = defineAsyncComponent(() => import('@/components/media_container/movie_container/sub_components/RatingCircle.vue'));
 const Badge = defineAsyncComponent(() => import('@/components/media_container/movie_container/sub_components/badge.vue'));
 const DifficultyGauge = defineAsyncComponent(() => import('@/components/media_container/movie_container/sub_components/DifficultyGauge.vue'));
-import external_img from '/ui/external_link.png'
-import youtube_img from '/ui/youtube.png'
-import diff_gauge from '/ui/circle_gauge.png'
-import pen_img from '/ui/crayon.png'
-import studio_img from '/ui/studio.png'
-import spinner from '/ui/custom_spinner.webp'
+
+import spinner from '/ui/custom_spinner_small.webp'
 
 const curr_api = inject("curr_api");
 const media = inject("selected_media");
@@ -108,8 +103,7 @@ onUnmounted(() => {
 
   <div class="media_details_wrapper" v-if="media">
 
-    <img @click="handle_pane_close" class="close_pane_button" alt="close_edit_pane"
-         src="/ui/cross_button.png">
+    <div @click="handle_pane_close" class="close_pane_button bi-x-circle"/>
 
     <div class="overflow">
 
@@ -119,10 +113,10 @@ onUnmounted(() => {
 
         <div style="display: flex;gap: 10px;position: absolute;bottom: -50px">
           <div v-if="media['external_link']">
-            <img v-lazy="external_img" class="button_img" @click="open_link_new_tab(media['external_link'])">
+            <div class="button_img bi-box-arrow-up-right" @click="open_link_new_tab(media['external_link'])"/>
           </div>
           <div v-if="media['video_link']">
-            <img v-lazy="youtube_img" class="button_img" @click="open_link_new_tab(media['video_link'])">
+            <div class="button_img bi-youtube" @click="open_link_new_tab(media['video_link'])"/>
           </div>
         </div>
 
@@ -176,7 +170,7 @@ onUnmounted(() => {
           <div style="display: flex;flex-flow:row wrap;gap: 30px">
             <div>
               <div style="display: flex;align-items: center;gap: 3px;">
-                <img :src="diff_gauge" class="overview_icon">
+                <div class="overview_icon bi-speedometer2"/>
                 <p class="overview">Difficulty</p>
               </div>
               <div class="extra_info_wrapper">
@@ -188,14 +182,14 @@ onUnmounted(() => {
             </div>
             <div v-if="media['author']">
               <div style="display: flex;align-items: center;gap: 3px;">
-                <img :src="pen_img" class="overview_icon">
+                <div class="overview_icon bi-pencil-fill"/>
                 <p class="overview">Author</p>
               </div>
               <h1 style="font-size: 1em;font-weight: 800">{{ media['author'] }}</h1>
             </div>
             <div v-if="media['studio']">
               <div style="display: flex;align-items: center;gap: 3px;">
-                <img :src="studio_img" class="overview_icon">
+                <div class="overview_icon bi-buildings"/>
                 <p class="overview">Studio</p>
               </div>
               <h1 style="font-size: 1em;font-weight: 800">{{ media['studio'] }}</h1>
@@ -296,8 +290,8 @@ onUnmounted(() => {
 }
 
 .button_img {
-  height: 40px;
-  filter: invert();
+  font-size: 1em;
+  padding: 10px;
   border: 0.1em solid grey;
   border-radius: 10px;
   cursor: pointer;
@@ -450,17 +444,18 @@ onUnmounted(() => {
 }
 
 .overview_icon {
-  height: 30px;
-  filter: invert();
+  font-size: 1em;
+  object-fit: cover;
+  padding: 5px 7px 7px 5px;
 }
 
 .close_pane_button {
   cursor: pointer;
   position: absolute;
-  filter: invert();
+  /*filter: invert();*/
   right: 20px;
   top: 20px;
-  width: 30px;
+  font-size: 2em;
   padding: 30px;
   margin: -30px;
   object-fit: contain;

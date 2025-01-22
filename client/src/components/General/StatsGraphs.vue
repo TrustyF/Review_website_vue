@@ -3,7 +3,7 @@ import {inject, onMounted, watch, ref, computed} from "vue";
 import {BarChart, LineChart} from 'vue-chart-3';
 import {Chart, registerables} from "chart.js";
 import chartTrendline from 'chartjs-plugin-trendline';
-import axios from "axios";
+import {axios} from '@bundled-es-modules/axios';
 
 Chart.register(...registerables, chartTrendline);
 

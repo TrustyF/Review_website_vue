@@ -1,7 +1,7 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed} from "vue";
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
-import {log_event} from "../../scripts/log_events.js";
+import {log_event} from "@/scripts/log_events";
 
 let props = defineProps(["data", "title"]);
 let emits = defineEmits(["id"]);
@@ -53,9 +53,8 @@ function reset() {
 
     <div class="title">
       <h1>{{ title }}</h1>
-      <img v-if="checked_ids.length > 0" src="/ui/rewind.png" style="filter: brightness(1000%)" class="clear"
-           alt="clear"
-           @click="reset">
+      <div v-if="checked_ids.length > 0" style="filter: brightness(1000%)" class="clear bi-arrow-counterclockwise"
+           @click="reset"/>
     </div>
     <div style="border-bottom: 1px solid white;margin-top: 2px"></div>
 
@@ -116,8 +115,7 @@ function reset() {
 }
 
 .clear {
-  height: 1em;
-  filter: invert();
+  font-size: 1em;
   cursor: pointer;
 }
 

@@ -7,7 +7,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import VueLazyLoad from "vue-lazyload";
 import {initializeApp} from 'firebase/app';
 import axiosRetry from 'axios-retry';
-import axios from 'axios';
+import { axios } from '@bundled-es-modules/axios';
 
 const local_api = "http://192.168.1.11:5000"
 const server_api = "https://review-trustyfox.pythonanywhere.com"
@@ -25,8 +25,7 @@ const firebaseConfig = {
     appId: "1:832888321299:web:7a93c03b654f01516d56e6",
     measurementId: "G-9X1XSGRPFG"
 };
-const firebase = initializeApp(firebaseConfig);
-
+initializeApp(firebaseConfig);
 const app = createApp(App)
 
 app.provide('curr_api', devMode ? local_api : server_api)

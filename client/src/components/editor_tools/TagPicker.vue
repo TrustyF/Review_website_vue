@@ -2,7 +2,7 @@
 import {inject, onMounted, watch, ref, computed} from "vue";
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
 import {get_current_user} from "@/firebase_auth.js";
-import axios from "axios";
+import {axios} from '@bundled-es-modules/axios';
 
 let selected_media = inject('selected_media')
 

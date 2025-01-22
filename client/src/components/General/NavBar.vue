@@ -1,15 +1,13 @@
 <script setup>
 import {RouterLink} from "vue-router";
-import logo from '/ui/logo.png'
+import logo from '/ui/logo.webp'
 import {defineAsyncComponent, inject, onMounted, ref} from 'vue'
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
 
 const LoginBar = defineAsyncComponent(()=> import("@/components/General/LoginBar.vue"))
 
-const curr_api = inject("curr_api");
 let is_mobile = inject("is_mobile")
 
-let edit_mode = inject('edit_mode')
 let is_visible_navbar = inject('is_visible_navbar')
 let prev_scroll = ref(0)
 let nav
