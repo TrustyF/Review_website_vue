@@ -3,8 +3,6 @@ import {inject, onMounted, watch, ref, computed} from "vue";
 import FilterContainer from "../media_filters/filterContainer.vue";
 import FilterSearch from "../media_filters/filterSearch.vue";
 import {clickOutSide as vClickOutSide} from '@mahdikhashan/vue3-click-outside'
-import spinner from '/ui/Loading_icon.gif'
-import filter_image from "/ui/filter_button.svg"
 
 let props = defineProps({
   media_types: {
@@ -76,14 +74,12 @@ onMounted(() => {
   <div class="filters_top_container sticky_nav">
 
     <div class="filters_box">
-      <img alt="filters" @click="toggle_filters_box" class="filter_button"
-           :src="filter_image">
+      <div @click="toggle_filters_box" class="filter_button bi-sliders"/>
       <filter-search @filter="emit_filter(['search',$event])"></filter-search>
       <div class="match_field" v-if="matched_field">
         <h1>Matched:</h1>
         <p>{{matched_field}}</p>
       </div>
-      <img v-if="load_status==='loading'" :src="spinner" alt="spinner" class="filter_box_spinner">
     </div>
 
     <div ref="filter_container" class="filter_wrapper" v-click-out-side="close_filters_box">
@@ -129,18 +125,17 @@ onMounted(() => {
 }
 
 .filter_button {
-  height: 20px;
-  width: 20px;
-  background-color: #d7d7c5;
+  font-size: 1.2em;
+  text-align: center;
+  background-color: #28283a;
   /*margin: 7px;*/
-  padding: 7px;
+  padding: 7px 8px 8px 8px;
   border-radius: 30%;
-  filter: invert();
-  box-shadow: 1px 1px 5px white;
   cursor: pointer;
   z-index: 10;
-  object-fit: cover;
-  border: 2px solid #969696;
+
+  box-shadow: 1px 1px 5px black;
+  border: 2px solid #686868;
 }
 
 .search_bar_wrapper {

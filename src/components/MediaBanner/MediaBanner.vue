@@ -1,7 +1,7 @@
 <script setup>
 import {inject, onMounted, ref, computed} from "vue";
 import MovieContainer from '@/components/media_container/movie_container/MovieContainer.vue'
-import axios from "axios";
+import {axios} from '@bundled-es-modules/axios';
 import {log_event} from "/src/scripts/log_events.js";
 
 let props = defineProps({

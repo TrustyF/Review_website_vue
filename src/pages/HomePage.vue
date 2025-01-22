@@ -5,7 +5,7 @@ const CreditsFooter  = defineAsyncComponent(() => import('../components/General/
 import MediaScrollBanner from "../components/MediaBanner/MediaScrollBanner.vue";
 import MediaBanner from "../components/MediaBanner/MediaBanner.vue";
 
-import logo from '/ui/logo.png'
+import logo from '/ui/logo.webp'
 import {RouterLink} from "vue-router";
 
 const curr_api = inject("curr_api");

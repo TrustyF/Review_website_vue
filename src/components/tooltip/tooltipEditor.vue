@@ -267,8 +267,7 @@ watch(selected_media,(oldV,newV)=>{
 <template>
   <div class="edit_page_wrapper">
 
-    <img @click="handle_pane_close" class="close_pane_button" alt="close_edit_pane"
-         src="/ui/cross_button.png">
+    <div @click="handle_pane_close" class="close_pane_button bi-x-circle"/>
 
     <div v-if="add" class="search_area">
 
@@ -321,16 +320,12 @@ watch(selected_media,(oldV,newV)=>{
 
         <div style="display: flex;flex-flow: column;align-content:space-evenly;gap:10px">
           <button v-if="edit" style="width: 100%;height: 65px" @click="update_media">Update</button>
-          <img class="update_logo" alt="failed update" v-if="updated === 'false'"
-               src="/ui/stop.png">
-          <img class="update_logo" alt="failed update" v-if="updated === 'true'"
-               src="/ui/success-green-check-mark-icon.svg">
+          <div class="update_logo bi-x-circle-fill" style="color: red" v-if="updated === 'false'"/>
+          <div class="update_logo bi-check-circle-fill" style="color: green" v-if="updated === 'true'"/>
 
           <button v-if="add" @click="add_media">Add</button>
-          <img class="update_logo" alt="failed update" v-if="added === 'false'"
-               src="/ui/stop.png">
-          <img class="update_logo" alt="failed update" v-if="added === 'true'"
-               src="/ui/success-green-check-mark-icon.svg">
+          <div class="update_logo bi-x-circle-fill" style="color: red" v-if="added === 'false'"/>
+          <div class="update_logo bi-check-circle-fill" style="color: green" v-if="added === 'true'"/>
 
           <button v-if="edit" @click="hard_delete">Hard delete</button>
 
@@ -515,16 +510,17 @@ watch(selected_media,(oldV,newV)=>{
 }
 
 .update_logo {
-  height: 20px;
+  font-size: 2em;
 }
 
 .close_pane_button {
   cursor: pointer;
   position: absolute;
-  filter: invert();
-  right: 5px;
-  top: 5px;
-  width: 20px;
+  font-size: 1em;
+  right: 0;
+  top: 0;
+  padding: 10px;
+  /*width: 20px;*/
   object-fit: contain;
 }
 </style>

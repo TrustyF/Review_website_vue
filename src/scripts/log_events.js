@@ -1,4 +1,4 @@
-import axios from "axios";
+import {axios} from '@bundled-es-modules/axios';
 import {check_admin} from "@/firebase_auth.js";
 import {geo_location, session_seed} from "/src/scripts/session.js";
 

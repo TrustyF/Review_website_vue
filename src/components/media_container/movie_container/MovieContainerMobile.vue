@@ -1,14 +1,12 @@
 <script setup>
 import {inject, onMounted, watch, ref, computed, provide} from "vue";
-import gold_star from '/ui/gold_star.png'
-import blue_star from '/ui/blue_star.png'
+import gold_star from '/ui/gold_star.webp'
+import blue_star from '/ui/blue_star.webp'
 import RatingCircle from "@/components/media_container/movie_container/sub_components/RatingCircle.vue";
 import BadgeTooltip from "@/components/media_container/movie_container/sub_components/badgeExpanded.vue";
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
 import {useRouter} from 'vue-router'
 
-import external_img from '/ui/external_link.png'
-import youtube_img from '/ui/youtube.png'
 import DifficultyGauge from "./sub_components/DifficultyGauge.vue";
 
 const image_path = computed(() => `${curr_api}/media/get_image?path=${props.data['poster_path']}&id=${props.data['id']}`)

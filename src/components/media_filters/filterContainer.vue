@@ -3,7 +3,7 @@ import {inject, onMounted, watch, ref, computed} from "vue";
 import FilterDropdown from "@/components/media_filters/filterDropdown.vue";
 import FilterRange from "@/components/media_filters/filterRange.vue";
 import FilterRadio from "@/components/media_filters/filterRadio.vue";
-import axios from "axios";
+import {axios} from '@bundled-es-modules/axios';
 
 let props = defineProps({
   media_types: {

@@ -1,12 +1,12 @@
 <script setup>
 import {inject, onMounted, watch, provide, ref, computed, onUnmounted} from "vue";
-import blue_star from '/ui/blue_star.png'
+import blue_star from '/ui/blue_star.webp'
 import MovieContainer from "@/components/media_container/movie_container/MovieContainer.vue";
 import MovieContainerMobile from "@/components/media_container/movie_container/MovieContainerMobile.vue";
 import MediaFeedFilterBar from "@/components/media_feed/MediaFeedFilterBar.vue";
 import CreditsFooter from "@/components/General/CreditsFooter.vue";
-import spinner from '/ui/custom_spinner.webp'
-import axios from "axios";
+import spinner from '/ui/custom_spinner_small.webp'
+import {axios} from '@bundled-es-modules/axios';
 
 let props = defineProps({
   media_types: {
