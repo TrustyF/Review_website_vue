@@ -1,12 +1,12 @@
 <template>
-  <div class="wrapper">
+  <div class="credits_footer_wrapper">
     <h1>Data and images provided by mangadex.org, themoviedb.org, igdb.com, comicvine.gamespot.com </h1>
     <h1> and returnyoutubedislike.com. Assets by Riot games</h1>
   </div>
 </template>
 
 <style scoped>
-.wrapper {
+.credits_footer_wrapper {
   position: relative;
   width: 100%;
 

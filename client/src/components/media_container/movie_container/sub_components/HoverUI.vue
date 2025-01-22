@@ -178,9 +178,6 @@ function sort_tags(arr) {
 }
 
 .tags_wrapper {
-  pointer-events: none;
-  /*outline: 1px solid red;*/
-  /*width: v-bind(poster_size [0] + 'px');*/
   position: absolute;
 
   left: 0;
@@ -191,9 +188,7 @@ function sort_tags(arr) {
   gap: 5px;
   padding: 5px;
   z-index: 20;
-}
 
-.tag_vis_container {
   pointer-events: auto;
   width: fit-content;
 
@@ -206,17 +201,8 @@ function sort_tags(arr) {
 }
 
 
-.movie_container_wrapper:hover .tag_dot_vis_container {
-  transform: translate(-3px,0);
-  visibility: hidden;
-  opacity: 0;
-
-  transition-delay: 0ms;
-  transition: 150ms;
-}
-
-.movie_container_wrapper:hover .edit_tools_wrapper,
-.movie_container_wrapper:hover .tag_vis_container {
+.movie_container_wrapper:hover .tags_wrapper,
+.movie_container_wrapper:hover .edit_tools_wrapper {
   visibility: visible;
   opacity: 100%;
   transform: translate(0, 0);
