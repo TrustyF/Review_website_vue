@@ -26,3 +26,5 @@ pnpm-debug.log*
 /public/home_images/tags.psd
 /public/tier_list_images/2020_Key_Art.0.psd
 /.firebase/
+/dist_stats/
+/package-lock.json
