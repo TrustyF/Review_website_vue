@@ -8,6 +8,7 @@ let props = defineProps({
   media_types: Array,
   order: String,
   ratings: Array,
+  specific: String,
   public_ratings: Array,
   limit: {
     type: Number,
@@ -15,7 +16,7 @@ let props = defineProps({
   },
   tier_lists: {
     type: Array,
-    default: ()=>["all"],
+    default: () => ["all"],
   },
   genres: Array,
   size_override: {
@@ -41,7 +42,6 @@ let scroll_position = ref(0)
 const container_height = computed(() => `${(props.size_override[1] * 0.3) + 60}px`)
 
 async function get_media() {
-  console.log('getting banner media')
   const url = new URL(`${curr_api}/media/get`)
   const params = {
     'limit': props.limit,
@@ -62,12 +62,31 @@ async function get_media() {
       {
         method: 'POST',
         url: url,
-        // signal: AbortSignal.timeout(2000),
-        // timeout:2000,
         headers: {"Content-Type": "application/json"},
         data: JSON.stringify(params)
       })
 
+  media.value = result.data['media']
+}
+
+async function get_specific() {
+  const url = new URL(`${curr_api}/media_banner/${props.specific}`)
+  console.log(url)
+  const params = {
+    'limit': props.limit,
+    'page': page.value,
+    'types': props.media_types,
+  }
+
+  let result = await axios(
+      {
+        method: 'POST',
+        url: url,
+        headers: {"Content-Type": "application/json"},
+        data: JSON.stringify(params)
+      })
+
+  console.log(result.data['media'])
   media.value = result.data['media']
 }
 
@@ -140,7 +159,7 @@ async function paginate(value) {
 }
 
 onMounted(() => {
-  get_media()
+  if (props.specific) get_specific(); else get_media()
   if (!props.defaultInView) log_event('anchor_in_view', 'scroll', props.title)
 })
 

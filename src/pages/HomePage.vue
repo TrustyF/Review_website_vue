@@ -1,7 +1,7 @@
 <script setup>
 import {computed, defineAsyncComponent, inject, onBeforeMount, onMounted, onUnmounted, ref} from "vue";
 
-const CreditsFooter  = defineAsyncComponent(() => import('../components/General/CreditsFooter.vue'));
+const CreditsFooter = defineAsyncComponent(() => import('../components/General/CreditsFooter.vue'));
 import MediaScrollBanner from "../components/MediaBanner/MediaScrollBanner.vue";
 import MediaBanner from "../components/MediaBanner/MediaBanner.vue";
 
@@ -57,16 +57,16 @@ const genre_number_list = [
     </lazy-component>
 
     <lazy-component class="banner">
-      <media-banner :order="'date_added'"
-                    title="Watched recently"
+      <media-banner title="Watched recently"
+                    specific="recent_watch"
                     :media_types="['movie','tv']"
                     :default-in-view="true"
       ></media-banner>
     </lazy-component>
 
     <lazy-component class="banner">
-      <media-banner :order="'release_date'"
-                    title="Latest releases"
+      <media-banner title="Latest releases"
+                    specific="recent_release"
                     :media_types="['movie','tv']"
                     :default-in-view="true"
       ></media-banner>
