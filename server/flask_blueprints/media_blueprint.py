@@ -23,6 +23,7 @@ from data_mapper.media_mapper import map_from_tmdb, map_from_mangadex, map_from_
 from db_loader import db
 from sql_models.media_model import Media, Genre, Theme, Tag, TierList, ContentRating, UserList
 from data_mapper.serializer import serialize_media, deserialize_media
+from flask_blueprints import media_banner_blueprint
 
 bp = Blueprint('media', __name__)
 
@@ -468,6 +469,9 @@ def add():
     db.session.commit()
     db.session.close()
 
+    cache.delete_memoized(media_banner_blueprint.get_recent_watch)
+    cache.delete_memoized(media_banner_blueprint.get_recent_release)
+
     return json.dumps({'ok': True}), 200, {'ContentType': 'application/json'}
 
 
@@ -664,7 +668,7 @@ def search_extra_posters():
 
 
 @bp.route("/get_scroll_banner", methods=['GET'])
-@cache.cached(timeout=3600)
+@cache.cached(timeout=86400)
 def get_scroll_banner():
     def resize_image(img, width, height):
         # Resize the image to the target width and height
@@ -714,7 +718,7 @@ def get_scroll_banner():
 
 
 @bp.route("/get_filters", methods=['POST'])
-@cache.cached()
+@cache.cached(timeout=86400)
 def get_filters():
     params = request.get_json()
 
@@ -782,7 +786,7 @@ def get_filters():
 
 
 @bp.route("/get_stats", methods=['GET'])
-@cache.cached()
+@cache.cached(timeout=86400)
 def get_stats():
     def construct_rating_list(arr):
         base = [x for x in range(1, 11)]

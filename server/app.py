@@ -55,9 +55,10 @@ with app.app_context():
 
 
     from flask_blueprints import media_blueprint, tag_blueprint, tier_list_blueprint, login_blueprint, \
-        user_list_blueprint
+        user_list_blueprint,media_banner_blueprint
 
     app.register_blueprint(media_blueprint.bp, url_prefix='/media')
+    app.register_blueprint(media_banner_blueprint.bp, url_prefix='/media_banner')
     app.register_blueprint(tag_blueprint.bp, url_prefix='/tag')
     app.register_blueprint(tier_list_blueprint.bp, url_prefix='/tier_list')
     app.register_blueprint(user_list_blueprint.bp, url_prefix='/user_list')
