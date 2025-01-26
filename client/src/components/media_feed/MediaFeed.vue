@@ -181,7 +181,6 @@ const handleInfiniteScroll = () => {
     is_page_loading.value = true
     media_page.value += 1
     get_media()
-    console.log('loading more', media_page.value)
   }
 
 };
