@@ -34,7 +34,7 @@ def get_recent_watch():
         .subquery()
     )
 
-    query = query.filter(not_(Media.id.in_(recent_releases_subquery)))
+    query = query.filter(not_(Media.id.in_(recent_releases_subquery.select())))
 
     query = query.order_by(Media.created_at.desc())
 

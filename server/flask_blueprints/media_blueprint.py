@@ -5,7 +5,7 @@ import requests
 import random
 from PIL import Image
 import io
-from flask import Blueprint, request, send_file
+from flask import Blueprint, request, send_file, send_from_directory
 from sqlalchemy import not_, and_, or_
 from sqlalchemy.sql.expression import func
 from datetime import datetime, timedelta
@@ -529,40 +529,31 @@ def delete():
 def get_image():
     media_id = request.args.get('id')
     media_path = request.args.get('path')
-    media_type = request.args.get('type')
 
-    # print(media_id, media_path, media_type)
+    file_dir = os.path.join(MAIN_DIR, "assets", "poster_images_caches")
+    file_path = os.path.join(file_dir, f"{media_id}.webp")
 
-    poster_id = hashlib.shake_256(media_path.encode("utf-8")).hexdigest(5)
-
-    # return not found image
-    if media_path in ['null', 'undefined', 'not_found']:
-        return [], 200
-
-    file_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches",
-                             f"{media_id}_{media_type}_{poster_id}.jpeg")
+    # make folder
+    os.makedirs(file_dir, exist_ok=True)
 
     # return saved file if exists
     if os.path.exists(file_path):
-        return send_file(file_path, mimetype='image/jpeg')
+        return send_from_directory(file_dir, f"{media_id}.webp")
 
-    # check if the requested image is part of a db entry and save if true
-    if db.session.query(Media).filter(Media.external_id == media_id,
-                                      Media.poster_path == media_path).one_or_none():
+    # check if media in db
+    in_db_media = db.session.query(Media).filter(Media.id == media_id).one_or_none()
 
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
-        response = requests.get(media_path)
-
+    if in_db_media:
+        # save image to local
+        response = requests.get(in_db_media.poster_path)
         image = Image.open(io.BytesIO(response.content))
-
-        image.save(file_path, "jpeg", quality=30)
+        image.save(file_path, "webp", quality=50)
+        return send_from_directory(file_dir, f"{media_id}.webp")
 
     else:
-        # if preview return without saving
+        # return image without saving
         response = requests.get(media_path)
         return response.content
-
-    return send_file(file_path, mimetype='image/jpeg')
 
 
 @bp.route("/get_extra_posters", methods=['GET'])
@@ -689,6 +680,8 @@ def get_scroll_banner():
     def is_valid_media(entry):
         media_type = entry.split('_')[1]
         return media_type in ['movie', 'game', 'manga', 'tv']
+
+    return 'ok', 200
 
     poster_images_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches")
     poster_paths = os.listdir(poster_images_path)
