@@ -69,7 +69,7 @@ onMounted(() => {
   <div class="banner_wrapper">
     <div class="banner_fade"></div>
     <img class="banner_img fade_anim" v-show="img_loads>=1" @load="img_loads+=1"
-         :src="`${curr_api}/media/get_scroll_banner`">
+         :src="`${curr_api}/static/banners/home_banner.webp`">
   </div>
 </template>
 

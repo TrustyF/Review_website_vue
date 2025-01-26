@@ -238,7 +238,8 @@ function switch_poster(event) {
 }
 
 function proxy_image(path){
-  return `${curr_api}/media/get_image?path=${path}`
+  // temporary disabled for new backend
+  return path
 
 }
 

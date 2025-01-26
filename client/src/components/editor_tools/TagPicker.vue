@@ -246,7 +246,7 @@ onMounted(() => {
       <div class="available_images">
         <div class="template_image" @click="switch_tag_image(img[1])" v-for="img in tag_images"
              :key="img">
-          <img class="tag_template_image" :src="`${curr_api}/tag/get_image?tier=${img[0]}&path=${img[1]}`"
+          <img class="tag_template_image" :src="`${curr_api}/static/tags/icons/${img[0]}/${img[1]}.webp`"
                alt="tag_template">
         </div>
       </div>
