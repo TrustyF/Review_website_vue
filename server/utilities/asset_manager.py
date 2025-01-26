@@ -25,6 +25,7 @@ def download_poster(poster_path, internal_id, external_id):
 
 
 def check_posters():
+    print('checking posters')
     all_media = db.session.query(Media).all()
 
     os.makedirs(poster_dir, exist_ok=True)
@@ -54,6 +55,7 @@ def check_posters():
 
 
 def make_home_banner():
+    print('making banner')
     def resize_image(img, width, height):
         # Resize the image to the target width and height
         return img.resize((width, height), Image.Resampling.BOX)

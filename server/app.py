@@ -1,14 +1,13 @@
-import json
-import os
-from flask import Flask
-from flask_cors import CORS
-from dotenv import load_dotenv
-from flask_caching import Cache
-from constants import MAIN_DIR, FLASK_SECRET
-from db_loader import db
 import logging
+import os
 
-from sql_models.media_model import Tag
+from dotenv import load_dotenv
+from flask import Flask
+from flask_caching import Cache
+from flask_cors import CORS
+
+from constants import MAIN_DIR
+from db_loader import db
 from utilities.asset_manager import check_posters, make_home_banner
 from utilities.devmode_checker import dev_mode
 
@@ -49,13 +48,6 @@ CORS(app)
 with app.app_context():
     db.init_app(app)
 
-    # from sql_models.media_model import *
-    # db.create_all()
-    # logging.disable(logging.WARNING)
-
-    check_posters()
-    make_home_banner()
-
     from flask_blueprints import media_blueprint, tag_blueprint, tier_list_blueprint, login_blueprint, \
         user_list_blueprint,media_banner_blueprint
 
@@ -65,3 +57,9 @@ with app.app_context():
     app.register_blueprint(tier_list_blueprint.bp, url_prefix='/tier_list')
     app.register_blueprint(user_list_blueprint.bp, url_prefix='/user_list')
     app.register_blueprint(login_blueprint.bp, url_prefix='/login')
+    # app.register_blueprint(task_blueprint.bp, url_prefix='/task')
+
+# run setup tasks
+with app.app_context():
+    check_posters()
+    make_home_banner()

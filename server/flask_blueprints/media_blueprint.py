@@ -1,29 +1,23 @@
-import hashlib
 import json
 import os.path
-import requests
-import random
-from PIL import Image
-import io
-from flask import Blueprint, request, send_file, send_from_directory
-from sqlalchemy import not_, and_, or_
-from sqlalchemy.sql.expression import func
-from datetime import datetime, timedelta
+from datetime import datetime
 from math import ceil, floor
+
+import requests
+from flask import Blueprint, request
+from sqlalchemy import and_, or_
+from sqlalchemy.sql.expression import func
 from youtubesearchpython import VideosSearch
 
 from app import cache
-from flask_blueprints.login_blueprint import requires_auth
-from concurrent.futures import ThreadPoolExecutor
-import time
-
 from constants import MAIN_DIR, TMDB_ACCESS_TOKEN, TMDB_API_KEY, IGDB_CLIENT_ID, IGDB_CLIENT_SECRET, COMIC_VINE_KEY
 from data_mapper.media_mapper import map_from_tmdb, map_from_mangadex, map_from_igdb, map_from_youtube, \
     map_from_comic_vine
-from db_loader import db
-from sql_models.media_model import Media, Genre, Theme, Tag, TierList, ContentRating, UserList
 from data_mapper.serializer import serialize_media, deserialize_media
+from db_loader import db
 from flask_blueprints import media_banner_blueprint
+from flask_blueprints.login_blueprint import requires_auth
+from sql_models.media_model import Media, Genre, Theme, Tag, TierList, ContentRating, UserList
 from utilities.asset_manager import download_poster
 
 bp = Blueprint('media', __name__)
@@ -86,12 +80,6 @@ def handle_igdb_access_token(f_source):
         # print('token time left',
         #       timedelta(seconds=old_token['expires_in'] - token_time_diff.total_seconds()))
         return old_token
-
-
-@bp.route("/sleep_check", methods=['GET'])
-def sleep_check():
-    print('not sleeping', datetime.now())
-    return json.dumps({'ok': True}), 200, {'ContentType': 'application/json'}
 
 
 @bp.route("/get", methods=['POST'])
