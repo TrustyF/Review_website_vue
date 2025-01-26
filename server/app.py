@@ -61,5 +61,6 @@ with app.app_context():
 
 # run setup tasks
 with app.app_context():
+    cache.clear()
     check_posters()
     make_home_banner()
