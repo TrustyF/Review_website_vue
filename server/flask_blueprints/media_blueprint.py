@@ -24,6 +24,7 @@ from db_loader import db
 from sql_models.media_model import Media, Genre, Theme, Tag, TierList, ContentRating, UserList
 from data_mapper.serializer import serialize_media, deserialize_media
 from flask_blueprints import media_banner_blueprint
+from utilities.asset_manager import download_poster
 
 bp = Blueprint('media', __name__)
 
@@ -467,8 +468,10 @@ def add():
 
     db.session.add(media_obj)
     db.session.commit()
-    db.session.close()
 
+    download_poster(media_obj.poster_path, media_obj.id, media_obj.external_id)
+
+    db.session.close()
     cache.delete_memoized(media_banner_blueprint.get_recent_watch)
     cache.delete_memoized(media_banner_blueprint.get_recent_release)
 
@@ -523,37 +526,6 @@ def delete():
     db.session.close()
 
     return json.dumps({'ok': True}), 200, {'ContentType': 'application/json'}
-
-
-@bp.route("/get_image", methods=['GET'])
-def get_image():
-    media_id = request.args.get('id')
-    media_path = request.args.get('path')
-
-    file_dir = os.path.join(MAIN_DIR, "assets", "poster_images_caches")
-    file_path = os.path.join(file_dir, f"{media_id}.webp")
-
-    # make folder
-    os.makedirs(file_dir, exist_ok=True)
-
-    # return saved file if exists
-    if os.path.exists(file_path):
-        return send_from_directory(file_dir, f"{media_id}.webp")
-
-    # check if media in db
-    in_db_media = db.session.query(Media).filter(Media.id == media_id).one_or_none()
-
-    if in_db_media:
-        # save image to local
-        response = requests.get(in_db_media.poster_path)
-        image = Image.open(io.BytesIO(response.content))
-        image.save(file_path, "webp", quality=50)
-        return send_from_directory(file_dir, f"{media_id}.webp")
-
-    else:
-        # return image without saving
-        response = requests.get(media_path)
-        return response.content
 
 
 @bp.route("/get_extra_posters", methods=['GET'])
@@ -656,58 +628,6 @@ def search_extra_posters():
         return posters, 200
     else:
         return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
-
-
-@bp.route("/get_scroll_banner", methods=['GET'])
-@cache.cached(timeout=86400)
-def get_scroll_banner():
-    def resize_image(img, width, height):
-        # Resize the image to the target width and height
-        return img.resize((width, height), Image.Resampling.BOX)
-
-    def make_collage(img_array, width, height):
-        collage = Image.new("RGB", (width * len(img_array), height))
-
-        with ThreadPoolExecutor() as executor:
-            resized_images = list(
-                executor.map(resize_image, img_array, [width] * len(img_array), [height] * len(img_array)))
-
-        for j, img in enumerate(resized_images):
-            collage.paste(img, (j * width, 0))
-
-        return collage
-
-    def is_valid_media(entry):
-        media_type = entry.split('_')[1]
-        return media_type in ['movie', 'game', 'manga', 'tv']
-
-    return 'ok', 200
-
-    poster_images_path = os.path.join(MAIN_DIR, "assets", "poster_images_caches")
-    poster_paths = os.listdir(poster_images_path)
-    poster_paths = list(filter(is_valid_media, poster_paths))
-    random.shuffle(poster_paths)
-
-    posters = []
-    for i, poster in enumerate(poster_paths):
-
-        if i > 10:
-            break
-
-        posters.append(os.path.join(poster_images_path, poster))
-
-    # print(len(posters))
-    if len(posters) < 1:
-        return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
-
-    # make collage
-    banner = make_collage([Image.open(i) for i in posters], int(500), int(750))
-
-    mem_file = io.BytesIO()
-    banner.save(mem_file, 'jpeg', quality=10)
-    mem_file.seek(0)
-
-    return send_file(mem_file, mimetype='image/jpeg')
 
 
 @bp.route("/get_filters", methods=['POST'])

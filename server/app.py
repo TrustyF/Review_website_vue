@@ -1,6 +1,5 @@
 import json
 import os
-
 from flask import Flask
 from flask_cors import CORS
 from dotenv import load_dotenv
@@ -9,12 +8,13 @@ from constants import MAIN_DIR, FLASK_SECRET
 from db_loader import db
 import logging
 
-# check if using locally
-dev_mode = os.path.exists(os.path.join(MAIN_DIR, 'devmode.txt'))
+from sql_models.media_model import Tag
+from utilities.asset_manager import check_posters, make_home_banner
+from utilities.devmode_checker import dev_mode
 
 load_dotenv(os.path.join(MAIN_DIR, '.env'))
-
-app = Flask(__name__)
+app = Flask(__name__,
+            static_folder='static')
 
 db_username = os.getenv('MYSQL_DATABASE_USERNAME')
 db_password = os.getenv('MYSQL_DATABASE_PASSWORD')
@@ -53,6 +53,8 @@ with app.app_context():
     # db.create_all()
     # logging.disable(logging.WARNING)
 
+    check_posters()
+    make_home_banner()
 
     from flask_blueprints import media_blueprint, tag_blueprint, tier_list_blueprint, login_blueprint, \
         user_list_blueprint,media_banner_blueprint

@@ -31,30 +31,6 @@ def get():
     return serialized_tags, 200
 
 
-@bp.route("/get_image", methods=['GET'])
-def get_image():
-    path = request.args.get('path').split('.')[0]
-    tier = request.args.get('tier')
-
-    # print('get tier image', path,tier)
-
-    if path == 'null':
-        return [], 200
-
-    file_path = os.path.join(MAIN_DIR, 'assets', 'static', 'tags', 'icons', tier, path + '.webp')
-    return send_file(file_path, mimetype='image/webp')
-
-
-@bp.route("/get_tier_images", methods=['GET'])
-def get_tier_images():
-    tier = request.args.get('tier')
-
-    all_tags_path = os.path.join(MAIN_DIR, 'assets', 'static', 'tags', 'icons', tier)
-    images = [[tier, x] for x in os.listdir(all_tags_path)]
-
-    return images, 200
-
-
 @bp.route("/add", methods=['POST'])
 @requires_auth
 def add():
