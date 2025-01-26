@@ -11,12 +11,13 @@ from constants import MAIN_DIR
 from db_loader import db
 from sql_models.media_model import Media
 from utilities.devmode_checker import dev_mode
+import logging
 
 poster_dir = os.path.join(MAIN_DIR, 'static', 'posters')
 
 
 def download_poster(poster_path, internal_id, external_id):
-    print('downloading', poster_path, internal_id)
+    logging.log(logging.DEBUG,'downloading'+ poster_path+ internal_id)
     # save image to static
     save_path = os.path.join(poster_dir, f'{internal_id}_{external_id}.webp')
     response = requests.get(poster_path)
@@ -25,7 +26,7 @@ def download_poster(poster_path, internal_id, external_id):
 
 
 def check_posters():
-    print('checking posters')
+    logging.log(logging.DEBUG,'checking poster')
     all_media = db.session.query(Media).all()
 
     os.makedirs(poster_dir, exist_ok=True)
@@ -55,7 +56,7 @@ def check_posters():
 
 
 def make_home_banner():
-    print('making banner')
+    logging.log(logging.DEBUG,'making banner')
     def resize_image(img, width, height):
         # Resize the image to the target width and height
         return img.resize((width, height), Image.Resampling.BOX)
