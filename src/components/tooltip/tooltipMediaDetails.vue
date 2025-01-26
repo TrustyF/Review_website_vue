@@ -62,7 +62,7 @@ function imageHandler(event) {
 
 function format_image_path(med) {
   if (med.value['poster_path'] !== 'null' && med.value['poster_path'] !== undefined) {
-    return `${curr_api}/media/get_image?path=${med.value['poster_path']}&type=${med.value['media_type']}&id=${med.value['id']}`
+    return `${curr_api}/static/posters/${med.value['id']}_${med.value['external_id']}.webp`
   } else {
     return undefined
   }

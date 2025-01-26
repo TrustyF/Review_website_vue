@@ -49,7 +49,7 @@ const router = useRouter()
 
 const media_type = computed(() => props['data']['media_type'] || 'movie')
 
-const image_path = computed(() => format_image_path(props['data']['poster_path'], props['data']['id']))
+const image_path = computed(() => `${curr_api}/static/posters/${props['data']['id']}_${props['data']['external_id']}.webp`)
 const poster_size = computed(() => {
   if (props.size_override) {
     return [
@@ -90,20 +90,6 @@ function get_year_from_release_date(string) {
   } else {
     return undefined
   }
-}
-
-function format_image_path(f_path, f_id) {
-  if (f_path !== 'null' && f_path !== undefined) {
-    return `${curr_api}/media/get_image?path=${f_path}&type=${props['data']['media_type']}&id=${f_id}`
-  } else {
-    return undefined
-  }
-}
-
-async function download_poster(image_path){
-
-  return await axios.get(image_path)
-    .then(response => response.data)
 }
 
 function push_to_details() {
