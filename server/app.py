@@ -12,8 +12,7 @@ from utilities.asset_manager import check_posters, make_home_banner
 from utilities.devmode_checker import dev_mode
 
 load_dotenv(os.path.join(MAIN_DIR, '.env'))
-app = Flask(__name__,
-            static_folder='static')
+app = Flask(__name__)
 
 db_username = os.getenv('MYSQL_DATABASE_USERNAME')
 db_password = os.getenv('MYSQL_DATABASE_PASSWORD')
