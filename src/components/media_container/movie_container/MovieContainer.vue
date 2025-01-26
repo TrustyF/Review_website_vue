@@ -49,8 +49,7 @@ const router = useRouter()
 
 const media_type = computed(() => props['data']['media_type'] || 'movie')
 
-const image_path = computed(() => format_image_path(props['data']['poster_path'], props['data']['external_id']))
-// const image_path = computed(() => props['data']['poster_path'])
+const image_path = computed(() => format_image_path(props['data']['poster_path'], props['data']['id']))
 const poster_size = computed(() => {
   if (props.size_override) {
     return [

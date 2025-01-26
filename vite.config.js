@@ -15,7 +15,7 @@ export default defineConfig({
             variables: true}),
         visualizer({
             filename: `dist_stats/stats_${Date.now()}.html`,
-            open: true,
+            open: false,
             template: 'flamegraph',
         })
     ],

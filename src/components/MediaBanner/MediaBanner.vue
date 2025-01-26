@@ -65,7 +65,7 @@ async function get_media() {
         headers: {"Content-Type": "application/json"},
         data: JSON.stringify(params)
       })
-
+  console.log(result.data['media'])
   media.value = result.data['media']
 }
 
