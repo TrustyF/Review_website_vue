@@ -516,6 +516,13 @@ def delete():
     return json.dumps({'ok': True}), 200, {'ContentType': 'application/json'}
 
 
+@bp.route("/proxy_poster", methods=['GET'])
+def proxy_poster():
+    img_path = request.args.get('path')
+    response = requests.get(img_path)
+    return response.content, 200
+
+
 @bp.route("/get_extra_posters", methods=['GET'])
 @requires_auth
 def search_extra_posters():
@@ -687,7 +694,7 @@ def get_filters():
 
 
 @bp.route("/get_stats", methods=['GET'])
-@cache.cached(timeout=86400)
+@cache.cached()
 def get_stats():
     def construct_rating_list(arr):
         base = [x for x in range(1, 11)]

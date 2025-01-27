@@ -12,7 +12,11 @@ from utilities.asset_manager import check_posters, make_home_banner
 from utilities.devmode_checker import dev_mode
 
 load_dotenv(os.path.join(MAIN_DIR, '.env'))
-app = Flask(__name__, static_folder=None)
+
+if dev_mode:
+    app = Flask(__name__)
+else:
+    app = Flask(__name__, static_folder=None)
 
 db_username = os.getenv('MYSQL_DATABASE_USERNAME')
 db_password = os.getenv('MYSQL_DATABASE_PASSWORD')
@@ -24,11 +28,9 @@ local_database_uri = f'mysql+pymysql://root:{db_password}@127.0.0.1:3306/{db_nam
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'pool_recycle': 280,
     'pool_pre_ping': True,
-    'echo': False
 }
 
 cache_config = {
-    "DEBUG": True,
     "CACHE_TYPE": "SimpleCache",
     "CACHE_DEFAULT_TIMEOUT": 300
 }
