@@ -1,57 +1,45 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed} from "vue";
+import {inject} from "vue";
+import router from "@/router";
 
 let props = defineProps(["b_width", "b_height", "box_data"]);
 let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
 
-let loaded = ref(false)
-
 </script>
 
 <template>
-  <RouterLink class="tier_box" :to="box_data['link']" v-show="loaded">
-    <div class="tier_box_wrapper">
+  <div class="tier_box" @click="router.push(box_data['link'])">
 
-      <div class="top_content">
-        <img :src="box_data['image']" @load="loaded=true" alt="tier_list_box_image" class="bg_image">
-      </div>
-
-      <div class="box_content">
-        <h1>{{ box_data['name'] }}</h1>
-        <h3 v-if="box_data['desc']">{{ box_data['desc'] }}</h3>
-      </div>
-
+    <div class="top_content">
+      <img :src="box_data['image']" alt="tier_list_box_image" class="bg_image">
     </div>
 
-  </RouterLink>
+    <div class="box_content">
+      <h1>{{ box_data['name'] }}</h1>
+      <h3 v-if="box_data['desc']">{{ box_data['desc'] }}</h3>
+    </div>
+
+  </div>
 </template>
 
 <style scoped>
 .tier_box {
   position: relative;
+  display: flex;
+  flex-flow: column;
 
   list-style: none;
   color: white;
+  background-color: #2b2a34;
   text-decoration: none;
+  cursor: pointer;
 
-  width: v-bind(b_width);
   border-radius: 10px;
+  border: 0 solid #464646;
 
   filter: drop-shadow(5px 5px 6px black);
   transition: 50ms ease-in-out;
-}
-
-.tier_box_wrapper {
-  position: relative;
-  display: flex;
-  flex-flow: column wrap;
-
-  border: 0 solid #464646;
-
-  background-color: #2b2a34;
-  flex-flow: column;
-  transition: 150ms ease-in-out;
   clip-path: inset(0% 0% 0% 0% round 10px);
 }
 

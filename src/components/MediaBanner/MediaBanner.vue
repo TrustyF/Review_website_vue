@@ -65,13 +65,13 @@ async function get_media() {
         headers: {"Content-Type": "application/json"},
         data: JSON.stringify(params)
       })
-  console.log(result.data['media'])
+  // console.log(result.data['media'])
   media.value = result.data['media']
 }
 
 async function get_specific() {
   const url = new URL(`${curr_api}/media_banner/${props.specific}`)
-  console.log(url)
+  // console.log(url)
   const params = {
     'limit': props.limit,
     'page': page.value,
@@ -86,7 +86,7 @@ async function get_specific() {
         data: JSON.stringify(params)
       })
 
-  console.log(result.data['media'])
+  // console.log(result.data['media'])
   media.value = result.data['media']
 }
 
@@ -129,7 +129,7 @@ async function paginate(value) {
   let scroll_amount = 5
 
   scroll_amount = countElementsInView(children)
-  console.log(countElementsInView(children))
+  // console.log(countElementsInView(children))
 
 
   scroll_position.value = Math.max(0, Math.min(20, scroll_position.value + (value * scroll_amount)))

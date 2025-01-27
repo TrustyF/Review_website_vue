@@ -1,5 +1,6 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed, onUnmounted,defineAsyncComponent, toRef} from "vue";
+import {inject, onMounted, watch, ref, computed, onUnmounted, defineAsyncComponent, toRef} from "vue";
+
 const FilterSearch = defineAsyncComponent(() => import('@/components/media_filters/filterSearch.vue'));
 const MovieContainer = defineAsyncComponent(() => import('@/components/media_container/movie_container/MovieContainer.vue'));
 const TagPicker = defineAsyncComponent(() => import('@/components/editor_tools/TagPicker.vue'));
@@ -21,6 +22,7 @@ let search_media = ref()
 let search_text = ref('')
 let search_page = ref(0)
 let extra_posters = ref([])
+let extra_posters_rows = ref(1.5)
 
 let updated = ref('none')
 let added = ref('none')
@@ -126,7 +128,7 @@ async function update_media() {
   }).then(response => response.json())
 
   updated.value = result.ok ? 'true' : 'false'
-  setTimeout(()=>updated.value = 'none',3000)
+  setTimeout(() => updated.value = 'none', 3000)
 
   if (updated.value) handle_pane_close()
 }
@@ -155,10 +157,8 @@ async function hard_delete() {
   selected_media.value = {}
 }
 
-function close_and_open_update_pane(){
-  //todo swap to update pane after add
+function close_and_open_update_pane() {
   handle_pane_close()
-
 }
 
 async function add_media() {
@@ -186,7 +186,7 @@ async function add_media() {
 }
 
 async function get_extra_posters() {
-  if(selected_media.value['name']===undefined) return
+  if (selected_media.value['name'] === undefined) return
 
   const token = await get_current_user()
 
@@ -237,10 +237,8 @@ function switch_poster(event) {
   selected_media.value['poster_path'] = event
 }
 
-function proxy_image(path){
-  // temporary disabled for new backend
-  return path
-
+function proxy_image(path) {
+  return `${curr_api}/media/proxy_poster?path=${path}`
 }
 
 onMounted(() => {
@@ -260,7 +258,7 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handle_key_press)
   document.body.style.overflow = 'scroll';
 })
-watch(selected_media,(oldV,newV)=>{
+watch(selected_media, (oldV, newV) => {
   if (add_pane_open.value) get_extra_posters()
 })
 </script>
@@ -314,10 +312,7 @@ watch(selected_media,(oldV,newV)=>{
 
       <div style="display:flex;flex-flow: column;gap: 20px;justify-content: space-between">
 
-        <movie-container :data="selected_media"
-                         :container_size="container_size"
-                         :container_scale="0.35"
-        ></movie-container>
+        <movie-container :data="selected_media" :scale_mul="1"/>
 
         <div style="display: flex;flex-flow: column;align-content:space-evenly;gap:10px">
           <button v-if="edit" style="width: 100%;height: 65px" @click="update_media">Update</button>
@@ -406,28 +401,30 @@ watch(selected_media,(oldV,newV)=>{
 
       </div>
 
-      <div style="display: grid;grid-template-rows: 50% 50%;gap: 10px;height: 590px">
+      <div style="display: grid;gap: 10px;height: 595px">
 
         <div class="extra_posters">
+          <input type="range" step="0.5" min="0.5" max="2" v-model="extra_posters_rows" style="position:absolute;left: 0;bottom: 0;width: 50%">
           <div class="extra_poster" v-for="poster in extra_posters" :key="poster">
-            <img v-lazy="proxy_image(poster)" alt="extra_poster" class="extra_poster_image"
+            <img v-lazy="proxy_image(poster)" threshold="0.5" alt="extra_poster" class="extra_poster_image"
                  @click="switch_poster(poster)">
           </div>
         </div>
 
-        <div class="tier_list_area">
-          <tier-list-picker/>
-          <user-list-picker/>
-        </div>
       </div>
 
 
     </div>
 
+    <div class="tier_list_area">
+      <tier-list-picker/>
+      <user-list-picker/>
+    </div>
+
     <div class="tags_area">
       <tag-picker :media_type="search_type"></tag-picker>
     </div>
-    
+
   </div>
 </template>
 
@@ -438,7 +435,7 @@ watch(selected_media,(oldV,newV)=>{
   padding: 10px;
   display: flex;
   flex-flow: column nowrap;
-  gap: 10px;
+  gap: 30px;
   height: 100%;
 
 }
@@ -472,11 +469,11 @@ watch(selected_media,(oldV,newV)=>{
 }
 
 .tier_list_area {
-  height: 100%;
+  height: 300px;
+  width: 100%;
   display: flex;
   flex-flow: column wrap;
   gap: 10px;
-  /*height: 300px;*/
 }
 
 .form_box {
@@ -487,20 +484,24 @@ watch(selected_media,(oldV,newV)=>{
 }
 
 .extra_posters {
+  position: relative;
   border: 2px dotted #464646;
   min-width: 50px;
 
-  display: flex;
-  flex-flow: row wrap;
-  gap: 5px;
+  /*display: flex;*/
+  /*flex-flow: row wrap;*/
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(calc(70px * v-bind(extra_posters_rows)),1fr));
+
+  gap: 2px;
   overflow-y: scroll;
   /*height: 300px;*/
 }
 
 .extra_poster_image {
-  /*width: 150px;*/
-  height: 150px;
-  object-fit: contain;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
 
 .search_result {

@@ -1,38 +1,29 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed} from "vue";
+import {inject} from "vue";
 import TierBox from "./TierBox.vue";
-import dont_thug_img from "/tier_list_images/dont_thug_me.jpg"
 
 let props = defineProps(["box_size", "box_scale", "row_num", "data"]);
 let emits = defineEmits(["test"]);
 const curr_api = inject("curr_api");
 const edit_mode = inject("edit_mode");
 
-let tier_box_height = computed(() => (props['box_size'][1] * props['box_scale']) + 'px')
-let tier_box_width = computed(() => (props['box_size'][0] * props['box_scale']) + 'px')
-let feed_width = computed(() => (props['box_size'][0] * props['box_scale'] + 25) * props['row_num'] + 'px')
-
 </script>
 
 <template>
   <div class="tier_feed_wrapper">
-    <tier-box :box_size="box_size" :b_width="tier_box_width" :b_height="tier_box_height"
+    <tier-box :box_size="box_size"
               :box_data="box" v-for="box in data"
               :key="box"></tier-box>
   </div>
-
 </template>
 
 <style scoped>
 .tier_feed_wrapper {
-  width: v-bind(feed_width);
-
-  /*display: flex;*/
-  /*flex-flow: row wrap;*/
   display: grid;
   grid-template-columns: repeat(v-bind(row_num), 1fr);
 
   justify-items: center;
+  align-items: flex-start;
 
   margin: 100px auto auto auto;
   padding-bottom: 30px;

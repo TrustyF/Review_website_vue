@@ -1,15 +1,14 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed, provide} from "vue";
+import {computed, inject} from "vue";
 import gold_star from '/ui/gold_star.webp'
 import blue_star from '/ui/blue_star.webp'
 import RatingCircle from "@/components/media_container/movie_container/sub_components/RatingCircle.vue";
-import BadgeTooltip from "@/components/media_container/movie_container/sub_components/badgeExpanded.vue";
 import Badge from "@/components/media_container/movie_container/sub_components/badge.vue";
 import {useRouter} from 'vue-router'
 
 import DifficultyGauge from "./sub_components/DifficultyGauge.vue";
 
-const image_path = computed(() => `${curr_api}/media/get_image?path=${props.data['poster_path']}&id=${props.data['id']}`)
+const image_path = computed(() => `${curr_api}/static/posters/${props.data['id']}_${props.data['external_id']}.webp`)
 let props = defineProps(["data", "container_scale", "container_size"]);
 let emits = defineEmits(["media_data"]);
 
