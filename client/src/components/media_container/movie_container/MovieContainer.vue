@@ -131,9 +131,6 @@ function emit_finished_loading() {
         <h2 class="date" v-if="data['seasons']>0">{{ data['seasons'] + " " + 's' }} </h2>
         <h2 class="date" v-if="data['episodes']>0 && data['episodes']>0">
           {{ Math.round(data['episodes'] / data['seasons']) + ' ep' }} </h2>
-        <!--        <h2 class="date" v-if="data['content_rating'] && data['content_rating'].name">•</h2>-->
-        <!--        <h2 class="date" v-if="data['content_rating'] && data['content_rating'].name">-->
-        <!--          {{ data['content_rating'].name }}</h2>-->
       </div>
     </div>
   </div>
@@ -154,7 +151,7 @@ function emit_finished_loading() {
   background-color: #25222a;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.75);
 
-  border-radius: 8px;
+  border-radius: 8px 8px 5px 5px;
 
   -webkit-animation: fadein 0.25s; /* Safari, Chrome and Opera > 12.1 */
   -moz-animation: fadein 0.25s; /* Firefox < 16 */
