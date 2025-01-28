@@ -1,12 +1,13 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed, onUnmounted, defineAsyncComponent, toRef} from "vue";
+import {computed, defineAsyncComponent, inject, onMounted, onUnmounted, ref, watch} from "vue";
+import {get_current_user} from "@/firebase_auth.js";
 
 const FilterSearch = defineAsyncComponent(() => import('@/components/media_filters/filterSearch.vue'));
 const MovieContainer = defineAsyncComponent(() => import('@/components/media_container/movie_container/MovieContainer.vue'));
 const TagPicker = defineAsyncComponent(() => import('@/components/editor_tools/TagPicker.vue'));
 const TierListPicker = defineAsyncComponent(() => import('@/components/editor_tools/TierListPicker.vue'));
 const UserListPicker = defineAsyncComponent(() => import('@/components/editor_tools/UserListPicker.vue'));
-import {get_current_user} from "@/firebase_auth.js";
+const ExtraPostersList = defineAsyncComponent(() => import("@/components/tooltip/ExtraPostersList.vue"));
 
 let props = defineProps(["edit", "add"]);
 // let emits = defineEmits(["test"]);
@@ -21,8 +22,6 @@ let search_type = ref('movie')
 let search_media = ref()
 let search_text = ref('')
 let search_page = ref(0)
-let extra_posters = ref([])
-let extra_posters_rows = ref(1.5)
 
 let updated = ref('none')
 let added = ref('none')
@@ -185,28 +184,6 @@ async function add_media() {
   close_and_open_update_pane()
 }
 
-async function get_extra_posters() {
-  if (selected_media.value['name'] === undefined) return
-
-  const token = await get_current_user()
-
-  const url = new URL(`${curr_api}/media/get_extra_posters`)
-
-  url.searchParams.set('name', selected_media.value['name'])
-  url.searchParams.set('external_id', selected_media.value['external_id'])
-  url.searchParams.set('type', selected_media.value['media_type'])
-
-  extra_posters.value = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Authorization': token.uid,
-      'Content-Type': 'application/json',
-    }
-  }).then(response => response.json())
-
-  // console.log(extra_posters.value)
-}
-
 function replace_from_search(event) {
   delete event['id']
   delete event['user_rating']
@@ -237,18 +214,11 @@ function switch_poster(event) {
   selected_media.value['poster_path'] = event
 }
 
-function proxy_image(path) {
-  return `${curr_api}/media/proxy_poster?path=${path}`
-}
 
 onMounted(() => {
   if (selected_media.value['media_type']) search_type.value = selected_media.value['media_type']
-  // console.log('selected', selected_media.value)
   if (add_pane_open.value) selected_media.value = {}
-
   fetch_filters()
-  if (edit_pane_open.value) get_extra_posters()
-
   updated.value = 'none'
   added.value = 'none'
   window.addEventListener('keydown', handle_key_press)
@@ -401,17 +371,7 @@ watch(selected_media, (oldV, newV) => {
 
       </div>
 
-      <div style="display: grid;gap: 10px;height: 595px">
-
-        <div class="extra_posters">
-          <input type="range" step="0.5" min="0.5" max="2" v-model="extra_posters_rows" style="position:absolute;left: 0;bottom: 0;width: 50%">
-          <div class="extra_poster" v-for="poster in extra_posters" :key="poster">
-            <img v-lazy="proxy_image(poster)" threshold="0.5" alt="extra_poster" class="extra_poster_image"
-                 @click="switch_poster(poster)">
-          </div>
-        </div>
-
-      </div>
+      <extra-posters-list :selected_media="selected_media"/>
 
 
     </div>
@@ -481,27 +441,6 @@ watch(selected_media, (oldV, newV) => {
   flex-flow: column;
   gap: 10px;
   align-items: flex-start;
-}
-
-.extra_posters {
-  position: relative;
-  border: 2px dotted #464646;
-  min-width: 50px;
-
-  /*display: flex;*/
-  /*flex-flow: row wrap;*/
-  display: grid;
-  grid-template-columns: repeat(auto-fit,minmax(calc(70px * v-bind(extra_posters_rows)),1fr));
-
-  gap: 2px;
-  overflow-y: scroll;
-  /*height: 300px;*/
-}
-
-.extra_poster_image {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
 }
 
 .search_result {

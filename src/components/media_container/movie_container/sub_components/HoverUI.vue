@@ -27,7 +27,7 @@ let selected_media = inject('selected_media')
 let media_detail_pane_open = inject("media_detail_pane_open");
 
 let dropped_badge = {
-  image_path: "103201.webp",
+  image_path: "103201",
   name: "Dropped",
   overview: "Didn't care enough to finish it",
   tier: "red"
@@ -76,13 +76,13 @@ function sort_tags(arr) {
     <h2 style="color: white">{{ data['content_rating']['age'] }}</h2>
   </div>
 
-  <div class="tags_wrapper" v-if="data['tags']!==undefined && data['tags']!==null && data['tags'].length > 0">
+  <div class="tags_wrapper" v-if="(data['tags']!==undefined && data['tags']!==null && data['tags'].length > 0) || data['is_dropped']">
 
     <div v-for="tag in sort_tags(data['tags'])" :key="tag['id']" class="tag_vis_container">
       <badge :data="tag" :min_size="min_size" :show_title="false"></badge>
     </div>
 
-    <div style="pointer-events: auto;width: fit-content" v-if=" data['is_dropped']">
+    <div style="pointer-events: auto;width: fit-content" v-if="data['is_dropped']">
       <badge :data="dropped_badge" :min_size="min_size" :show_title="false"></badge>
     </div>
   </div>

@@ -4,7 +4,7 @@ import {log_event} from "@/scripts/log_events";
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     scrollBehavior(to, from, savedPosition) {
-        // return {top: 0}
+        return {top: 0}
     },
     routes: [
         {
