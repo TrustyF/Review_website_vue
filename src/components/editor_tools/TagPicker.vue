@@ -10,7 +10,7 @@ let props = defineProps(["media_type"]);
 let emits = defineEmits(["tags"]);
 const curr_api = inject("curr_api");
 
-const tiers = ['gold', 'green', 'purple', 'silver', 'red']
+const tiers = ['gold', 'green', 'purple', 'silver', 'red', 'iron', 'bronze']
 
 const tag_images = ref({})
 
@@ -56,7 +56,6 @@ async function get_tags() {
 }
 
 async function get_tier_images() {
-
   const url = `${curr_api}/tag/get_tier_images`
   const params = {
     tier: temp_tag.value.tier
@@ -65,7 +64,6 @@ async function get_tier_images() {
   const result = await axios.get(url, {params: params})
       .then(response => response.data)
 
-  // console.log(result)
   tag_images.value = result
 }
 
@@ -102,7 +100,7 @@ function add_dragged_badge_to_editor() {
 }
 
 function switch_tag_image(path) {
-  temp_tag.value['image_path'] = path
+  temp_tag.value['image_path'] = path.split('.')[0]
 }
 
 async function add_tag() {
@@ -244,8 +242,7 @@ onMounted(() => {
     <div class="bottom_area">
       <div class="available_images">
         <div class="template_image" @click="switch_tag_image(img[1])" v-for="img in tag_images" :key="img">
-          <img class="tag_template_image" :src="`${curr_api}/static/tags/icons/${img[0]}/${img[1]}`"
-               alt="tag_template">
+          <img class="tag_template_image" :src="`${curr_api}/static/tags/icons/${img[0]}/${img[1]}`" alt="tag_template">
         </div>
       </div>
     </div>

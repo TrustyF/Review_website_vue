@@ -29,8 +29,8 @@ let media_detail_pane_open = inject("media_detail_pane_open");
 let dropped_badge = {
   image_path: "103201",
   name: "Dropped",
-  overview: "Didn't care enough to finish it",
-  tier: "red"
+  overview: "Didn't finish it",
+  tier: "iron"
 }
 
 const curr_api = inject("curr_api");

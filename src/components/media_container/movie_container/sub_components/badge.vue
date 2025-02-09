@@ -9,9 +9,10 @@ const tooltip_pos = inject("tooltip_badge_pos");
 const tooltip_data = inject("tooltip_badge_data");
 const tooltip_hover = inject("tooltip_badge_hover");
 
-const tag_container = ref()
+const tag_container = ref(null)
 
 function emit_tooltip_data() {
+  if (tag_container.value === null) return
   let tag_box = tag_container.value.getBoundingClientRect()
   let tag_position = [tag_box.x + (tag_box.width / 2), tag_box.y + (tag_box.height / 2) + document.documentElement.scrollTop]
 
@@ -30,7 +31,8 @@ function close_tooltip() {
 
 <template>
   <div class="tag_box" @mouseover="emit_tooltip_data" @mouseleave="close_tooltip">
-    <img v-if="data['tier']" ref="tag_container" lazy="loading" class="tag_image" v-lazy="`${curr_api}/static/tags/icons/${data['tier']}/${data['image_path']}.webp`">
+    <img v-if="data['tier'] && data['image_path']" ref="tag_container" lazy="loading" class="tag_image"
+         v-lazy="`${curr_api}/static/tags/icons/${data['tier']}/${data['image_path']}.webp`">
     <h1 v-if="show_title" class="tag_title">{{ data['name'] }}</h1>
   </div>
 </template>
