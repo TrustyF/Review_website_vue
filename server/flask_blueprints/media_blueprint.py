@@ -471,21 +471,19 @@ def add():
 def update():
     # parameters
     data = request.get_json()
-    # print('update', data['name'])
+    # print('update', data)
     # pprint.pprint(data)
 
     query = db.session.query(Media).filter_by(id=data['id'])
 
     if query.one_or_none() is None:
-        return json.dumps({'ok': False}), 200, {'ContentType': 'application/json'}
+        return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
 
     # update
     query.update(deserialize_media(data))
 
     # associations
     media_obj = query.one()
-
-    print(data.get('user_lists', []))
 
     media_obj.genres = [db.session.query(Genre).filter_by(id=x['id']).one() for x in data.get('genres', [])]
     media_obj.themes = [db.session.query(Theme).filter_by(id=x['id']).one() for x in data.get('themes', [])]
@@ -497,6 +495,8 @@ def update():
                                     .filter_by(id=data.get('content_rating').get('id')).one())
 
     db.session.commit()
+    download_poster(media_obj.poster_path, media_obj.id, media_obj.external_id)
+
     db.session.close()
 
     return json.dumps({'ok': True}), 200, {'ContentType': 'application/json'}

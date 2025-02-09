@@ -31,6 +31,17 @@ def get():
     return serialized_tags, 200
 
 
+@bp.route("/get_tier_images", methods=['GET'])
+@cache.cached()
+def get_tier_images():
+    tier = request.args.get('tier')
+
+    all_tags_path = os.path.join(MAIN_DIR, 'static', 'tags', 'icons', tier)
+    images = [[tier, x] for x in os.listdir(all_tags_path)]
+
+    return images, 200
+
+
 @bp.route("/add", methods=['POST'])
 @requires_auth
 def add():
