@@ -66,6 +66,12 @@ async function get_media() {
         data: JSON.stringify(params)
       })
   // console.log(result.data['media'])
+
+  if (result.data['media'].length < 1){
+    page.value = 0
+    await paginate(0)
+  }
+
   media.value = result.data['media']
 }
 
@@ -127,22 +133,20 @@ async function paginate(value) {
 
   let children = scroll_banner.value.children
   let scroll_amount = 5
-
   scroll_amount = countElementsInView(children)
-  // console.log(countElementsInView(children))
+  let max = children.length-1
 
-
-  scroll_position.value = Math.max(0, Math.min(20, scroll_position.value + (value * scroll_amount)))
+  scroll_position.value = Math.max(0, Math.min(max, scroll_position.value + (value * scroll_amount)))
 
   log_event('paginate banner', 'int', `${props['title']} ${scroll_position.value}-${page.value}`)
 
   if (scroll_position.value === 15) {
-    children[20].scrollIntoView({
+    children[max].scrollIntoView({
       behavior: 'smooth',
       block: 'nearest',
       inline: 'end'
     })
-  } else if (scroll_position.value >= 20) {
+  } else if (scroll_position.value >= max) {
     scroll_position.value = 0
     page.value += 1
     await get_media()

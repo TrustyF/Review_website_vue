@@ -8,11 +8,14 @@ const curr_api = inject("curr_api");
 const tier_details = computed(() => {
   let tier = props['data']['tier']
 
-  if (tier === 'purple') return 'Warning'
-  if (tier === 'green') return 'Positive'
-  if (tier === 'red') return 'Negative'
-  if (tier === 'gold') return 'Peak'
-  if (tier === 'silver') return 'Gripe'
+  if (tier === 'purple') return 'warning'
+  if (tier === 'green') return 'positive'
+  if (tier === 'red') return 'negative'
+  if (tier === 'gold') return 'peak'
+  if (tier === 'silver') return 'gripe'
+  if (tier === 'cyan') return 'status'
+  if (tier === 'iron') return 'status'
+  if (tier === 'bronze') return 'status'
 
   return undefined
 })
