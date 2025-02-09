@@ -62,5 +62,6 @@ with app.app_context():
 
 # run setup tasks
 with app.app_context():
-    check_posters()
-    make_home_banner()
+    if not dev_mode:
+        check_posters()
+        make_home_banner()
