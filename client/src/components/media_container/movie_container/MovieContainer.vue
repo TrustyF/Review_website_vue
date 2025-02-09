@@ -1,10 +1,9 @@
 <script setup>
-import {inject, onMounted, watch, ref, computed, provide, defineAsyncComponent} from "vue";
+import {computed, defineAsyncComponent, inject} from "vue";
 import {useRouter} from 'vue-router'
 import {log_event} from "/src/scripts/log_events";
-import {axios} from '@bundled-es-modules/axios';
 
-const HoverUI = defineAsyncComponent(()=> import("@/components/media_container/movie_container/sub_components/HoverUI.vue"))
+const HoverUI = defineAsyncComponent(() => import("@/components/media_container/movie_container/sub_components/HoverUI.vue"))
 const DifficultyGauge = defineAsyncComponent(() => import("@/components/media_container/movie_container/sub_components/DifficultyGauge.vue"));
 const Rating = defineAsyncComponent(() => import('@/components/media_container/movie_container/sub_components/rating.vue'));
 
@@ -24,6 +23,10 @@ let props = defineProps({
     type: Boolean,
     default: true
   },
+  proxy_poster: {
+    type: Boolean,
+    default: false
+  },
   scale_mul: {
     type: Number,
     default: 1
@@ -31,6 +34,9 @@ let props = defineProps({
   size_override: {
     type: Array,
     default: null
+  },
+  force_reload: {
+    default: 0
   },
   media_container_type_override: {
     type: String,
@@ -49,7 +55,10 @@ const router = useRouter()
 
 const media_type = computed(() => props['data']['media_type'] || 'movie')
 
-const image_path = computed(() => `${curr_api}/static/posters/${props['data']['id']}_${props['data']['external_id']}.webp`)
+const image_path = computed(() => {
+  if (!props.proxy_poster) return `${curr_api}/static/posters/${props['data']['id']}_${props['data']['external_id']}.webp`
+  else return `${curr_api}/media/proxy_poster?path=${props['data']['poster_path']}`
+})
 const poster_size = computed(() => {
   if (props.size_override) {
     return [
@@ -105,9 +114,10 @@ function emit_finished_loading() {
 
 </script>
 <template>
-  <div class="movie_container_wrapper">
+  <div class="movie_container_wrapper" :key="force_reload">
 
-    <img datatype="img" @click="push_to_details" @loadeddata="emit_finished_loading" v-if="lazy_poster && image_path" class="poster"
+    <img datatype="img" @click="push_to_details" @loadeddata="emit_finished_loading" v-if="lazy_poster && image_path"
+         class="poster"
          alt="" v-lazy="image_path" lazy="loading" draggable="false"/>
     <div v-else class="poster"></div>
 

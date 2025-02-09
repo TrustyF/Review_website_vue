@@ -49,8 +49,8 @@ async function get_tags() {
 
   available_badges.value = result.sort((a, b) => a['count'] < b['count'])
   unique_badges.value = result.sort((a, b) => a['count'] < b['count'])
-  available_badges.value = available_badges.value.filter((e)=>!e.is_unique)
-  unique_badges.value = unique_badges.value.filter((e)=>e.is_unique)
+  available_badges.value = available_badges.value.filter((e) => !e.is_unique)
+  unique_badges.value = unique_badges.value.filter((e) => e.is_unique)
   available_badges.value = order_stuff(available_badges)
   unique_badges.value = order_stuff(unique_badges)
 }
@@ -184,7 +184,6 @@ onMounted(() => {
                  :min_size="200"
                  :show_title="true"></badge>
         </div>
-        <!--        <button @click="emit">Push to media</button>-->
       </div>
 
       <div class="tag_editor" @dragover="allowDrop" @drop="add_dragged_badge_to_editor">
@@ -244,9 +243,8 @@ onMounted(() => {
 
     <div class="bottom_area">
       <div class="available_images">
-        <div class="template_image" @click="switch_tag_image(img[1])" v-for="img in tag_images"
-             :key="img">
-          <img class="tag_template_image" :src="`${curr_api}/static/tags/icons/${img[0]}/${img[1]}.webp`"
+        <div class="template_image" @click="switch_tag_image(img[1])" v-for="img in tag_images" :key="img">
+          <img class="tag_template_image" :src="`${curr_api}/static/tags/icons/${img[0]}/${img[1]}`"
                alt="tag_template">
         </div>
       </div>

@@ -282,7 +282,7 @@ watch(selected_media, (oldV, newV) => {
 
       <div style="display:flex;flex-flow: column;gap: 20px;justify-content: space-between">
 
-        <movie-container :data="selected_media" :scale_mul="1"/>
+        <movie-container :proxy_poster="true" :data="selected_media" :scale_mul="1"/>
 
         <div style="display: flex;flex-flow: column;align-content:space-evenly;gap:10px">
           <button v-if="edit" style="width: 100%;height: 65px" @click="update_media">Update</button>
@@ -371,7 +371,7 @@ watch(selected_media, (oldV, newV) => {
 
       </div>
 
-      <extra-posters-list :selected_media="selected_media"/>
+      <extra-posters-list @picked_poster="switch_poster" :selected_media="selected_media"/>
 
 
     </div>
