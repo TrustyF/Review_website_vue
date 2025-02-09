@@ -2,4 +2,5 @@
 /devmode.txt
 /venv/
 /tokens/
-/static/
+/static/*
+!/static/tags/
