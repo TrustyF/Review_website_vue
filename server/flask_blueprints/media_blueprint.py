@@ -232,7 +232,7 @@ def get():
                 q = q.filter(func.abs(Media.user_rating - Media.public_rating) >= abs(rating_spacing),
                              Media.public_rating >= Media.user_rating, Media.public_rating >= 7)
 
-            q = q.filter(Media.is_dropped != 1)
+            q = q.filter(or_(Media.is_dropped == None, Media.is_dropped == 0))
 
         return q, match
 
