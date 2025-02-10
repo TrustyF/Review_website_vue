@@ -74,8 +74,8 @@ const genre_number_list = [
 
     <lazy-component class="banner">
       <media-banner title="Controversial"
-                    :rating_spacing="3"
-                    :media_types="['movie','tv','game','manga']"
+                    :rating_spacing="2"
+                    :media_types="['movie']"
                     :default-in-view="true"
       ></media-banner>
     </lazy-component>
