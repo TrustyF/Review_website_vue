@@ -69,6 +69,8 @@ def add():
         return json.dumps({'ok': False}), 404, {'ContentType': 'application/json'}
 
     db.session.close()
+    cache.clear()
+
     return json.dumps({'ok': True}), 200, {'ContentType': 'application/json'}
 
 
@@ -91,6 +93,7 @@ def update():
 
     db.session.commit()
     db.session.close()
+    cache.clear()
 
     return json.dumps({'ok': True}), 200, {'ContentType': 'application/json'}
 
@@ -106,5 +109,6 @@ def delete():
 
     db.session.commit()
     db.session.close()
+    cache.clear()
 
     return json.dumps({'ok': True}), 200, {'ContentType': 'application/json'}
