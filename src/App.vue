@@ -92,6 +92,7 @@ onMounted(() => {
 })
 
 //todo add watched by account
+//todo add media subtype
 
 </script>
 <template>
@@ -128,7 +129,9 @@ onMounted(() => {
   margin: 0 auto 0 auto;
   max-width: 1080px;
   min-height: 80vh;
-  /*overflow-x: clip;*/
+
+  /*added to prevent horizontal scrolling, might break something*/
+  overflow: hidden;
 
   padding: 0 40px 0 40px;
 }
