@@ -628,7 +628,7 @@ def search_extra_posters():
 
 
 @bp.route("/get_filters", methods=['POST'])
-@cache.cached(timeout=86400)
+@cache.cached()
 def get_filters():
     params = request.get_json()
 
