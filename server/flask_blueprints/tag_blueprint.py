@@ -4,7 +4,7 @@ from dataclasses import asdict
 
 import sqlalchemy.exc
 from flask import Blueprint, request, Response, jsonify, send_file
-from sqlalchemy import func
+from sqlalchemy import func, or_
 
 from app import cache
 from constants import MAIN_DIR
@@ -32,12 +32,31 @@ def get():
 
 
 @bp.route("/get_tier_images", methods=['GET'])
-@cache.cached()
+@cache.cached(query_string=True)
 def get_tier_images():
     tier = request.args.get('tier')
+    get_all = request.args.get('get_all')
 
     all_tags_path = os.path.join(MAIN_DIR, 'static', 'tags', 'icons', tier)
-    images = [[tier, x] for x in os.listdir(all_tags_path)]
+    all_images = [x for x in os.listdir(all_tags_path)]
+
+    # return all images
+    if get_all:
+        formated_images = [[tier, x] for x in all_images]
+        return formated_images, 200
+
+    # return images not yet used for tags
+    tags = (
+        db.session.query(Tag)
+        .filter(Tag.tier == tier)
+        .filter(Tag.is_deleted.is_(None))
+        .all()
+    )
+
+    tag_paths = [f'{tag.image_path}.webp' for tag in tags]
+
+    exclusive_paths = [name for name in all_images if name not in tag_paths]
+    images = [[tier, x] for x in exclusive_paths]
 
     return images, 200
 
