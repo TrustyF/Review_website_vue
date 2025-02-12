@@ -85,7 +85,6 @@ const genre_number_list = [
                     title="TV"
                     :media_types="['Tv']"
                     :size_override="[512, 720]"
-                    :default-in-view="true"
       ></media-banner>
     </lazy-component>
 
