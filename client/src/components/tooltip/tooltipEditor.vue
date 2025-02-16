@@ -17,7 +17,8 @@ let selected_media = inject('selected_media')
 let edit_pane_open = inject('edit_pane_open')
 let add_pane_open = inject('add_pane_open')
 
-let search_type = ref('movie')
+let search_source = ref('imdb')
+let search_type = ref(null)
 
 let search_media = ref()
 let search_text = ref('')
@@ -27,9 +28,6 @@ let updated = ref('none')
 let added = ref('none')
 let hard_delete_count = ref(0)
 
-let content_ratings = ref()
-let all_content_ratings = ref()
-
 let container_size = computed(() => {
   if (search_type.value === 'youtube') {
     return [1280 / 1.3, 720 / 1.3]
@@ -37,30 +35,6 @@ let container_size = computed(() => {
     return [500, 750]
   }
 })
-
-async function fetch_filters() {
-
-  const url = new URL(`${curr_api}/media/get_filters`)
-  const params = {
-    'type': selected_media.value['media_type'],
-    'tier_lists': [],
-  }
-
-  const result = await fetch(url, {
-    method: 'POST',
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(params)
-  }).then(response => response.json())
-
-  content_ratings.value = result['content_ratings']
-  all_content_ratings.value = result['all_content_ratings']
-  // content_ratings.value.push({'id': 0, 'name': 'None', 'order': -1})
-  content_ratings.value.sort((a, b) => a['order'] > b['order'])
-  all_content_ratings.value.sort((a, b) => a['order'] > b['order'])
-
-  // console.log('content ratings', content_ratings.value)
-  // console.log(selected_media.value.content_rating)
-}
 
 async function get_media() {
 
@@ -89,11 +63,15 @@ async function get_media() {
 }
 
 async function find_media() {
+
+  if (!search_type.value || !search_source.value || !search_text.value) return
+
   const token = await get_current_user()
 
   const url = new URL(`${curr_api}/media/find`)
   url.searchParams.set('name', search_text.value)
   url.searchParams.set('type', search_type.value)
+  url.searchParams.set('source', search_source.value)
   url.searchParams.set('page', String(search_page.value))
 
   search_media.value = await fetch(url, {
@@ -218,7 +196,6 @@ function switch_poster(event) {
 onMounted(() => {
   if (selected_media.value['media_type']) search_type.value = selected_media.value['media_type']
   if (add_pane_open.value) selected_media.value = {}
-  fetch_filters()
   updated.value = 'none'
   added.value = 'none'
   window.addEventListener('keydown', handle_key_press)
@@ -228,9 +205,7 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handle_key_press)
   document.body.style.overflow = 'scroll';
 })
-watch(selected_media, (oldV, newV) => {
-  if (add_pane_open.value) get_extra_posters()
-})
+
 </script>
 
 <template>
@@ -241,11 +216,7 @@ watch(selected_media, (oldV, newV) => {
     <div v-if="add" class="search_area">
 
       <div style="display: flex;gap: 15px">
-        <div class="search_bars">
-          <!--          <div style="display: flex;align-items: center;gap: 10px">-->
-          <!--            <h1>Library</h1>-->
-          <!--            <filter-search style="height: 30px" @filter="get_media($event)" :auto_search="false"></filter-search>-->
-          <!--          </div>-->
+        <div class="search_bars" v-show="search_source && search_type">
           <div style="display: flex;align-items: center;gap: 10px">
             <h1>Find</h1>
             <filter-search style="height: 30px" @filter="search_text=$event;find_media()"
@@ -254,8 +225,18 @@ watch(selected_media, (oldV, newV) => {
         </div>
 
         <div class="media_type_selector">
+
+          <label for="media_Sources" style="margin-right: 10px">Media source</label>
+          <select v-model="search_source" id="media_Sources" @change="find_media">
+            <option value="imdb" :selected="search_source">movie db</option>
+            <option value="mangadex" :selected="search_source">manga dex</option>
+            <option value="igdb" :selected="search_source">video game db</option>
+            <option value="youtube" :selected="search_source">youtube</option>
+            <option value="comic_vine" :selected="search_source">comic vine</option>
+          </select>
+
           <label for="media_types" style="margin-right: 10px">Media type</label>
-          <select v-model="search_type" id="media_types" @change="get_media();fetch_filters();">
+          <select v-model="search_type" id="media_types" @change="find_media">
             <option value="movie" :selected="search_type">movie</option>
             <option value="tv" :selected="search_type">tv</option>
             <option value="youtube" :selected="search_type">youtube</option>
@@ -263,11 +244,15 @@ watch(selected_media, (oldV, newV) => {
             <option value="game" :selected="search_type">game</option>
             <option value="comic" :selected="search_type">comic</option>
           </select>
+
           <input v-model="search_page" type="number" style="margin-left: 10px;width: 50px" @change="find_media">
         </div>
+
       </div>
-      <div class="search_result">
+
+      <div class="search_result" v-if="search_media">
         <movie-container v-for="med in search_media"
+                         :proxy_poster="true"
                          :key="search_type + med['external_id'] + med['id']"
                          :data="med"
                          :container_size="container_size"
@@ -282,7 +267,7 @@ watch(selected_media, (oldV, newV) => {
 
       <div style="display:flex;flex-flow: column;gap: 20px;justify-content: space-between">
 
-        <movie-container :proxy_poster="true" :data="selected_media" :scale_mul="1"/>
+        <movie-container v-if="selected_media.name" :proxy_poster="true" :data="selected_media" :scale_mul="1"/>
 
         <div style="display: flex;flex-flow: column;align-content:space-evenly;gap:10px">
           <button v-if="edit" style="width: 100%;height: 65px" @click="update_media">Update</button>
@@ -322,27 +307,16 @@ watch(selected_media, (oldV, newV) => {
                    @change="selected_media['is_deleted']=$event.target.checked">
           </div>
 
-          <label for="form_media_types">Content rating</label>
-          <select v-if="selected_media['content_rating'] && selected_media['content_rating'].id"
-                  @change="selected_media['content_rating']=content_ratings[$event.target.value]"
+          <label for="form_media_types">Media Type</label>
+          <select v-if="selected_media['media_type']"
+                  @change="selected_media['media_type']=$event.target.value"
                   id="form_media_types">
-            <option v-for="(c,i) in content_ratings" :key="c['id']" :value="i"
-                    :selected="selected_media['content_rating'].id === c.id">
-              {{ c.name }}
+            <option v-for="m_type in media_types" :key="m_type" :value="m_type"
+                    :selected="selected_media['media_type'] === m_type">
+              {{ m_type }}
             </option>
             .value
           </select>
-
-          <label for="form_media_types">All Content ratings</label>
-          <select @change="selected_media['content_rating']=all_content_ratings[$event.target.value]"
-                  id="form_media_types"
-          >
-            <option v-for="(c,i) in all_content_ratings" :key="c['id']" :value="i">
-              {{ c.name }}
-            </option>
-            .value
-          </select>
-
 
           <label for="form_image_url">Poster path</label>
           <textarea id="form_image_url" v-model="selected_media['poster_path']"
@@ -363,9 +337,9 @@ watch(selected_media, (oldV, newV) => {
           <input id="form_public_rating" v-model="selected_media['public_rating']" type="number"
                  @change="selected_media['public_rating']=$event.target.value">
 
-          <!--          <label for="form_added_date">Date added</label>-->
-          <!--          <input id="form_added_date" v-model="selected_media['created_at']" type="text"-->
-          <!--                 @change="selected_media['created_at']=$event.target.value">-->
+          <label for="form_added_date">Date added</label>
+          <input id="form_added_date" v-model="selected_media['created_at']" type="text"
+                 @change="selected_media['created_at']=$event.target.value">
 
         </div>
 
@@ -463,5 +437,12 @@ watch(selected_media, (oldV, newV) => {
   padding: 10px;
   /*width: 20px;*/
   object-fit: contain;
+}
+
+.media_type_selector {
+  display: flex;
+  flex-flow: row;
+  align-items: flex-start;
+  gap: 5px;
 }
 </style>
