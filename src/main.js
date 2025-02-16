@@ -9,11 +9,11 @@ import {initializeApp} from 'firebase/app';
 import axiosRetry from 'axios-retry';
 import { axios } from '@bundled-es-modules/axios';
 
-const local_api = "http://192.168.1.11:5000"
+const local_api = "http://127.0.0.1:5000"
 const server_api = "https://review-trustyfox.pythonanywhere.com"
 
-// const devMode = import.meta.env.DEV
-const devMode = false
+const devMode = import.meta.env.DEV
+// const devMode = false
 const edit_mode = ref(false)
 
 const firebaseConfig = {

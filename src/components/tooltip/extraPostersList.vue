@@ -18,8 +18,8 @@ function emit_poster(path) {
 }
 
 async function get_extra_posters() {
-  console.log(props['selected_media'])
-  if (props["selected_media"] === undefined) return
+
+  if (!props["selected_media"].name) return
 
   const token = await get_current_user()
 
