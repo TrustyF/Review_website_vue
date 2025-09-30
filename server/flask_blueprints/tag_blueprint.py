@@ -16,7 +16,7 @@ bp = Blueprint('tag', __name__)
 
 
 @bp.route("/get", methods=['GET'])
-@cache.cached()
+# @cache.cached()
 def get():
     tag_counts = (
         db.session.query(Tag, func.count(Media.id).label('count'))
