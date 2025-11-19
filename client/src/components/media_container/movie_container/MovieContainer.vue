@@ -56,6 +56,7 @@ const router = useRouter()
 const media_type = computed(() => props['data']['media_type'] || 'movie')
 
 const image_path = computed(() => {
+  if (!props.data.poster_path) return ''
   if (!props.proxy_poster) return `${curr_api}/static/posters/${props['data']['id']}_${props['data']['external_id']}.webp`
   else return `${curr_api}/media/proxy_poster?path=${props['data']['poster_path']}`
 })

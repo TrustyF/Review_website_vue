@@ -10,6 +10,7 @@ let extra_posters_rows = ref(1.5)
 let extra_posters = ref([])
 
 function proxy_image(path) {
+  if (path === undefined) return ''
   return `${curr_api}/media/proxy_poster?path=${path}`
 }
 
@@ -18,8 +19,7 @@ function emit_poster(path) {
 }
 
 async function get_extra_posters() {
-  console.log(props['selected_media'])
-  if (props["selected_media"] === undefined) return
+  if (props["selected_media"].value === undefined) return
 
   const token = await get_current_user()
 
