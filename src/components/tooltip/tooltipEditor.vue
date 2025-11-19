@@ -228,9 +228,6 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handle_key_press)
   document.body.style.overflow = 'scroll';
 })
-watch(selected_media, (oldV, newV) => {
-  if (add_pane_open.value) get_extra_posters()
-})
 </script>
 
 <template>
@@ -270,6 +267,7 @@ watch(selected_media, (oldV, newV) => {
         <movie-container v-for="med in search_media"
                          :key="search_type + med['external_id'] + med['id']"
                          :data="med"
+                         :proxy_poster="true"
                          :container_size="container_size"
                          :scale_mul="0.6"
                          @media_data="replace_from_search"
