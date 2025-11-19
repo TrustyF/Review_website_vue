@@ -291,12 +291,22 @@ def find():
 
     def request_tmdb():
         all_found = []
-        id_request = requests.get(
-            f'https://api.themoviedb.org/3/search/{media_type}?query={media_name}&page=1', headers={
-                "accept": "application/json",
-                "Authorization": f"Bearer {TMDB_ACCESS_TOKEN}"}).json()
 
-        found_ids = [x['id'] for x in id_request['results'][media_page * 5:(media_page * 5) + 5]]
+        if media_name.startswith("tt="):
+            id_request = requests.get(
+                f'https://api.themoviedb.org/3/find/{media_name[3:]}?external_source=imdb_id&include_adult=true',
+                headers={
+                    "accept": "application/json",
+                    "Authorization": f"Bearer {TMDB_ACCESS_TOKEN}"}).json()
+            found_ids = [id_request[media_type + '_results'][0]['id']]
+        else:
+            id_request = requests.get(
+                f'https://api.themoviedb.org/3/search/{media_type}?query={media_name}&include_adult=true&page=1',
+                headers={
+                    "accept": "application/json",
+                    "Authorization": f"Bearer {TMDB_ACCESS_TOKEN}"}).json()
+
+            found_ids = [x['id'] for x in id_request['results'][media_page * 5:(media_page * 5) + 5]]
         # print('tmdb_ids',found_ids)
 
         for media_id in found_ids:
