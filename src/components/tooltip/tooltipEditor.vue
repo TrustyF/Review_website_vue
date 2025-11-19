@@ -19,6 +19,7 @@ let add_pane_open = inject('add_pane_open')
 
 let search_source = ref('imdb')
 let search_type = ref(null)
+let all_media_types = ['movie', 'tv', 'manga', 'games', 'youtube', 'comic', 'short', 'documentary']
 
 let search_media = ref()
 let search_text = ref('')
@@ -88,12 +89,13 @@ async function find_media() {
 
 async function update_media() {
   if (selected_media.value['id'] === undefined) return
+  if (search_type.value === null) return
 
   const token = await get_current_user()
-
-  // console.log('updating', selected_media.value)
-
   const url = new URL(`${curr_api}/media/update`)
+
+  selected_media.value['media_type'] = search_type.value
+  console.log(selected_media.value['media_type'])
 
   const result = await fetch(url, {
     method: 'POST',
@@ -237,12 +239,10 @@ onUnmounted(() => {
 
           <label for="media_types" style="margin-right: 10px">Media type</label>
           <select v-model="search_type" id="media_types" @change="find_media">
-            <option value="movie" :selected="search_type">movie</option>
-            <option value="tv" :selected="search_type">tv</option>
-            <option value="youtube" :selected="search_type">youtube</option>
-            <option value="manga" :selected="search_type">manga</option>
-            <option value="game" :selected="search_type">game</option>
-            <option value="comic" :selected="search_type">comic</option>
+            <option v-for="type in all_media_types" :value="type" :selected="search_type" :key="type">{{
+                type
+              }}
+            </option>
           </select>
 
           <input v-model="search_page" type="number" style="margin-left: 10px;width: 50px" @change="find_media">
@@ -308,14 +308,9 @@ onUnmounted(() => {
           </div>
 
           <label for="form_media_types">Media Type</label>
-          <select v-if="selected_media['media_type']"
-                  @change="selected_media['media_type']=$event.target.value"
-                  id="form_media_types">
-            <option v-for="m_type in media_types" :key="m_type" :value="m_type"
-                    :selected="selected_media['media_type'] === m_type">
-              {{ m_type }}
+          <select v-model="search_type" id="form_media_types" @change="find_media">
+            <option v-for="type in all_media_types" :value="type" :selected="search_type" :key="type">{{ type }}
             </option>
-            .value
           </select>
 
           <label for="form_image_url">Poster path</label>

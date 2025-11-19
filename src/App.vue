@@ -45,6 +45,14 @@ const media_scales = computed(() => {
       'size': [264, 352],
       'scale': !is_mobile.value ? 0.69 : 0.5,
     },
+    'short': {
+      'size': [500, 750],
+      'scale': !is_mobile.value ? 0.35 : 0.2,
+    },
+    'documentary': {
+      'size': [500, 750],
+      'scale': !is_mobile.value ? 0.35 : 0.2,
+    },
   }
 })
 
