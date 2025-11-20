@@ -19,7 +19,7 @@ function emit_poster(path) {
 }
 
 async function get_extra_posters() {
-  if (props["selected_media"].value === undefined) return
+  if (!props["selected_media"].name) return
 
   const token = await get_current_user()
 
@@ -39,6 +39,7 @@ async function get_extra_posters() {
 }
 
 watch(() => props.selected_media, () => {
+  console.log('getting')
   get_extra_posters()
 }, {immediate: true})
 </script>
