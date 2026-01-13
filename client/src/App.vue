@@ -130,9 +130,6 @@ onMounted(() => {
   max-width: 1080px;
   min-height: 80vh;
 
-  /*added to prevent horizontal scrolling, might break something*/
-  overflow: hidden;
-
   padding: 0 40px 0 40px;
 }
 
