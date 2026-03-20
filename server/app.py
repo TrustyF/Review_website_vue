@@ -20,10 +20,12 @@ else:
 
 db_username = os.getenv('MYSQL_DATABASE_USERNAME')
 db_password = os.getenv('MYSQL_DATABASE_PASSWORD')
+db_loc_username = os.getenv('MYSQL_DATABASE_LOC_USERNAME')
+db_loc_password = os.getenv('MYSQL_DATABASE_LOC_PASSWORD')
 db_name = 'TrustyFox$review_site'
 
 database_uri = f'mysql+pymysql://{db_username}:{db_password}@TrustyFox.mysql.pythonanywhere-services.com:3306/{db_name}'
-local_database_uri = f'mysql+pymysql://root:{db_password}@127.0.0.1:3306/{db_name}'
+local_database_uri = f'mysql+pymysql://root:{db_loc_password}@127.0.0.1:3306/{db_name}'
 
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     'pool_recycle': 280,
