@@ -1,0 +1,6 @@
+/.env
+/devmode.txt
+/venv/
+/tokens/
+/static/*
+!/static/tags/
