@@ -2,7 +2,7 @@
 # Trusty's Corner
 Welcome! This is my personal media review website / blog. It is published on [trusty-corner.me](https://trusty-corner.me/).
 
-![Screenshot1](https://github.com/TrustyF/Review_website_vue/raw/master/public/home_images/readme_images/readme_screen_2.jpg)
+![Screenshot1](https://github.com/TrustyF/Review_website_vue/raw/master/client/public/home_images/readme_images/readme_screen_2.jpg)
 
 ### Dev
 
@@ -15,7 +15,7 @@ Welcome! This is my personal media review website / blog. It is published on [tr
 ### Ratings
 Ratings are split into: my personal rating, public rating and the combined circle.
 
-![Screenshot2](https://github.com/TrustyF/Review_website_vue/raw/master/public/home_images/rating_info.jpg)
+![Screenshot2](https://github.com/TrustyF/Review_website_vue/raw/master/client/public/home_images/rating_info.jpg)
 
  The public rating is visually remapped to better match my personal rating distribution.
 
@@ -25,7 +25,7 @@ Ratings are split into: my personal rating, public rating and the combined circl
 ### Tags
 Medias are annotated with various tags. These are meant to provide a simple breakdown of my opinion, and to help you decide what to pick.
 
-![Screenshot3](https://github.com/TrustyF/Review_website_vue/raw/master/public/home_images/tags_info.jpg)
+![Screenshot3](https://github.com/TrustyF/Review_website_vue/raw/master/client/public/home_images/tags_info.jpg)
 
 Tags are categorized into different colors representing their sentiment:
 
@@ -38,7 +38,7 @@ Tags are categorized into different colors representing their sentiment:
 ### Searchbar
 Features a flexible keyword-matching search.
 
-![Screenshot4](https://github.com/TrustyF/Review_website_vue/raw/master/public/home_images/search_info.jpg)
+![Screenshot4](https://github.com/TrustyF/Review_website_vue/raw/master/client/public/home_images/search_info.jpg)
 
 Various Filters can also be applied to match specific attributes like: runtime, release date, rating, etc..
 Search fields are matched sequentially:
@@ -52,6 +52,6 @@ Each field attempt to find as much as it can and moves to the next if nothing is
 ### Stats
 These are really just to satisfy my own curiosity. Each media category can be graphed if the necessary values are available.
 
-![Screenshot5](https://github.com/TrustyF/Review_website_vue/raw/master/public/home_images/readme_images/readme_screen_3.jpg)
+![Screenshot5](https://github.com/TrustyF/Review_website_vue/raw/master/client/public/home_images/readme_images/readme_screen_3.jpg)
 
 If possible the average personal rating and public rating will be plotted against the specified category.
